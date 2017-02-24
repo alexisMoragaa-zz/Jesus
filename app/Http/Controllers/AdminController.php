@@ -18,7 +18,7 @@ class AdminController extends Controller {
 	{
 
 		$usuarios =User::all();
-		return view('admin/administradorr', compact('usuarios'));
+		return view('admin/adminUser', compact('usuarios'));
 	}
 
 	public function create()
@@ -62,7 +62,7 @@ class AdminController extends Controller {
 		]);
 
 		$usuarios = User::all();
-		return view('admin/administradorr',compact('usuarios'));
+		return view('admin/adminUser',compact('usuarios'));
 
 	}
 
@@ -95,7 +95,7 @@ class AdminController extends Controller {
 		$usuarios->save();
 
 		$usuarios= User::all();
-		return view('admin/administradorr',compact('usuarios'));
+		return view('admin/adminUser',compact('usuarios'));
 
 	}
 

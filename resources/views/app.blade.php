@@ -134,7 +134,7 @@ div .logo{
 		</div>
 	</nav>
 	<div >
-    <img class="logo" src="../../imagenes/imgDues.png"> </img>
+    <img class="logo" src="/imagenes/imgDues.png"> </img>
     
     </div>
 	

@@ -24,7 +24,7 @@
    				</tr>
 		@foreach($usuarios as $User)
    				<tr data-id="{{$User->id}}">
-   					<td>{{  $User->name }}</td>
+   					<td>{{ $User->name }}</td>
    					<td>{{ $User->email }}</td>
    					<td>{{ $User->perfil }}</td>
    					<td style="text-align: center">
