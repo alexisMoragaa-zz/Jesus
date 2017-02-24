@@ -11,7 +11,7 @@ div .iconoActu{
 <h1>Actualizar el registro </h1>
 
 			<div class="panel panel-default">
-            <div class="panel-heading">ACTUALIZAR MANDATO</div> 
+            <div class="panel-heading">ACTUALIZAR MANDATO -----------</div> 
 					<form class="form-horizontal" role="form" method="POST" action="@if(Auth::user()->perfil==1){{ url('admin/actualizado&') }}{{$capta->id}}@elseif(Auth::user()->perfil==2){{ url('teo/actualizado&') }}{{$capta->id}}@endif" >
                     <input type="hidden" name="_token" value="{{ csrf_token() }}">
    <div>
