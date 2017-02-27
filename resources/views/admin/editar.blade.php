@@ -1,12 +1,17 @@
 @extends('app')
 
 @section('content')
+<link href="{{ asset('/css/style.css') }}" rel="stylesheet">
+
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-8 col-md-offset-2">
                 <div class="panel panel-default">
                     <div class="panel-heading">Editar Usuario {{$user->name}}</div>
-                    <div class="panel-body">
+    <div>
+    <img style="width:10%; margin-left:2%;" src="/imagenes/iditarIcono.png"> </img>
+    </div>
+					<div class="panel-body">
                         @if (count($errors) > 0)
                             <div class="alert alert-danger">
                                 <strong>Whoops!</strong>Por favor corrige los siguientes errores.<br><br>
@@ -23,27 +28,26 @@
 
                 <input type="hidden" name="_token" value="{{ csrf_token() }}">
 
-                     <h1 style="text-align: right">
-                        Editar Usuarios
-                     </h1>
 
                     @include('admin.partials.login')
 
-                        <div class="form-group">
+                        
+<div style="margin:0%0%5%0%;float:right">
+                     
+		 </div>
+        <div class="col-md-6 col-md-offset-4">
+        <button type="submit" class="btn btn-primary">Editar</button>
+		
+    <img style="width:15%;margin-left:15%;" src="/imagenes/EliminarUsu.png"> </img>
 
-                        <div class="col-md-6 col-md-offset-4">
-
-                             <button type="submit" class="btn btn-primary">
-
-                                  Editar
-
-                             </button>
+		@include('admin.partials.delete')
+		 </div>
+		 
          {!! form::close() !!}
-                        </div>
-
-                     @include('admin.partials.delete')
-
-                        </div>
+        
+		 
+           
+                        
                     </div>
                 </div>
             </div>

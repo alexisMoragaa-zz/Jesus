@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
+
 <header>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -7,7 +8,7 @@
 	<title>Laravel</title>
     
 	<link href="{{ asset('/css/app.css') }}" rel="stylesheet">
-
+    <link href="{{ asset('/css/style.css') }}" rel="stylesheet">
 	<!-- Fonts -->
 	<link href='//fonts.googleapis.com/css?family=Roboto:400,300' rel='stylesheet' type='text/css'>
 
@@ -17,55 +18,7 @@
 		<script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
 		<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 	<![endif]-->
-<style>	
-	
-body {
-	 background: #CCCACA;	 
-}
-header {
-	 background: #CCCACA;	
-}
 
-ul .nav{
-	background: #F96400;
-}	 
-nav .nav{
-	background: #F96400;
-}
-div .collapse {
-	background: #F96400;	
-}	
-div .navbar-brand {
-	background: #F96400;
-}	
-div .navbar-header {
-	background: #F96400;	
-}	
-nav{
-    background: #F96400;
-    padding:10px;
-    margin-bottom: 20px;
-    border-radius:10px;/*El estandar por defecto*/
-    background-image: -webkit-gradient(linear, left top, left bottom, from(#F96400), to(#F96400));/*Para chrome y Safari*/
-    /*Degradados*/
-    background-image: -moz-linear-gradient(top, #F96400, #F96400);/*Para Firefox*/
-    background-image: -o-linear-gradient(top, #F96400, #F96400);/*Para Opera*/
-    background-image: linear-gradient(top, #F96400, #F96400);/*El estandar por defecto*/	
-}
-footer{
-width:100%;
-margin-top:2%; 
-background:#F96400;
-display: block;
-}
-
-div .logo{
-	width:10%;
-    margin:0%0%2%42%;
- }
-
-}
-</style>
 <nav class="">
 		<div class="container-fluid">
 			<div class="navbar-header">
@@ -133,16 +86,15 @@ div .logo{
 			</div>
 		</div>
 	</nav>
+	
 	<div >
     <img class="logo" src="/imagenes/imgDues.png"> </img>
-    
     </div>
 	
 </header>
-<body>
+<body style="background:#CCCACA">
+
 @yield('content')
-
-
 
 	<!-- Scripts -->
 	<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
@@ -150,10 +102,7 @@ div .logo{
 
 </body>
 
-
 <footer>
-<p></br></p>
-<p></br></p>
 <p></br></p>
 <p></br></p>
 <p></br></p>

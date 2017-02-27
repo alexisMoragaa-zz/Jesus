@@ -1,0 +1,89 @@
+<style>	
+
+header {
+	 background: #CCCACA;	
+}
+
+ul .nav{
+	background: #F96400;
+}	 
+nav .nav{
+	background: #F96400;
+}
+div .collapse {
+	background: #F96400;	
+}	
+div .navbar-brand {
+	background: #F96400;
+}	
+div .navbar-header {
+	background: #F96400;	
+}	
+nav{
+    background: #F96400;
+    padding:10px;
+    margin-bottom: 20px;
+    border-radius:10px;/*El estandar por defecto*/
+    background-image: -webkit-gradient(linear, left top, left bottom, from(#F96400) );/*Para chrome y Safari*/
+    /*Degradados*/
+    background-image: -moz-linear-gradient(top, #F96400, #F96400);/*Para Firefox*/
+    background-image: -o-linear-gradient(top, #F96400, #F96400);/*Para Opera*/
+    background-image: linear-gradient(top, #F96400, #F96400);/*El estandar por defecto*/	
+}
+footer{
+width:100%;
+margin-top:2%; 
+background:#F96400;
+display: block;
+}
+
+div .logo{
+	width:10%;
+    margin:0%0%2%42%;
+ }
+
+}
+
+div .logore{
+width:10%;
+margin-bottom:2%;
+}
+
+div .logoto{
+width:20%;
+height:10%;	
+margin-bottom:2%;
+}
+div .iconoActu{
+	width:10%;  
+ }
+div .col-md-4{
+	 margin-bottom:2%;	 
+}
+div .iconoReg{
+	width:10%;
+    
+ }
+ 
+ div .logosu{
+width:20%;
+height:10%;	
+margin-bottom:2%;
+}
+
+div .iconoEx{
+	width:10%;  
+ }
+div .logoOp{
+	width:25%;
+	margin-bottom:2%;
+}
+
+div .logoRu{
+	width:20%;
+	margin-bottom:2%;
+}
+
+
+ 
+</style>
