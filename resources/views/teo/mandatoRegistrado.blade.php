@@ -1,23 +1,15 @@
 @extends('app')
 
 @section('content')
-
-<style>
- div .col-md-4{
-	 margin-bottom:2%;	 
-}
-div .iconoReg{
-	width:10%;
-    
- }
-</style>
+<link href="{{ asset('/css/style.css') }}" rel="stylesheet">
             <h1>Agregar Mandato Exitoso </h1>
+			<div class="container">
 			<div  class="panel panel-default ">
             <div class="panel-heading">AGREGAR MANDATO</div> 
 				   <form class="form-horizontal" role="form" method="POST" action="@if(Auth::user()->perfil==1){{ url('admin/agregado') }}@elseif(Auth::user()->perfil==2){{ url('teo/agregado')}}@endif " >
                     <input type="hidden" name="_token" value="{{ csrf_token() }}">
 	<div>
-    <img class="iconoReg" src="../imagenes/RegistroMandato.png"></img>
+    <img class="iconoReg" src="/imagenes/RegistroMandato.png"></img>
     </div>
 			            @foreach($c as $ca)
 						@if($ca->n_interno_dues==$ca->n_interno_dues)
@@ -209,7 +201,7 @@ div .iconoReg{
 						</div>
 					</form>
  					</div>
-			
+			</div>
 
 
   

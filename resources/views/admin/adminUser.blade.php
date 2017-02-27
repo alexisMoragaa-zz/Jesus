@@ -2,6 +2,8 @@
 @extends('app')
 
 @section('content')
+<link href="{{ asset('/css/style.css') }}" rel="stylesheet">
+
 <h1 style="text-align: center">Administrar</h1>
 
         @if(Session::has('message'))
@@ -9,9 +11,12 @@
             <p class="alert alert-success">{{Session::get('message')}}</p>
         @endif
 
-	<div class="container">
-		<a class="btn btn-info" href="{{ route('admin.user.create') }}" role="button" style="margin:5px; margin-left: 88%;">Registrar Usuario</a>
 	
+		
+<div class="container">
+
+<a class="btn btn-info" href="{{ route('admin.user.create') }}" role="button" style="margin:5px; margin-left: 85%;">Registrar Usuario</a>
+		
 <div class="panel panel-default">
 <div class="panel-heading">DATOS DEL USUARIO</div> 
 			<div class="table-responsive">
@@ -24,7 +29,7 @@
    				</tr>
 		@foreach($usuarios as $User)
    				<tr data-id="{{$User->id}}">
-   					<td>{{ $User->name }}</td>
+   					<td>{{  $User->name }}</td>
    					<td>{{ $User->email }}</td>
    					<td>{{ $User->perfil }}</td>
    					<td style="text-align: center">
@@ -40,5 +45,6 @@
 </div>
 </div>
 </div>
+
 
 @endsection

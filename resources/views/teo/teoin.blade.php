@@ -2,21 +2,10 @@
 
 @section('content')
 
-<style>
-
-div .logoto{
-width:25%;
-height:10%;	
-margin-bottom:2%;
-}
-</style>
-
-
-   
-
+<link href="{{ asset('/css/style.css') }}" rel="stylesheet">
 <h1>esta es la vista de teleoperador</h1>
 <div>
- <img class="logoto" src="../../imagenes/Teleoperadores.png"  >
+ <img class="logoto" src="/imagenes/Teleoperadores.png"  >
 </div>
 <div class="table-responsive">
 <div class="panel panel-default">

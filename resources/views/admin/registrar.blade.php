@@ -2,23 +2,14 @@
 
 @section('content')
 
-<style>
-
-div .logore{
-width:10%;
-height:10%;	
-margin-bottom:2%;
-}
-</style>
-
 <div class="container-fluid">
 	<div class="row">
 		<div class="col-md-8 col-md-offset-2">
 			<div class="panel panel-default">
 				<div class="panel-heading">REGISTRAR TELEOPERADOR</div>
 				<div>
- <img class="logore" src="/imagenes/registroUs.png"  >
-
+ <img style="width:10%;margin-bottom:2%;" 
+      class="logore" src="/imagenes/registroUs.png"  >
 </div>
 				
 				<div class="panel-body">
@@ -35,9 +26,6 @@ margin-bottom:2%;
 					{!! Form::open(['route' => ['admin.user.store'], 'method' => 'POST', 'class' =>'form-horizontal']) !!}
 
 						<input type="hidden" name="_token" value="{{ csrf_token() }}"> 
-					
-
-							<h1 style="text-align: center">Registrar Usuario</h1>
 
 						@include('admin.partials.login')
 

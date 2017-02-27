@@ -1,13 +1,9 @@
 @extends('app')
 
 @section('content')
-<style>
-div .iconoEx{
-	width:10%;
-    
- }
- </style>
-<div class="container-fluid">
+
+ <link href="{{ asset('/css/style.css') }}" rel="stylesheet">
+<div class="container">
   <div class="col-md-12">
   
       <div class="box box-primary">
@@ -24,7 +20,7 @@ div .iconoEx{
       <div class="form-group col-xs-12"  >
              <label>Agregar Archivo de Excel </label>
 	<div >
-    <img class="iconoEx" src="../imagenes/excelIcono.png"> </img>
+    <img class="iconoEx" src="/imagenes/excelIcono.png"> </img>
     </div>
               <input name="archivo" id="archivo" type="file"   class="archivo form-control"  required/><br /><br />
       </div>
