@@ -44,33 +44,30 @@ class CargaController extends Controller {
 			Excel::selectSheetsByIndex(0)->load($ruta, function($hoja) {
 
 				$hoja->each(function($fila) {
-					$captaciones_dues=captaciones::where("n_interno_dues","=",$fila->n_interno_dues)->first();
+					$captaciones_dues=captaciones::where("n_dues","=",$fila->n_dues)->first();
 					if(count( $captaciones_dues)==0){
-						$captaciones=new captaciones;
-						$captaciones->n_interno_dues= $fila->n_interno_dues;
-						$captaciones->id_interno_funda= $fila->id_interno_funda;
-						$captaciones->origen= $fila->origen;
-						$captaciones->fono1= $fila->fono1;
-						$captaciones->fono2= $fila->fono2;
-						$captaciones->fono3= $fila->fono3;
-						$captaciones->fono4= $fila->fono4;
-						$captaciones->nombre= $fila->nombre;
-						$captaciones->apellido=$fila->apellido;
-						$captaciones->correo1=$fila->correo1;
-						$captaciones->correo2=$fila->correo2;
-						$captaciones->fecha_firma_inscripcion=$fila->fecha_firma_inscripcion;
-						$captaciones->otro_antecedente= $fila->otro_antecedente;
-						$captaciones->monto_original= $fila->monto_original;
-						$captaciones->monto_aporte= $fila->monto_aporte;
-						$captaciones->monto_final= $fila->monto_final;
-						$captaciones->estado= $fila->estado;
-						$captaciones->fecha_volver_allamar=$fila->fecha_volver_allamar;
-						$captaciones->mensaje=$fila->mensaje;
-						$captaciones->observacion=$fila->observacion;
-						$captaciones->fecha_primer_llamado=$fila->fecha_primer_llamado;
-						$captaciones->fecha_segundo_llamado=$fila->fecha_segundo_llamado;
-						$captaciones->fecha_tercer_llamado=$fila->fecha_tercer_llamado;
-						$captaciones->save();
+						$captaciones = new captaciones;
+						$captaciones -> n_dues            = $fila -> n_dues;
+						$captaciones -> id_fundacion       = $fila -> id_fundacion;
+						$captaciones -> fono_1            = $fila -> fono_1;
+						$captaciones -> fono_2            = $fila -> fono_2;
+						$captaciones -> fono_3            = $fila -> fono_3;
+						$captaciones -> fono_4            = $fila -> fono_4;
+						$captaciones -> nombre            = $fila -> nombre;
+						$captaciones -> apellido          = $fila -> apellido;
+						$captaciones -> correo_1          = $fila -> correo_1;
+						$captaciones -> correo_2          = $fila -> correo_2;
+						$captaciones -> firma_inscripcion = $fila -> firma_inscripcion;
+						$captaciones -> otro_antecedente  = $fila -> otro_antecedente;
+						$captaciones -> monto             = $fila -> monto;
+						$captaciones -> estado            = $fila -> estado;
+						$captaciones -> volver_llamar    = $fila -> volver_llamar;
+						$captaciones -> mensaje           = $fila -> mensaje;
+						$captaciones -> observacion       = $fila -> observacion;
+						$captaciones -> primer_llamado    = $fila -> primer_llamado;
+						$captaciones -> segundo_llamado   = $fila -> segundo_llamado;
+						$captaciones -> tercer_llamado    = $fila -> tercer_llamado;
+						$captaciones -> save();
 					}
 
 				});
