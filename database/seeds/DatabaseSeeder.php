@@ -12,12 +12,15 @@ class DatabaseSeeder extends Seeder {
 	 */
 	public function run()
     {
-        DB::table('users')->insert([
+        $this->call('AdminTableSeeder');
+        $this->call('UsersTableSeeder');
+        /*DB::table('users')->insert([
             'name' => 'eddy',
             'email' => 'adan.e.c.p@hotmail.com',
 			'perfil' => '1',
             'password' => bcrypt('123456'),
         ]);
+        */
     }
 
 }
