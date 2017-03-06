@@ -15,30 +15,27 @@ class CreateCaptacionesExitosasTable extends Migration {
 		Schema::create('captaciones_exitosas', function(Blueprint $table)
 		{
 			$table->increments('id');
-			$table->string('n_interno_dues');
-			$table->string('id_interno_funda');
-			$table->string('origen');
-			$table->string('fono1');
-			$table->string('fono2');
-			$table->string('fono3');
-			$table->string('fono4');
+			$table->string('n_dues');
+			$table->string('id_fundacion');
+			$table->string('fono_1');
+			$table->string('fono_2');
+			$table->string('fono_3');
+			$table->string('fono_4');
 			$table->string('nombre');
 			$table->string('apellido');
-			$table->string('correo1');
-			$table->string('correo2');
-			$table->string('fecha_firma_inscripcion');
+			$table->string('correo_1');
+			$table->string('correo_2');
+			$table->string('firma_inscripcion');
 			$table->string('otro_antecedente');
-			$table->string('monto_original');
-			$table->string('monto_aporte');
-			$table->string('monto_final');
+			$table->string('monto');
 			$table->string('estado');
-			$table->string('fecha_volver_allamar');
+			$table->string('volver_allamar');
 			$table->string('mensaje');
 			$table->string('observacion');
 			$table->string('n_llamados');
-			$table->string('fecha_primer_llamado');
-			$table->string('fecha_segundo_llamado');
-			$table->string('fecha_tercer_llamado');
+			$table->string('primer_llamado');
+			$table->string('segundo_llamado');
+			$table->string('tercer_llamado');
 			$table->timestamps();
 		});
 	}
