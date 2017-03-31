@@ -17,26 +17,29 @@ class CreateCaptacionesExitosasTable extends Migration {
 			$table->increments('id');
 			$table->string('n_dues');
 			$table->string('id_fundacion');
-			$table->string('fono_1');
-			$table->string('fono_2');
-			$table->string('fono_3');
-			$table->string('fono_4');
+			$table->string('fecha_captacion');//Tomar Hora de Sistema
+			$table->string('fecha_agendamiento');
+			$table->string('tipo_retiro');
+			$table->string('jornada');
+			$table->string('horario');
 			$table->string('nombre');
 			$table->string('apellido');
+			$table->string('rut');
+			$table->string('dv');
+			$table->string('direccion');
+			$table->string('comuna');
+			$table->string('ciudad');
+			$table->string('region');
+			$table->string('fono_1');
 			$table->string('correo_1');
-			$table->string('correo_2');
-			$table->string('firma_inscripcion');
-			$table->string('otro_antecedente');
+			$table->string('observaciones');
+			$table->string('rutero');
+			$table->string('teleoperador');
+			$table->string('fundacion');
+			$table->string('nom_campana');
 			$table->string('monto');
-			$table->string('estado');
-			$table->string('volver_allamar');
-			$table->string('mensaje');
-			$table->string('observacion');
-			$table->string('n_llamados');
-			$table->string('primer_llamado');
-			$table->string('segundo_llamado');
-			$table->string('tercer_llamado');
-			$table->timestamps();
+			$table->string('forma_pago');
+		 	$table->timestamps();
 		});
 	}
 

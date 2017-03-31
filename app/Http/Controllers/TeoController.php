@@ -38,7 +38,7 @@ class TeoController extends Controller {
             ->get();*/
 			
 			$c = DB::table('captaciones_exitosas')
-		    ->where('n_interno_dues','=', $id_interno_dues)->get();
+		    ->where('n_dues','=', $id_interno_dues)->get();
 			
 		    $capta = captaciones::findOrFail($id);
 	    
@@ -56,30 +56,29 @@ class TeoController extends Controller {
 			$data = $request->all();
 			
 			CaptacionesExitosa::create([
-			'n_interno_dues' => $data['n_interno_dues'],
-			'id_interno_funda' => $data['id_interno_funda'],
-			'origen'=> $data['origen'],
-			'fono1' => $data['fono1'],
-			'fono2' => $data['fono2'],
-			'fono3' => $data['fono3'],
-			'fono4'=> $data['fono4'],
-			'nombre'=> $data['nombre'],
-			'apellido'=> $data['apellido'],
-			'correo1' => $data['correo1'],
-			'correo2'=> $data['correo2'],
-			'fecha_firma_inscripcion' => $data['fecha_firma_inscripcion'],
-			'otro_antecedente' => $data['otro_antecedente'],
-			'monto_original' => $data['monto_original'],
-			'monto_aporte'=> $data['monto_aporte'],
-			'monto_final' => $data['monto_final'],
-			'estado' => $data['estado'],
-			'fecha_volver_allamar' => $data['fecha_volver_allamar'],
-			'mensaje'=> $data['mensaje'],
-			'observacion' => $data['observacion'],			
-			'n_llamados' => $data['n_llamados'],
-			'fecha_primer_llamado' => $data['fecha_primer_llamado'],
-			'fecha_segundo_llamado'=> $data['fecha_segundo_llamado'],
-			'fecha_tercer_llamado' => $data['fecha_tercer_llamado'],			
+				'n_dues' => $data['n_dues'],
+				'id_fundacion' => $data['id_fundacion'],
+				'fecha_captacion'=> $data['fecha_captacion'],
+				'fecha_agendamiento' => $data['fecha_agendamiento'],
+				'tipo_retiro' => $data['tipo_retiro'],
+				'jornada'=> $data['jornada'],
+				'horario'=> $data['horario'],
+				'rut' => $data['rut'],
+				'dv'=> $data ['dv'],
+				'fono_1' => $data['fono_1'],
+				'nombre'=> $data['nombre'],
+				'apellido'=> $data['apellido'],
+				'direccion'=> $data['direccion'],
+				'comuna' => $data['comuna'],
+				'correo_1' => $data['correo_1'],
+				'monto'=> $data['monto'],
+				'rutero'=> $data['rutero'],
+				'teleoperador' => $data['teleoperador'],
+				'nom_campana'=> $data['nom_campana'],
+				'fundacion' => $data ['fundacion'],
+				'observaciones' => $data['observaciones'],
+				'forma_pago'=>$data['forma_pago'],
+
 			
 		]);
 	

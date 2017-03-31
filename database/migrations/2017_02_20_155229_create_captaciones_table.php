@@ -15,6 +15,9 @@ class CreateCaptacionesTable extends Migration {
 		Schema::create('captaciones', function(Blueprint $table)
 		{
 			$table->increments('id');
+			$table->string('campana')->nullable();
+			$table->string('estado_registro')->nullable();
+			$table->string('nom_fundacion')->nullable();
 			$table->string('n_dues')->nullable();
 			$table->string('id_fundacion')->nullable();
 			$table->string('fono_1')->nullable();

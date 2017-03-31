@@ -47,8 +47,11 @@ class CargaController extends Controller {
 					$captaciones_dues=captaciones::where("n_dues","=",$fila->n_dues)->first();
 					if(count( $captaciones_dues)==0){
 						$captaciones = new captaciones;
+						$captaciones -> campana           = $fila -> campana;
+						$captaciones -> nom_fundacion     = $fila -> nom_fundacion;
+						$captaciones -> estado_registro   = $fila -> estado_registro;
 						$captaciones -> n_dues            = $fila -> n_dues;
-						$captaciones -> id_fundacion       = $fila -> id_fundacion;
+						$captaciones -> id_fundacion      = $fila -> id_fundacion;
 						$captaciones -> fono_1            = $fila -> fono_1;
 						$captaciones -> fono_2            = $fila -> fono_2;
 						$captaciones -> fono_3            = $fila -> fono_3;
@@ -61,7 +64,7 @@ class CargaController extends Controller {
 						$captaciones -> otro_antecedente  = $fila -> otro_antecedente;
 						$captaciones -> monto             = $fila -> monto;
 						$captaciones -> estado            = $fila -> estado;
-						$captaciones -> volver_llamar    = $fila -> volver_llamar;
+						$captaciones -> volver_llamar     = $fila -> volver_llamar;
 						$captaciones -> mensaje           = $fila -> mensaje;
 						$captaciones -> observacion       = $fila -> observacion;
 						$captaciones -> primer_llamado    = $fila -> primer_llamado;

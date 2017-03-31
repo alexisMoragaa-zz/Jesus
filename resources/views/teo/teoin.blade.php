@@ -14,11 +14,11 @@
     
 	<tr>
 
-	<th>FONO1</th>
-	<th>FONO2</th>
+	<th>FONO</th>
+	<th>FONO</th>
 	<th>NOMBRE</th>
     <th>APELLIDO</th>
-    <th>CORREO1</th>
+    <th>CORREO</th>
 	<th>OTROS ANTECEDENTES</th>
 	<th>ESTADO</th>
 	<th>FECHA VOLVER A LLAMAR</th>
@@ -30,13 +30,16 @@
 	
     <tr>
 
-	<td>{{ $c->fono1 }}</td>
-	<td>{{ $c->fono2 }}</td>
+	<td>{{ $c->fono_1 }}</td>
+	<td>{{ $c->fono_2 }}</td>
 	<td>{{ $c->nombre }}</td>
 	<td>{{ $c->apellido }}</td>
-	<td>{{ $c->correo1 }}</td>
+	<td>{{ $c->correo_1 }}</td>
 	<td>{{ $c->otro_antecedente }}</td>
-	<td>{{ $c->estado }}</td>
+	<td><select name="estado" class="form-control col-md-3" >
+			<option>--Seleccione--</option>
+			<option></option>
+		</select></td>
 	<td>{{ $c->fecha_volver_allamar }}</td>
 	@if(Auth::user()->perfil==1)
 	<td><a href="{{ url('admin/edit&')}}{{$c->id}}">MODIFICAR</a>
@@ -44,10 +47,10 @@
 	<td><a href="{{ url('teo/edit&')}}{{$c->id}}">MODIFICAR</a>
     @endif
 	@if(Auth::user()->perfil==1)
-	<td><a href="{{ url('admin/mandatoExitoso&')}}{{$c->id}}&{{$c->n_interno_dues}}">AGREGAR MANDATO EXITOSO</a>
+	<td><a href="{{ url('admin/mandatoExitoso&')}}{{$c->id}}&{{$c->n_dues}}">AGREGAR MANDATO EXITOSO</a>
 
 	@elseif(Auth::user()->perfil==2)
-	<td><a href="{{ url('teo/mandatoExitoso&')}}{{$c->id}}">AGREGAR MANDATO EXITOSO</a>
+	<td><a href="{{ url('teo/mandatoExitoso&')}}{{$c->id}}&{{$c->n_dues}}">AGREGAR MANDATO EXITOSO</a>
 	@endif
 	</td>
 	

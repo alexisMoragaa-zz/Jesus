@@ -67,7 +67,7 @@ Route::group(['middleware' =>['auth', 'teleoperador'],'prefix'=>'teo'], function
 		Route::Resource('call','TeoController');
 		Route::post('actualizado&{id}','TeoController@actualizar');
 		Route::get('edit&{id}', 'TeoController@editar');
-		Route::get('mandatoExitoso&{id}', 'TeoController@create');
+	Route::get('mandatoExitoso&{id}&{id_interno_dues}', 'TeoController@create');
 		Route::post('agregado', 'TeoController@store');
 		Route::get('/', function(){
 

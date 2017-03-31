@@ -2,202 +2,183 @@
 
 @section('content')
 <link href="{{ asset('/css/style.css') }}" rel="stylesheet">
-            <h1>Agregar Mandato Exitoso </h1>
+
 			<div class="container">
+
 			<div  class="panel panel-default ">
-            <div class="panel-heading">AGREGAR MANDATO</div> 
+            <div class="panel-heading">Agendamiento</div>
 				   <form class="form-horizontal" role="form" method="POST" action="@if(Auth::user()->perfil==1){{ url('admin/agregado') }}@elseif(Auth::user()->perfil==2){{ url('teo/agregado')}}@endif " >
                     <input type="hidden" name="_token" value="{{ csrf_token() }}">
-	<div>
-    <img class="iconoReg" src="/imagenes/RegistroMandato.png"></img>
-    </div>
+
 			            @foreach($c as $ca)
-						@if($ca->n_interno_dues==$ca->n_interno_dues)
+						@if ($ca->n_dues==$ca->n_dues)
 					    <h2>Mandato Registrado Anteriormente</h2>
 						@endif
 						@endforeach
-						
-							
+
+					   <div>
+						   <input type="hidden" class="form-control" name="fundacion" value="{{$capta->fundacion}}">
+					   </div>
+
 						<div  class="col-md-4 ">
-								<input type="hidden" class="form-control" name="n_interno_dues" value="{{$capta->n_interno_dues}}">
-						</div>
-							
-						<div  class="col-md-4 ">
-								<input type="hidden" class="form-control" name="id_interno_funda" value="{{$capta->id_interno_funda}}">
+								<input type="hidden" class="form-control" name="n_dues" value="{{$capta->n_dues}}">
 						</div>
 
 						<div  class="col-md-4 ">
-								<input type="hidden" class="form-control" name="origen" value="{{$capta->origen}}">
-						</div>
-						
-						
-						<div id="" class="">
-							<label class="col-md-2 control-label">Fono 1</label>
-							<div  class="col-md-4 ">
-								<input type="text" class="form-control" name="fono1" value="{{$capta->fono1}}">
-							</div>
+								<input type="hidden" class="form-control" name="id_fundacion" value="{{$capta->id_fundacion}}">
 						</div>
 
-						<div id="" class="">
-							<label class="col-md-2 control-label">Fono 2</label>
-							<div class="col-md-4">
-								<input type="text" class="form-control" name="fono2" value="{{$capta->fono2}}">
-							</div>
+						<div  class="col-md-4 ">
+								<input type="hidden" class="form-control" name="fecha_captacion" value="<?php echo date("y/m/d")?>">
 						</div>
-						
-						<div class="">
-							<label class="col-md-2 control-label">Fono 3</label>
-							<div class="col-md-4">
-								<input type="text" class="form-control" name="fono3" value="">
-							</div>
+
+					  <div class="col-md-3">
+						   <label class=" control-label">Fecha Agendamiento</label>
+								<div class="">
+								   <input type="date" class="form-control" name="fecha_agendamiento" value="">
+								</div>
+					   </div>
+
+					   <div class="col-md-3">
+						   <label class=" control-label">Tipo Retiro</label>
+						   <div class="">
+							   <select name="tipo_retiro" class="form-control">
+								   <option>--seleccione--</option>
+
+								   <option>Garabacion</option>
+								   <option>Agendamiento</option>
+								   <option>Captacion Propia</option>
+								   <option>Dialogo Directo</option>
+								   <option>Delivery</option>
+								   <option>Chilexpress</option>
+								   <option>Ir A Dues</option>
+								   <option>Ir A Fundacion</option>
+
+
+							   </select>
+						   </div>
+					   </div>
+
+					   <div class="col-md-3">
+						   <label class="control-label" >Jornada</label>
+
+							   <select name="jornada" class="form-control">
+								   <option>--Seleccione--</option>
+								   <option>AM</option>
+								   <option>PM</option>
+							   </select>
+					   </div>
+
+					   <div class="col-md-3">
+						   <label class=" control-label">Horario .</label>
+								   <input type="time" class="form-control" name="horario" value="">
+					   </div>
+
+
+					   <div class="col-md-3">
+						   <label class=" control-label">Rut</label>
+								   <input type="text" class="form-control" name="rut" placeholder="Ej: 76459578">
+                        </div>
+
+					   <div class="col-md-1">
+						   <label class="control-label">Dv</label>
+							   <input type="text"  class="form-control" name="dv" placeholder="Dv">
+					   </div>
+
+					   <div class="col-md-2"></div>
+
+					   <div class="col-md-3">
+						   <label class=" control-label">Comuna</label>
+						     	 <input type="text" class="form-control" name="comuna" placeholder="Ingrese Comuna">
+					   </div>
+
+						<div  class="col-md-3">
+							<label class=" control-label">Fono</label>
+
+								<input type="text" class="form-control" name="fono_1" value="{{$capta->fono_1}}">
+
+
 						</div>
-						
-						<div class="">
-							<label class="col-md-2 control-label">Fono 4</label>
-							<div class="col-md-4">
-								<input type="text" class="form-control" name="fono4" value="">
-							</div>
-						</div>
+
 						 
-						<div class="">
-							<label class="col-md-2 control-label">Nombre</label>
-							<div class="col-md-4">
+						<div class="col-md-3">
+							<label class=" control-label">Nombre</label>
+
 								<input type="text" class="form-control" name="nombre" value="{{$capta->nombre}}">
-							</div>
-						</div>
-						
-						<div class="">
-							<label class="col-md-2 control-label">Apellido</label>
-							<div class="col-md-4">
-								<input type="text" class="form-control" name="apellido" value="">
-							</div>
-						</div>
-						
-						<div class="">
-							<label class="col-md-2 control-label">Correo 1</label>
-							<div class="col-md-4">
-								<input type="text" class="form-control" name="correo1" value="">
-							</div>
-						</div>
-						
-						<div class="">
-							<label class="col-md-2 control-label">Correo 2</label>
-							<div class="col-md-4">
-								<input type="text" class="form-control" name="correo2" value="">
-							</div>
-						</div>
-                        
-						<div class="">
-							<label class="col-md-2 control-label">Fecha Firma Inscripcion</label>
-							<div class="col-md-4">
-							<input type="date" class="form-control" name="fecha_firma_inscripcion"  value="">
-							</div>
-						</div> 
 
-						<div class="">
-							<label class="col-md-2 control-label">Otro Antecedente</label>
-							<div class="col-md-4">
-								<input type="text" class="form-control" name="otro_antecedente" value="{{$capta->otro_antecedente}}">
-							</div>
-						</div>
-							
-						<div class="">
-							<label class="col-md-2 control-label">Monto Original</label>
-							<div class="col-md-4">
-								<input type="text" class="form-control"  name="monto_original" value="@if($capta->monto_original==0 or $capta->monto_aporte==null) ingrese monto original @else{{ $capta->monto_original }}@endif">
-							</div>
 						</div>
 						
-						
-						<div class="">
-							<label class="col-md-2 control-label">Monto Aporte</label>
-							<div class="col-md-4">
-								<input type="text" class="form-control" name="monto_aporte"  value="@if($capta->monto_aporte==0 or $capta->monto_aporte==null) ingrese monto aporte @else{{ $capta->monto_aporte }}@endif">
-							</div>
-						</div>	
-						
-                        <div class="">
-							<label class="col-md-2 control-label">Monto Final</label>
-							<div class="col-md-4">
-								<input type="text" class="form-control" name="monto_final"  value="@if($capta->monto_final==0 or $capta->monto_final==null) ingrese monto aporte @else{{ $capta->monto_final }}@endif">
-							</div>
-						</div>
-						
-				     <div class="">
-                        <label class="col-md-2 control-label">Estado</label>
-						<div class="col-md-4">
-                        <select  name="estado" class="form-control">
-						
-                            <option>--Seleccione--</option>
-                            <option "@if($capta->estado=='ACEPTA UPGRADE') " value="ACEPTA UPGRADE"  selected "@endif">ACEPTA UPGRADE</option>
-                            <option "@if($capta->estado=='PERSONA CUELGA') " value="PERSONA CUELGA"  selected "@endif">PERSONA CUELGA</option>
-                            <option "@if( $capta->estado=='NO CONTESTA')" value="NO CONTESTA " selected   "@endif">NO CONTESTA</option>
-							<option "@if( $capta->estado=='VOLVER A LLAMAR')" value="VOLVER A LLAMAR  "  selected "@endif">VOLVER A LLAMAR</option>
-							<option "@if( $capta->estado=='OTRA PERSONA')" value="OTRA PERSONA  " selected "@endif">OTRA PERSONA</option>
-							<option "@if( $capta->estado=='FUERA DE SERVICIO')" value="FUERA DE SERVICIO"  selected "@endif">FUERA DE SERVICIO</option>
-							<option "@if( $capta->estado=='GRABADORA')" value="GRABADORA"  selected "@endif">GRABADORA</option>
-                        </select>
-						</div>
-                    </div>
-					
-					<div class="">
-                      <label class="col-md-2 control-label">Fecha Volver a Llamar</label>
-					  <div class="col-md-4">
-                      <input  type="date" name="fecha_volver_allamar" class="form-control" value="{{$capta->fecha_volver_allamar}}" />
-                      </div>
-					</div>
-					<div class="">
-							<label class="col-md-2 control-label">Mensaje</label>
-							<div class="col-md-4">
-								<input type="text" class="form-control" name="mensaje" value="@if($capta->mensaje==null) ingrese un mensaje @else{{ $capta->mensaje }}@endif">
-							</div>
-						</div>
-						<div class="">
-							<label class="col-md-2 control-label">Observacion</label>
-							<div class="col-md-4">
-								<input type="text" class="form-control" name="observacion" value="@if($capta->observacion==null) ingrese un observacion @else{{ $capta->observacion }}@endif">
-							</div>
-						</div>	
-						
-					<div class="">
-							<label class="col-md-2 control-label">N° llamados</label>
-							<div class="col-md-4">
-							<select  name="n_llamados" class="form-control">
-                            <option>--Seleccione--</option>
-                            <option "@if( $capta->n_llamados==1)" value="1" selected "@endif">1</option>
-                            <option "@if( $capta->n_llamados==2)" value="2" selected "@endif">2</option>
-                            <option "@if( $capta->n_llamados==3)" value="3" selected "@endif">3</option>
-                        </select>
-							</div>
-						</div>						
-						
-					<div class="">
-                      <label class="col-md-2 control-label">Fecha Primer Llamado</label>
-					  <div class="col-md-4">
-                      <input   type="date" name="fecha_primer_llamado" class="form-control" value="{{$capta->fecha_primer_llamado}}" />
+						<div class="col-md-3">
+							<label class=" control-label">Apellido</label>
 
-					  </div>
-					</div>
-					
-					<div class="">
-                      <label class="col-md-2 control-label">Fecha Segundo Llamado</label>
-					  <div class="col-md-4">
-                      <input  type="date" name="fecha_segundo_llamado" class="form-control" value="{{$capta->fecha_segundo_llamado}}" />
-                      </div>
-					</div>
-					
-					<div class="">
-                      <label class="col-md-2 control-label">Fecha Tercer Llamado</label>
-					  <div class="col-md-4">
-                      <input  type="date" name="fecha_tercer_llamado" class="form-control"  value="{{$capta->fecha_tercer_llamado}}" />
-                      </div>
-					</div>					
-						<div class="form-group">
-							<div class="col-md-6 col-md-offset-4">
-								<button type="submit" class="btn btn-primary">
-									AGREGAR MANDATO EXITOSO
+								<input type="text" class="form-control" name="apellido" value="{{$capta->apellido}}">
+
+						</div>
+
+					   <div class="col-md-6">
+						   <label class="control-label">Direccion</label>
+
+								   <input type="text" name="direccion" class="form-control" placeholder="Ej: Santa Magdalena #10">
+
+					   </div>
+
+						<div class="col-md-3">
+							<label class="control-label">Correo</label>
+
+								<input type="text" class="form-control" name="correo_1" value="{{$capta->correo_1}}">
+
+						</div>
+						
+
+
+					   <div class="col-md-3">
+						   <label  class="control-label">Voluntario Ruta</label>
+						   <input type="text" class="form-control" name="rutero">
+					   </div>
+
+					   
+					   <div class="col-md-2">
+						   <label class="control-label">Campaña</label>
+						   <input type="text" class="form-control" name="nom_campana" value="{{$capta->campana}}">
+					   </div>
+					   
+					   <div class="col-md-2">
+						   <label class="control-label">Monto</label>
+						   <input type="text" class="form-control" name="monto">
+					   </div>
+					   
+					   <div class="col-md-2">
+
+						   <label class="control-label">Forma Pago</label>
+
+
+						   <select name="forma_pago" class="form-control">
+							   <option>--Seleccione--</option>
+							   <option >Cuenta Vista</option>
+							   <option >Cuenta Corriente</option>
+							   <option >Cuenta Rut</option>
+							   <option >Tarjeta De Credito</option>
+							   <option >Cuenta Rut</option>
+						   </select>
+					   </div>
+
+					   <div class="col-md-6">
+						   <label class=" control-label">Observaciones</label>
+
+						   <input type="text" class="form-control" name="observaciones" >
+
+					   </div>
+					   <div  class=" ">
+						   <input type="hidden" class="form-control" name="teleoperador" value="{{auth::user()->name}}">
+					   </div>
+
+					   <div class="col-md-6">
+						   <label class="control.label">.</label>
+								<button type="submit" class="btn btn-primary form-control">
+									Ingresar Agendamiento
 								</button>
 							</div>
+					   <div class="form-group ">
 						</div>
 					</form>
  					</div>

@@ -50,7 +50,7 @@
 							@elseif(Auth::user()->perfil==2)
 
 								<ul class="nav navbar-nav">
-					         		<li><a href="{{ url('/admin/call') }}">TeleOperador</a></li>
+					         		<li><a href="{{ url('/teo/call') }}">TeleOperador</a></li>
 				            	</ul>
 
 							@elseif(Auth::user()->perfil==3)
