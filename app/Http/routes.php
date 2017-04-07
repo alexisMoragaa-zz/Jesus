@@ -50,7 +50,6 @@ Route::group(['middleware' =>['auth', 'administrador'],'prefix'=>'admin'], funct
 	Route::get('mandatoExitoso&{id}&{id_interno_dues}', 'TeoController@create');
 	Route::post('agregado', 'TeoController@store');
 	Route::post('actualizado&{id}','TeoController@actualizar');
-	
 	Route::get('/', function(){
 
 		return view('admin/administradorr');
