@@ -120,19 +120,15 @@ class TeoController extends Controller {
 	 */
     public function actualizar(Request $request,$id)
 	{
+
 		$capta = captaciones::findOrFail($id);
-       
-        $capta->monto_original = $request->monto_original;	
-        $capta->monto_aporte = $request->monto_aporte;
-        $capta->monto_final = $request->monto_final;
-        $capta->estado = $request->estado;	
-        $capta->fecha_volver_allamar = $request->fecha_volver_allamar;	
-        $capta->mensaje = $request->mensaje;	
+		$capta->fono_1 = $request->fono_1;
+		$capta->fono_2 = $request->fono_2;
+		$capta->nombre = $request->nombre;
+		$capta->apellido = $request->apellido;
+        $capta->estado = $request->estado;
+        $capta->volver_llamar = $request->volver_llamar;
         $capta->observacion = $request->observacion;
-		$capta->n_llamados = $request->n_llamados;
-		$capta->fecha_primer_llamado = $request->fecha_primer_llamado;
-		$capta->fecha_segundo_llamado = $request->fecha_segundo_llamado;
-		$capta->fecha_tercer_llamado = $request->fecha_tercer_llamado;
 		$capta->save();
 		
         return view('teo/actualizado');

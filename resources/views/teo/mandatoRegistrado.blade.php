@@ -173,7 +173,7 @@
 					   </div>
 
 					   <div class="col-md-6">
-						   <label class="control.label">.</label>
+						   <label class="control-label">.</label>
 								<button type="submit" class="btn btn-primary form-control">
 									Ingresar Agendamiento
 								</button>
