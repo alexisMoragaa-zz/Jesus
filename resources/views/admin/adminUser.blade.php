@@ -4,7 +4,7 @@
 @section('content')
 <link href="{{ asset('/css/style.css') }}" rel="stylesheet">
 
-<h1 style="text-align: center">Administrar</h1>
+
 
         @if(Session::has('message'))
 

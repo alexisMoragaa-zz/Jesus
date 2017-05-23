@@ -12,6 +12,7 @@ class DatabaseSeeder extends Seeder {
 	 */
 	public function run()
     {
+		$this->call('CampanaTableSeeder');
         $this->call('AdminTableSeeder');
         $this->call('UsersTableSeeder');
         /*DB::table('users')->insert([

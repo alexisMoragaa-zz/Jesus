@@ -1,9 +1,11 @@
 <?php namespace App\Http\Controllers;
 
 use App\Http\Requests;
+use Illuminate\Support\Facades\Request;
 use App\Http\Controllers\Controller;
+use App\User;
 
-use Illuminate\Http\Request;
+//use Illuminate\Http\Request;
 
 class supController extends Controller {
 
@@ -12,10 +14,11 @@ class supController extends Controller {
 	 *
 	 * @return Response
 	 */
-	public function index()
+	public function index(Request $request)
 	{
+		$usuarios=User::all();
 
-		return view('sup/supervisor');
+		return view('sup/supervisor',compact('usuarios'));
 		//
 	}
 

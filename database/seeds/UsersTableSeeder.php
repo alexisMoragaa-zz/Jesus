@@ -16,7 +16,8 @@ class UsersTableSeeder extends Seeder
             'email' => 'Fabian.gonzalez@gmail.com',
             'perfil' => '2',
             'estado' => 'Activo',
-            'password' => \Hash::make('123456')
+            'password' => \Hash::make('123456'),
+            'campana' => '1'
 
         ));
         \DB::table('users')->insert(array(
@@ -24,7 +25,9 @@ class UsersTableSeeder extends Seeder
             'email' => 'Julissa@gmail.com',
             'perfil' => '2',
             'estado' => 'Activo',
-            'password' => \Hash::make('123456')
+            'password' => \Hash::make('123456'),
+            'campana'  =>  '2'
+            
 
         ));
         \DB::table('users')->insert(array(
@@ -32,7 +35,8 @@ class UsersTableSeeder extends Seeder
             'email' => 'Jessarela.Montaner@gmail.com',
             'perfil' => '2',
             'estado' => 'Activo',
-            'password' => \Hash::make('123456')
+            'password' => \Hash::make('123456'),
+            'campana'  => '3'
 
         ));
         \DB::table('users')->insert(array(
@@ -40,7 +44,8 @@ class UsersTableSeeder extends Seeder
             'email' => 'Macarena.Valenzuela@gmail.com',
             'perfil' => '2',
             'estado' => 'Activo',
-            'password' => \Hash::make('123456')
+            'password' => \Hash::make('123456'),
+            'campana' => 'sin campana'
 
         ));
         \DB::table('users')->insert(array(
@@ -48,7 +53,8 @@ class UsersTableSeeder extends Seeder
             'email' => 'Patricio.Manaut@gmail.com',
             'perfil' => '2',
             'estado' => 'Activo',
-            'password' => \Hash::make('123456')
+            'password' => \Hash::make('123456'),
+            'campana'  => 'sin campana'
 
         ));
 
@@ -58,7 +64,8 @@ class UsersTableSeeder extends Seeder
             'email' => 'Maria.Fernanda@gmail.com',
             'perfil' => '3',
             'estado' => 'Activo',
-            'password' => \Hash::make('123456')
+            'password' => \Hash::make('123456'),
+            'campana'  => 'sin campana'
 
         ));
     }

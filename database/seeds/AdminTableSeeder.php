@@ -14,7 +14,8 @@ class AdminTableSeeder extends Seeder
             'email' =>'alexis.moraga.gallardo@gmail.com',
             'perfil' => '1',
             'estado' => 'Activo',
-            'password' =>\Hash::make('1111111')
+            'password' =>\Hash::make('1111111'),
+            'campana'=>'ballenas rm'
 
         ));
     }
