@@ -12,27 +12,38 @@
 </div>
 
 
+
  <div class="container">
 
   <div class="table-responsive">
    <table class="table table-bordered">
     <tr>
      <th>Nombres</th>
-     <th>Correo</th>
-     <th>Perfil</th>
-     <th>Accion</th>
-    </tr>
-    @foreach($usuarios as $User)
-     <tr data-id="{{$User->id}}">
-      <td>{{  $User->name }}</td>
-      <td>{{ $User->campana }}</td>
-      <td>{{ $User->perfil }}</td>
-      <td style="text-align: center">
+     <th>Campaña actual</th>
 
-       <a href="{{ route('admin.user.edit',$User->id)}}">Editar/Eliminar</a>
+     <th>Turno</th>
+     <th>Accion</th>
+     <th>Ver Usuario</th>
+
+    </tr>
+
+    @foreach($User_Campana as $user_campana)
+      <tr data-id="{{$user_campana->id}}">
+      <td>{{ $user_campana->name }}</td>
+      <td>{{ $user_campana->nombre_campana }}</td>
+      <td>{{ $user_campana->turno }}</td>
+
+          <td>
+              <a href="{{url('admin/detalle')}}{{$user_campana->id}}">Detalle</a>
+          </td>
+
+          <td style="text-align: center">
+
+       <a href="{{ route('admin.user.edit',$user_campana->id)}}">Asignar Campaña</a>
 
 
       </td>
+
      </tr>
 
     @endforeach

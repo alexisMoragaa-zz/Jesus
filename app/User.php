@@ -10,27 +10,27 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 
 	use Authenticatable, CanResetPassword;
 
-	/**
-	 * The database table used by the model.
-	 *
-	 * @var string
-	 */
+
 	protected $table = 'users';
 
-	/**
-	 * The attributes that are mass assignable.
-	 *
-	 * @var array
-	 */
-	protected $fillable = ['name', 'email','perfil','estado', 'password','campana'];
 
-	/**
-	 * The attributes excluded from the model's JSON form.
-	 *
-	 * @var array
-	 */
+	protected $fillable = ['name', 'email','perfil','estado', 'password','campana','turno', 'fecha_ingreso', 'fecha_termino'];
+
+
 	protected $hidden = ['password', 'remember_token'];
 
+	/**
+	 * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
 
+	public function campanitas()
+{
+	return $this->belongsToMany(Campana::class)
+		->withPivot('fecha_inicio')
+		->withPivot('fecha_termino')
+		->withPivot('motivo_termino')
+		->withTimestamps();
+}
 
+	
 }

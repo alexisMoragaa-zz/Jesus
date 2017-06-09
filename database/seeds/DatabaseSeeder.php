@@ -12,9 +12,11 @@ class DatabaseSeeder extends Seeder {
 	 */
 	public function run()
     {
-		$this->call('CampanaTableSeeder');
+
         $this->call('AdminTableSeeder');
+        $this->call('CampanaTableSeeder');
         $this->call('UsersTableSeeder');
+        $this->call('CampanaUserTableSeeder');
         /*DB::table('users')->insert([
             'name' => 'eddy',
             'email' => 'adan.e.c.p@hotmail.com',

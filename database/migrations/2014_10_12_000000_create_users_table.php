@@ -21,6 +21,9 @@ class CreateUsersTable extends Migration {
 			$table->string('estado');
 			$table->string('password', 60);
 			$table->string('campana');
+			$table->string('turno');
+			$table->string('fecha_ingreso');
+			$table->string('fecha_termino');
 			$table->rememberToken();
 			$table->timestamps();
 		});

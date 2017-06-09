@@ -50,6 +50,7 @@ Route::group(['middleware' =>['auth', 'administrador'],'prefix'=>'admin'], funct
 	Route::get('mandatoExitoso&{id}&{id_interno_dues}', 'TeoController@create');
 	Route::post('agregado', 'TeoController@store');
 	Route::post('actualizado&{id}','TeoController@actualizar');
+	Route::get('detalle{id}','supController@detalleUser');
 	
 	Route::get('/', function(){
 
@@ -86,6 +87,7 @@ Route::group(['middleware' =>['auth', 'supervisor'], 'prefix'=>'sup'], function(
 
 	Route::Resource('sup','supController');
 	Route::Resource('call','TeoController');
+	Route::get('detalle','supController@detalleUser');
 	/*Route::get('/', function(){
 
 		return view('sup/supervisor');
@@ -100,6 +102,7 @@ Route::group(['middleware' =>['auth', 'operaciones'], 'prefix'=>'ope'], function
 	Route::Resource('/','OperacionesController');
 	Route::Resource('sup','supController');
 	Route::Resource('call','TeoController');
+
 	/*Route::get('/', function(){
 
 		return view('operac/ope');

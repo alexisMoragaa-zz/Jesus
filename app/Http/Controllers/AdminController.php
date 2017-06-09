@@ -43,8 +43,12 @@ class AdminController extends Controller {
 				'estado' => 'required',
 				'password'=>'required'
 			);
+		/*creamos una regla de validacion en al cual especificamos los campos obligatorios*/
 
 		$v=Validator::make($usuarios, $rules);
+
+		/*instanciamos la variable " V " y declaramos que es igual a la validacion de la regla
+		que creamos arriba a la cual llamamos $regla*/
 
 		if($v->fails()){
 
@@ -52,6 +56,11 @@ class AdminController extends Controller {
 				->withErrors($v->errors())
 				->withInput(Request::except('password'));
 		}
+			/*preguntamos con un if si la validacion falla.
+				si la validacion falla nos retorna de regreso a la pagina con los errores de validacion
+				pero obviando el password.
+
+				si la validacion no falla continua con el codigo y crea un nuevo usuario*/
 
 			User::create([
 			'name' => $usuarios['name'],
