@@ -19,7 +19,7 @@
 */
 
 	/*
-		Todos lo grupos de rutas incluyen el middleware auth, esto es para que a ese grupo de rutas se tenga}
+		Todos lo grupos de rutas incluyen el middleware auth, esto es para que a ese grupo de rutas se tenga
 		acceso solo despues de que sean registrado
 	*/
 Route::controllers([
@@ -68,7 +68,7 @@ Route::group(['middleware' =>['auth', 'teleoperador'],'prefix'=>'teo'], function
 		Route::Resource('call','TeoController');
 		Route::post('actualizado&{id}','TeoController@actualizar');
 		Route::get('edit&{id}', 'TeoController@editar');
-	Route::get('mandatoExitoso&{id}&{id_interno_dues}', 'TeoController@create');
+	    Route::get('mandatoExitoso&{id}&{id_interno_dues}', 'TeoController@create');
 		Route::post('agregado', 'TeoController@store');
 		Route::get('/', function(){
 

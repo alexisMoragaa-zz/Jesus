@@ -21,18 +21,20 @@
 
 
         <div class="col-md-4">
-        <select name="campanas" id="22" class="form-control">
+        <select name="campanas"  class="form-control">
 
             @foreach($campanas as $campana)
                 <option value="{{$campana->id}}" name="seleccion">{{$campana->nombre_campana}}</option>
             @endforeach
-            <!--recorremos con un foreach las campañas y fguardamos en el atributo value el id correspondiente
+            <!--recorremos con un foreach las campañas y guardamos en el atributo value el id correspondiente
                 mientras mostramos el nombre de la campaña en la vista-->
             
         </select>
         </div>
-
-    <div class="col-md-3">
+            <div class="col-md-2">
+                <input type="date" name="fecha_inicio" value="{{date('Y-m-d')}}" class=" form-control ">
+            </div>
+    <div class="col-md-2">
         <input type="submit" class="btn btn-info" value="Añadir Campaña">
     </div>
     </div>
@@ -61,7 +63,7 @@
             </table>
 
         </div>
-        <input type="date" name="fecha_inicio">
+
         {!! Form::Close() !!}
 
     </div>
