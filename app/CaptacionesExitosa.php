@@ -3,7 +3,11 @@
 use Illuminate\Database\Eloquent\Model;
 
 class CaptacionesExitosa extends Model {
-      
+      /**
+      *este modelo es el responsable de gestionar la informacionn de los "cluientes que aceptan ser socios de una fundacion
+	   * una vez que esto ocurre viaja la informacion de el modelo captaciones y se añade informacion adicional como la 
+	   * direccion entre otros datos necesaris para lso agendamientos.
+	   */
 	  
 	protected $table = 'captaciones_exitosas';
 

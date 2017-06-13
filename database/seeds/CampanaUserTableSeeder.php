@@ -10,7 +10,7 @@ use App\User;
 Class CampanaUserTableSeeder extends Seeder
 {
     /**
-     *
+     seeder para agragar informacion a la relacion muchos a muchos entre usuarios y campañas
      */
     public function run()
     {

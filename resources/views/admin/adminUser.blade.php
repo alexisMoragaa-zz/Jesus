@@ -20,6 +20,8 @@
 <div class="panel panel-default">
 <div class="panel-heading">DATOS DEL USUARIO</div> 
 			<div class="table-responsive">
+
+				<!--creamos un atabla para mostrar la informacuion de los usuarios registrados en nuestro sistema -->
   			<table class="table table-bordered">
    				<tr>
    					<th>Nombres</th>
@@ -27,24 +29,25 @@
    					<th>Perfil</th>
    					<th>Accion</th>
    				</tr>
-		@foreach($usuarios as $User)
-   				<tr data-id="{{$User->id}}">
-   					<td>{{  $User->name }}</td>
-   					<td>{{ $User->email }}</td>
-   					<td>{{ $User->perfil }}</td>
-   					<td style="text-align: center">
+						<!--con un foreach recorremos todos los usuarios  y los mostramos en la tabla a continuacion -->
 
-                        <a href="{{ route('admin.user.edit',$User->id)}}">Editar/Eliminar</a>
+					@foreach($usuarios as $User)
+   						<tr data-id="{{$User->id}}">
+   							<td>{{  $User->name }}</td>
+   							<td>{{ $User->email }}</td>
+   							<td>{{ $User->perfil }}</td>
+   							<td style="text-align: center">
+                        		<a href="{{ route('admin.user.edit',$User->id)}}">Editar/Eliminar</a>
+								<!-- agragamos un ling para editar o eliminar un usuario  y en el link enviamos el id
+								del usuario al controlador para solo ese registro y no todos-->
+   							</td>
+   						</tr>
 
-
-   					</td>
-   				</tr>
-
-		@endforeach
+					@endforeach
   			</table>
-</div>
-</div>
-</div>
+</div><!--fin table responsive-->
+</div> <!-- din panel default-->
+</div><!--fin container -->
 
 
 @endsection

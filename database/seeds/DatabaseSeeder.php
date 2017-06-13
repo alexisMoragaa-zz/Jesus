@@ -6,14 +6,13 @@ use Illuminate\Database\Eloquent\Model;
 class DatabaseSeeder extends Seeder {
 
 	/**
-	 * Run the database seeds.
-	 *
-	 * @return void
+	 *archivo que controla los sedeers
+     * con este archivo seleccionamos que seeder se ejecutaran y en que orden se ejecutaran los seeders
 	 */
 	public function run()
     {
 
-        $this->call('AdminTableSeeder');
+        $this->call('AdminTableSeeder');//lamada al seeder
         $this->call('CampanaTableSeeder');
         $this->call('UsersTableSeeder');
         $this->call('CampanaUserTableSeeder');

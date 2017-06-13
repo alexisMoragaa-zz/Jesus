@@ -10,19 +10,25 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 
 	use Authenticatable, CanResetPassword;
 
-
+/**
+*este es el modelo demusuario.
+ * esta encarghado de gestionar la informacion de los usuarios que utilizaran el webside
+ */
 	protected $table = 'users';
 
 
 	protected $fillable = ['name', 'email','perfil','estado', 'password','campana','turno', 'fecha_ingreso', 'fecha_termino'];
+							/*campos que podemos modificar*/
 
 
 	protected $hidden = ['password', 'remember_token'];
+							/*campos que no podemoa modificar*/
 
+	
 	/**
-	 * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
-     */
-
+	 * esta funcion se encarga de gestional la relacion muchos a muchos entre usuarios y campañas
+	 * ademas de incluir campos adicionales a la tabla pivote
+	 */
 	public function campanitas()
 {
 	return $this->belongsToMany(Campana::class)

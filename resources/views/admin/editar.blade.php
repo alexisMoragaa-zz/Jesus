@@ -8,50 +8,46 @@
             <div class="col-md-8 col-md-offset-2">
                 <div class="panel panel-default">
                     <div class="panel-heading">Editar Usuario {{$user->name}}</div>
-    <div>
-    <img style="width:10%; margin-left:2%;" src="/imagenes/iditarIcono.png"> </img>
-    </div>
-					<div class="panel-body">
-                        @if (count($errors) > 0)
-                            <div class="alert alert-danger">
-                                <strong>Whoops!</strong>Por favor corrige los siguientes errores.<br><br>
-                                <ul>
-                                    @foreach ($errors->all() as $error)
-                                        <li>{{ $error }}</li>
-                                    @endforeach
-                                </ul>
-                            </div>
-                        @endif
 
-         {!! Form::model($user,['route' => ['admin.user.update',$user], 'method' => 'PUT', 'class' =>'form-horizontal']) !!}
+                        <div>
+                             <img style="width:10%; margin-left:2%;" src="/imagenes/iditarIcono.png"> </img>
+                        </div>
+
+					    <div class="panel-body">
+                            @if (count($errors) > 0)
+                                <div class="alert alert-danger">
+                                    <strong>Whoops!</strong>Por favor corrige los siguientes errores.<br><br>
+                                        <ul>
+                                            @foreach ($errors->all() as $error)
+                                                <li>{{ $error }}</li>
+                                            @endforeach
+                                        </ul>
+                                </div>
+                            @endif
+
+    {!! Form::model($user,['route' => ['admin.user.update',$user], 'method' => 'PUT', 'class' =>'form-horizontal']) !!}
                            
-
                 <input type="hidden" name="_token" value="{{ csrf_token() }}">
-
 
                     @include('admin.partials.login')
 
-                        
-<div style="margin:0%0%5%0%;float:right">
-                     
-		 </div>
-        <div class="col-md-6 col-md-offset-4">
-        <button type="submit" class="btn btn-primary">Editar</button>
-		
-    <img style="width:15%;margin-left:15%;" src="/imagenes/EliminarUsu.png"> </img>
+             <div class="col-md-6 col-md-offset-4">
 
-		@include('admin.partials.delete')
-		 </div>
+                 <button type="submit" class="btn btn-primary">Editar</button>
+                 <img style="width:15%;margin-left:15%;" src="/imagenes/EliminarUsu.png"> </img>
+
+		        @include('admin.partials.delete')
+             </div>
 		 
-         {!! form::close() !!}
+    {!! form::close() !!}
         
 		 
            
                         
-                    </div>
-                </div>
+                    </div><!--fin panel body-->
+                </div><!--finnpanel default-->
             </div>
 
-        </div>
-    </div>
+        </div><!--fin row-->
+    </div><!--FIN DIV CONTAINER-->
 @endsection

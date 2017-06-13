@@ -6,7 +6,7 @@ use Illuminate\Database\Seeder;
 class AdminTableSeeder extends Seeder
 {
 
-
+/*seeder paera agragar un usuario de tipo administrador*/
     public function run()
     {
         \DB::table('users')->insert(array(

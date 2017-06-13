@@ -6,10 +6,13 @@ use Illuminate\Database\Migrations\Migration;
 class CreateUsersTable extends Migration {
 
 	/**
-	 * Run the migrations.
-	 *
-	 * @return void
+	 	 *creacion de la tabla usuarios
+	 	 *en esta tabla solo se guarda informacion de los usuarios que tendran acceso al webside ya sea total o parcial 
 	 */
+	
+	/**
+	 * el metodo up se utiliza para crear la tabla cuando se ejecuta la migracion desde la consola
+	*/
 	public function up()
 	{
 		Schema::create('users', function(Blueprint $table)
@@ -30,9 +33,7 @@ class CreateUsersTable extends Migration {
 	}
 
 	/**
-	 * Reverse the migrations.
-	 *
-	 * @return void
+	 *el metodo down por el contrario elimina la migracion cuando se ejecutan comandos como migrate:refresh o migrate:reset
 	 */
 	public function down()
 	{

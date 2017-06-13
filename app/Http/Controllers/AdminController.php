@@ -97,7 +97,14 @@ class AdminController extends Controller {
 	public function update($id)
 
 	{
-		//
+		/*
+		 * 
+		 metodo para actualizar un  usuario 
+			
+		ERROR
+		ACTUALIZA CONTRASEÑA MODIFICAR
+		*/
+		
 		$usuarios =User::findOrFail($id);
 		$usuarios->fill(Request::all());
 
@@ -110,7 +117,9 @@ class AdminController extends Controller {
 
 	public function destroy($id)
 	{
-		//
+		//METODO PARA ELIMINAR UN USUARIO
+		 /** EN FUTURAS MODIFICACIONES SE IMPLEMENTARA EL BORRADO LOGICO Y FISICO DE LOS USUARUIOS PARA MAYOR SEFGURIDAD
+		 **/
 		$usuarios =User::findOrFail($id);
 
 		$usuarios->delete();

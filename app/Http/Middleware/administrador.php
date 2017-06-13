@@ -15,11 +15,16 @@ public function __construct(Guard $auth)
 }
 
 	/**
-	 * Handle an incoming request.
+	 *EL Middleware funciona como una especia de filtro entre la vista y el controlador.
+	 * por ejemplo en este caso estamos restringiendo el acceso de usuarios a rutas del webside a las que pos sus privilegios
+	 * no estan autorizados para ingresar
 	 *
-	 * @param  \Illuminate\Http\Request  $request
-	 * @param  \Closure  $next
-	 * @return mixed
+	 * 		*para esto planteamos un switch en el cvual especificamos donde nos redireccionara en caso de no  tener privilegios para
+	 * 		visitar dicha ruta.
+	 *
+	 * 		en este caso si el usuario tiene el perfil 1(administrador) la linea se comenta. esto es para evitar un bucle infinito en el cual
+	 * 		el middleware pregunta que usuario es, y al ser usuario 1 redirecciona, y luego repite la pregunta.
+	 * 		es por esto que en cada caso se deve dejar comentado segun corresponda
 	 */
 	public function handle($request, Closure $next)
 	{

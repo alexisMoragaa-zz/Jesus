@@ -6,9 +6,10 @@ use Illuminate\Database\Migrations\Migration;
 class CreateCaptacionesExitosasTable extends Migration {
 
 	/**
-	 * Run the migrations.
-	 *
-	 * @return void
+*
+	 * ejn la tabla de captaciones exitosas se guarda la informacion de los "clientes"
+	 * una vez que aceptan la ser socios de la fundacion. es aca donde se registra datos como la direccion entre otros datos 
+	 * necesarios para la creacion de rutas
 	 */
 	public function up()
 	{

@@ -6,9 +6,9 @@ use Illuminate\Database\Migrations\Migration;
 class CreateCaptacionesTable extends Migration {
 
 	/**
-	 * Run the migrations.
-	 *
-	 * @return void
+	 *en esta tabla se guarda la ifnormacion de las campañas en bruto.
+	 * es decir, aca se guarda la informacion que nos envia la fundacion y es de esta tabla de donde se recogen
+	 * lso legistros para la llamada de los teleoperadores
 	 */
 	public function up()
 	{

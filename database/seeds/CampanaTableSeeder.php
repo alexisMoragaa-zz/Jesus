@@ -5,6 +5,8 @@ use Illuminate\Database\Seeder;
 
 class CampanaTableSeeder extends Seeder
 {
+    
+    /*seeder para agragar campañas al sistema*/
     public function run()
     {
         \DB::table('campanas')->insert(array(

@@ -13,21 +13,22 @@
 </div>
 				
 				<div class="panel-body">
-					@if (count($errors) > 0)
+					@if (count($errors) > 0)<!--creamos un if para verificar si no hay errores-->
 						<div class="alert alert-danger">
 							<strong>Por Favor </strong>Corrige los siguientes errores.<br><br>
 							<ul>
-								@foreach ($errors->all() as $error)
-									<li>{{ $error }}</li>
+								@foreach ($errors->all() as $error)<!--si hay errores lso recorremos con un foreach-->
+									<li>{{ $error }}</li> <!--imprimimos los errores en pantalla-->
 								@endforeach
 							</ul>
 						</div>
 					@endif
 					{!! Form::open(['route' => ['admin.user.store'], 'method' => 'POST', 'class' =>'form-horizontal']) !!}
 
-						<input type="hidden" name="_token" value="{{ csrf_token() }}"> 
+						<input type="hidden" name="_token" value="{{ csrf_token() }}">
+							<!--este campo es requerido en larabel para evitar ataques de tipo csrf-->
 
-						@include('admin.partials.login')
+						@include('admin.partials.login')<!--inluimos el parcial de login -->
 
 						<div class="form-group">
 							<label class="col-md-4 control-label">Password</label>
@@ -46,7 +47,7 @@
 
 						<div class="form-group">
 							<div class="col-md-6 col-md-offset-4">
-								<button type="submit" class="btn btn-primary">
+								<button type="submit" class="btn btn-primary"><!-- enviamos la informacion del formulario -->
 									Registrar
 								</button>
 							</div>

@@ -28,5 +28,8 @@
     </div>
 </div>
 
+<!--este formulario se encuentra como parcial para poder reutilizarlo tanto en la ventana de login como en la de
+login, registrar, y editar usuarios. ya que estas tres ventanas comparten la misma informacion. por ende tendriamos
+que duplicar el formulario en estas tres vistas-->
 
 

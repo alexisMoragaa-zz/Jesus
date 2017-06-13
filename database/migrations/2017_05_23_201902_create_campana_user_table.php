@@ -6,9 +6,9 @@ use Illuminate\Database\Migrations\Migration;
 class CreateCampanaUserTable extends Migration {
 
 	/**
-	 * Run the migrations.
-	 *
-	 * @return void
+	 *en esta tabla se guarda la relacion muchos a muchso entre usuarios y campañas, ya que un usuario puede trabajar en 
+	 * muchas campañas. como a su ves muchso usuarios pueden estar trabajando en la misma campaña
+	 * es desde esta tabla donde se filtraran los registros que pueden ver lso usuarios dependiedo de la campaña asignada por el supervisor
 	 */
 	public function up()
 	{
