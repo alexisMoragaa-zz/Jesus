@@ -15,7 +15,7 @@ class DatabaseSeeder extends Seeder {
         $this->call('AdminTableSeeder');//lamada al seeder
         $this->call('CampanaTableSeeder');
         $this->call('UsersTableSeeder');
-        $this->call('CampanaUserTableSeeder');
+        //$this->call('CampanaUserTableSeeder');
         /*DB::table('users')->insert([
             'name' => 'eddy',
             'email' => 'adan.e.c.p@hotmail.com',

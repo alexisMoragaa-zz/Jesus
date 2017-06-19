@@ -1,21 +1,8 @@
 <?php
 
 /*
-|--------------------------------------------------------------------------
-| Application Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register all of the routes for an application.
-| It's a breeze. Simply tell Laravel the URIs it should respond to
-| and give it the controller to call when that URI is requested.
-|
-*/
-/*
-
-	Agrupo las rutas por middleware para luego atravez de el middleware definir los roles y que usuarios pueden
+	grupo las rutas por middleware para luego atravez de el middleware definir los roles y que usuarios pueden
 	acceder a las vistas que se programan en el grupo de rutas correspondiente a el rol.
-
-
 */
 
 	/*
@@ -70,9 +57,9 @@ Route::group(['middleware' =>['auth', 'teleoperador'],'prefix'=>'teo'], function
 		Route::get('edit&{id}', 'TeoController@editar');
 	    Route::get('mandatoExitoso&{id}&{id_interno_dues}', 'TeoController@create');
 		Route::post('agregado', 'TeoController@store');
-		Route::get('/', function(){
+		Route::get(' ', function(){
 
-			return view('teo/teoin');
+			return view('teo/call');
 	});
 
 	});
@@ -87,7 +74,8 @@ Route::group(['middleware' =>['auth', 'supervisor'], 'prefix'=>'sup'], function(
 
 	Route::Resource('sup','supController');
 	Route::Resource('call','TeoController');
-	Route::get('detalle','supController@detalleUser');
+	Route::get('detalle{id}','supController@detalleUser');
+
 	/*Route::get('/', function(){
 
 		return view('sup/supervisor');

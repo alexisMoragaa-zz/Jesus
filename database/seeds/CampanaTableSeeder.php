@@ -10,6 +10,11 @@ class CampanaTableSeeder extends Seeder
     public function run()
     {
         \DB::table('campanas')->insert(array(
+            'nombre_campana'=>'Sin Campaña',
+            'ubicacion'=>'Sin Region',
+            'fundacion'=>'Sin Fundacion'
+        ));
+        \DB::table('campanas')->insert(array(
             'nombre_campana'=>'Ballenas RM',
             'ubicacion'=>'region metropolitana',
             'fundacion'=>'Greepneace'

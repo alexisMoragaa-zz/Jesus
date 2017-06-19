@@ -97,14 +97,7 @@ class AdminController extends Controller {
 	public function update($id)
 
 	{
-		/*
-		 * 
-		 metodo para actualizar un  usuario 
-			
-		ERROR
-		ACTUALIZA CONTRASEÑA MODIFICAR
-		*/
-		
+
 		$usuarios =User::findOrFail($id);
 		$usuarios->fill(Request::all());
 

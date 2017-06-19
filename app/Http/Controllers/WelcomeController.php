@@ -1,5 +1,5 @@
 <?php namespace App\Http\Controllers;
-
+use Illuminate\Support\Facades\Auth;
 class WelcomeController extends Controller {
 
 	/*
@@ -30,7 +30,19 @@ class WelcomeController extends Controller {
 	 */
 	public function index()
 	{
-		return view('home');
+
+		if (Auth::User()-> perfil== 1) {
+
+			return view('administradorr');
+
+		}elseif (Auth::User()->perfil==2){
+
+			return view('teo/teoin');
+
+		}elseif (Auth::User()->perfil==3){
+			return view('home');
+		}
+
 	}
 
 }

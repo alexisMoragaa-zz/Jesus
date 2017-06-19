@@ -23,7 +23,7 @@ class CreateUsersTable extends Migration {
 			$table->string('perfil');
 			$table->string('estado');
 			$table->string('password', 60);
-			$table->string('campana');
+			$table->string('campana')->default('1');
 			$table->string('turno');
 			$table->string('fecha_ingreso');
 			$table->string('fecha_termino');

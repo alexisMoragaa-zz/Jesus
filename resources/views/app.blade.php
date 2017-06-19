@@ -87,13 +87,13 @@
 		</div>
 	</nav>
 	
-	<div >
-    <img class="logo" src="/imagenes/imgDues.png"> </img>
-    </div>
+
 	
 </header>
-<body style="background:#CCCACA">
-
+<body style="background:#FFF">
+<div >
+	<img class="logo" src="/imagenes/imgdues1.png"> </img>
+</div>
 @yield('content')
 
 	<!-- Scripts -->
@@ -102,9 +102,9 @@
 
 </body>
 
-<footer>
-<p></br></p>
-<p></br></p>
-<p></br></p>
+<footer >
+<p class="textoFooter">Dues Limitada Todos Los Derechos Reservados</p>
+<p class="textoFooter">Programador y Desarrollador <strong>Alexis Moraga Gallardo</strong></p>
+
 </footer>
 </html>

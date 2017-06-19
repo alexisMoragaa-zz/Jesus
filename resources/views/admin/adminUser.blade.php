@@ -8,7 +8,7 @@
 
         @if(Session::has('message'))
 
-            <p class="alert alert-success">{{Session::get('message')}}</p>
+            <div class="container alert alert-success"> <p style="text-align: center">{{Session::get('message')}}</p></div>
         @endif
 
 	

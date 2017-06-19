@@ -34,16 +34,23 @@
              <div class="col-md-6 col-md-offset-4">
 
                  <button type="submit" class="btn btn-primary">Editar</button>
-                 <img style="width:15%;margin-left:15%;" src="/imagenes/EliminarUsu.png"> </img>
 
-		        @include('admin.partials.delete')
-             </div>
-		 
+
+
+		        </div>
+
+
+
     {!! form::close() !!}
-        
-		 
-           
-                        
+                            <!--<div class="col-md6 col-md-offset-4">
+-->
+<div></div>
+                 @include('admin.partials.delete')
+
+
+                        </div>
+
+
                     </div><!--fin panel body-->
                 </div><!--finnpanel default-->
             </div>
