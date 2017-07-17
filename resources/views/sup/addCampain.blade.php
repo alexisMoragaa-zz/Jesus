@@ -27,15 +27,13 @@
         </div>
 
         <div class="col-md-4">
-
             <select name="campanas"  class="form-control">
 
                 @foreach($campanas as $campana)
                     <option value="{{$campana->id}}" name="seleccion">{{$campana->nombre_campana}}</option>
-                    @endforeach
-                            <!--recorremos con un foreach las campañas y guardamos en el atributo value el id correspondiente
-                         mientras mostramos el nombre de la campaña en la vista-->
-
+                @endforeach
+                <!--recorremos con un foreach las campañas y guardamos en el atributo value el id correspondiente
+                    mientras mostramos el nombre de la campaña en la vista-->
             </select>
         </div>
 

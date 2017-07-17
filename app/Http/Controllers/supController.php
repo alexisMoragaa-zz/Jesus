@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 use App\User;
 use App\Campana;
+use Carbon\Carbon;
 //use DB;
 
 use Illuminate\Http\Request;
@@ -33,9 +34,14 @@ class supController extends Controller {
 	{
 		$usuarios = User::findOrFail($id);//encontramos el usuario mediante el id
 
-		$campanas = Campana::all();//enviamos toda la data de campaña
 
+
+		//$campanas = Campana::orderBy('created_at','ASC');
+
+		//$campanas = \DB::table('campanas')->orderBy('created_at');
 		return view('sup/detalleUser', compact('usuarios','campanas'));
+
+
 		/*este metodo se encarga de retornar a la vista detalleUser las campañas en las
 		cuales trabajo un usuario en particular*/
 	}
@@ -70,8 +76,49 @@ class supController extends Controller {
 		$campanas =Campana::all();
 		return view('sup/addCampain',compact('usuarios','campanas'));
 	}
+	
+	
+	public function updatePivot(Request $request,$user_id, $pivot_id){
 
-	public function update(Request $request,$id)
+		/*$pivote=1;
+		$valor ="yo se";
+		$usuarios =User::findOrFail($user_id);
+		
+		$motivo=$request->input('motivo_termino');
+
+		$usuarios->campanitas()->updateExistingPivot($pivote,array( $valor));
+		return"hola mundo";
+		$motivo=$request->input('motivo');
+		$updates = DB::table('campana_user')
+			->where('id', '=',$pivot_id)
+			->update([
+				'motivo_termino' => $motivo
+
+			]);*/
+		return view('sup/UpdatePivot',compact('pivot_id','user_id'));
+	}
+
+	public function updatepivot2(Request $request){
+
+		$user_id = $request->input("user_id");
+		$id = $request->input('pivote');
+		$motivo = $request->input('motivo');
+
+
+		$date = Carbon::now();
+
+		$updates = DB::table('campana_user')
+			->where('id', '=',$id)
+			->update([
+				'motivo_termino' => $motivo,
+				'fecha_termino' =>$date
+
+			]);
+		return redirect('admin/detalle'.$user_id);
+
+	}
+	
+	public function update(Request $request,  $id)
 	{
 			/*creamos una variable usuario en la cual guardamos toda la informacin de
 		 	la data correspondiente al id que enviamos como parametro atraves de la url*/

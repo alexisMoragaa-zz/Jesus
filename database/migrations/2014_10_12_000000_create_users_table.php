@@ -19,12 +19,22 @@ class CreateUsersTable extends Migration {
 		{
 			$table->increments('id');
 			$table->string('name');
+			$table->string('last_name');
+			$table->integer('rut');
+			$table->integer('dv');
+			$table->enum('perfil',['1','2','3','4','5']);
 			$table->string('email')->unique();
-			$table->string('perfil');
+			$table->string('direccion');
+			$table->integer('telefono');
+			$table->string('afp');
+			$table->string('previcion');
+			$table->string('nombre_isapre');
+			$table->string('turno');
 			$table->string('estado');
+			$table->string('tipo_cuenta');
+			$table->integer('n_cuenta');
 			$table->string('password', 60);
 			$table->string('campana')->default('1');
-			$table->string('turno');
 			$table->string('fecha_ingreso');
 			$table->string('fecha_termino');
 			$table->rememberToken();

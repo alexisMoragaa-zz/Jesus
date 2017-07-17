@@ -2,6 +2,7 @@
 <html lang="es">
 
 <header>
+
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
@@ -12,12 +13,17 @@
 	<!-- Fonts -->
 	<link href='//fonts.googleapis.com/css?family=Roboto:400,300' rel='stylesheet' type='text/css'>
 
-	<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-	<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-	<!--[if lt IE 9]>
+
 		<script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
 		<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+
+		<script src="{{asset('plugins/jquery/jquery-3.2.1.js')}}"></script>
+		<script src="{{asset('plugins/tablesorter/jquery.tablesorter.min.js')}}"></script>
+		<script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.1/js/bootstrap.min.js"></script>
+
 	<![endif]-->
+
+
 
 <nav class="">
 		<div class="container-fluid">
@@ -36,15 +42,13 @@
 
 					@else
 
-						@if(Auth::user()->perfil==1)
+						@if(Auth::user()->perfil==3)
 
 								<ul class="nav navbar-nav">
-					        		<li><a href="{{ url('/admin/user') }}">Usuarios</a></li>
-					         		<li><a href="{{ url('/admin/call') }}">TeleOperador</a></li>
-				       		 		<li><a href="{{ url('/admin/sup') }}">Supervisor</a></li>
-				            		<li><a href="{{ url('/admin/ope') }}">Operaciones</a></li>
-				            		<li><a href="{{ url('/admin/rutas') }}">Ruteros</a></li>
-									<li><a href="{{ url('/admin/cargas') }}">Cargas</a></li>
+									<li><a href="{{ url('/sup/user') }}">Usuarios</a></li>
+									<li><a href="{{ url('/sup/sup') }}">Supervisor</a></li>
+									<li><a href="{{ url('/sup/call') }}">TeleOperador</a></li>
+
 								</ul>
 
 							@elseif(Auth::user()->perfil==2)
@@ -53,11 +57,15 @@
 					         		<li><a href="{{ url('/teo/call') }}">TeleOperador</a></li>
 				            	</ul>
 
-							@elseif(Auth::user()->perfil==3)
+							@elseif(Auth::user()->perfil==1)
 
 								<ul class="nav navbar-nav">
-					         		<li><a href="{{ url('/sup/sup') }}">Supervisor</a></li>
-					         		<li><a href="{{ url('/sup/call') }}">TeleOperador</a></li>
+									<li><a href="{{ url('/admin/user') }}">Usuarios</a></li>
+									<li><a href="{{ url('/admin/call') }}">TeleOperador</a></li>
+									<li><a href="{{ url('/admin/sup') }}">Supervisor</a></li>
+									<li><a href="{{ url('/admin/ope') }}">Operaciones</a></li>
+									<li><a href="{{ url('/admin/rutas') }}">Ruteros</a></li>
+									<li><a href="{{ url('/admin/cargas') }}">Cargas</a></li>
 				           	 	</ul>
 
 				            @elseif(Auth::user()->perfil==4)
@@ -95,10 +103,6 @@
 	<img class="logo" src="/imagenes/imgdues1.png"> </img>
 </div>
 @yield('content')
-
-	<!-- Scripts -->
-	<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-	<script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.1/js/bootstrap.min.js"></script>
 
 </body>
 

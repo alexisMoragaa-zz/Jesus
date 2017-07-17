@@ -38,11 +38,13 @@ Route::group(['middleware' =>['auth', 'administrador'],'prefix'=>'admin'], funct
 	Route::post('agregado', 'TeoController@store');
 	Route::post('actualizado&{id}','TeoController@actualizar');
 	Route::get('detalle{id}','supController@detalleUser');
-	
-	Route::get('/', function(){
+	route::get('updatePivot{user_id}/{pivot_id}','supController@updatePivot');
+	route::post('updatepivot2','supController@updatepivot2');
+	route::post('updatePass/{id}','adminController@updatePass');
+	/*Route::get('/', function(){
 
 		return view('admin/administradorr');
-	});
+	});*/
 });
 
 /*
@@ -75,6 +77,8 @@ Route::group(['middleware' =>['auth', 'supervisor'], 'prefix'=>'sup'], function(
 	Route::Resource('sup','supController');
 	Route::Resource('call','TeoController');
 	Route::get('detalle{id}','supController@detalleUser');
+	route::get('updatePivot{id}','supController@updatePivot');
+	Route::Resource('user','AdminController');
 
 	/*Route::get('/', function(){
 

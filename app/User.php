@@ -17,7 +17,9 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 	protected $table = 'users';
 
 
-	protected $fillable = ['name', 'email','perfil','estado', 'password','campana','turno', 'fecha_ingreso', 'fecha_termino'];
+	protected $fillable = ['name','last_name','rut','dv','perfil','email','direccion','telefono','afp','previcion','nombre_isapre',
+							'turno', 'estado','tipo_cuenta','n_cuenta', 'campana','fecha_ingreso','fecha_termino','password'];
+
 							/*campos que podemos modificar*/
 
 
@@ -35,7 +37,12 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 		->withPivot('fecha_inicio')
 		->withPivot('fecha_termino')
 		->withPivot('motivo_termino')
+		->withPivot('created_at')
+		->withPivot('updated_at')
+		->withPivot('id')
 		->withTimestamps();
+
+
 }
 
 	

@@ -1,12 +1,23 @@
 @extends('app')
 @section('content')
 
+    <script src="{{asset('plugins/jquery/jquery-3.2.1.js')}}"></script>
+    <script src="{{asset('plugins/tablesorter/jquery.tablesorter.min.js')}}"></script>
+    <script src="{{asset('js/optimizar.js')}}"></script>
 
 
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $("#table_campana").tablesorter({sortList:[[4,1],[1,0]]});
+            /**para establecer un orden inicial usamos sortlist, y le pasamos como parametro 2 arrays con dos campos cada uno, el primero
+             * corresponde a la fila que deseamos ordenar partiendo desde el 0 y el segundo al order, siendo 0 acendente. y 1 decendente*/
+
+
+        });
+
+    </script>
     <link href="{{ asset('/css/style.css') }}" rel="stylesheet">
-   <!-- <div>
-        <img class="logosu" src="/imagenes/supervisor.png"  >
-    </div> -->
+
     <div class="container">
 
         <div class="form-group">
@@ -25,22 +36,36 @@
             </div>
         </div>
 
-        <div class="table-responsive" style="clear: left">
-            <table class="table table-bordered">
-                <tr>
-                    <th>Campañas</th>
-                    <th>Inicio Campaña</th>
-                    <th>Termino Campaña</th>
-                    <th>Motivo Termino</th>
-                </tr>
+        <div class="table-responsive" style="clear: left;">
+            <table id="table_campana" class="table table-bordered ">
+                <thead>
+                    <tr>
+                        <th class ="colorhead">Campañas</th>
+                        <th>Inicio Campaña</th>
+                        <th>Termino Campaña</th>
+                        <th>Motivo Termino</th>
+                        <th>Fecha asignacion</th>
+                        <th>Estado</th>
+                    </tr>
+                </thead>
+                <tbody>
                     @foreach($usuarios->campanitas as $campana)
-                         <tr data-id="{{$usuarios->id}}">
+
+                         <tr data-id="{{$campana->id}}">
                              <td>{{$campana->nombre_campana}}</td>
                              <td>{{$campana->pivot->fecha_inicio}}</td>
                              <td>{{$campana->pivot->fecha_termino}}</td>
                              <td>{{$campana->pivot->motivo_termino}}</td>
+                             <td>{{$campana->pivot->created_at}}</td>
+                             @if($campana->pivot->motivo_termino =="")
+                              <td style="border:0"><a href="{{url('admin/updatePivot')}}{{$usuarios->id}}/{{$campana->pivot->id}}" >Finalizar</a></td>
+                             @else
+                                <td>Finalizada</td>
+                             @endif
                          </tr>
+
                     @endforeach
+                </tbody>
                 <!--en una tabla mostramos el usuario seleccionado en la vista sup/supervisor y con el foreach recorremos
                     todas las campañas que tenga en la tabla pivote ese usurio-->
             </table>
@@ -48,5 +73,9 @@
         </div><!--fin table resposibe-->
 
     </div><!--fin container-->
+
+
+
+
 
 @endsection

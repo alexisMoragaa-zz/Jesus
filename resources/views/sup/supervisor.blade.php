@@ -4,7 +4,18 @@
 @section('content')
 
 
+    <script src="{{asset('plugins/jquery/jquery-3.2.1.js')}}"></script>
+    <script src="{{asset('plugins/tablesorter/jquery.tablesorter.min.js')}}"></script>
 
+    <script type="text/javascript">
+        $(document).ready(function()
+        {
+            $("#table_campana").tablesorter();
+            /**para establecer un orden inicial usamos sortlist, y le pasamos como parametro 2 arrays con dos campos cada uno, el primero
+             * corresponde a la fila que deseamos ordenar partiendo desde el 0 y el segundo al order, siendo 0 acendente. y 1 decendente*/
+        });
+
+    </script>
 
 <link href="{{ asset('/css/style.css') }}" rel="stylesheet">
 <div>
@@ -16,7 +27,8 @@
  <div class="container">
 
   <div class="table-responsive">
-   <table class="table table-bordered">
+   <table id="table_campana" class="table table-bordered">
+       <thead>
     <tr>
      <th>Nombres</th>
      <th>Campaña actual</th>
@@ -26,7 +38,8 @@
      <th>Ver Usuario</th>
 
     </tr>
-
+       </thead>
+       <tbody>
     @foreach($User_Campana as $user_campana)
 
       <tr data-id="{{$user_campana->id}}">
@@ -52,6 +65,7 @@
      </tr>
 
     @endforeach
+       </tbody>
    </table>
       </div>
 

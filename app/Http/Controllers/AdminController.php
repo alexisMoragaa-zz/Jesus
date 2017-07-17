@@ -8,8 +8,10 @@ use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 //use Illuminate\Http\Request;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 use app\User;
-
+//use Illuminate\Http\Request;
 
 class AdminController extends Controller {
 
@@ -31,24 +33,35 @@ class AdminController extends Controller {
 
 	public function store(Request $request)
 	{
-		//
+
 
 			$usuarios = $request::all();
 
 			$rules = array(
 
 				'name'=>'required',
-				'email'=>'required|unique:users,email',
+				'last_name'=>'required',
+				'rut'=>'required|max:8',
+				'dv'=>'required|max:2',
 				'perfil'=>'required',
-				'estado' => 'required',
+				'email'=>'required|unique:users,email',
+				'direccion'=>'required',
+				'telefono'=>'required','numeric',
+				'afp' =>'required|min:4',
+				'previcion'=>'required',
+				'nombre_isapre'=>'required_if:previcion,isapre',
+				'turno'=>'required',
+				'estado'=>'required',
+				'tipo_cuenta'=>'required',
+				'n_cuenta' =>'required|numeric',
 				'password'=>'required'
 			);
 		/*creamos una regla de validacion en al cual especificamos los campos obligatorios*/
 
 		$v=Validator::make($usuarios, $rules);
 
-		/*instanciamos la variable " V " y declaramos que es igual a la validacion de la regla
-		que creamos arriba a la cual llamamos $regla*/
+		/*instanciamos la variable " V " y declaramos que es igual a la validacion de la reglaque creamos arriba a la cual llamamos $regla*/
+
 
 		if($v->fails()){
 
@@ -57,20 +70,33 @@ class AdminController extends Controller {
 				->withInput(Request::except('password'));
 		}
 			/*preguntamos con un if si la validacion falla.
-				si la validacion falla nos retorna de regreso a la pagina con los errores de validacion
-				pero obviando el password.
-
+				si la validacion falla nos retorna de regreso a la pagina con los errores de validacionpero obviando el password.
 				si la validacion no falla continua con el codigo y crea un nuevo usuario*/
 
+
+		$date = Carbon::now();
 			User::create([
-			'name' => $usuarios['name'],
-			'email' => $usuarios['email'],
-			'perfil'=> $usuarios['perfil'],
-			'estado' => $usuarios['estado'],
-			'password' => bcrypt($usuarios['password']),
+				'name' => $usuarios['name'],
+				'last_name' => $usuarios['last_name'],
+				'rut' => $usuarios['rut'],
+				'dv' => $usuarios['dv'],
+				'perfil'=> $usuarios['perfil'],
+				'email' => $usuarios['email'],
+				'direccion' =>$usuarios['direccion'],
+				'telefono' => $usuarios['telefono'],
+				'afp' => $usuarios['afp'],
+				'previcion'=>$usuarios['previcion'],
+				'nombre_isapre' =>$usuarios['nombre_isapre'],
+				'turno' =>$usuarios['turno'],
+				'estado' => $usuarios['estado'],
+				'tipo_cuenta'=>$usuarios['tipo_cuenta'],
+				'n_cuenta' =>$usuarios['n_cuenta'],
+				'fecha_ingreso'=>$date,
+				'password' => bcrypt($usuarios['password']),
 		]);
 
 		$usuarios = User::all();
+		
 		return view('admin/adminUser',compact('usuarios'));
 
 	}
@@ -78,7 +104,7 @@ class AdminController extends Controller {
 
 	public function show($id)
 	{
-		//
+		
 
 
 	}
@@ -94,19 +120,44 @@ class AdminController extends Controller {
     }
 
 
-	public function update($id)
+	public function update( Request $request, $id)
 
 	{
 
-		$usuarios =User::findOrFail($id);
-		$usuarios->fill(Request::all());
+		$usuario =User::findOrFail($id);
 
-		$usuarios->save();
+		$usuario->fill(Request::all());
+
+		$usuario->save();
 
 		$usuarios= User::all();
 		return view('admin/adminUser',compact('usuarios'));
 
 	}
+	public function updatePass(Request $request, $id){
+
+		$pass=$request::input('in_pass');
+
+		$update= DB::table('users')
+			->where('id','=',$id)
+			->update([
+				'password'=>bcrypt($pass)
+			]);
+
+		$usuarios= User::all();
+return view('admin/adminUser', compact('usuarios'));
+		}
+
+
+
+		/*$usuario->fill(Request::all());
+
+		$usuario->save();
+
+		$usuarios= User::all();
+		return view('admin/adminUser',compact('usuarios'));
+		*/
+
 
 	public function destroy($id)
 	{

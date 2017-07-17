@@ -10,11 +10,7 @@ use DB;
 
 class TeoController extends Controller {
 
-	/**
-	 * Display a listing of the resource.
-	 *
-	 * @return Response
-	 */
+
 	public function index()
 	{
 		//
@@ -45,14 +41,9 @@ class TeoController extends Controller {
 		return view('teo/mandatoRegistrado',compact('capta'),compact('c'));
 	}
 
-	/**
-	 * Store a newly created resource in storage.
-	 *
-	 * @return Response
-	 */
+	
 	public function store(Request $request)
 	{
-		//	
 			$data = $request->all();
 			
 			CaptacionesExitosa::create([
@@ -84,40 +75,20 @@ class TeoController extends Controller {
 	
 	}
 
-	/**
-	 * Display the specified resource.
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
+	
 	public function show($id)
 	{
 	 
-	 
-
 	}
 	
-	
-
-	/**
-	 * Show the form for editing the specified resource.
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
 	public function editar($id)
 	{
-		//
+	
 		$capta = captaciones::findOrFail($id);
 		return view('teo/modificar', compact('capta'));
 	}
 
-	/**
-	 * Update the specified resource in storage.
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
+
     public function actualizar(Request $request,$id)
 	{
 		$capta = captaciones::findOrFail($id);
@@ -138,15 +109,7 @@ class TeoController extends Controller {
         return view('teo/actualizado');
 	} 
 	 
-	 
-
-
-	/**
-	 * Remove the specified resource from storage.
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
+	
 	public function destroy($id)
 	{
 		//

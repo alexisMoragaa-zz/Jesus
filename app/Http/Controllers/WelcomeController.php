@@ -1,48 +1,43 @@
 <?php namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Auth;
-class WelcomeController extends Controller {
+class WelcomeController extends Controller
+{
 
-	/*
-	|--------------------------------------------------------------------------
-	| Welcome Controller
-	|--------------------------------------------------------------------------
-	|
-	| This controller renders the "marketing page" for the application and
-	| is configured to only allow guests. Like most of the other sample
-	| controllers, you are free to modify or remove it as you desire.
-	|
-	*/
 
 	/**
-	 * Create a new controller instance.
-	 *
-	 * @return void
+	 *este controlador funciona como filtro, cada vez que se ingrese una url
+	 * vacia este controlador se encargara a redirigirlo a una pagina en particular
+	 * segun el perfil de cada usuario
 	 */
+
 	public function __construct()
 	{
 		$this->middleware('auth');
 	}
 
-	/**
-	 * Show the application welcome screen to the user.
-	 *
-	 * @return Response
-	 */
+
+
 	public function index()
 	{
 
-		if (Auth::User()-> perfil== 1) {
+		if (Auth::User()->perfil == 1) {
 
 			return view('administradorr');
 
-		}elseif (Auth::User()->perfil==2){
+		} elseif (Auth::User()->perfil == 2) {
 
 			return view('teo/teoin');
 
-		}elseif (Auth::User()->perfil==3){
+		} elseif (Auth::User()->perfil == 3) {
 			return view('home');
+
+		} elseif (Auth::User()->perfil == 4) {
+			return view('home');
+
+		} elseif (Auth::User()->perfil == 5) {
+			return view('home');
+
 		}
 
 	}
-
 }

@@ -2,7 +2,7 @@
 
 @section('content')
 <link href="{{ asset('/css/style.css') }}" rel="stylesheet">
-
+<script src="{{asset('js/optimizar.js')}}"></script>
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-8 col-md-offset-2">
@@ -29,25 +29,56 @@
                            
                 <input type="hidden" name="_token" value="{{ csrf_token() }}">
 
+                  <div class="col-md-12">
                     @include('admin.partials.login')
 
-             <div class="col-md-6 col-md-offset-4">
+                  </div>
 
-                 <button type="submit" class="btn btn-primary">Editar</button>
+             <div class=" col-md-2">
 
-
-
-		        </div>
+                 <button style="margin: 15px;"type="submit" class="btn btn-primary">Editar</button>
+             </div>
 
 
 
     {!! form::close() !!}
-                            <!--<div class="col-md6 col-md-offset-4">
--->
-<div></div>
-                 @include('admin.partials.delete')
 
+   @include('admin.partials.delete')
 
+                                @if(Auth::user()->perfil==1)
+                                    <div class="form-group">
+                                        <div class="col-md-4" style="padding:15px;">
+
+                                            <a id="edit_pass" > Editar Pass</a>
+
+                                            <label for="" id="error" style="text-align: center; color: red"></label>
+                                        </div>
+
+                    <div id="newpass" class="form-group">
+
+                        {!!  Form::model($user,['url'=>['admin/updatePass',$user],'method'=>'POST','class' =>'form-horizontal', 'id'=>'form']) !!}
+
+                                        <div class="col-md-3" class="newpass">
+                                             <label for="" class="control-label">Contraseña</label>
+
+                                                <input type="password" class="form-control" id="in_pass" name="in_pass">
+                                        </div>
+
+                                        <div class="col-md-3" class="newpass">
+
+                                            <label for="" class="control-label" id="error">Confirmar</label>
+
+                                            <input type="password" class="form-control" id="confirm_pass" name="confirm_password">
+                                        </div>
+
+                                        <div class="col-md-2">
+                                            <label for="">.</label>
+                                            <input type="button" class="btn btn-info form-control" id="btn_enviar" value="Actualizar">
+                                        </div>
+                        {!! Form::close() !!}
+                    </div>
+                                    </div>
+                                @endif
                         </div>
 
 
