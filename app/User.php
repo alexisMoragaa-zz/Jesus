@@ -10,15 +10,12 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 
 	use Authenticatable, CanResetPassword;
 
-/**
-*este es el modelo demusuario.
- * esta encarghado de gestionar la informacion de los usuarios que utilizaran el webside
- */
+
 	protected $table = 'users';
 
 
 	protected $fillable = ['name','last_name','rut','dv','perfil','email','direccion','telefono','afp','previcion','nombre_isapre',
-							'turno', 'estado','tipo_cuenta','n_cuenta', 'campana','fecha_ingreso','fecha_termino','password'];
+							'turno', 'estado','fecha_nacimiento','tipo_cuenta','n_cuenta', 'campana','fecha_ingreso','fecha_termino','password'];
 
 							/*campos que podemos modificar*/
 
@@ -41,8 +38,6 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 		->withPivot('updated_at')
 		->withPivot('id')
 		->withTimestamps();
-
-
 }
 
 	

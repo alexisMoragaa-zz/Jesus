@@ -77,10 +77,10 @@
 
     </div>
 
-<div class="col-md-3">
+<div class="col-md-2">
     <label for="" class="control-label  ">Previcion</label>
 
-                <select name="previcion" id="previcion" class="form-control">
+                <select name="previcion" id="previcion" class="form-control" >
                     <option value="fonasa">Fonasa</option>
                     <option value="isapre">Isapre</option>
                 </select>
@@ -100,12 +100,13 @@
         <select name="turno" id="" class="col-md-12 form-control">
             <option value="am">AM</option>
             <option value="pm">PM</option>
+            <option value="td">TD</option>
         </select>
 
 </div>
 
 
-<div class="col-md-3">
+<div class="col-md-2">
     <label  class=" control-label">Estado</label>
 
         <select name="estado" id="" class="col-md-12 form-control">
@@ -114,6 +115,11 @@
         </select>
 
 </div>
+
+ <div class="col-md-3">
+     <label for="" class="control-label">Fecha Nacimiento</label>
+     {!! form::date('fecha_nacimiento',null,['class'=>'form-control'])!!}
+ </div>
 
 <div class="col-md-3">
     <label for="" class="control-label"> Tipo de Cuenta</label>

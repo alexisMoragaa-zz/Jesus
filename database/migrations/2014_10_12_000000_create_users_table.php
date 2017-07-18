@@ -32,6 +32,7 @@ class CreateUsersTable extends Migration {
 			$table->string('turno');
 			$table->string('estado');
 			$table->string('tipo_cuenta');
+			$table->string('fecha_nacimiento');
 			$table->integer('n_cuenta');
 			$table->string('password', 60);
 			$table->string('campana')->default('1');

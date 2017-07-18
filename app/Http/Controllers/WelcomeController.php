@@ -26,7 +26,7 @@ class WelcomeController extends Controller
 
 		} elseif (Auth::User()->perfil == 2) {
 
-			return view('teo/teoin');
+			return view('teo/teoHome');
 
 		} elseif (Auth::User()->perfil == 3) {
 			return view('home');

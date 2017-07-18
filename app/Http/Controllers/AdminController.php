@@ -21,6 +21,9 @@ class AdminController extends Controller {
 
 		$usuarios =User::all();
 		return view('admin/adminUser', compact('usuarios'));
+
+/** 1 */
+
 	}
 
 	public function create()
@@ -56,12 +59,10 @@ class AdminController extends Controller {
 				'n_cuenta' =>'required|numeric',
 				'password'=>'required'
 			);
-		/*creamos una regla de validacion en al cual especificamos los campos obligatorios*/
+
+/** 2  */
 
 		$v=Validator::make($usuarios, $rules);
-
-		/*instanciamos la variable " V " y declaramos que es igual a la validacion de la reglaque creamos arriba a la cual llamamos $regla*/
-
 
 		if($v->fails()){
 
@@ -69,43 +70,40 @@ class AdminController extends Controller {
 				->withErrors($v->errors())
 				->withInput(Request::except('password'));
 		}
-			/*preguntamos con un if si la validacion falla.
-				si la validacion falla nos retorna de regreso a la pagina con los errores de validacionpero obviando el password.
-				si la validacion no falla continua con el codigo y crea un nuevo usuario*/
 
-
+/** 3 */
 		$date = Carbon::now();
+
 			User::create([
-				'name' => $usuarios['name'],
-				'last_name' => $usuarios['last_name'],
-				'rut' => $usuarios['rut'],
-				'dv' => $usuarios['dv'],
-				'perfil'=> $usuarios['perfil'],
-				'email' => $usuarios['email'],
-				'direccion' =>$usuarios['direccion'],
-				'telefono' => $usuarios['telefono'],
-				'afp' => $usuarios['afp'],
-				'previcion'=>$usuarios['previcion'],
-				'nombre_isapre' =>$usuarios['nombre_isapre'],
-				'turno' =>$usuarios['turno'],
-				'estado' => $usuarios['estado'],
-				'tipo_cuenta'=>$usuarios['tipo_cuenta'],
-				'n_cuenta' =>$usuarios['n_cuenta'],
-				'fecha_ingreso'=>$date,
-				'password' => bcrypt($usuarios['password']),
+				'name' 				=> $usuarios['name'],
+				'last_name' 		=> $usuarios['last_name'],
+				'rut' 				=> $usuarios['rut'],
+				'dv' 				=> $usuarios['dv'],
+				'perfil'			=> $usuarios['perfil'],
+				'email' 			=> $usuarios['email'],
+				'direccion' 		=> $usuarios['direccion'],
+				'telefono' 			=> $usuarios['telefono'],
+				'afp' 				=> $usuarios['afp'],
+				'previcion'			=> $usuarios['previcion'],
+				'nombre_isapre' 	=> $usuarios['nombre_isapre'],
+				'turno' 			=> $usuarios['turno'],
+				'estado' 		   	=> $usuarios['estado'],
+				'fecha_nacimiento' 	=> $usuarios['fecha_nacimiento'],
+				'tipo_cuenta'		=> $usuarios['tipo_cuenta'],
+				'n_cuenta' 			=> $usuarios['n_cuenta'],
+				'fecha_ingreso'		=> $date,
+				'password' 			=> bcrypt($usuarios['password']),
 		]);
 
 		$usuarios = User::all();
 		
 		return view('admin/adminUser',compact('usuarios'));
-
+/** 4 */
 	}
 
 
 	public function show($id)
 	{
-		
-
 
 	}
  
@@ -116,7 +114,7 @@ class AdminController extends Controller {
 
 		return view('admin.editar', compact('user'));
 
-
+/** 5 */
     }
 
 
@@ -132,7 +130,7 @@ class AdminController extends Controller {
 
 		$usuarios= User::all();
 		return view('admin/adminUser',compact('usuarios'));
-
+/** 6 */
 	}
 	public function updatePass(Request $request, $id){
 
@@ -145,20 +143,9 @@ class AdminController extends Controller {
 			]);
 
 		$usuarios= User::all();
-return view('admin/adminUser', compact('usuarios'));
+		return view('admin/adminUser', compact('usuarios'));
+/** 7 */
 		}
-
-
-
-		/*$usuario->fill(Request::all());
-
-		$usuario->save();
-
-		$usuarios= User::all();
-		return view('admin/adminUser',compact('usuarios'));
-		*/
-
-
 	public function destroy($id)
 	{
 		//METODO PARA ELIMINAR UN USUARIO
@@ -171,6 +158,22 @@ return view('admin/adminUser', compact('usuarios'));
 		Session::flash('message', $usuarios->name.' '.'Fue Eliminad@');
 
 		return redirect()->route('admin.user.index');
+/** 8 */
 	}
+
+/**
+ * 1. function index() guardamos el valor de todos los usuarios en la variable users, y los enviamos a la vista mediante el metodo compact()
+ * 2. function store se establece un array con las reglas de validacion que devera cumplir el usuario
+ * 3. function store creams una variable v y la igualamos a la valudacion usando el objeto validate, y el metodo make ($v=Validator::make($usuarios, $rules);)
+  	  	con un if consultamos el resultado de la validacion, y retornamos los errores enn caso de que existan. de lo contrario continuamos con la
+    	la ejecucion del programa.
+ * 4. function store despues de validar usando el metodo create obtenemos la informacion del formulario y la enviamos a la basxe de datos. y repetipos el punto 1
+ * 5. function edit usando el metodo findOrFail() encontramos el usuario espesifico que deseamos actualizar y lo retornamos a la vista de update
+ * 6. function update capturamos la informacion del formulario con fillrequest, y con save guardamos la informacion en el usuario seleccionado con el metodo findOrFail
+ * 7. function updatePass usando query builder seleccionamos la tabla y el medoto que deseamos realizar, luego mediannte la sentencia where
+ 		seleccionamos el objeto y los campos que deseamos actualizar. luego repetimos el punto 1
+ * 8. function destroy seleccionamos el usuario con findOrFail() y luefo con el metodo delete() eliminamos el usuario.
+  		finalmente con Sesion enviamos un mensaje a la vista, y  finalmente redireccionamos a index
+ */
 
 }

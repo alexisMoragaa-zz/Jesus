@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use DB;
 
 
+
 class TeoController extends Controller {
 
 

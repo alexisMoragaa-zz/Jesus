@@ -9,7 +9,7 @@ $(document).ready(function(){
 
     });/**fin 2*/
 
-    $("#error").hide()/** 3*/
+    $("#error").hide() /** 3*/
 
     $("#btn_enviar").click(function(){/** inicio 4 */
 
