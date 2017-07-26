@@ -41,6 +41,7 @@ Route::group(['middleware' =>['auth', 'administrador'],'prefix'=>'admin'], funct
 	route::get('updatePivot{user_id}/{pivot_id}','supController@updatePivot');
 	route::post('updatepivot2','supController@updatepivot2');
 	route::post('updatePass/{id}','adminController@updatePass');
+	route::get('siguiente{id}','teoController@siguiente');
 	/*Route::get('/', function(){
 
 		return view('admin/administradorr');
@@ -59,6 +60,7 @@ Route::group(['middleware' =>['auth', 'teleoperador'],'prefix'=>'teo'], function
 		Route::get('edit&{id}', 'TeoController@editar');
 	    Route::get('mandatoExitoso&{id}&{id_interno_dues}', 'TeoController@create');
 		Route::post('agregado', 'TeoController@store');
+		route::post('siguiente{id}','teoController@siguinente');
 		Route::get(' ', function(){
 
 			return view('teo/call');

@@ -1,14 +1,14 @@
 @extends('app')
 @section('content')
 
-
+    <script src="{{asset('plugins/jquery/jquery-3.2.1.js')}}"></script>
+    <script src="{{asset('plugins/tablesorter/jquery.tablesorter.min.js')}}"></script>
 
 
 
     <script type="text/javascript">
         $(document).ready(function() {
             $("#table_campana").tablesorter({sortList:[[4,1],[1,0]]});
-
             /**para establecer un orden inicial usamos sortlist, y le pasamos como parametro 2 arrays con dos campos cada uno, el primero
              * corresponde a la fila que deseamos ordenar partiendo desde el 0 y el segundo al order, siendo 0 acendente. y 1 decendente*/
 

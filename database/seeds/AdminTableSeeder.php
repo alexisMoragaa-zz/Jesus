@@ -27,7 +27,8 @@ class AdminTableSeeder extends Seeder
             'nombre_isapre'=>'consalud',
             'tipo_cuenta'=>'Banco Estado Cuenta Rut',
             'n_cuenta'=>'18202912',
-            'campana'=>'1'
+            'campana'=>'1',
+            'fecha_ingreso'  =>  '01-11-2016 15:50',
 
         ));
     }

@@ -6,6 +6,7 @@ use App\captaciones;
 use App\CaptacionesExitosa;
 use Illuminate\Http\Request;
 use DB;
+use Carbon\Carbon;
 
 
 
@@ -14,32 +15,47 @@ class TeoController extends Controller {
 
 	public function index()
 	{
-		//
-		$cap= captaciones::where('id','>=', 1 )->where('id','<=', 1000)->simplepaginate('1');
-        
+		$date=Carbon::now()->format('d-m-Y');
+
+		$cap= captaciones::where('id','>=', 1 )->first();// ->where('estado_registro','=',0)->where('f_ultimo_llamado','!=',$date)->first();
+
+      DB::table('captaciones')
+			->where('id', '=', $cap->id)
+			->update([
+				'estado_registro'=>1
+			]);
+
 		return view('teo/teoin', compact('cap'));
 		
 	}
 
+	public function siguiente( $id){
 
-	/**
-	 * Show the form for creating a new resource.
-	 *
-	 * @return Response
-	 */
+		$date=Carbon::now()->format('d-m-Y');
+
+		DB::table('captaciones')
+			->where('id', '=', $id)
+			->update([
+				'estado_registro'=>0,
+				'f_ultimo_llamado'=>$date
+			]);
+
+		return redirect()->route('admin.call.index');
+	}
+	
 	public function create($id,$id_interno_dues)
 	{
-		  /*$c=  DB::table('captaciones')
+		 /** $c=  DB::table('captaciones')
             ->join('captaciones_exitosas', 'captaciones.id', '=', 'captaciones_exitosas.id')
 			->where('captaciones_exitosas.n_interno_dues','=', $id_interno_dues)
-            ->get();*/
+            ->get();
 			
 			$c = DB::table('captaciones_exitosas')
 		    ->where('n_dues','=', $id_interno_dues)->get();
-			
+			*/
 		    $capta = captaciones::findOrFail($id);
 	    
-		return view('teo/mandatoRegistrado',compact('capta'),compact('c'));
+		return view('teo/mandatoRegistrado',compact('capta'));
 	}
 
 	
@@ -115,6 +131,15 @@ class TeoController extends Controller {
 	{
 		//
 	}
-	
+
+
+
+	/** comentarios del controlador
+	 *index:    selecciona el primer registro de la base de datos que cumpla con las condiciones establecidas en los where
+			    luego inserta acontinuacion inserta un 1 en estado para vbloquear el registro a los demas usuarios. finalmente
+	 * 		     envia la informacion a la vista
+	 *Siguiente: toma el registro entregado por la vista, inserta un 0 para desbloquear el registro, he inserta la fecha correspondiente
+	 * 		     al dia, para que de esta forma no se llamena los mismos registros el mismo dia. luego redirecciona al index y se repite el proceso
+	 */
 
 }

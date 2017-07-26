@@ -1,11 +1,12 @@
 @extends('app')
 
 @section('content')
+
 	<style>
 		#name{
 
-			margin-left: 90%;
-
+			margin-left: 0%;
+			display: block;
 
 		}
 		#contenedor{
@@ -13,100 +14,101 @@
 			min-height: 400px;
 
 		}
+		#btn_siguiente{
+			margin-top: 23px;
+		}
+		#btn_agendar{
+			float:left;
+		}
+		.div-name{
+			float:left;
+		}
+		#contenedor1{
+
+			clear: both;
+
+		}
 	</style>
+	<script>
+		$(document).ready(function(){
+
+
+
+		});
+
+
+	</script>
 
 <link href="{{ asset('/css/style.css') }}" rel="stylesheet">
+	<script src="{{asset('js/optimizar.js')}}"></script>
+
 <div class="container " id="contenedor">
-<h1 id="name" class="">{{Auth::user()->name}}</h1>
 
-	@foreach($cap as $c)
-	<p>{{$c->nombre}}</p>
+<div class="div-name col-md-10 col-sm-10 col-xs-10">
+	<h1 id="name" class="col-md-10">{{Auth::user()->name}} {{Auth::user()->last_name}}</h1>
+
+</div>
+<div id="btn_agendar">
+
+	<a href="{{url('admin/mandatoExitoso&')}}{{$cap->id}}&{{$cap->n_dues}}" ><h1 class="btn btn-success">Agendar</h1></a>
+</div>
+
+	<div id="contenedor1" class="form-group">
+		<div class="col-md-3">
+
+		<label for="" class="control-label">Nombre</label>
+		<input type="text" value="{{$cap->nombre}}" class="form-control">
+	</div>
+
+	<div class="col-md-3">
+		<label for="" class="control-label">Apellido</label>
+		<input type="text" value="{{$cap->apellido}}" class="form-control">
+	</div>
+
+	<div class="col-md-3">
+		<label for="" class="control-label">Fono</label>
+		<input type="text" class="form-control" id="fono_seleccionado" value="">
+	</div>
+
+	<div class="col-md-2">
+		<label for="" class="control-label">Fono</label>
+		<select  class="form-control" id="fon_selector">
+			<option  value="{{$cap->fono_1}}" id="fono1">Fono 1</option>
+			<option value="{{$cap->fono_2}}" id="fono2">Fono 2</option>
+			<option value="{{$cap->fono_3}}" id="fono3">Fono 3</option>
+			<option value="{{$cap->fono_4}}" id="fono4">Fono 4</option>
+
+		</select>
+	</div>
+
+	<div class="col-md-4">
+		<label for="" class="control-label">Correo</label>
+		<input type="text" class="form-control" id="correo_seleccionado">
+
+	</div>
+
+	<div class="col-md-2">
+		<label for="" class="control-label">Correo</label>
+		<select name="" id="correo_selector" class="form-control">
+			<option value="{{$cap->correo_1}}" id="correo1">Correo 1</option>
+			<option value="{{$cap->correo_2}}" id="correo2">Correo 1</option>
+		</select>
+	</div>
+
+	<div class="col-md-4">
+		<label for="" id="otro_antecedente-l" class="control-label">Otro Antecedente</label>
+		<input type="text" value="{{$cap->otro_antecedente}}" id="otro_antecedente" class="form-control">
+	</div>
+
+	<div class="col-md-1">
+
+		<a href="{{url('admin/siguiente')}}{{$cap->id}}" class="btn btn-info col-md-12" id="btn_siguiente">Next</a>
+	</div>
+
+</div>
 
 
+</div>
 
-
-
-
-
-
-
-	@endforeach
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<!-- codigo anterior
-<div class="table-responsive">
-	<div class="panel panel-default">
-		<table class="table">
-    			<tr>
-					<th>FONO</th>
-					<th>FONO</th>
-					<th>NOMBRE</th>
-   				 	<th>APELLIDO</th>
-    				<th>CORREO</th>
-					<th>OTROS ANTECEDENTES</th>
-					<th>ESTADO</th>
-					<th>FECHA VOLVER A LLAMAR</th>
-					<th>ACCION</th>
-    			</tr>
-			 @foreach ($cap as $c)
-
-    			<tr>
-
-					<td>{{ $c->fono_1 }}</td>
-					<td>{{ $c->fono_2 }}</td>
-					<td>{{ $c->nombre }}</td>
-					<td>{{ $c->apellido }}</td>
-					<td>{{ $c->correo_1 }}</td>
-					<td>{{ $c->otro_antecedente }}</td>
-					<td>
-						<select name="estado" class="form-control col-md-3" >
-							<option>--Seleccione--</option>
-								<option></option>
-						</select>
-					</td>
-					<td>{{ $c->fecha_volver_allamar }}</td>
-
-					@if(Auth::user()->perfil==1)
-						<td><a href="{{ url('admin/edit&')}}{{$c->id}}">MODIFICAR</a></td>
-
-    				@elseif(Auth::user()->perfil==2)
-						<td><a href="{{ url('teo/edit&')}}{{$c->id}}">MODIFICAR</a></td>
-    				@endif
-
-					@if(Auth::user()->perfil==1)
-						<td><a href="{{ url('admin/mandatoExitoso&')}}{{$c->id}}&{{$c->n_dues}}">AGREGAR MANDATO EXITOSO</a></td>
-
-					@elseif(Auth::user()->perfil==2)
-						<td><a href="{{ url('teo/mandatoExitoso&')}}{{$c->id}}&{{$c->n_dues}}">AGREGAR MANDATO EXITOSO</a></td>
-					@endif
-
-	
-   				 </tr>
-			@endforeach
-			</table>
-	  </div>
-  {!!$cap->render()!!}
-  </div>
- fin codigo anterior-->
 	</div>
 @endsection

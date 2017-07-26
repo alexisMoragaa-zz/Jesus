@@ -10,11 +10,7 @@
 				   <form class="form-horizontal" role="form" method="POST" action="@if(Auth::user()->perfil==1){{ url('admin/agregado') }}@elseif(Auth::user()->perfil==2){{ url('teo/agregado')}}@endif " >
                     <input type="hidden" name="_token" value="{{ csrf_token() }}">
 
-			            @foreach($c as $ca)
-						@if ($ca->n_dues==$ca->n_dues)
-					    <h2>Mandato Registrado Anteriormente</h2>
-						@endif
-						@endforeach
+
 
 					   <div>
 						   <input type="hidden" class="form-control" name="fundacion" value="{{$capta->fundacion}}">

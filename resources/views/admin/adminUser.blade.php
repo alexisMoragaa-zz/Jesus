@@ -4,7 +4,11 @@
 @section('content')
 <link href="{{ asset('/css/style.css') }}" rel="stylesheet">
 
+<script>
+	$(document).ready(function(){
 
+	});
+</script>
 
         @if(Session::has('message'))
 
@@ -27,15 +31,18 @@
 			<div class="table-responsive">
 
 				<!--creamos un atabla para mostrar la informacuion de los usuarios registrados en nuestro sistema -->
-  			<table class="table table-bordered">
-   				<tr>
-   					<th>Nombres</th>
-   					<th>Correo</th>
-   					<th>Perfil</th>
-   					<th>Accion</th>
-   				</tr>
-						<!--con un foreach recorremos todos los usuarios  y los mostramos en la tabla a continuacion -->
-
+  			<table class="table table-bordered" id="tableUser">
+				<thead>
+   					<tr>
+   						<th>Nombres</th>
+   						<th>Correo</th>
+   						<th>Perfil</th>
+						<th>Fecha Ingreso</th>
+   						<th>Accion</th>
+   					</tr>
+				</thead>
+				<!--con un foreach recorremos todos los usuarios  y los mostramos en la tabla a continuacion -->
+				<tbody>
 					@foreach($usuarios as $User)
    						<tr data-id="{{$User->id}}">
    							<td>{{  $User->name }}</td>
@@ -53,7 +60,8 @@
 									@else
 									{{$User->perfil}}
 									@endif
-								</td>
+							</td>
+							<td style="text-align: center">{{$User->fecha_ingreso}}</td>
    							<td style="text-align: center">
 								@if(Auth::user()->perfil==1)
                         			<a href="{{ route('admin.user.edit',$User->id)}}">Editar/Eliminar</a>
@@ -64,9 +72,9 @@
 								del usuario al controlador para solo ese registro y no todos-->
    							</td>
    						</tr>
-
 					@endforeach
-  			</table>
+				</tbody>
+			</table>
 </div><!--fin table responsive-->
 </div> <!-- din panel default-->
 </div><!--fin container -->

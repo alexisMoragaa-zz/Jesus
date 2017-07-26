@@ -19,8 +19,10 @@ class AdminController extends Controller {
 	public function index(Request $request)
 	{
 
-		$usuarios =User::all();
-		return view('admin/adminUser', compact('usuarios'));
+		$usuarios = User::all()->sortByDesc('created_at');
+
+
+		return view('admin/adminUser',compact('usuarios'));
 
 /** 1 */
 
@@ -72,7 +74,8 @@ class AdminController extends Controller {
 		}
 
 /** 3 */
-		$date = Carbon::now();
+		$date = Carbon::now()->format('d-m-Y');
+
 
 			User::create([
 				'name' 				=> $usuarios['name'],
@@ -95,9 +98,7 @@ class AdminController extends Controller {
 				'password' 			=> bcrypt($usuarios['password']),
 		]);
 
-		$usuarios = User::all();
-		
-		return view('admin/adminUser',compact('usuarios'));
+		return redirect()->route('admin.user.index');
 /** 4 */
 	}
 
