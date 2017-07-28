@@ -35,6 +35,7 @@ class CreateCaptacionesTable extends Migration {
 			$table->string('volver_llamar')->nullable();
 			$table->string('mensaje')->nullable();
 			$table->string('observacion')->nullable();
+			$table->string('estado_llamada');
 			$table->string('n_llamados')->nullable();
 			$table->string('f_ultimo_llamado')->nullable();
 			$table->string('primer_llamado')->nullable();

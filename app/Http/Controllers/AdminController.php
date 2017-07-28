@@ -173,8 +173,8 @@ class AdminController extends Controller {
  * 6. function update capturamos la informacion del formulario con fillrequest, y con save guardamos la informacion en el usuario seleccionado con el metodo findOrFail
  * 7. function updatePass usando query builder seleccionamos la tabla y el medoto que deseamos realizar, luego mediannte la sentencia where
  		seleccionamos el objeto y los campos que deseamos actualizar. luego repetimos el punto 1
- * 8. function destroy seleccionamos el usuario con findOrFail() y luefo con el metodo delete() eliminamos el usuario.
-  		finalmente con Sesion enviamos un mensaje a la vista, y  finalmente redireccionamos a index
+ * 8. function destroy seleccionamos el usuario con findOrFail() y luego con el metodo delete() eliminamos el usuario.
+  		finalmente con Sesion enviamos un mensaje a la vista, y redireccionamos a index
  */
 
 }

@@ -29,18 +29,23 @@ class TeoController extends Controller {
 		
 	}
 
-	public function siguiente( $id){
+	public function siguiente(Request $request, $id){
 
 		$date=Carbon::now()->format('d-m-Y');
+		$observation=$request->input('observation1');
+		$call_status =$request->input('call_status');
 
 		DB::table('captaciones')
 			->where('id', '=', $id)
 			->update([
 				'estado_registro'=>0,
-				'f_ultimo_llamado'=>$date
+				'f_ultimo_llamado'=>$date,
+				'observacion'=>$observation,
+				'estado_llamada'=>$call_status
 			]);
 
 		return redirect()->route('admin.call.index');
+
 	}
 	
 	public function create($id,$id_interno_dues)

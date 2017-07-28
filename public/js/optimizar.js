@@ -55,18 +55,39 @@ $(document).ready(function(){
     }/** fin 6 */
    
     /** inicio 7 */
+
+    $("#observation-error").hide();
+    $("#status-error").hide();
+
+    $("#btn_siguiente").click(function(){
+
+        if($("#observation").val()==""){
+
+            $("#observation-error").show();
+            return false;
+        }
+
+        if($("#call_status").val()==""){
+
+            $("#status-error").show();
+            return false;
+        }
+    });/**fin 7 */
+    /** inicio 8 */
 /*fin*/
 });
 /**
  *  1.ocultamos el contenedor new pass que contiene dos input de tipo password para actualizar la contraseña
  *  2. dejamos el link editar pass a la escucha del evento click, para mostrar el contenedor con los inputs
- *  3. ocultamos el label de error
+ *  3. ocultamos el label de error.
  *  4. dejamos el boton de enviar a la espera del evento click / valida que el password sea igual en ambos casos
  *      si los campos son iguales ejecuta el evento submit del formulario y envia los datos al controlador.
  *      si los passwords no son iguales muestra el label, y le añade el texto las contraseñas no son iguales.
  *  5. asignamos el valor de un select a una input de tipo text, para que luego el teleoperador pueda copiar y
- *      pegar ehn zoiper
+ *      pegar en zoiper.
  *     luego con el evento change volvemos a asignar el valor seleccionado en el select cada vez que este cambie.
  *     hacemos lo mismo con el correo.
  * 6. consultamos con una sentencia if el valor de el campo option, y si el campo esta vacio lo ocultamos.
+ * 7. establecemos una validacion para la vista teoin en la cual, verificamos que las casillas observation y call_status
+ *      y si se encuentran bacias mostramos un mensaje de error, he inavilitamos el boton next.
  */
