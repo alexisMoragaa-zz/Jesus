@@ -7,6 +7,8 @@ use App\CaptacionesExitosa;
 use Illuminate\Http\Request;
 use DB;
 use Carbon\Carbon;
+use App\estado;
+
 
 
 
@@ -17,7 +19,7 @@ class TeoController extends Controller {
 	{
 		$date=Carbon::now()->format('d-m-Y');
 
-		$cap= captaciones::where('id','>=', 1 )->first();// ->where('estado_registro','=',0)->where('f_ultimo_llamado','!=',$date)->first();
+		$cap= captaciones::where('id','>=', 1 )->where('estado','!=','cu-')->first();// ->where('estado_registro','=',0)->where('f_ultimo_llamado','!=',$date)->first();
 
       DB::table('captaciones')
 			->where('id', '=', $cap->id)
@@ -25,7 +27,9 @@ class TeoController extends Controller {
 				'estado_registro'=>1
 			]);
 
-		return view('teo/teoin', compact('cap'));
+		$status= estado::where('modulo','=','llamado')->get();
+
+		return view('teo/teoin', compact('cap','status'));
 		
 	}
 
@@ -34,17 +38,42 @@ class TeoController extends Controller {
 		$date=Carbon::now()->format('d-m-Y');
 		$observation=$request->input('observation1');
 		$call_status =$request->input('call_status');
+		$call_again=$request->input('call_again');
+		$type = estado::where('estado','=',$call_status)->pluck('tipo');
+		$llamado1= captaciones::where('id','=',$id)->pluck('primer_llamado');
+		$llamado2= captaciones::where('id','=',$id)->pluck('segundo_llamado');
 
-		DB::table('captaciones')
+		if ($llamado1 == null){
+				$llamado='primer_llamado';
+				$name_status='estado_llamada1';
+				$n_llamado='1';
+
+		}elseif($llamado2 == null){
+			$llamado='segundo_llamado';
+			$name_status='estado_llamada2';
+			$n_llamado='2';
+
+		}else{
+			$llamado='tercer_llamado';
+			$name_status='estado_llamada3';
+			$n_llamado='3';
+		}
+
+	DB::table('captaciones')
 			->where('id', '=', $id)
 			->update([
 				'estado_registro'=>0,
 				'f_ultimo_llamado'=>$date,
 				'observacion'=>$observation,
-				'estado_llamada'=>$call_status
+				$name_status=>$call_status,
+				'estado'=>$type,
+				$llamado=>$date,
+				'n_llamados'=>$n_llamado,
+				'volver_llamar'=>$call_again
 			]);
 
 		return redirect()->route('admin.call.index');
+
 
 	}
 	

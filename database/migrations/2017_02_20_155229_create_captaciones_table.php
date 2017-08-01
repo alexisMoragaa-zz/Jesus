@@ -30,17 +30,17 @@ class CreateCaptacionesTable extends Migration {
 			$table->string('correo_2')->nullable();
 			$table->string('firma_inscripcion')->nullable();
 			$table->string('otro_antecedente')->nullable();
-			$table->string('monto')->nullable();
-			$table->string('estado')->nullable();
+			$table->string('estado')->default(0);
 			$table->string('volver_llamar')->nullable();
-			$table->string('mensaje')->nullable();
 			$table->string('observacion')->nullable();
-			$table->string('estado_llamada');
+			$table->string('estado_llamada1');
+			$table->string('primer_llamado')->nullable();
+			$table->string('estado_llamada2');
+			$table->string('segundo_llamado')->nullable();
+			$table->string('estado_llamada3');
+			$table->string('tercer_llamado')->nullable();
 			$table->string('n_llamados')->nullable();
 			$table->string('f_ultimo_llamado')->nullable();
-			$table->string('primer_llamado')->nullable();
-			$table->string('segundo_llamado')->nullable();
-			$table->string('tercer_llamado')->nullable();
 			$table->timestamps();
 		});
 	}

@@ -1,6 +1,7 @@
 @extends('app')
 
 @section('content')
+	<script src="http://code.jquery.com/jquery-migrate-1.0.0.js"></script>
 
 	<style>
 		#name{
@@ -39,9 +40,37 @@
 			padding-left: 30px;
 			color: red;
 		}
+		#color{
+			/*border-color: #aaaaaa;
+			border-width: 1px;
+			border-style: solid;*/
+			background: red;
+			margin-top: 30px;
+			margin-bottom: 15px;
+		}
 	</style>
 	<script>
 		$(document).ready(function(){
+
+
+			$("#v_llamar").hide();
+
+			$("#call_status").change(function(){
+
+				if($("#call_status").val()=='Volver a llamar'){
+
+					$("#observ").removeClass('col-md-6');
+					$("#observ").addClass('col-md-3');
+					$("#v_llamar").fadeIn(550);
+				}else{
+					$("#v_llamar").hide()
+					$("#observ").removeClass('col-md-3');
+					$("#observ").addClass('col-md-6');
+
+				}
+			});
+
+
 
 
 		});
@@ -104,7 +133,7 @@
 		<label for="" class="control-label">Correo</label>
 		<select name="" id="correo_selector" class="form-control">
 			<option value="{{$cap->correo_1}}" id="correo1">Correo 1</option>
-			<option value="{{$cap->correo_2}}" id="correo2">Correo 1</option>
+			<option value="{{$cap->correo_2}}" id="correo2">Correo 2</option>
 		</select>
 	</div>
 
@@ -115,30 +144,33 @@
 
 		{!! Form::open(['url'=>['admin/siguiente',$cap->id],'method'=>'POST']) !!}
 
-		<div class="col-md-6">
-
-			<label for="" class="control-label">Observaciones</label>
-			<label for="" class="control-label" id="observation-error">*Ingrese Un Valor</label>
-			<input type="text" class="form-control" id="observation" name="observation1">
-		</div>
-
 		<div class="col-md-3">
 			<label for="" class="control-label">Estado Llamado</label>
 			<label for="" class="control-label" id="status-error">*Ingrese Un Valor</label>
+
 			<select name="call_status" id="call_status" class="form-control">
-				<option value="">Seleccione una Opcion</option>
-				<option value="1">No Contesta</option>
-				<option value="2">Fono Ocuopado</option>
-				<option value="3">Mala Conexion</option>
-				<option value="4">Fuera de servicio</option>
-				<option value="5">No interesado</option>
-				<option value="6">Sin dinero</option>
-				<option value="7">Sin Trabajo</option>
-				<option value="8">Volver a Llamar</option>
-				<option value="9">Molesto por Llamado</option>
-				<option value="0">No interesado</option>
+
+				<option value="">--Seleccione--</option>
+				@foreach($status as $sta)
+					<option value="{{$sta->Estado}}">{{$sta->Estado}}</option>
+				@endforeach
+
 			</select>
+
 		</div>
+
+		<div class="col-md-3" id="v_llamar">
+			<label for="" class="control-label">Volver a llamar</label>
+			<input type="date" class="form-control" name="call_again" value="{{$cap->volver_llamar}}">
+		</div>
+
+		<div class="col-md-6" id="observ">
+			<label for="" class="control-label">Observaciones</label>
+			<label for="" class="control-label" id="observation-error">*Ingrese Un Valor</label>
+			<input type="text" class="form-control" id="observation" name="observation1" value="{{$cap->observacion}}">
+		</div>
+
+
 
 		<div class="col-md-1">
 			<a href="{{url('admin/edit&')}}{{$cap->id}}" class="btn btn-warning" id="btn-edit"> Edit</a>
@@ -146,11 +178,36 @@
 		<div class="col-md-1">
 
 			<!--[<a href="{{url('admin/siguiente')}}{{$cap->id}}" class="btn btn-info col-md-12" id="btn_siguiente">Next</a>]-->
-			<input type="submit" id="btn_siguiente" class="btn btn-info">
+			<input type="submit" id="btn_siguiente" class="btn btn-info" value="Next">
 		</div>
 		{!! Form::close() !!}
-</div>
 
+@if($cap->n_llamados != null)
+		<div id="color" class="col-md-12" >
+
+		</div>
+
+		<div class="col-md-3">
+			<label for="" class="control-label">Estado Anterior</label>
+
+			@if($cap->n_llamados == 1)
+				<input type="text" class="form-control"  id="last_status" value="{{$cap->estado_llamada1}}">
+			@elseif($cap->n_llamados == 2)
+				<input type="text" class="form-control"  id="last_status" value="{{$cap->estado_llamada2}}">
+			@else
+				<input type="text" class="form-control"  id="last_status" value="{{$cap->estado_llamada3}}">
+			@endif
+		</div>
+		<div class="col-md-1">
+			<label for="" class="control-label">Llamadas</label>
+			<input type="text" class="form-control" value="{{$cap->n_llamados}}">
+		</div>
+		<div class="col-md-3">
+			<label for="" class="control-label">Fecha Ultimo Llamado</label>
+			<input type="text" class="form-control" value="{{$cap->f_ultimo_llamado}}">
+		</div>
+@endif
+</div>
 
 </div>
 

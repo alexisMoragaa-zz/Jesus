@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Validator;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use app\User;
+
 //use Illuminate\Http\Request;
 
 class AdminController extends Controller {
@@ -20,7 +21,6 @@ class AdminController extends Controller {
 	{
 
 		$usuarios = User::all()->sortByDesc('created_at');
-
 
 		return view('admin/adminUser',compact('usuarios'));
 
@@ -162,6 +162,45 @@ class AdminController extends Controller {
 /** 8 */
 	}
 
+	public function adminConfig(){
+
+		return view('admin/configAdmin');
+	}
+/** 9 */
+	public function create_status(Request $request){
+
+		$estado=Request::input('name-status');
+		$tipo=Request::input('tipo');
+
+		DB::table('estados')->insert(
+		['estado'=>$estado,
+		  'modulo'=>'llamado',
+		   'tipo'=>$tipo]
+		);
+		return('esto funciona');
+	}
+/** 10 */
+	public function create_status_retirement(){
+
+		$estado=Request::input('name-status');
+
+		DB::table('estados')->insert(
+			['estado'=>$estado,
+				'tipo'=>'Estado de Retiros']
+		);
+
+	}
+/** 11 */
+	public function create_status_payment_method(){
+
+		$estado=Request::input('name-method');
+
+		DB::table('estados')->insert(
+			['estado'=>$estado,
+				'tipo'=>'Forma de Pago']
+		);
+	}
+
 /**
  * 1. function index() guardamos el valor de todos los usuarios en la variable users, y los enviamos a la vista mediante el metodo compact()
  * 2. function store se establece un array con las reglas de validacion que devera cumplir el usuario
@@ -175,6 +214,10 @@ class AdminController extends Controller {
  		seleccionamos el objeto y los campos que deseamos actualizar. luego repetimos el punto 1
  * 8. function destroy seleccionamos el usuario con findOrFail() y luego con el metodo delete() eliminamos el usuario.
   		finalmente con Sesion enviamos un mensaje a la vista, y redireccionamos a index
+ * 9. 10. 11.
+ * 		los metodos del 9 al 11 insertan cada uno un valor respectivo a la tabla estados, y con esto conseguimos que el usuario
+ * 		de tipo administrador pueda añadir nuevos estados  a los formularios ya existentes sin necesidad de reprogramar o
+ * 		añadir codigo.
  */
 
 }

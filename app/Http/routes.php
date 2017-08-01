@@ -42,6 +42,10 @@ Route::group(['middleware' =>['auth', 'administrador'],'prefix'=>'admin'], funct
 	route::post('updatepivot2','supController@updatepivot2');
 	route::post('updatePass/{id}','adminController@updatePass');
 	route::post('siguiente/{id}','teoController@siguiente');
+	route::get('adminconfig','AdminController@adminConfig');
+	route::post('createstatus','AdminController@create_status');
+	route::post('createcallstatus','Admincontroller@create_status_retirement');
+	route::post('createpaymentstatus','Admincontroller@create_status_payment_method');
 	/*Route::get('/', function(){
 
 		return view('admin/administradorr');

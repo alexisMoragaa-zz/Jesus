@@ -26,6 +26,7 @@
 		<a class="btn btn-info" href="{{route('sup.user.create')}}" style="margin:5px; margin-left: 89%;">Registrar</a>
 	@endif
 
+
 <div class="panel panel-default">
 
 			<div class="table-responsive">
