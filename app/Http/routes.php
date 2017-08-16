@@ -1,12 +1,17 @@
 <?php
 
-/*
+
+	/*/*
 	grupo las rutas por middleware para luego atravez de el middleware definir los roles y que usuarios pueden
 	acceder a las vistas que se programan en el grupo de rutas correspondiente a el rol.
 */
 
-	/*
-		Todos lo grupos de rutas incluyen el middleware auth, esto es para que a ese grupo de rutas se tenga
+use App\comunaRetiro;
+use App\CaptacionesExitosa;
+use Illuminate\Support\Facades\Input;
+use Carbon\Carbon;
+
+/* Todos lo grupos de rutas incluyen el middleware auth, esto es para que a ese grupo de rutas se tenga
 		acceso solo despues de que sean registrado
 	*/
 Route::controllers([
@@ -17,6 +22,8 @@ Route::controllers([
 
 Route::get('/', 'WelcomeController@index');
 Route::get('home', 'HomeController@index');
+
+
 
 /*
 	el grupo de rutas del administrador tiene acceso a todas las rutas del sistema
@@ -46,6 +53,26 @@ Route::group(['middleware' =>['auth', 'administrador'],'prefix'=>'admin'], funct
 	route::post('createstatus','AdminController@create_status');
 	route::post('createcallstatus','Admincontroller@create_status_retirement');
 	route::post('createpaymentstatus','Admincontroller@create_status_payment_method');
+	route::get('teoHome','Teocontroller@Home');
+	route::get('rutas','Admincontroller@rutas');
+	route::get('admin','Admincontroller@admin');
+	route::post('comuna','Admincontroller@addcomuna');
+	route::get('showDay','OperacionesController@showDay');
+    route::get('ajax-rutero',function(){
+		$rutero_id=Input::get('ruteroid');
+		$nombre_rutero = comunaRetiro::where('comuna','=',$rutero_id)->get();
+
+                      						return Response::json($nombre_rutero);
+	});
+route::get('carbon',function(){
+
+	$hoy =Carbon::now()->format('d/m/Y');
+	$last_week =Carbon::now()->subMonth()->format('d/m/Y');
+	$start = Carbon::now()->startOfMonth()->format('d/m/Y');
+
+	return("la fecha de hoy es ".$hoy." "."y la semana pasada era ".$last_week." "." y el primer dia de este mes fue ".$start);
+});
+
 	/*Route::get('/', function(){
 
 		return view('admin/administradorr');

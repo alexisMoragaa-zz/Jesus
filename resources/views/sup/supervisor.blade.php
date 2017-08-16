@@ -3,7 +3,6 @@
 
 @section('content')
 
-
     <script src="{{asset('plugins/jquery/jquery-3.2.1.js')}}"></script>
     <script src="{{asset('plugins/tablesorter/jquery.tablesorter.min.js')}}"></script>
 
@@ -18,57 +17,45 @@
     </script>
 
 <link href="{{ asset('/css/style.css') }}" rel="stylesheet">
-<div>
+<div class="col-md-1">
  <img class="logosu" src="/imagenes/supervisor.png"  >
 </div>
 
-
-
- <div class="container">
+ <div class="container ">
 
   <div class="table-responsive">
-   <table id="table_campana" class="table table-bordered">
-       <thead>
-    <tr>
-     <th>Nombres</th>
-     <th>Campaña actual</th>
+       <table id="table_campana" class="table table-bordered">
+          <thead>
+              <tr>
+                 <th>Nombre</th>
+                 <th>Apellido</th>
+                 <th>Correo</th>
+                 <th>Campaña actual</th>
+                 <th>Turno</th>
+                 <th>Accion</th>
+              </tr>
+          </thead>
+         <tbody>
+             @foreach($User_Campana as $user_campana)
 
-     <th>Turno</th>
-     <th>Accion</th>
-     <th>Ver Usuario</th>
+                  <tr data-id="{{$user_campana->id}}">
 
-    </tr>
-       </thead>
-       <tbody>
-    @foreach($User_Campana as $user_campana)
-
-      <tr data-id="{{$user_campana->id}}">
-
-          <td>{{ $user_campana->name }}</td>
-          <td>{{ $user_campana->nombre_campana }}</td>
-          <td>{{ $user_campana->turno }}</td>
-          <td>
-              @if(Auth::User()->perfil==1)
-                  <a href="{{url('admin/detalle')}}{{$user_campana->id}}">Detalle</a>
-              @elseif(Auth::User()->perfil==3)
-                  <a href="{{url('sup/detalle')}}{{$user_campana->id}}">Detalle</a>
-              @endif
-          </td>
-          <td style="text-align: center">
-              @if(Auth::User()->perfil==1)
-                  <a href="{{ route('admin.sup.edit',$user_campana->id)}}">Asignar Campaña</a>
-              @elseif(Auth::User()->perfil==3)
-                  <a href="{{ route('sup.sup.edit',$user_campana->id)}}">Asignar Campaña</a>
-              @endif
-          </td>
-
-     </tr>
-
-    @endforeach
+                     <td>{{ $user_campana->name }}</td>
+                     <td>{{$user_campana->last_name}}</td>
+                     <td>{{$user_campana->email}}</td>
+                     <td>{{ $user_campana->nombre_campana }}</td>
+                     <td>{{ $user_campana->turno }}</td>
+                     <td>
+                         @if(Auth::User()->perfil==1)
+                            <a href="{{url('admin/detalle')}}{{$user_campana->id}}">Detalle</a>
+                        @elseif(Auth::User()->perfil==3)
+                             <a href="{{url('sup/detalle')}}{{$user_campana->id}}">Detalle</a>
+                        @endif
+                      </td>
+                  </tr>
+             @endforeach
        </tbody>
    </table>
-      </div>
-
- </div>
-
+    </div>
+</div>
 @endsection

@@ -80,41 +80,51 @@ class supController extends Controller {
 	
 	public function updatePivot(Request $request,$user_id, $pivot_id){
 
-		/*$pivote=1;
-		$valor ="yo se";
-		$usuarios =User::findOrFail($user_id);
+		/**
+		 * $pivote=1;
+			$valor ="yo se";
+			$usuarios =User::findOrFail($user_id);
 		
-		$motivo=$request->input('motivo_termino');
+			$motivo=$request->input('motivo_termino');
 
-		$usuarios->campanitas()->updateExistingPivot($pivote,array( $valor));
-		return"hola mundo";
-		$motivo=$request->input('motivo');
-		$updates = DB::table('campana_user')
-			->where('id', '=',$pivot_id)
-			->update([
-				'motivo_termino' => $motivo
+			$usuarios->campanitas()->updateExistingPivot($pivote,array( $valor));
 
-			]);*/
+			$motivo=$request->input('motivo');
+			$updates = DB::table('campana_user')
+						->where('id', '=',$pivot_id)
+						->update([
+							'motivo_termino' => $motivo
+
+							]);
+		 * return"hola mundo";
+		 */
 		return view('sup/UpdatePivot',compact('pivot_id','user_id'));
 	}
 
 	public function updatepivot2(Request $request){
 
-		$user_id = $request->input("user_id");
-		$id = $request->input('pivote');
-		$motivo = $request->input('motivo');
+			$user_id = $request->input("user_id");
+			$id = $request->input('pivote');
+			$motivo = $request->input('motivo');
+
+			$num =1;
+
+			$date = Carbon::now();
+
+			$updates = DB::table('campana_user')
+				->where('id', '=',$id)
+				->update([
+					'motivo_termino' => $motivo,
+					'fecha_termino' =>$date
+
+				]);
+
+			$usuario = User::findOrFail($user_id);
+			$usuario->campana = 1;
+			$usuario->save();
 
 
-		$date = Carbon::now();
-
-		$updates = DB::table('campana_user')
-			->where('id', '=',$id)
-			->update([
-				'motivo_termino' => $motivo,
-				'fecha_termino' =>$date
-
-			]);
-		return redirect('admin/detalle'.$user_id);
+			return redirect('admin/detalle'.$user_id);
 
 	}
 	

@@ -4,14 +4,10 @@
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>Laravel</title>
+	<title>Dues Ltda</title>
 
 	<link href="{{ asset('/css/app.css') }}" rel="stylesheet">
 	<link href="{{ asset('/css/style.css') }}" rel="stylesheet">
-
-
-
-	<!-- Fonts -->
 	<link href='//fonts.googleapis.com/css?family=Roboto:400,300' rel='stylesheet' type='text/css'>
 
 	<script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
@@ -53,8 +49,15 @@
 
 				@else
 					@if(Auth::user()->perfil==1)
+						<li class="dropdown">
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Administrador <span class="caret"></span></a>
+							<ul class="dropdown-menu">
+								<li><a href="{{ url('/admin/rutas') }}">Modificar Rutas</a></li>
+								<li><a href="{{ url('/admin/adminconfig') }}">Añadir Estados</a></li>
+							</ul>
+						</li>
 						<li><a href="{{ url('/admin/user') }}">Usuarios</a></li>
-						<li><a href="{{ url('/admin/call') }}">TeleOperador</a></li>
+						<li><a href="{{ url('/admin/teoHome') }}">TeleOperador</a></li>
 						<li><a href="{{ url('/admin/sup') }}">Supervisor</a></li>
 						<li><a href="{{ url('/admin/ope') }}">Operaciones</a></li>
 						<li><a href="{{ url('/admin/rutas') }}">Ruteros</a></li>
@@ -81,7 +84,7 @@
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{ Auth::user()->name }}<span class="caret"></span></a>
 							<ul class="dropdown-menu">
 								<li><a href="{{ url('/auth/logout') }}">Salir</a></li>
-								</ul>
+							</ul>
 						</li>
 					@endif
 			</ul>

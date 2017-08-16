@@ -14,6 +14,11 @@ class CaptacionesExitosa extends Model {
 	//
 	protected $fillable = ['n_dues', 'id_fundacion','nom_campana','fecha_captacion','fecha_agendamiento','tipo_retiro', 'jornada','horario',
 							'nombre','apellido', 'rut','dv','direccion','comuna','ciudad','region','fono_1','correo_1','observaciones',
-							'rutero','teleoperador','fundacion','monto','estado','forma_pago'
+							'rutero','teleoperador','fundacion','monto','estado','forma_pago','user_id'
 	];
+
+	public function Usuario(){
+
+		return $this->belongsTo(User::class,'user_id');
+	}
 }

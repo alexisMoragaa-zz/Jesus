@@ -1,6 +1,39 @@
 @extends('app')
 
 @section('content')
+
+	<script>
+		$(document).ready(function(){
+
+			$("#comuna").on('change',function(e){
+
+				console.log(e);
+				var rutero_id = e.target.value;
+
+
+				$.get('ajax-rutero?ruteroid='+rutero_id, function(data){
+						console.log(data);
+					$.each(data, function(index,obj){
+
+						$("#rutero").val(obj.rutero);
+
+						$("#comunatable").text(obj.comuna);
+						$("#voluntario").text(obj.rutero);
+						$("#lunes").text(obj.h_lunes);
+						$("#martes").text(obj.h_martes);
+						$("#miercoles").text(obj.h_miercoles);
+						$("#jueves").text(obj.h_jueves);
+						$("#viernes").text(obj.h_viernes);
+
+
+					});
+
+				});
+			});
+
+
+		});
+	</script>
 <link href="{{ asset('/css/style.css') }}" rel="stylesheet">
 
 			<div class="container">
@@ -25,15 +58,10 @@
 						</div>
 
 						<div  class="col-md-4 ">
-								<input type="hidden" class="form-control" name="fecha_captacion" value="<?php echo date("y/m/d")?>">
+
 						</div>
 
-					  <div class="col-md-3">
-						   <label class=" control-label">Fecha Agendamiento</label>
-								<div class="">
-								   <input type="date" class="form-control" name="fecha_agendamiento" value="">
-								</div>
-					   </div>
+
 
 					   <div class="col-md-3">
 						   <label class=" control-label">Tipo Retiro</label>
@@ -56,13 +84,20 @@
 					   </div>
 
 					   <div class="col-md-3">
-						   <label class="control-label" >Jornada</label>
+						   <label class=" control-label">Comuna</label>
+						   <select name="comuna" id="comuna" class="form-control">
+							   <option value="a">-- Seleccione --</option>
+							   @foreach($comunas as $comuna)
+								   <option value="{{$comuna->comuna}}">{{$comuna->comuna}}</option>
+							   @endforeach
+						   </select>
+					   </div>
 
-							   <select name="jornada" class="form-control">
-								   <option>--Seleccione--</option>
-								   <option>AM</option>
-								   <option>PM</option>
-							   </select>
+					   <div class="col-md-3">
+						   <label class=" control-label">Fecha Agendamiento</label>
+						   <div class="">
+							   <input type="date" class="form-control" name="fecha_agendamiento" value="">
+						   </div>
 					   </div>
 
 					   <div class="col-md-3">
@@ -83,12 +118,22 @@
 
 					   <div class="col-md-2"></div>
 
+
 					   <div class="col-md-3">
-						   <label class=" control-label">Comuna</label>
-						     	 <input type="text" class="form-control" name="comuna" placeholder="Ingrese Comuna">
+						   <label class="control-label" >Jornada</label>
+
+						   <select name="jornada" class="form-control">
+							   <option>--Seleccione--</option>
+							   <option>AM</option>
+							   <option>PM</option>
+						   </select>
 					   </div>
 
-						<div  class="col-md-3">
+
+
+
+
+					   <div  class="col-md-3">
 							<label class=" control-label">Fono</label>
 
 								<input type="text" class="form-control" name="fono_1" value="{{$capta->fono_1}}">
@@ -129,7 +174,7 @@
 
 					   <div class="col-md-3">
 						   <label  class="control-label">Voluntario Ruta</label>
-						   <input type="text" class="form-control" name="rutero">
+						   <input type="text" class="form-control" name="rutero" id="rutero">
 					   </div>
 
 					   
@@ -165,7 +210,7 @@
 
 					   </div>
 					   <div  class=" ">
-						   <input type="hidden" class="form-control" name="teleoperador" value="{{auth::user()->name}}">
+						   <input type="hidden" class="form-control" name="teleoperador" value="{{auth::user()->id}}">
 					   </div>
 
 					   <div class="col-md-6">
@@ -177,7 +222,35 @@
 					   <div class="form-group ">
 						</div>
 					</form>
+
+
  					</div>
+
+				<table class="table table-responsive">
+					<thead>
+						<tr>
+							<th>Comuna</th>
+							<th>Voluntario</th>
+							<th>Lunes</th>
+							<th>Martes</th>
+							<th>Miercoles</th>
+							<th>Jueves</th>
+							<th>Viernes</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td id="comunatable">x</td>
+							<td id="voluntario">x</td>
+							<td id="lunes">x</td>
+							<td id="martes">x</td>
+							<td id="miercoles">x</td>
+							<td id="jueves">x</td>
+							<td id="viernes">x</td>
+
+						</tr>
+					</tbody>
+				</table>
 			</div>
 
 

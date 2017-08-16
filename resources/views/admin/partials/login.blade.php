@@ -34,7 +34,7 @@
     <div class="col-md-2">
         <label class="control-label">Perfil</label>
 
-        <select name="perfil" id="perfil" class="form-control">
+        <select name="perfil" id="perfil" class="form-control" value="{{}}">
 
             @if(Auth::user()->perfil==1)
                 <option value="1">Administrador</option>

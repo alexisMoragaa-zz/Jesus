@@ -10,7 +10,8 @@ use Illuminate\Support\Facades\Validator;
 //use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
-use app\User;
+use App\User;
+use App\comunaRetiro;
 
 //use Illuminate\Http\Request;
 
@@ -102,37 +103,27 @@ class AdminController extends Controller {
 /** 4 */
 	}
 
-
 	public function show($id)
 	{
-
 	}
  
 	public function edit($id)
 	{
-
 		$user = User::findOrFail($id);
-
 		return view('admin.editar', compact('user'));
-
 /** 5 */
     }
 
-
 	public function update( Request $request, $id)
-
 	{
-
 		$usuario =User::findOrFail($id);
-
 		$usuario->fill(Request::all());
-
 		$usuario->save();
-
 		$usuarios= User::all();
 		return view('admin/adminUser',compact('usuarios'));
 /** 6 */
 	}
+
 	public function updatePass(Request $request, $id){
 
 		$pass=$request::input('in_pass');
@@ -149,9 +140,6 @@ class AdminController extends Controller {
 		}
 	public function destroy($id)
 	{
-		//METODO PARA ELIMINAR UN USUARIO
-		 /** EN FUTURAS MODIFICACIONES SE IMPLEMENTARA EL BORRADO LOGICO Y FISICO DE LOS USUARUIOS PARA MAYOR SEFGURIDAD
-		 **/
 		$usuarios =User::findOrFail($id);
 
 		$usuarios->delete();
@@ -177,7 +165,7 @@ class AdminController extends Controller {
 		  'modulo'=>'llamado',
 		   'tipo'=>$tipo]
 		);
-		return('esto funciona');
+		return view('administradorr');
 	}
 /** 10 */
 	public function create_status_retirement(){
@@ -188,7 +176,7 @@ class AdminController extends Controller {
 			['estado'=>$estado,
 				'tipo'=>'Estado de Retiros']
 		);
-
+		return view('administradorr');
 	}
 /** 11 */
 	public function create_status_payment_method(){
@@ -199,8 +187,80 @@ class AdminController extends Controller {
 			['estado'=>$estado,
 				'tipo'=>'Forma de Pago']
 		);
+		return view('administradorr');
 	}
 
+	public function admin(){
+
+		return view('administradorr');
+	}
+
+
+	public function rutas(){
+
+		$comunas = comunaRetiro::where('region','=','metropolitana')->where('ciudad','=','santiago')->get();
+		$ruteros =User::where('perfil','=','5')->get();
+
+		return view('operac/crearRutas',compact('comunas','ruteros'));
+	}
+
+	public function addcomuna(){
+
+		$id=Request::input('comunas');
+		$rutero = Request::input('name_rutero');
+		$lunes = Request::input('checkbox1');
+		$martes =Request::input('checkbox2');
+		$miercoles=Request::input('checkbox3');
+		$jueves=Request::input('checkbox4');
+		$viernes=Request::input('checkbox5');
+
+		$update =  comunaRetiro::find($id);
+
+		if($lunes){
+			$update->lunes=1;
+			$update->h_lunes=Request::input('lunes_de')." - ".Request::input('lunes_a');
+		}else{
+			$update->lunes=0;
+
+		}
+		if($martes){
+			$update->martes=1;
+			$update->h_martes=Request::input('martes_de')." - ".Request::input('martes_a');
+		}else{
+			$update->martes=0;
+
+		}
+		if($miercoles){
+			$update->miercoles=1;
+			$update->h_miercoles=Request::input('miercoles_de')." - ".Request::input('miercoles_a');
+
+		}else{
+			$update->miercoles=0;
+
+		}
+		if($jueves){
+			$update->jueves=1;
+			$update->h_jueves=Request::input('jueves_de')." - ".Request::input('jueves_a');
+		}else{
+			$update->jueves=0;
+
+		}
+		if($viernes){
+			$update->viernes=1;
+			$update->h_viernes=Request::input('viernes_de')." - ".Request::input('viernes_a');
+		}else{
+			$update->viernes=0;
+		}
+
+		
+		$update->rutero=$rutero;
+
+		$update->save();
+
+
+		return redirect()->to('admin/rutas');
+
+	}
 /**
  * 1. function index() guardamos el valor de todos los usuarios en la variable users, y los enviamos a la vista mediante el metodo compact()
  * 2. function store se establece un array con las reglas de validacion que devera cumplir el usuario

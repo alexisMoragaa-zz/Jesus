@@ -101,6 +101,12 @@
        {!! Form::close() !!}
     </div>
 
+    <div class="coniatner" id="comuna">
+        {!! Form::open(['url'=>['admin/comuna'],'method'=>'post']) !!}
+
+        {!! Form::close() !!}
+    </div>
+
     <!-[ falta crear las funciones necesarias en los controladores para los fomularios de  add-status-retiro
     y add-payment-methods.
     adicionalmente falta crear las migraciones y en las vistas cargar la informacion desde la migracion]->

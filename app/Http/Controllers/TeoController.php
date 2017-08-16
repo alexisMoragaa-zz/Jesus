@@ -8,29 +8,42 @@ use Illuminate\Http\Request;
 use DB;
 use Carbon\Carbon;
 use App\estado;
-
-
-
+use App\Campana;
+use Illuminate\Support\Facades\Auth;
+use App\comunaRetiro;
 
 class TeoController extends Controller {
 
+	public function home(){
+		
+		return view('teo/teoHome');
+		
+	}
 
 	public function index()
 	{
-		$date=Carbon::now()->format('d-m-Y');
-
-		$cap= captaciones::where('id','>=', 1 )->where('estado','!=','cu-')->first();// ->where('estado_registro','=',0)->where('f_ultimo_llamado','!=',$date)->first();
-
-      DB::table('captaciones')
-			->where('id', '=', $cap->id)
-			->update([
-				'estado_registro'=>1
-			]);
-
 		$status= estado::where('modulo','=','llamado')->get();
+		$date=Carbon::now()->format('d-m-Y');
+		$dato = Campana::findOrFail(Auth::user()->campana)->nombre_campana;
+
+		$cap= captaciones::where('id','>=', 1 )
+							->where('campana','=',$dato)->where('f_ultimo_llamado','!=',$date)->where('estado','!=','cu-')->where('estado','!=','cu+')->first();// ->where('estado_registro','=',0)
+							//->where('f_ultimo_llamado','!=',$date)->first();
+
+
+		if(empty($cap)){
+
+			return view('teo/teoError');
+		}
+
+		DB::table('captaciones')
+				->where('id', '=', $cap->id)
+				->update([
+				'estado_registro'=>1
+				]);
 
 		return view('teo/teoin', compact('cap','status'));
-		
+
 	}
 
 	public function siguiente(Request $request, $id){
@@ -59,18 +72,18 @@ class TeoController extends Controller {
 			$n_llamado='3';
 		}
 
-	DB::table('captaciones')
-			->where('id', '=', $id)
-			->update([
-				'estado_registro'=>0,
-				'f_ultimo_llamado'=>$date,
-				'observacion'=>$observation,
-				$name_status=>$call_status,
-				'estado'=>$type,
-				$llamado=>$date,
-				'n_llamados'=>$n_llamado,
-				'volver_llamar'=>$call_again
-			]);
+			DB::table('captaciones')
+				->where('id', '=', $id)
+				->update([
+					'estado_registro'=>0,
+					'f_ultimo_llamado'=>$date,
+					'observacion'=>$observation,
+					$name_status=>$call_status,
+					'estado'=>$type,
+					$llamado=>$date,
+					'n_llamados'=>$n_llamado,
+					'volver_llamar'=>$call_again
+					]);
 
 		return redirect()->route('admin.call.index');
 
@@ -79,28 +92,31 @@ class TeoController extends Controller {
 	
 	public function create($id,$id_interno_dues)
 	{
-		 /** $c=  DB::table('captaciones')
-            ->join('captaciones_exitosas', 'captaciones.id', '=', 'captaciones_exitosas.id')
-			->where('captaciones_exitosas.n_interno_dues','=', $id_interno_dues)
-            ->get();
-			
-			$c = DB::table('captaciones_exitosas')
-		    ->where('n_dues','=', $id_interno_dues)->get();
-			*/
+
+			DB::table('captaciones')
+				->where('id','=',$id)
+				->update([
+					'estado_registro'=>0,
+					'estado'=>'cu+'
+
+				]);
+
 		    $capta = captaciones::findOrFail($id);
+
+			$comunas = comunaRetiro::where('region','=','metropolitana')->where('ciudad','=','santiago')->get();
 	    
-		return view('teo/mandatoRegistrado',compact('capta'));
+		return view('teo/mandatoRegistrado',compact('capta','comunas'));
 	}
 
 	
 	public function store(Request $request)
 	{
 			$data = $request->all();
-			
+			$date=Carbon::now()->format('d/m/Y');
 			CaptacionesExitosa::create([
 				'n_dues' => $data['n_dues'],
 				'id_fundacion' => $data['id_fundacion'],
-				'fecha_captacion'=> $data['fecha_captacion'],
+				'fecha_captacion'=> $date,
 				'fecha_agendamiento' => $data['fecha_agendamiento'],
 				'tipo_retiro' => $data['tipo_retiro'],
 				'jornada'=> $data['jornada'],
@@ -120,9 +136,12 @@ class TeoController extends Controller {
 				'fundacion' => $data ['fundacion'],
 				'observaciones' => $data['observaciones'],
 				'forma_pago'=>$data['forma_pago'],
+				'user_id'=>$data['teleoperador'],
+
 
 			
 		]);
+		return view('teo/teoHome');
 	
 	}
 
@@ -144,17 +163,15 @@ class TeoController extends Controller {
 	{
 		$capta = captaciones::findOrFail($id);
        
-        $capta->monto_original = $request->monto_original;	
-        $capta->monto_aporte = $request->monto_aporte;
-        $capta->monto_final = $request->monto_final;
-        $capta->estado = $request->estado;	
-        $capta->fecha_volver_allamar = $request->fecha_volver_allamar;	
-        $capta->mensaje = $request->mensaje;	
-        $capta->observacion = $request->observacion;
-		$capta->n_llamados = $request->n_llamados;
-		$capta->fecha_primer_llamado = $request->fecha_primer_llamado;
-		$capta->fecha_segundo_llamado = $request->fecha_segundo_llamado;
-		$capta->fecha_tercer_llamado = $request->fecha_tercer_llamado;
+        $capta->nombre = $request->nombre;
+        $capta->apellido = $request->apellido;
+        $capta->fono_1 = $request->fono1;
+        $capta->fono_2 = $request->fono2;
+        $capta->fono_3 = $request->fono3;
+        $capta->fono_4 = $request->fono4;
+        $capta->correo_1 = $request->correo1;
+		$capta->correo_2 = $request->correo2;
+
 		$capta->save();
 		
         return view('teo/actualizado');
@@ -165,8 +182,6 @@ class TeoController extends Controller {
 	{
 		//
 	}
-
-
 
 	/** comentarios del controlador
 	 *index:    selecciona el primer registro de la base de datos que cumpla con las condiciones establecidas en los where

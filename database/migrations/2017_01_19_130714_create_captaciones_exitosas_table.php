@@ -40,7 +40,9 @@ class CreateCaptacionesExitosasTable extends Migration {
 			$table->string('nom_campana');
 			$table->string('monto');
 			$table->string('forma_pago');
+			$table->integer('user_id');
 		 	$table->timestamps();
+
 		});
 	}
 

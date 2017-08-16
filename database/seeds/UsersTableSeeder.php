@@ -15,7 +15,8 @@ class UsersTableSeeder extends Seeder
         // teleoperadores
 
         \DB::table('users')->insert(array(
-            'name' => 'Fabian Gonzales',
+            'name' => 'Fabian',
+            'last_name'=>'Gonzalez',
             'email' => 'Fabian.gonzalez@gmail.com',
             'perfil' => '2',
             'estado' => 'Activo',
@@ -27,7 +28,8 @@ class UsersTableSeeder extends Seeder
 
         ));
         \DB::table('users')->insert(array(
-            'name' => 'Julissa Luna',
+            'name' => 'Julissa',
+            'last_name'=>'Luna',
             'email' => 'Julissa@gmail.com',
             'perfil' => '2',
             'estado' => 'Activo',
@@ -40,7 +42,8 @@ class UsersTableSeeder extends Seeder
 
         ));
         \DB::table('users')->insert(array(
-            'name' => 'Jessarela Montaner',
+            'name' => 'Jessarela',
+            'last_name'=>'Montaner',
             'email' => 'Jessarela.Montaner@gmail.com',
             'perfil' => '2',
             'estado' => 'Activo',
@@ -52,7 +55,8 @@ class UsersTableSeeder extends Seeder
 
         ));
         \DB::table('users')->insert(array(
-            'name' => 'Macarena Valenzuela',
+            'name' => 'Macarena',
+            'last_name'=>'Valenzuela',
             'email' => 'Macarena.Valenzuela@gmail.com',
             'perfil' => '2',
             'estado' => 'Activo',
@@ -64,7 +68,8 @@ class UsersTableSeeder extends Seeder
 
         ));
         \DB::table('users')->insert(array(
-            'name' => 'Patricio Manaut',
+            'name' => 'Patricio',
+            'last_name'=>'Manaut',
             'email' => 'Patricio.Manaut@gmail.com',
             'perfil' => '2',
             'estado' => 'Desvimculado',
@@ -78,6 +83,7 @@ class UsersTableSeeder extends Seeder
         //supervisor
         \DB::table('users')->insert(array(
             'name' => 'Maria Fernanda',
+            'last_name'=>'Arroz',
             'email' => 'Maria.Fernanda@gmail.com',
             'perfil' => '3',
             'estado' => 'Activo',
@@ -87,6 +93,33 @@ class UsersTableSeeder extends Seeder
             'fecha_ingreso'  =>  '10-02-2017',
             'fecha_termino'  =>  '22-04-2017'
 
+        ));
+
+        //ruteros
+        \DB::table('users')->insert(array(
+            'name' => 'Nicolas',
+            'last_name'=>'Castillo',
+            'email' => 'nico@gmail.com',
+            'perfil' => '5',
+            'estado' => 'Activo',
+            'password' => \Hash::make('123456'),
+            'campana'  => '5',
+            'turno'  =>  'TD',
+            'fecha_ingreso'  =>  '10-02-2017',
+            'fecha_termino'  =>  '22-04-2017'
+        ));
+
+        \DB::table('users')->insert(array(
+            'name' => 'Rodrigo',
+            'last_name'=>'Maldonado',
+            'email' => 'rodrigo@gmail.com',
+            'perfil' => '5',
+            'estado' => 'Activo',
+            'password' => \Hash::make('123456'),
+            'campana'  => '5',
+            'turno'  =>  'TD',
+            'fecha_ingreso'  =>  '10-02-2017',
+            'fecha_termino'  =>  '22-04-2017'
         ));
     }
 }

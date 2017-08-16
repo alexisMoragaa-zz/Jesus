@@ -39,6 +39,11 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 		->withPivot('id')
 		->withTimestamps();
 }
+	
+	public function captacion(){
+		
+		return $this->hasMany(CaptacionesExitosa::class);
+	}
 
 	
 }

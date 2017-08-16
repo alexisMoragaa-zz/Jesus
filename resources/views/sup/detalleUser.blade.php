@@ -4,7 +4,11 @@
     <script src="{{asset('plugins/jquery/jquery-3.2.1.js')}}"></script>
     <script src="{{asset('plugins/tablesorter/jquery.tablesorter.min.js')}}"></script>
 
+    <style>
+        .btn-add{
 
+        }
+    </style>
 
     <script type="text/javascript">
         $(document).ready(function() {
@@ -12,7 +16,17 @@
             /**para establecer un orden inicial usamos sortlist, y le pasamos como parametro 2 arrays con dos campos cada uno, el primero
              * corresponde a la fila que deseamos ordenar partiendo desde el 0 y el segundo al order, siendo 0 acendente. y 1 decendente*/
 
+            $(".error").hide();
+            if($("#eje").val()==1){
 
+                 $(".btn-add").removeAttr("href");
+
+                 $(".btn-add").click(function(){
+
+                         $(".error").fadeIn(500).css("color","red");
+                         $(".error").css("font-size","14px");
+                });
+            }
         });
 
     </script>
@@ -25,15 +39,17 @@
                 <p style="font-size: 2.7em">
                     {{$usuarios->name}}
                 </p>
+                <p class="error">Tiene campañas no Finalizadas</p>
             </div>
 
             <div class="col-md-4" >
                 @if(Auth::User()->perfil==1)
-                        <a style="margin-left: 68% " href="{{route('admin.sup.edit',$usuarios->id)}}" class="btn btn-info">Añadir Campaña</a>
-                 @elseif(Auth::User()->perfil==3)
-                        <a style="margin-left: 68% " href="{{route('sup.sup.edit',$usuarios->id)}}" class="btn btn-info">Añadir Campaña</a>
-                 @endif
+                    <a style="margin-left: 68% " href="{{route('admin.sup.edit',$usuarios->id)}}" class="btn btn-info btn-add">Añadir Campaña</a>
+                @elseif(Auth::User()->perfil==3)
+                    <a style="margin-left: 68% " href="{{route('sup.sup.edit',$usuarios->id)}}" class="btn btn-info btn-add" >Añadir Campaña</a>
+                @endif
             </div>
+
         </div>
 
         <div class="table-responsive" style="clear: left;">
@@ -58,7 +74,9 @@
                              <td>{{$campana->pivot->motivo_termino}}</td>
                              <td>{{$campana->pivot->created_at}}</td>
                              @if($campana->pivot->motivo_termino =="")
-                              <td style="border:0"><a href="{{url('admin/updatePivot')}}{{$usuarios->id}}/{{$campana->pivot->id}}" >Finalizar</a></td>
+                                 <input type="hidden" value="1" id="eje">
+                                 <td style="border:0"><a href="{{url('admin/updatePivot')}}{{$usuarios->id}}/{{$campana->pivot->id}}" >
+                                         Finalizar <span class="error">*</span></a></td>
                              @else
                                 <td>Finalizada</td>
                              @endif
