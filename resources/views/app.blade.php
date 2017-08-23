@@ -14,7 +14,9 @@
 	<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 
 	<script src="{{asset('plugins/jquery/jquery-3.2.1.js')}}"></script>
+
 	<script src="{{asset('plugins/tablesorter/jquery.tablesorter.min.js')}}"></script>
+	<script src="{{asset('plugins/jqueryRut/jquery.rut.js')}}"></script>
 	<script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.1/js/bootstrap.min.js"></script>
 	<![endif]-->
 </head>

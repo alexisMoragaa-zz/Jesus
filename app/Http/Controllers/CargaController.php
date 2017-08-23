@@ -38,7 +38,7 @@ class CargaController extends Controller {
 					if(count( $captaciones_dues)==0){
 						$captaciones = new captaciones;
 						$captaciones -> campana           = $fila -> campana;
-						$captaciones -> nom_fundacion     = $fila -> nom_fundacion;
+						$captaciones -> nom_fundacion     = $fila -> fundacion;
 						$captaciones -> estado_registro   = '0';
 						$captaciones -> n_dues            = $fila -> n_dues;
 						$captaciones -> id_fundacion      = $fila -> id_fundacion;

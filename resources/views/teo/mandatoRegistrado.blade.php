@@ -1,19 +1,28 @@
 @extends('app')
 
 @section('content')
+	<style>
 
+	.error {
+
+		border-color: red;
+	}
+	.succes{
+		border-color: green;
+	}
+	</style>
 	<script>
-		$(document).ready(function(){
+		$(document).ready(function() {
 
-			$("#comuna").on('change',function(e){
+			$("#comuna").on('change', function (e) {
 
 				console.log(e);
 				var rutero_id = e.target.value;
 
 
-				$.get('ajax-rutero?ruteroid='+rutero_id, function(data){
-						console.log(data);
-					$.each(data, function(index,obj){
+				$.get('ajax-rutero?ruteroid=' + rutero_id, function (data) {
+					console.log(data);
+					$.each(data, function (index, obj) {
 
 						$("#rutero").val(obj.rutero);
 
@@ -29,10 +38,47 @@
 					});
 
 				});
+
+
 			});
 
+		$("#rut").rut({validateOn: 'keyup change'})
+					.on('rutInvalido', function(){
+						$(this).addClass("error")
+
+
+					})
+					.on('rutValido', function(){
+
+						$(this).removeClass("error")
+					});
+
+		$("#enviar").click(function(){
+
+			var datos ={rut:$("#rut").val(),fundacion:$("#fundacion").val()}
+
+			$.get('validarSocio',datos,procesarDatos);
+			console.log(datos);
+
+			function procesarDatos(data){
+
+				console.log(data);
+				 if(data == 2){
+					 alert("este usuarios ya es socio o tiene uina visita pendiente de greenpeace");
+
+
+
+				 }else{
+
+					 $("#send").submit();
+				 }
+
+			}
 
 		});
+
+		});
+
 	</script>
 <link href="{{ asset('/css/style.css') }}" rel="stylesheet">
 
@@ -40,13 +86,14 @@
 
 			<div  class="panel panel-default ">
             <div class="panel-heading">Agendamiento</div>
-				   <form class="form-horizontal" role="form" method="POST" action="@if(Auth::user()->perfil==1){{ url('admin/agregado') }}@elseif(Auth::user()->perfil==2){{ url('teo/agregado')}}@endif " >
+				   <form class="form-horizontal" role="form" id="send" method="POST" action="@if(Auth::user()->perfil==1){{ url('admin/agregado') }}@elseif(Auth::user()->perfil==2){{ url('teo/agregado')}}@endif " >
                     <input type="hidden" name="_token" value="{{ csrf_token() }}">
 
 
 
 					   <div>
-						   <input type="hidden" class="form-control" name="fundacion" value="{{$capta->fundacion}}">
+
+						   <input type="hidden" class="form-control" name="fundacion" value="{{$capta->nom_fundacion}}" id="fundacion">
 					   </div>
 
 						<div  class="col-md-4 ">
@@ -108,15 +155,10 @@
 
 					   <div class="col-md-3">
 						   <label class=" control-label">Rut</label>
-								   <input type="text" class="form-control" name="rut" placeholder="Ej: 76459578">
+						   <input type="text" class="form-control" id="rut" name="rut" placeholder="18.202.912-2">
                         </div>
 
-					   <div class="col-md-1">
-						   <label class="control-label">Dv</label>
-							   <input type="text"  class="form-control" name="dv" placeholder="Dv">
-					   </div>
 
-					   <div class="col-md-2"></div>
 
 
 					   <div class="col-md-3">
@@ -215,7 +257,7 @@
 
 					   <div class="col-md-6">
 						   <label class="control.label">.</label>
-								<button type="submit" class="btn btn-primary form-control">
+								<button type="button" class="btn btn-primary form-control" id="enviar">
 									Ingresar Agendamiento
 								</button>
 							</div>

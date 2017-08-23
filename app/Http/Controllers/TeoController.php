@@ -27,8 +27,8 @@ class TeoController extends Controller {
 		$dato = Campana::findOrFail(Auth::user()->campana)->nombre_campana;
 
 		$cap= captaciones::where('id','>=', 1 )
-							->where('campana','=',$dato)->where('f_ultimo_llamado','!=',$date)->where('estado','!=','cu-')->where('estado','!=','cu+')->first();// ->where('estado_registro','=',0)
-							//->where('f_ultimo_llamado','!=',$date)->first();
+							->where('campana','=',$dato)->where('f_ultimo_llamado','!=',$date)->where('estado','!=','cu-')->where('estado','!=','cu+')->where('estado_registro','=',0)
+							->where('f_ultimo_llamado','!=',$date)->first();
 
 
 		if(empty($cap)){
@@ -122,7 +122,7 @@ class TeoController extends Controller {
 				'jornada'=> $data['jornada'],
 				'horario'=> $data['horario'],
 				'rut' => $data['rut'],
-				'dv'=> $data ['dv'],
+				
 				'fono_1' => $data['fono_1'],
 				'nombre'=> $data['nombre'],
 				'apellido'=> $data['apellido'],
