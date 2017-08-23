@@ -16,11 +16,13 @@ class CreateFundacionsTable extends Migration {
 		{
 			$table->increments('id');
 			$table->string('nombre');
-			$table->string('razon social');
+			$table->integer('fono');
+			$table->integer('email');
+			$table->string('razon_social');
 			$table->string('rut');
 			$table->string('agendamiento');
 			$table->string('upgrade');
-			$table->string('agendamiento');
+			$table->string('regiones');
 			$table->timestamps();
 		});
 	}

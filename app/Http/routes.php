@@ -59,20 +59,14 @@ Route::group(['middleware' => ['auth', 'administrador'], 'prefix' => 'admin'], f
     route::get('filtrarpor', 'OperacionesController@filtrarpor');
     route::get('showDay1', 'OperacionesController@showDay1');
     route::get('validarSocio', 'OperacionesController@validarSocio');
+
     route::get('ajax-rutero', function () {
         $rutero_id = Input::get('ruteroid');
         $nombre_rutero = comunaRetiro::where('comuna', '=', $rutero_id)->get();
 
         return Response::json($nombre_rutero);
     });
-    route::get('carbon', function () {
 
-        $hoy = Carbon::now()->format('d/m/Y');
-        $last_week = Carbon::now()->subMonth()->format('d/m/Y');
-        $start = Carbon::now()->startOfMonth()->format('d/m/Y');
-
-        return ("la fecha de hoy es " . $hoy . " " . "y la semana pasada era " . $last_week . " " . " y el primer dia de este mes fue " . $start);
-    });
 
     /*Route::get('/', function(){
 

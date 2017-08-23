@@ -24,17 +24,7 @@
                                 <img class="iconoEx" src="/imagenes/excelIcono.png"> </img>
                             </div>
 
-                            <div class="col-md-3">
-                                <label for="" class="control-label">Seleccionar Fundacion</label>
-                                <select name="" id="" class="form-control">
-                                    <option value="">-- opciones --</option>
-                                </select>
-                            </div>
 
-                            <div class="col-md-3">
-                                <label for="" class="control-label">Nombre Campaña</label>
-                                <input type="text" class="form-control">
-                            </div>
                             <input name="archivo" id="archivo" type="file" class="archivo form-control"
                                    required/><br/><br/>
                         </div>
