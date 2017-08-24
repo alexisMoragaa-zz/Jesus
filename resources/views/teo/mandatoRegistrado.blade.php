@@ -69,6 +69,16 @@
                 }
 
             });
+
+            $("#tipo_retiro").change(function(){
+
+                if($(this).val()==2){
+
+                    $(".grabacion").fadeOut();
+                }else{
+                    $(".grabacion").fadeIn();
+                }
+            });
         });
 
     </script>
@@ -125,14 +135,14 @@
                     </select>
                 </div>
 
-                <div class="col-md-3">
+                <div class="col-md-3 grabacion">
                     <label class=" control-label">Fecha Agendamiento</label>
                     <div class="">
                         <input type="date" class="form-control" name="fecha_agendamiento" value="">
                     </div>
                 </div>
 
-                <div class="col-md-3">
+                <div class="col-md-3 grabacion">
                     <label class=" control-label">Horario .</label>
                     <input type="time" class="form-control" name="horario" value="">
                 </div>
@@ -184,7 +194,7 @@
                 </div>
 
 
-                <div class="col-md-3">
+                <div class="col-md-3 grabacion">
                     <label class="control-label">Voluntario Ruta</label>
                     <input type="text" class="form-control" name="rutero" id="rutero">
                 </div>
@@ -206,11 +216,11 @@
 
                     <select name="forma_pago" class="form-control">
                         <option>--Seleccione--</option>
-                        <option>Cuenta Vista</option>
-                        <option>Cuenta Corriente</option>
-                        <option>Cuenta Rut</option>
+                        <option class="grabacion">Cuenta Vista</option>
+                        <option class="grabacion">Cuenta Corriente</option>
+                        <option class="grabacion">Cuenta Rut</option>
                         <option>Tarjeta De Credito</option>
-                        <option>Cuenta Rut</option>
+                        <option class="grabacion">Cuenta Rut</option>
                     </select>
                 </div>
 
@@ -237,7 +247,7 @@
 
         </div>
 
-        <table class="table table-responsive">
+        <table class="table table-responsive grabacion">
             <thead>
             <tr>
                 <th>Comuna</th>

@@ -2,38 +2,7 @@
 @section('content')
 
     <style>
-        #espacio {
 
-            margin-bottom: 38px;
-        }
-
-        .contenedor2 {
-            margin: auto;
-            margin-top: 40px;
-            max-width: 97%;
-
-        }
-
-        .contenedor1 {
-            margin: auto;
-            margin-top: 40px;
-            max-width: 90%;
-
-        }
-
-        .table-hover tbody tr:hover td, .table-hover tbody tr:hover th {
-            background-color: #caecff;
-        }
-
-        #table-table {
-
-            height: 500px;
-            overflow: auto;
-        }
-
-        .btn{
-            margin-top: 23px;
-        }
 
 
     </style>
@@ -110,7 +79,6 @@
             $("#tabla_resultados").hide();
 
 
-
             $("#btn_search").click(function () {
 
                 var datos_busqueda = $("#filtros").serialize();
@@ -182,8 +150,6 @@
                 }
 
             });
-
-
 
             $("#btn_search_mas").click(function(){
 

@@ -59,6 +59,8 @@ Route::group(['middleware' => ['auth', 'administrador'], 'prefix' => 'admin'], f
     route::get('filtrarpor', 'OperacionesController@filtrarpor');
     route::get('showDay1', 'OperacionesController@showDay1');
     route::get('validarSocio', 'OperacionesController@validarSocio');
+    route::get('rutas','OperacionesController@verRutas');
+    route::post('filtroRutas','OperacionesController@verRutasFiltradas');
 
     route::get('ajax-rutero', function () {
         $rutero_id = Input::get('ruteroid');
@@ -122,6 +124,8 @@ Route::group(['middleware' => ['auth', 'operaciones'], 'prefix' => 'ope'], funct
     Route::Resource('/', 'OperacionesController');
     Route::Resource('sup', 'supController');
     Route::Resource('call', 'TeoController');
+    Route::get('rutas','OperacionesControlle@verRutas');
+    route::post('filtroRutas','OperacionesController@verRutasFiltradas');
 
     /*Route::get('/', function(){
 

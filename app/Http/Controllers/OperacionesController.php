@@ -265,5 +265,51 @@ class OperacionesController extends Controller
     }
 
 
+    public function verRutas(){
+        $hoy = Carbon::now()->format('Y-m-d');
+        $rutas =DB::table('captaciones_exitosas')->where('fecha_agendamiento','=',$hoy)->get();
+        $ruteros = DB::table('users')->where('perfil','=',5)->get();
+
+        return view("rutas/rutas", compact('rutas','ruteros'));
+    }
+    
+    public function verRutasFiltradas(Request $request)
+    {
+
+
+        $ruteros = DB::table('users')->where('perfil','=',5)->get();
+        if($request->buscarPor == 'hoy'){
+
+            return view("rutas/rutas", compact('rutas','ruteros'));
+
+        }elseif ($request->buscarPor == 'rutas futuras'){
+
+            if($request->rutas_para =='mañana'){
+
+                return("esto seguira funcionando funcionando mañana");
+
+            }else if($request->rutas_para =='la semana'){
+
+                return("esto seguira funcionando funcionando toda la semana");
+
+            }else if($request->rutas_para =='el mes'){
+
+                return("esto seguira funcionando funcionando todo el mes");
+
+            }else if($request->rutas_para =='el infinito y mas alla'){
+
+                return("esto seguira funcionando funcionando hasta el infinito y mas alla");
+            }
+
+
+        }elseif($request->buscarPor == 'rutas pasadas'){
+
+            return("esto funciono");
+        }
+
+
+        
+        
+    }
 }
 

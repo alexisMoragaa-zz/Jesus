@@ -8,6 +8,7 @@
 
 	<link href="{{ asset('/css/app.css') }}" rel="stylesheet">
 	<link href="{{ asset('/css/style.css') }}" rel="stylesheet">
+	<link href="{{ asset('/css/tablas.css') }}" rel="stylesheet">
 	<link href='//fonts.googleapis.com/css?family=Roboto:400,300' rel='stylesheet' type='text/css'>
 
 	<script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
@@ -61,7 +62,16 @@
 						<li><a href="{{ url('/admin/user') }}">Usuarios</a></li>
 						<li><a href="{{ url('/admin/teoHome') }}">TeleOperador</a></li>
 						<li><a href="{{ url('/admin/sup') }}">Supervisor</a></li>
-						<li><a href="{{ url('/admin/ope') }}">Operaciones</a></li>
+
+						<li class="dropdown">
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Operaciones <span class="caret"></span></a>
+							<ul class="dropdown-menu">
+								<li><a href="{{ url('/admin/ope') }}">Captaciones</a></li>
+								<li><a href="{{ url('/admin/rutas')}}">Rutas</a></li>
+							</ul>
+
+						</li>
+
 						<li><a href="{{ url('/admin/rutas') }}">Ruteros</a></li>
 						<li><a href="{{ url('/admin/cargas') }}">Cargas</a></li>
 
@@ -74,7 +84,14 @@
 						<li><a href="{{ url('/sup/call') }}">TeleOperador</a></li>
 
 					@elseif(Auth::user()->perfil==4)
-						<li><a href="{{ url('/ope') }}">Operaciones</a></li>
+						<li class="dropdown">
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Operaciones <span class="caret"></span></a>
+							<ul class="dropdown-menu">
+								<li><a href="{{ url('/ope/ope') }}">Captaciones</a></li>
+								<li><a href="{{ url('/ope/rutas')}}">Rutas</a></li>
+							</ul>
+
+						</li>
 						<li><a href="{{ url('/ope/call') }}">TeleOperador</a></li>
 						<li><a href="{{ url('/ope/sup') }}">Supervisor</a></li>
 
