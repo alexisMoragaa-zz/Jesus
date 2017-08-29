@@ -6,6 +6,7 @@
 
             $(".futuras").hide();
             $(".pasadas").hide();
+            $("#dia").hide();
 
             $("#buscarPor").change(function () {
 
@@ -13,17 +14,26 @@
 
                     $(".futuras").fadeOut();
                     $(".pasadas").fadeOut();
+                    $("#dia").fadeOut();
 
                 } else if ($(this).val() == 'rutas futuras') {
 
-                    $(".futuras").fadeIn(800);
                     $(".pasadas").hide();
+                    $("#dia").hide();
+                    $(".futuras").fadeIn(800);
 
                 } else if ($(this).val() == 'rutas pasadas') {
 
                     $(".futuras").hide();
+                    $("#dia").hide();
                     $(".pasadas").fadeIn(800);
+                }else if($(this).val() == 'dia'){
+
+                    $(".futuras").hide();
+                    $(".pasadas").hide();
+                    $("#dia").fadeIn(800);
                 }
+
             });
 
         });
@@ -43,6 +53,7 @@
                         <option value="hoy">Hoy</option>
                         <option value="rutas futuras">Rutas Futuras</option>
                         <option value="rutas pasadas">Rutas Pasadas</option>
+                        <option value="dia">Buscar Por Dia</option>
                      </select>
                 </div>
                 <div class="col-md-3 futuras">
@@ -51,29 +62,35 @@
                         <option value="mañana">Mañana</option>
                         <option value="la semana">La semana</option>
                         <option value="el mes">El mes</option>
-                        <option value="el infinito y mas alla">El Infinito Y mas Alla</option>
+                        <option value="elInfinitoYMasAlla">El Infinito Y mas Alla</option>
                     </select>
                 </div>
 
                 <div class="col-md-3 pasadas">
                     <label for="" class="control-label">Rutas De</label>
-                    <select name="Rutas_De" id="" class="form-control">
+                    <select name="rutasDe" id="rutasDe" class="form-control">
                         <option value="ayer">Ayer</option>
                         <option value="la semana">La Semana</option>
                         <option value="el mes">El Mes</option>
-                        <option value="el origen de los tiempos">El Origen de los tiempos</option>
+                        <option value="elOrigenDeLosTiempos">El Origen de los tiempos</option>
                     </select>
                 </div>
-
+                
+                <div class="col-md-3" id="dia">
+                    <label for="" class="control-label">Seleccioe Dia</label>
+                    <input type="date" class="form-control" name="buscarPorDia">
+                </div>
+        
                 <div class="col-md-3">
                     <label for="" class="control-label">Voluntario Ruta</label>
                     <select name="voluntario" id="voluntario" class="form-control">
-                        <option value="">--Todos--</option>
+                        <option value="todos">--Todos--</option>
                         @foreach($ruteros as$rutero)
                             <option value="{{$rutero->name}}">{{$rutero->name}}</option>
                         @endforeach
                     </select>
                 </div>
+              
                 <div class="col-md-2">
                     <input type="submit" class="btn btn-success" value="Buscar">
                 </div>
@@ -86,13 +103,16 @@
             <th>direccion</th>
             <th>Comuna</th>
             <th>Fono</th>
-            <th>Am/Pm</th>
+            <th>Jornada</th>
             <th>Hora</th>
             <th id="dia">Dia</th>
+            <th>Voluntario</th>
+            <th>Estado</th>
+            <th>N°Visita</th>
             </thead>
             <tbody>
-            <tr>
-                @foreach($rutas as $ruta)
+            @foreach($rutas->estado_ruta as $ruta)
+                 <tr>
                     <td>{{$ruta->nombre}} {{$ruta->apellido}}</td>
                     <td>{{$ruta->direccion}}</td>
                     <td>{{$ruta->comuna}}</td>
@@ -100,8 +120,11 @@
                     <td>{{$ruta->jornada}}</td>
                     <td>{{$ruta->horario}}</td>
                     <td id="dia">{{$ruta->fecha_agendamiento}}</td>
-                @endforeach
-            </tr>
+                     <td>{{$ruta->rutero}}</td>
+                     <td>{{$ruta->rut}}</td>
+                     <td></td>
+                 </tr>
+            @endforeach
             </tbody>
         </table>
     </div>

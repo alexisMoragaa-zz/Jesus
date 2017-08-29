@@ -67,12 +67,12 @@
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Operaciones <span class="caret"></span></a>
 							<ul class="dropdown-menu">
 								<li><a href="{{ url('/admin/ope') }}">Captaciones</a></li>
-								<li><a href="{{ url('/admin/rutas')}}">Rutas</a></li>
+								<li><a href="{{ url('/admin/verRutas')}}">Rutas</a></li>
 							</ul>
 
 						</li>
 
-						<li><a href="{{ url('/admin/rutas') }}">Ruteros</a></li>
+						<li><a href="{{ url('/admin/verRutas') }}">Ruteros</a></li>
 						<li><a href="{{ url('/admin/cargas') }}">Cargas</a></li>
 
 					@elseif(Auth::user()->perfil==2)
@@ -88,7 +88,7 @@
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Operaciones <span class="caret"></span></a>
 							<ul class="dropdown-menu">
 								<li><a href="{{ url('/ope/ope') }}">Captaciones</a></li>
-								<li><a href="{{ url('/ope/rutas')}}">Rutas</a></li>
+								<li><a href="{{ url('/ope/verRutas')}}">Rutas</a></li>
 							</ul>
 
 						</li>

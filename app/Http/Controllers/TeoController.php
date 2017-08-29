@@ -147,12 +147,14 @@ class TeoController extends Controller
 
             estadoRuta::create([
                 'primer_agendamiento' => $data['fecha_agendamiento'],
+                'estado_primer_agendamiento'=>'Visita Pendiente'
             ]);
 
         } else {
 
             estadoRuta::create([
-                'primer_agendamiento' =>'no aplica'
+                'primer_agendamiento' =>'no aplica',
+                'estado_primer_agendamiento'=>'no aplica'
             ]);
         }
 

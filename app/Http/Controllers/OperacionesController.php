@@ -125,6 +125,8 @@ class OperacionesController extends Controller
         $last_week = Carbon::now()->startOfWeek()->format('d/m/Y');
         $last_month = Carbon::now()->startOfMonth()->format('d/m/Y');
 
+
+
         $dia = isset($_GET['dias']) ? $_GET['dias'] : $_POST['dias'];
         $teo = isset($_GET['teo']) ? $_GET['teo'] : $_POST['teo'];
         $rutero = isset($_GET['rutero']) ? $_GET['rutero'] : $_POST['rutero'];
@@ -241,31 +243,23 @@ class OperacionesController extends Controller
 
     public function validarSocio()
     {
-
-
         $rut = isset($_GET['rut']) ? $_GET['rut'] : $_POST['rut'];
         $fundacion = isset($_GET['fundacion']) ? $_GET['fundacion'] : $_POST['fundacion'];
 
-
         $consulta = DB::table('captaciones_exitosas')->where('rut', '=', $rut)->where('fundacion', '=', $fundacion)->get();
-
 
         if ($consulta == null) {
 
             $data = 1;
             return Response::json($data);
         } else {
-
             $data = 2;
-
             return Response::json($data);
         }
-
-
     }
 
-
     public function verRutas(){
+
         $hoy = Carbon::now()->format('Y-m-d');
         $rutas =DB::table('captaciones_exitosas')->where('fecha_agendamiento','=',$hoy)->get();
         $ruteros = DB::table('users')->where('perfil','=',5)->get();
@@ -275,41 +269,134 @@ class OperacionesController extends Controller
     
     public function verRutasFiltradas(Request $request)
     {
-
-
+        $rutero = $request->voluntario;
         $ruteros = DB::table('users')->where('perfil','=',5)->get();
+
+        $hoy = Carbon::now()->format('Y-m-d');
+        $mañana =Carbon::now()->addDay(1)->format('Y-m-d');
+        $final_semana=Carbon::now()->endOfWeek()->format('Y-m-d');
+        $final_mes=Carbon::now()->endOfMonth()->format('Y-m-d');
+        $finDeLosTiempos =Carbon::now()->endOfCentury()->format('Y-m-d');
+        $ayer =Carbon::now()->subDay(1)->format('Y-m-d');
+        $startWeek =Carbon::now()->startOfWeek()->format('Y-m-d');
+        $startMonth =Carbon::now()->startOfMonth()->format('Y-m-d');
+        $origenDeLosTiempos =Carbon::now()->startOfCentury()->format('Y-m-d');;
+
+
         if($request->buscarPor == 'hoy'){
 
-            return view("rutas/rutas", compact('rutas','ruteros'));
+            if($request->voluntario =='todos'){
+                $rutas = DB::table('captaciones_exitosas')->where('fecha_agendamiento','=',$hoy)->get();
+                return view("rutas/rutas", compact('rutas','ruteros'));
+            }else{
+                $rutas = DB::table('captaciones_exitosas')->where('fecha_agendamiento','=',$hoy)->where('rutero','=',$rutero)->get();
+                return view("rutas/rutas", compact('rutas','ruteros'));
+            }
 
         }elseif ($request->buscarPor == 'rutas futuras'){
 
             if($request->rutas_para =='mañana'){
 
-                return("esto seguira funcionando funcionando mañana");
+                if($request->voluntario =='todos'){
+
+                    $rutas = DB::table('captaciones_exitosas')->whereBetween('fecha_agendamiento',[$hoy,$mañana])->get();
+                    return view("rutas/rutas", compact('rutas','ruteros'));
+                }else{
+                    $rutas = DB::table('captaciones_exitosas')->whereBetween('fecha_agendamiento',[$hoy,$mañana])->where('rutero','=',$rutero)->get();
+                    return view("rutas/rutas", compact('rutas','ruteros'));
+                }
 
             }else if($request->rutas_para =='la semana'){
 
-                return("esto seguira funcionando funcionando toda la semana");
+                if($request->voluntario =='todos'){
+
+                    $rutas = DB::table('captaciones_exitosas')->whereBetween('fecha_agendamiento',[$hoy,$final_semana])->get();
+                    return view("rutas/rutas", compact('rutas','ruteros'));
+                }else{
+                    $rutas = DB::table('captaciones_exitosas')->whereBetween('fecha_agendamiento',[$hoy,$final_semana])->where('rutero','=',$rutero)->get();
+                    return view("rutas/rutas", compact('rutas','ruteros'));
+                }
 
             }else if($request->rutas_para =='el mes'){
 
-                return("esto seguira funcionando funcionando todo el mes");
+                if($request->voluntario =='todos'){
 
-            }else if($request->rutas_para =='el infinito y mas alla'){
+                    $rutas = DB::table('captaciones_exitosas')->whereBetween('fecha_agendamiento',[$hoy,$final_mes])->get();
+                    return view("rutas/rutas", compact('rutas','ruteros'));
+                }else{
+                    $rutas = DB::table('captaciones_exitosas')->whereBetween('fecha_agendamiento',[$hoy,$final_mes])->where('rutero','=',$rutero)->get();
+                    return view("rutas/rutas", compact('rutas','ruteros'));
+                }
 
-                return("esto seguira funcionando funcionando hasta el infinito y mas alla");
+            }else if($request->rutas_para =='elInfinitoYMasAlla'){
+
+                if($request->voluntario =='todos'){
+
+                    $rutas = DB::table('captaciones_exitosas')->whereBetween('fecha_agendamiento',[$hoy,$finDeLosTiempos])->get();
+                    return view("rutas/rutas", compact('rutas','ruteros'));
+                }else{
+                    $rutas = DB::table('captaciones_exitosas')->whereBetween('fecha_agendamiento',[$hoy,$finDeLosTiempos])->where('rutero','=',$rutero)->get();
+                    return view("rutas/rutas", compact('rutas','ruteros'));
+                }
             }
 
 
-        }elseif($request->buscarPor == 'rutas pasadas'){
+        }elseif($request->buscarPor == 'rutas pasadas') {//fin rutas futuras, comienzo rutas pasadas
 
-            return("esto funciono");
+            if ($request->rutasDe == 'ayer') {
+
+                if ($request->voluntario == 'todos') {
+                    $rutas = DB::table('captaciones_exitosas')->where('fecha_agendamiento', '=', $ayer)->get();
+                    return view("rutas/rutas", compact('rutas', 'ruteros'));
+                } else {
+                    $rutas = DB::table('captaciones_exitosas') -> where('fecha_agendamiento', '=', $ayer)->where('rutero', '=', $rutero)->get();
+                    return view("rutas/rutas", compact('rutas', 'ruteros'));
+                }
+
+            } elseif ($request->rutasDe == 'la semana') {
+
+                if ($request->voluntario == 'todos') {
+
+                    $rutas = DB::table('captaciones_exitosas')->whereBetween('fecha_agendamiento',[$startWeek,$hoy])->get();
+                    return view("rutas/rutas", compact('rutas', 'ruteros'));
+                } else {
+                    $rutas = DB::table('captaciones_exitosas') -> whereBetween('fecha_agendamiento',[$startWeek,$hoy])->where('rutero', '=', $rutero)->get();
+                    return view("rutas/rutas", compact('rutas', 'ruteros'));
+                }
+
+            } elseif($request->rutasDe =='el mes'){
+
+                if($request->voluntario =='todos'){
+                    $rutas = DB::table('captaciones_exitosas')->whereBetween('fecha_agendamiento',[$startMonth,$hoy])->get();
+                    return view("rutas/rutas", compact('rutas', 'ruteros'));
+                }else{
+                    $rutas = DB::table('captaciones_exitosas') ->whereBetween('fecha_agendamiento',[$startMonth,$hoy])->where('rutero', '=', $rutero)->get();
+                    return view("rutas/rutas", compact('rutas', 'ruteros'));
+                }
+
+            }elseif ($request->rutasDe =='elOrigenDeLosTiempos'){
+
+                if($request->voluntario =='todos'){
+                    $rutas =DB::table('captaciones_exitosas')->whereBetween('fecha_agendamiento',[$origenDeLosTiempos,$hoy])->get();
+                    return view('rutas/rutas', compact('rutas','ruteros'));
+                }else{
+                    $rutas =DB::table('captaciones_exitosas')->whereBetween('fecha_agendamiento',[$origenDeLosTiempos,$hoy])->where('rutero','=',$rutero)->get();
+                    return view('rutas/rutas', compact('rutas','ruteros'));
+                }
+            }
+
+
+        }elseif($request->buscarPorDia != ""){//FIN RUTAS PASADAS comienzo rutas por dia
+
+            if($request->voluntario =='todos'){
+                $rutas =DB::table('captaciones_exitosas')->where('fecha_agendamiento','=',$request->buscarPorDia)->get();
+                return view('rutas/rutas', compact('rutas','ruteros'));
+            }else{
+                $rutas =DB::table('captaciones_exitosas')->where('fecha_agendamiento','=',$request->buscarPorDia)->where('rutero','=',$rutero)->get();
+                return view('rutas/rutas', compact('rutas','ruteros'));
+            }
         }
-
-
         
-        
-    }
-}
+    }//fin metodo verRutasFiltradas
+}//fin controlador
 
