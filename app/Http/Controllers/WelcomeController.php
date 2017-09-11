@@ -1,5 +1,6 @@
 <?php namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Auth;
+use App\CaptacionesExitosa;
 class WelcomeController extends Controller
 {
 
@@ -19,6 +20,8 @@ class WelcomeController extends Controller
 
 	public function index()
 	{
+		$captaciones =CaptacionesExitosa::where('teleoperador','=',Auth::user()->id);
+		
 
 		if (Auth::User()->perfil == 1) {
 
@@ -26,7 +29,7 @@ class WelcomeController extends Controller
 
 		} elseif (Auth::User()->perfil == 2) {
 
-			return view('teo/teoHome');
+			return view('teo/teoHome',compact('captaciones'));
 
 		} elseif (Auth::User()->perfil == 3) {
 			return view('home');

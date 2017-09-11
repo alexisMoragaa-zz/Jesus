@@ -1,12 +1,24 @@
 @extends('app')
 
 @section('content')
+    <style>
+        .moto{
+
+            width:50%;
+            margin-top: -40%;
+            margin-left: 250%;
+        }
+
+    </style>
+    <script src="http://code.jquery.com/jquery-migrate-1.0.0.js"></script>
     <script>
         $(document).ready(function () {
+
 
             $(".futuras").hide();
             $(".pasadas").hide();
             $("#dia").hide();
+            $(".ocultar").hide();
 
             $("#buscarPor").change(function () {
 
@@ -36,17 +48,39 @@
 
             });
 
+            $("#info").toggle(function(){
+
+
+                $(this).val("menos info");
+                $(".ocultar").fadeIn();
+                },function(){
+
+                        $(this).val("mas info");
+                        $(".ocultar").fadeOut();
+            }
+
+            );
+
         });
     </script>
-
-    <div>
-        <img class="logoRu" src="/imagenes/iconoRu.png">
-    </div>
-
     <div class="contenedor1">
 
-        {!! Form::open(array('url'=>'/admin/filtroRutas')) !!}
 
+    <div class="col-md-4">
+        <img class="moto" src="/imagenes/iconoRu.png">
+    </div>
+
+
+        <div class="col-md-12 linea">
+
+        </div>
+
+
+@if(Auth::user()->perfil ==1)
+        {!! Form::open(array('url'=>'/admin/filtroRutas')) !!}
+@elseif(Auth::user()->perfil ==4)
+            {!! Form::open(array('url'=>'/ope/filtroRutas')) !!}
+@endif
                 <div class="col-md-3">
                     <label for="" class="control-label">Buscar por</label>
                     <select name="buscarPor" id="buscarPor" class="form-control">
@@ -91,9 +125,12 @@
                     </select>
                 </div>
               
-                <div class="col-md-2">
+                <div class="col-md-3">
                     <input type="submit" class="btn btn-success" value="Buscar">
+
+                    <input type="button" class="btn btn-info" value="Mas Info" id="info">
                 </div>
+
 
         {!! Form::close() !!}
 
@@ -109,9 +146,10 @@
             <th>Voluntario</th>
             <th>Estado</th>
             <th>N°Visita</th>
+            <th class="ocultar">Observaciones</th>
             </thead>
             <tbody>
-            @foreach($rutas->estado_ruta as $ruta)
+            @foreach($rutas as $ruta)
                  <tr>
                     <td>{{$ruta->nombre}} {{$ruta->apellido}}</td>
                     <td>{{$ruta->direccion}}</td>
@@ -121,8 +159,14 @@
                     <td>{{$ruta->horario}}</td>
                     <td id="dia">{{$ruta->fecha_agendamiento}}</td>
                      <td>{{$ruta->rutero}}</td>
-                     <td>{{$ruta->rut}}</td>
-                     <td></td>
+
+                     @foreach($estado as $estados)
+                         @if($ruta->id == $estados->id)
+                             <td>{{$estados->estado_primer_agendamiento}}</td>
+                         @endif
+                     @endforeach
+                    <td><a >link</a></td>
+                     <td class="ocultar" >{{$ruta->observaciones}}</td>
                  </tr>
             @endforeach
             </tbody>

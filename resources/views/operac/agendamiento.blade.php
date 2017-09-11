@@ -76,7 +76,7 @@
                 }
             });
 
-            $("#tabla_resultados").hide();
+           /* $("#tabla_resultados").hide();
 
 
             $("#btn_search").click(function () {
@@ -113,7 +113,10 @@
                     }
                     var fila = data.length;
                     for (var i = 0; i < fila; i++) {
+
+                        var $id = data[i].id;
                         var nuevafila = "<tr><td>" +
+
                                 data[i].id + "</td><td>" +
                                 data[i].nombre + " " + data[i].apellido + "</td><td>" +
                                 data[i].fono_1 + "</td><td>" +
@@ -129,9 +132,8 @@
                                 data[i].forma_pago + "</td><td class='detalle'>" +
                                 data[i].fecha_captacion + "</td><td class='detalle'>" +
                                 data[i].fecha_agendamiento + "</td><td>" +
-                                data[i].monto + "</td><td>" +
-                                data[i].rutero + "</td></tr>"
-
+                                data[i].monto + "</td><td><a href='{{route('admin.call.show')}}'>Ver <span class='glyphicon glyphicon-search'></span></a>" +
+                                "</td></tr>"
 
                         if (data[i].nombre != null) {
                             $("#table").fadeOut();
@@ -210,7 +212,8 @@
                                 data[i].fecha_captacion + "</td><td class='detalle'>" +
                                 data[i].fecha_agendamiento + "</td><td>" +
                                 data[i].monto + "</td><td>" +
-                                data[i].rutero + "</td></tr>"
+                                data[i].rutero + "</td>"+
+                                data[i]+"<td>hola</td></tr>"
 
 
                         if (data[i].nombre != null) {
@@ -231,11 +234,11 @@
 
 
 
-            });
+            });*/
 
         });
     </script>
-    <form action="" id="filtros">
+{!! Form::open(array('url'=>'admin/showDay1')) !!}
     <div class=" contenedor1" id="con">
 
         <div class="col-md-2">
@@ -298,17 +301,17 @@
 
         <div class="col-md-2">
 
-            <input type="button" class="btn btn-success busqueda" value="Buscar" id="btn_search" >
+            <input type="submit" class="btn btn-success busqueda" value="Buscar" id="btn_search" >
             <input type="button" class="btn btn-success mas" value="Buscar" id="btn_search_mas" >
             <input type="button" class="btn btn-info mas+" value="Mas +" id="mas" >
 
         </div>
-
+{!! Form::close() !!}
         <div class="col-md-12" id="espacio"> </div>
 
 
 
-        <div class="cl-md-12 table table-responsive" id="table-table">
+        <div class="cl-md-12 table table-responsive " id="table-table">
 
             <table class="table table-striped table-hover table-condensed" id="table">
 
@@ -336,6 +339,8 @@
                 <tbody>
 
                 @foreach($datos as $dato)
+                    @if($dato == "")
+                        @else
                     <tr>
                         <td>{{$dato->id}}</td>
                         <td>{{$dato->nombre}} {{$dato->apellido}}</td>
@@ -354,8 +359,14 @@
                         <td class="detalle">{{$dato->fecha_agendamiento}}</td>
                         <td>{{$dato->monto}}</td>
                         <td class="rutero">{{$dato->rutero}}</td>
+                        @if(Auth::user()->perfil == 1)
+                            <td><a href="{{route('admin.call.show',$dato->id)}}">Ver <span class="glyphicon glyphicon-search"></span></a></td>
+                        @elseif(Auth::user()->perfil == 4)
+                            <td><a href="{{route('ope.call.show',$dato->id)}}">Ver <span class="glyphicon glyphicon-search"></span></a></td>
 
+                        @endif
                     </tr>
+                    @endif
                 @endforeach
 
                 </tbody>
@@ -363,34 +374,8 @@
             </table>
 
 
-            <table id="tabla_resultados" class="table  table-hover table-condensed">
-                <thead>
-                <th>ID</th>
-                <th>Nombre</th>
-                <th>Fono</th>
-                <th>Rut</th>
-                <th class="detalle">Correo</th>
-                <th>Direccion</th>
-                <th class="detalle">Comuna</th>
-                <th class="detalle">Horario</th>
-                <th>Observaciones</th>
-                <th class="detalle">TeleOperador</th>
-                <th class="detalle">Fundacion</th>
-                <th class="detalle">Campaña</th>
-                <th class="detalle">Forma De Pago</th>
-                <th class="detalle">Captacion</th>
-                <th class="detalle">Agendamiento</th>
-                <th>Monto</th>
-                <th>rutero</th>
-
-                </thead>
-                <tbody>
-
-                </tbody>
-            </table>
-        </div>
     </div>
     </div>
 
-    </form>
+
 @endsection

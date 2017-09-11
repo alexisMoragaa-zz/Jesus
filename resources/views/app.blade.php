@@ -9,15 +9,17 @@
 	<link href="{{ asset('/css/app.css') }}" rel="stylesheet">
 	<link href="{{ asset('/css/style.css') }}" rel="stylesheet">
 	<link href="{{ asset('/css/tablas.css') }}" rel="stylesheet">
+	<link href="{{ asset('http://code.jquery.com/ui/1.10.1/themes/base/jquery-ui.css') }}" rel="stylesheet">
 	<link href='//fonts.googleapis.com/css?family=Roboto:400,300' rel='stylesheet' type='text/css'>
 
 	<script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
 	<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 
 	<script src="{{asset('plugins/jquery/jquery-3.2.1.js')}}"></script>
-
 	<script src="{{asset('plugins/tablesorter/jquery.tablesorter.min.js')}}"></script>
 	<script src="{{asset('plugins/jqueryRut/jquery.rut.js')}}"></script>
+	<script src="{{asset('plugins/jquery-ui/jquery-ui.js')}}"></script>
+
 	<script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.1/js/bootstrap.min.js"></script>
 	<![endif]-->
 </head>
@@ -76,7 +78,7 @@
 						<li><a href="{{ url('/admin/cargas') }}">Cargas</a></li>
 
 					@elseif(Auth::user()->perfil==2)
-						<li><a href="{{ url('/teo/call') }}">TeleOperador</a></li>
+						<li><a href="{{ url('/teo/teoHome') }}">TeleOperador</a></li>
 
 					@elseif(Auth::user()->perfil==3)
 						<li><a href="{{ url('/sup/user') }}">Usuarios</a></li>

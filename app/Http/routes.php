@@ -57,10 +57,12 @@ Route::group(['middleware' => ['auth', 'administrador'], 'prefix' => 'admin'], f
     route::get('admin', 'Admincontroller@admin');
     route::post('comuna', 'Admincontroller@addcomuna');
     route::get('filtrarpor', 'OperacionesController@filtrarpor');
-    route::get('showDay1', 'OperacionesController@showDay1');
+    route::post('showDay1', 'OperacionesController@showDay1');
     route::get('validarSocio', 'OperacionesController@validarSocio');
     route::get('verRutas','OperacionesController@verRutas');
     route::post('filtroRutas','OperacionesController@verRutasFiltradas');
+    route::post('capFilter','TeoController@capFilter');
+    Route::post('addStatusCap','OperacionesController@addStatusCap');
 
     route::get('ajax-rutero', function () {
         $rutero_id = Input::get('ruteroid');
@@ -89,6 +91,16 @@ Route::group(['middleware' => ['auth', 'teleoperador'], 'prefix' => 'teo'], func
     Route::get('mandatoExitoso&{id}&{id_interno_dues}', 'TeoController@create');
     Route::post('agregado', 'TeoController@store');
     route::post('siguiente{id}', 'teoController@siguinente');
+    route::post('capFilter','TeoController@capFilter');
+    route::get('teoHome','TeoController@Home');
+    route::get('validarSocio', 'OperacionesController@validarSocio');
+
+    route::get('ajax-rutero', function () {
+        $rutero_id = Input::get('ruteroid');
+        $nombre_rutero = comunaRetiro::where('comuna', '=', $rutero_id)->get();
+
+        return Response::json($nombre_rutero);
+    });
     Route::get(' ', function () {
 
         return view('teo/call');
@@ -121,10 +133,10 @@ Route::group(['middleware' => ['auth', 'supervisor'], 'prefix' => 'sup'], functi
 
 Route::group(['middleware' => ['auth', 'operaciones'], 'prefix' => 'ope'], function () {
 
-    Route::Resource('/', 'OperacionesController');
+    Route::Resource('ope', 'OperacionesController');
     Route::Resource('sup', 'supController');
     Route::Resource('call', 'TeoController');
-    Route::get('verRutas','OperacionesControlle@verRutas');
+    Route::get('verRutas','OperacionesController@verRutas');
     route::post('filtroRutas','OperacionesController@verRutasFiltradas');
 
     /*Route::get('/', function(){

@@ -16,6 +16,6 @@ class estadoRuta extends Model {
 
     public function agendamiento(){
 
-        return $this->hasOne('App\CaptacionesExitosas');
+        return $this->belongsTo(CaptacionesExitosa::class,'id');
     }
 }

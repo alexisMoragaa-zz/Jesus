@@ -22,10 +22,9 @@ class OperacionesController extends Controller
      */
     public function index()
     {
-        $dias = CaptacionesExitosa::all();
         $teos = User::where('perfil', '=', 2)->get();
         $ruteros = User::where('perfil', '=', 5)->get();
-        $datos = CaptacionesExitosa::all();
+        $datos = CaptacionesExitosa::all()->sortByDesc('created_at');
         return view('operac/agendamiento', compact('datos', 'teos', 'ruteros'));
 
     }
@@ -33,8 +32,9 @@ class OperacionesController extends Controller
     public function show($id)
     {
 
-        $datos = CaptacionesExitosa::all();
-        return view('operac/detalleAgendamiento', compact('datos'));
+        $detalle =CaptacionesExitosa::where('id','=',$id)->get();
+
+        return view('teo/detalle', compact('detalle'));
     }
 
     public function create()
@@ -119,95 +119,106 @@ class OperacionesController extends Controller
         }
     }
 
-    public function showDay1()
+    public function showDay1(Request $request)
     {
+        $teos = User::where('perfil', '=', 2)->get();
+        $ruteros = User::where('perfil', '=', 5)->get();
         $hoy = Carbon::now()->format('d/m/Y');
         $last_week = Carbon::now()->startOfWeek()->format('d/m/Y');
         $last_month = Carbon::now()->startOfMonth()->format('d/m/Y');
 
+        $dia=$request->input('dias');
+        $teo=$request->input('teo');
+        $rutero=$request->input('rutero');
 
-
-        $dia = isset($_GET['dias']) ? $_GET['dias'] : $_POST['dias'];
+       /* $dia = isset($_GET['dias']) ? $_GET['dias'] : $_POST['dias'];
         $teo = isset($_GET['teo']) ? $_GET['teo'] : $_POST['teo'];
         $rutero = isset($_GET['rutero']) ? $_GET['rutero'] : $_POST['rutero'];
+*/
 
+       if ($dia == 1 and $teo != "" and $rutero != "") {
 
-        if ($dia == 1 and $teo != "" and $rutero != "") {
-
-            $today = DB::table('captaciones_exitosas')->where('fecha_captacion', '=', $hoy)->where('teleoperador', '=', $teo)
+            $datos = DB::table('captaciones_exitosas')->where('fecha_captacion', '=', $hoy)->where('teleoperador', '=', $teo)
                 ->where('rutero', '=', $rutero)->get();
-            return Response::json($today);
+            return view('operac/agendamiento', compact('datos','teos','ruteros'));
 
         } elseif ($dia == 1 and $teo != "") {
 
-            $today = DB::table('captaciones_exitosas')->where('fecha_captacion', '=', $hoy)->where('teleoperador', '=', $teo)
+            $datos = DB::table('captaciones_exitosas')->where('fecha_captacion', '=', $hoy)->where('teleoperador', '=', $teo)
                 ->get();
-            return Response::json($today);
+            return view('operac/agendamiento', compact('datos', 'teos', 'ruteros'));
 
         } elseif ($dia == 1 and $rutero != "") {
 
-            $today = DB::table('captaciones_exitosas')->where('fecha_captacion', '=', $hoy)->where('rutero', '=', $rutero)->get();
-            return Response::json($today);
+            $datos = DB::table('captaciones_exitosas')->where('fecha_captacion', '=', $hoy)->where('rutero', '=', $rutero)->get();
+            return view('operac/agendamiento', compact('datos','teos','ruteros'));
 
         } elseif ($dia == 1) {
-            $today = DB::table('captaciones_exitosas')->where('fecha_captacion', '=', $hoy)->get();
-            return Response::json($today);
+            $datos = DB::table('captaciones_exitosas')->where('fecha_captacion', '=', $hoy)->get();
+            return view('operac/agendamiento', compact('datos','teos','ruteros'));
         }
 
 
         if ($dia == 2 and $teo != "" and $rutero != "") {
 
-            $dias = DB::table('captaciones_exitosas')->whereBetween('fecha_captacion', [$last_week, $hoy])
+          $datos = DB::table('captaciones_exitosas')->whereBetween('fecha_captacion', [$last_week, $hoy])
                 ->where('teleoperador', '=', $teo)->where('rutero', '=', $rutero)->get();
-            return Response::json($dias);
+
+
+            return view('operac/agendamiento', compact('datos','teos','ruteros'));
 
         } elseif ($dia == 2 and $teo != "") {
 
-            $dias = DB::table('captaciones_exitosas')->whereBetween('fecha_captacion', [$last_week, $hoy])
+            $datos = DB::table('captaciones_exitosas')->whereBetween('fecha_captacion', [$last_week, $hoy])
                 ->where('teleoperador', '=', $teo)->get();
-            return Response::json($dias);
+            return view('operac/agendamiento', compact('datos','teos','ruteros'));
 
         } elseif ($dia == 2 and $rutero != "") {
 
-            $dias = DB::table('captaciones_exitosas')->whereBetween('fecha_captacion', [$last_week, $hoy])
+            $datos = DB::table('captaciones_exitosas')->whereBetween('fecha_captacion', [$last_week, $hoy])
                 ->where('rutero', '=', $rutero)->get();
-            return Response::json($dias);
+            return view('operac/agendamiento', compact('datos','teos','ruteros'));
 
         } elseif ($dia == 2) {
 
 
-            $dias = DB::table('captaciones_exitosas')->whereBetween('fecha_captacion', [$last_week, $hoy])->get();
-            return Response::json($dias);
+        $datos = DB::table('captaciones_exitosas')->whereBetween('fecha_captacion',[$last_week,$hoy])->get();
+
+
+            return view('operac/agendamiento', compact('datos','teos','ruteros'));
 
         }
 
 
         if ($dia == 3 and $teo != "" and $rutero != "") {
 
-            $dias = DB::table('captaciones_exitosas')->whereBetween('fecha_captacion', [$last_month, $hoy])
+            $datos = DB::table('captaciones_exitosas')->whereBetween('fecha_captacion', [$last_month, $hoy])
                 ->where('teleoperador', '=', $teo)->where('rutero', '=', $rutero)->get();
-            return Response::json($dias);
+            return view('operac/agendamiento', compact('datos','teos','ruteros'));
 
         } elseif ($dia == 3 and $teo != "") {
 
-            $dias = DB::table('captaciones_exitosas')->whereBetween('fecha_captacion', [$last_month, $hoy])
+            $datos = DB::table('captaciones_exitosas')->whereBetween('fecha_captacion', [$last_month, $hoy])
                 ->where('teleoperador', '=', $teo)->get();
-            return Response::json($dias);
+            return view('operac/agendamiento', compact('datos','teos','ruteros'));
 
         } elseif ($dia == 3 and $rutero != "") {
 
-            $dias = DB::table('captaciones_exitosas')->whereBetween('fecha_captacion', [$last_month, $hoy])
+            $datos = DB::table('captaciones_exitosas')->whereBetween('fecha_captacion', [$last_month, $hoy])
                 ->where('rutero', '=', $rutero)->get();
-            return Response::json($dias);
+            return view('operac/agendamiento', compact('datos','teos','ruteros'));
+
 
 
         } elseif ($dia == 3) {
 
-            $dias = DB::table('captaciones_exitosas')->whereBetween('fecha_captacion', [$last_month, $hoy])->get();
+            $datos = DB::table('captaciones_exitosas')->whereBetween('fecha_captacion', [$last_month, $hoy])->get();
 
-            return Response::json($dias);
+            return view('operac/agendamiento', compact('datos','teos','ruteros'));
+
 
         }
+
 
 
     }
@@ -258,19 +269,48 @@ class OperacionesController extends Controller
         }
     }
 
+    public function addStatusCap(){
+        $capStatus =$_POST['checkRecord'];
+        $reason =$_POST['motivo'];
+        $id =$_POST['cap_id'];
+
+
+       $cap = CaptacionesExitosa::find($id);
+        $cap->estado_captacion=$capStatus;
+        $cap->motivo=$reason;
+        $cap->save();
+
+        $verificar =CaptacionesExitosa::where('id','=',$id)->pluck('estado_Captacion');
+
+        if($verificar == $capStatus){
+
+            return Response::json("exito");
+        }else{
+            return Response::json('error');
+        }
+
+    }
+
     public function verRutas(){
 
         $hoy = Carbon::now()->format('Y-m-d');
         $rutas =DB::table('captaciones_exitosas')->where('fecha_agendamiento','=',$hoy)->get();
         $ruteros = DB::table('users')->where('perfil','=',5)->get();
+        $estado=DB::table('estado_rutas')->where('primer_agendamiento','!=','no aplica')->get();
+        $datos = DB::table('captaciones_exitosas')->where('id','=','1')->get();
 
-        return view("rutas/rutas", compact('rutas','ruteros'));
-    }
     
+        return view("rutas/rutas", compact('rutas','ruteros','estado','url'));
+    }
+
+
+
+
     public function verRutasFiltradas(Request $request)
     {
         $rutero = $request->voluntario;
         $ruteros = DB::table('users')->where('perfil','=',5)->get();
+        $estado=DB::table('estado_rutas')->where('primer_agendamiento','!=','no aplica')->get();
 
         $hoy = Carbon::now()->format('Y-m-d');
         $mañana =Carbon::now()->addDay(1)->format('Y-m-d');
@@ -290,7 +330,7 @@ class OperacionesController extends Controller
                 return view("rutas/rutas", compact('rutas','ruteros'));
             }else{
                 $rutas = DB::table('captaciones_exitosas')->where('fecha_agendamiento','=',$hoy)->where('rutero','=',$rutero)->get();
-                return view("rutas/rutas", compact('rutas','ruteros'));
+                return view("rutas/rutas", compact('rutas','ruteros','estado'));
             }
 
         }elseif ($request->buscarPor == 'rutas futuras'){
@@ -300,10 +340,10 @@ class OperacionesController extends Controller
                 if($request->voluntario =='todos'){
 
                     $rutas = DB::table('captaciones_exitosas')->whereBetween('fecha_agendamiento',[$hoy,$mañana])->get();
-                    return view("rutas/rutas", compact('rutas','ruteros'));
+                    return view("rutas/rutas", compact('rutas','ruteros','estado'));
                 }else{
                     $rutas = DB::table('captaciones_exitosas')->whereBetween('fecha_agendamiento',[$hoy,$mañana])->where('rutero','=',$rutero)->get();
-                    return view("rutas/rutas", compact('rutas','ruteros'));
+                    return view("rutas/rutas", compact('rutas','ruteros','estado'));
                 }
 
             }else if($request->rutas_para =='la semana'){
@@ -311,10 +351,10 @@ class OperacionesController extends Controller
                 if($request->voluntario =='todos'){
 
                     $rutas = DB::table('captaciones_exitosas')->whereBetween('fecha_agendamiento',[$hoy,$final_semana])->get();
-                    return view("rutas/rutas", compact('rutas','ruteros'));
+                    return view("rutas/rutas", compact('rutas','ruteros','estado'));
                 }else{
                     $rutas = DB::table('captaciones_exitosas')->whereBetween('fecha_agendamiento',[$hoy,$final_semana])->where('rutero','=',$rutero)->get();
-                    return view("rutas/rutas", compact('rutas','ruteros'));
+                    return view("rutas/rutas", compact('rutas','ruteros','estado'));
                 }
 
             }else if($request->rutas_para =='el mes'){
@@ -322,10 +362,10 @@ class OperacionesController extends Controller
                 if($request->voluntario =='todos'){
 
                     $rutas = DB::table('captaciones_exitosas')->whereBetween('fecha_agendamiento',[$hoy,$final_mes])->get();
-                    return view("rutas/rutas", compact('rutas','ruteros'));
+                    return view("rutas/rutas", compact('rutas','ruteros','estado'));
                 }else{
                     $rutas = DB::table('captaciones_exitosas')->whereBetween('fecha_agendamiento',[$hoy,$final_mes])->where('rutero','=',$rutero)->get();
-                    return view("rutas/rutas", compact('rutas','ruteros'));
+                    return view("rutas/rutas", compact('rutas','ruteros','estado'));
                 }
 
             }else if($request->rutas_para =='elInfinitoYMasAlla'){
@@ -333,10 +373,10 @@ class OperacionesController extends Controller
                 if($request->voluntario =='todos'){
 
                     $rutas = DB::table('captaciones_exitosas')->whereBetween('fecha_agendamiento',[$hoy,$finDeLosTiempos])->get();
-                    return view("rutas/rutas", compact('rutas','ruteros'));
+                    return view("rutas/rutas", compact('rutas','ruteros','estado'));
                 }else{
                     $rutas = DB::table('captaciones_exitosas')->whereBetween('fecha_agendamiento',[$hoy,$finDeLosTiempos])->where('rutero','=',$rutero)->get();
-                    return view("rutas/rutas", compact('rutas','ruteros'));
+                    return view("rutas/rutas", compact('rutas','ruteros','estado'));
                 }
             }
 
@@ -347,10 +387,10 @@ class OperacionesController extends Controller
 
                 if ($request->voluntario == 'todos') {
                     $rutas = DB::table('captaciones_exitosas')->where('fecha_agendamiento', '=', $ayer)->get();
-                    return view("rutas/rutas", compact('rutas', 'ruteros'));
+                    return view("rutas/rutas", compact('rutas','ruteros','estado'));
                 } else {
                     $rutas = DB::table('captaciones_exitosas') -> where('fecha_agendamiento', '=', $ayer)->where('rutero', '=', $rutero)->get();
-                    return view("rutas/rutas", compact('rutas', 'ruteros'));
+                    return view("rutas/rutas", compact('rutas','ruteros','estado'));
                 }
 
             } elseif ($request->rutasDe == 'la semana') {
@@ -358,30 +398,30 @@ class OperacionesController extends Controller
                 if ($request->voluntario == 'todos') {
 
                     $rutas = DB::table('captaciones_exitosas')->whereBetween('fecha_agendamiento',[$startWeek,$hoy])->get();
-                    return view("rutas/rutas", compact('rutas', 'ruteros'));
+                    return view("rutas/rutas", compact('rutas','ruteros','estado'));
                 } else {
                     $rutas = DB::table('captaciones_exitosas') -> whereBetween('fecha_agendamiento',[$startWeek,$hoy])->where('rutero', '=', $rutero)->get();
-                    return view("rutas/rutas", compact('rutas', 'ruteros'));
+                    return view("rutas/rutas", compact('rutas','ruteros','estado'));
                 }
 
             } elseif($request->rutasDe =='el mes'){
 
                 if($request->voluntario =='todos'){
                     $rutas = DB::table('captaciones_exitosas')->whereBetween('fecha_agendamiento',[$startMonth,$hoy])->get();
-                    return view("rutas/rutas", compact('rutas', 'ruteros'));
+                    return view("rutas/rutas", compact('rutas','ruteros','estado'));
                 }else{
                     $rutas = DB::table('captaciones_exitosas') ->whereBetween('fecha_agendamiento',[$startMonth,$hoy])->where('rutero', '=', $rutero)->get();
-                    return view("rutas/rutas", compact('rutas', 'ruteros'));
+                    return view("rutas/rutas", compact('rutas','ruteros','estado'));
                 }
 
             }elseif ($request->rutasDe =='elOrigenDeLosTiempos'){
 
                 if($request->voluntario =='todos'){
                     $rutas =DB::table('captaciones_exitosas')->whereBetween('fecha_agendamiento',[$origenDeLosTiempos,$hoy])->get();
-                    return view('rutas/rutas', compact('rutas','ruteros'));
+                    return view("rutas/rutas", compact('rutas','ruteros','estado'));
                 }else{
                     $rutas =DB::table('captaciones_exitosas')->whereBetween('fecha_agendamiento',[$origenDeLosTiempos,$hoy])->where('rutero','=',$rutero)->get();
-                    return view('rutas/rutas', compact('rutas','ruteros'));
+                    return view("rutas/rutas", compact('rutas','ruteros','estado'));
                 }
             }
 
@@ -390,10 +430,10 @@ class OperacionesController extends Controller
 
             if($request->voluntario =='todos'){
                 $rutas =DB::table('captaciones_exitosas')->where('fecha_agendamiento','=',$request->buscarPorDia)->get();
-                return view('rutas/rutas', compact('rutas','ruteros'));
+                return view("rutas/rutas", compact('rutas','ruteros','estado'));
             }else{
                 $rutas =DB::table('captaciones_exitosas')->where('fecha_agendamiento','=',$request->buscarPorDia)->where('rutero','=',$rutero)->get();
-                return view('rutas/rutas', compact('rutas','ruteros'));
+                return view("rutas/rutas", compact('rutas','ruteros','estado'));
             }
         }
         

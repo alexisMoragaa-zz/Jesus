@@ -24,8 +24,8 @@ class CaptacionesExitosa extends Model
         return $this->belongsTo(User::class, 'user_id');
     }
 
-    public function estado_ruta(){
+    public function estado(){
 
-        return $this->hasOne('App\estado_ruta');
+        return $this->hasOne(estadoRuta::class,'id','id');
     }
 }

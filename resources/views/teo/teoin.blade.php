@@ -76,7 +76,11 @@
 	</div>
 
 	<div id="btn_agendar">
-		<a href="{{url('admin/mandatoExitoso&')}}{{$cap->id}}&{{$cap->n_dues}}" ><h1 class="btn btn-success">Agendar</h1></a>
+		@if(Auth::user()->perfil==1)
+			<a href="{{url('admin/mandatoExitoso&')}}{{$cap->id}}&{{$cap->n_dues}}" ><h1 class="btn btn-success">Agendar</h1></a>
+		@elseif(Auth::user()->perfil==2)
+			<a href="{{url('teo/mandatoExitoso&')}}{{$cap->id}}&{{$cap->n_dues}}" ><h1 class="btn btn-success">Agendar</h1></a>
+		@endif
 	</div>
 	
 	<div id="contenedor1" class="form-group">

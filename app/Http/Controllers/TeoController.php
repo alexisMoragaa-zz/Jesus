@@ -9,6 +9,7 @@ use DB;
 use Carbon\Carbon;
 use App\estado;
 use App\Campana;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use App\comunaRetiro;
 use App\estadoRuta;
@@ -19,7 +20,9 @@ class TeoController extends Controller
     public function home()
     {
 
-        return view('teo/teoHome');
+        $captaciones = CaptacionesExitosa::where('teleoperador','=',Auth::user()->id)->get();
+
+        return view('teo/teoHome', compact('captaciones'));
 
     }
 
@@ -47,6 +50,38 @@ class TeoController extends Controller
 
         return view('teo/teoin', compact('cap', 'status'));
 
+    }
+
+
+    public function show($id)
+    {
+
+        $detalle =CaptacionesExitosa::where('id','=',$id)->get();
+        
+        return view('teo/detalle', compact('detalle'));
+
+    }
+
+    public function capFilter(Request $request){
+
+        $hoy =Carbon::now()->format('d/m/Y');
+        $option =$request->input('searchFor');
+        $date =$request->input('date');
+
+        if($option==1){
+            $captaciones = CaptacionesExitosa::where('teleoperador','=',Auth::user()->id)->where('fecha_captacion','=',$hoy)->get();
+            return view('teo/teoHome', compact('captaciones'));
+
+        }else if($option == 2){
+            $captaciones = CaptacionesExitosa::where('teleoperador','=',Auth::user()->id)->where('fecha_captacion','=',$date)->get();
+            return view('teo/teoHome', compact('captaciones'));
+        }else if($option == 6){
+
+            $captaciones = CaptacionesExitosa::where('teleoperador','=',Auth::user()->id)->get();
+                return view('teo/teoHome', compact('captaciones'));
+
+    }
+        return($date);
     }
 
     public function siguiente(Request $request, $id)
@@ -140,32 +175,35 @@ class TeoController extends Controller
             'fundacion' => $data ['fundacion'],
             'observaciones' => $data['observaciones'],
             'forma_pago' => $data['forma_pago'],
-            'user_id' => $data['teleoperador'],
+
         ]);
 
         if ($data['tipo_retiro'] == 1) {
 
-            estadoRuta::create([
+           $id =DB::table('estado_rutas')->insertGetId([
                 'primer_agendamiento' => $data['fecha_agendamiento'],
-                'estado_primer_agendamiento'=>'Visita Pendiente'
+                'estado_primer_agendamiento' => 'Visita Pendiente',
             ]);
 
         } else {
 
-            estadoRuta::create([
+            $id =DB::table('estado_rutas')->insertGetId([
                 'primer_agendamiento' =>'no aplica',
-                'estado_primer_agendamiento'=>'no aplica'
+                'estado_primer_agendamiento' => 'no aplica',
             ]);
         }
 
-        return view('teo/teoHome');
+if(Auth::user()->perfil==1){
+
+    return redirect(url('admin/teoHome'));
+}elseif (Auth::user()->perfil==2){
+
+    return redirect(url('teo/teoHome'));
+}
+
     }
 
 
-    public function show($id)
-    {
-
-    }
 
     public function editar($id)
     {
@@ -192,23 +230,34 @@ class TeoController extends Controller
 
         return view('teo/actualizado');
     }
-
-
+   
     public function destroy($id)
     {
         //
     }
 
+
     /** comentarios del controlador
+     *
+     * home: home nos retorna una vista previa antes de la vista de llamados, en la cual adicionalmente podemos ver las captacioens
+     *          y filtrarlas segun unos sensillos parametroas. para la parte del filtro nos valemos del metodo capFilter, el cual se
+     *          explicara en detalle mas adelante
+     *
      *index:    selecciona el primer registro de la base de datos que cumpla con las condiciones establecidas en los where
-     * luego inserta acontinuacion inserta un 1 en estado para vbloquear el registro a los demas usuarios. finalmente
+     *              luego inserta acontinuacion inserta un 1 en estado para vbloquear el registro a los demas usuarios. finalmente
      *             envia la informacion a la vista
+     *
      *Siguiente: toma el registro entregado por la vista, inserta un 0 para desbloquear el registro, he inserta la fecha correspondiente
      *             al dia, para que de esta forma no se llamena los mismos registros el mismo dia. luego redirecciona al index y se repite el proceso
      *
      *Store    : la funcaion store inserta los datos rescatados del formulario en la tabla captaciones exitosas, y si el tipo de retiro es
      *            agendamiento adicionalmente inserta el id y la fecha de agendamiento en la tabla estado ruta que  es parte de la relacion
      *            uno a uno
+     *
+     * capFilter: en este metodo de tipo post, evaluamos  los valores obtenidos del campo select searchFor, y con un grupo de if anidados
+     *              determinamos la informacion que enviaremos a la vista teo Home segun corresponda
+     *
+     * show:    busca una captacion por id,(id  enviado desde la vista) y muestra la informacuion completa y detallada de esa captacion en particular
      *
      */
 
