@@ -9,7 +9,7 @@ use DB;
 use Carbon\Carbon;
 use App\estado;
 use App\Campana;
-use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Auth;
 use App\comunaRetiro;
 use App\estadoRuta;
@@ -20,7 +20,7 @@ class TeoController extends Controller
     public function home()
     {
 
-        $captaciones = CaptacionesExitosa::where('teleoperador','=',Auth::user()->id)->get();
+        $captaciones = CaptacionesExitosa::where('teleoperador','=',Auth::user()->id)->get()->sortByDesc('created_at');
 
         return view('teo/teoHome', compact('captaciones'));
 
@@ -129,16 +129,47 @@ class TeoController extends Controller
 
     }
 
-    public function create($id, $id_interno_dues)
-    {
+    public function addStatusCapAjax(){
+
+        $estado = $_POST['call_status'];
+        $id =$_POST['id_captacion'];
+
+        $llamado1 = captaciones::where('id', '=', $id)->pluck('primer_llamado');
+        $llamado2 = captaciones::where('id', '=', $id)->pluck('segundo_llamado');
+
+        if ($llamado1 == null) {
+
+            $name_status = 'estado_llamada1';
+
+
+        } elseif ($llamado2 == null) {
+            $llamado = 'segundo_llamado';
+            $name_status = 'estado_llamada2';
+
+
+        } else {
+            $llamado = 'tercer_llamado';
+            $name_status = 'estado_llamada3';
+
+        }
 
         DB::table('captaciones')
             ->where('id', '=', $id)
             ->update([
                 'estado_registro' => 0,
-                'estado' => 'cu+'
+                'estado' => 'cu+',
+                $name_status=>$estado
+
 
             ]);
+
+        return Response::json('exito');
+
+    }
+    public function create($id, $estado)
+    {
+       
+
 
         $capta = captaciones::findOrFail($id);
 
@@ -177,6 +208,8 @@ class TeoController extends Controller
             'forma_pago' => $data['forma_pago'],
 
         ]);
+
+
 
         if ($data['tipo_retiro'] == 1) {
 
@@ -230,11 +263,13 @@ if(Auth::user()->perfil==1){
 
         return view('teo/actualizado');
     }
-   
+
+
     public function destroy($id)
     {
         //
     }
+
 
 
     /** comentarios del controlador

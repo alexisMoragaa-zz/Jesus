@@ -30,8 +30,7 @@
 
 
 
-
-$("#datepiker").datepicker();
+            $("#datepiker").datepicker();
 
             $("#date").hide();
             $("#btn-start-search").css('margin-right','41%');
@@ -94,9 +93,9 @@ $("#datepiker").datepicker();
 
         <div class="col-md-2 " id="btn-start-call">
             @if(Auth::user()->perfil ==1)
-                <a href="{{route('admin.call.index')}}"  class="btn btn-success">Comenzar a Llamar</a>
+                <a href="{{route('admin.call.index')}}"  class="btn btn-success btn-ajax">Comenzar a Llamar</a>
              @elseif(Auth::user()->perfil ==2)
-                <a href="{{route('teo.call.index')}}"  class="btn btn-success">Comenzar a Llamar</a>
+                <a href="{{route('teo.call.index')}}"  class="btn btn-success btn-ajax">Comenzar a Llamar</a>
             @endif
         </div>
 </div>

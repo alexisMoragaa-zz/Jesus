@@ -63,6 +63,7 @@ Route::group(['middleware' => ['auth', 'administrador'], 'prefix' => 'admin'], f
     route::post('filtroRutas','OperacionesController@verRutasFiltradas');
     route::post('capFilter','TeoController@capFilter');
     Route::post('addStatusCap','OperacionesController@addStatusCap');
+    route::post('addStatusCapAjax','Teocontroller@addStatusCapAjax');
 
     route::get('ajax-rutero', function () {
         $rutero_id = Input::get('ruteroid');
