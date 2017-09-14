@@ -7,43 +7,11 @@
 		#btn-edit{margin-top: 23px;}#btn_agendar{float:left;}.div-name{float:left;}#contenedor1{clear: both;}
 		#observation-error{padding-left: 60%;color: red;}#status-error{padding-left: 30px;color: red;}
 		#color{background: red;margin-top: 30px;margin-bottom: 15px;}#btn-exit{ margin-top:23px;}
+		#btn-back{margin-top: -3%}
 	</style>
 
 	<script>
 		$(document).ready(function(){
-
-		$(".btn-ajax").click(function(e){
-
-			var info =$("#form-cap").serialize();
-			var option =$("#call_status").val();
-			if(option =="Acepta Agendamiento"||option=="Acepta Grabacion"||option=="Acepta Delivery"||option=="Acepta Upgrade"||option=="Acepta Chilexpress"||option=="Acepta ir a Dues"){
-
-				$.post('addStatusCapAjax',info,processData)
-
-				function processData(data) {
-					console.log(data);
-					if(data =="exito"){
-
-					}
-				}
-			}else{
-				alert("Ingrese una opcion Valida");
-				return false;
-			}
-
-
-		});
-			$("#btn_siguiente").click(function(e){
-				var option =$("#call_status").val();
-				e.preventDefault();
-				if(option =="Acepta Agendamiento"||option=="Acepta Grabacion"||option=="Acepta Delivery"||option=="Acepta Upgrade"||option=="Acepta Chilexpress"||option=="Acepta ir a Dues") {
-
-				alert("ingrese una opcion Valida")
-				}else {
-					$("#form-cap").submit();
-				}
-			});
-
 
 			$("#v_llamar").hide();
 
@@ -60,6 +28,10 @@
 					$("#observ").addClass('col-md-6');
 				}
 			});
+
+			$("#btn-back").click(function () {
+				$("#form-back").submit();
+			});
 		});
 
 	</script>
@@ -68,6 +40,18 @@
 	<script src="{{asset('js/optimizar.js')}}"></script>
 
 <div class="container " id="contenedor">
+	<div class="cl-md-3" id="btn-back">
+	@if(Auth::user()->perfil==1)
+			{!! Form::open(['url'=>['admin/homeBack'],'method'=>'POST','id'=>'form-back']) !!}
+	@elseif(Auth::user()->perfil==2)
+			{!! Form::open(['url'=>['teo/homeBack'],'method'=>'POST','id'=>'form-back']) !!}
+	@endif
+		<input type="hidden" name="id" value="{{$cap->id}}">
+
+		{!! Form::close() !!}
+		<button type="button" class="btn btn-outline btn-default or" id="btn-back" ><span class="glyphicon glyphicon-arrow-left"></span> Regresar</button>
+
+	</div>
 
 	<div class="div-name col-md-10 col-sm-10 col-xs-10">
 		<h1 id="name" class="col-md-10">{{Auth::user()->name}} {{Auth::user()->last_name}}</h1>
@@ -129,9 +113,11 @@
 			<label for="" id="otro_antecedente-l" class="control-label">Otro Antecedente</label>
 			<input type="text" value="{{$cap->otro_antecedente}}" id="otro_antecedente" class="form-control">
 		</div>
-
+@if(Auth::user()->perfil==1)
 {!! Form::open(['url'=>['admin/siguiente',$cap->id],'method'=>'POST','id'=>'form-cap']) !!}
-
+@elseif(Auth::user()->perfil==2)
+			{!! Form::open(['url'=>['teo/siguiente',$cap->id],'method'=>'POST','id'=>'form-cap']) !!}
+@endif
 		<div class="col-md-3">
 			<label for="" class="control-label">Estado Llamado</label>
 			<label for="" class="control-label" id="status-error">*Ingrese Un Valor</label>
@@ -159,7 +145,11 @@
 
 
 		<div class="col-md-1">
-			<a href="{{url('admin/edit&')}}{{$cap->id}}" class="btn btn-warning" id="btn-edit"> Edit</a>
+			@if(Auth::user()->perfil==1)
+				<a href="{{url('admin/edit&')}}{{$cap->id}}" class="btn btn-warning" id="btn-edit"> Edit</a>
+			@elseif(Auth::user()->perfil==2)
+				<a href="{{url('teo/edit&')}}{{$cap->id}}" class="btn btn-warning" id="btn-edit"> Edit</a>
+			@endif
 		</div>
 
 		<div class="col-md-1">

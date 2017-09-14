@@ -11,10 +11,41 @@
         .succes {
             border-color: green;
         }
+        #space{
+            margin-left: -40%;
+
+        }
+        #space2{
+            margin-left: 40%;
+        }
     </style>
     <script>
         $(document).ready(function () {
+            $(".modal-form").hide();
+            $(".v_llamar").hide();
 
+            $("#status").change(function(){
+                if($(this).val()=="Volver a llamar"){
+                    $(".v_llamar").fadeIn();
+                }else{
+                    $(".v_llamar").fadeOut();
+                }
+            });
+
+            $("#btn-cancel").click(function(){
+                $( ".modal-form" ).dialog({
+                    buttons: [{
+                       text: "Cancelar","class":'btn btn-danger space',"id":'space',click: function () {
+
+                            $(this).dialog("close");
+                        }},{
+                        text:"Aceptar","class":'btn btn-success',"id":'space2',click : function(){
+                            $("#form-cap").submit();
+                        }
+                    }]
+                });
+
+            });
             $("#comuna").on('change', function (e) {
 
                 console.log(e);
@@ -86,8 +117,38 @@
 
     <div class="container">
 
+        <div class="col-md-12">
+            <div class="col-md-1" style="margin-left: 90%">
+                <input type="button" value="Cancelar" class="btn btn-danger" id="btn-cancel">
+            </div>
+        </div>
+
+        <div class="modal-form" title="Cancelar Agendamiento">
+            @if(Auth::user()->perfil==1)
+                {!! Form::open(['url'=>['admin/siguiente',$capta->id],'method'=>'POST','id'=>'form-cap']) !!}
+            @elseif(Auth::user()->perfil==2)
+                {!! Form::open(['url'=>['teo/siguiente',$capta->id],'method'=>'POST','id'=>'form-cap']) !!}
+            @endif
+                <label for="status" class="control-label">Estado Llamado</label>
+                <select name="call_status" id="status" class="form-control">
+                    
+                    <option value="">selecione estado</option>
+                    @foreach($status as $sta)
+                        <option value="{{$sta->Estado}}">{{$sta->Estado}}</option>
+                    @endforeach    
+                </select>
+
+                <label for="observation" class="control-label">Observacion</label>
+                <input type="text" class="form-control" name="observation1">
+
+                <label for="v_llamar" class="control-label v_llamar">Volver a llamar</label>
+                <input type="date" name="call_again" class="v_llamar form-control">
+
+           {!! Form::close() !!}
+        </div>
         <div class="panel panel-default ">
-            <div class="panel-heading">Agendamiento</div>
+
+
             <form class="form-horizontal" role="form" id="send" method="POST"
                   action="@if(Auth::user()->perfil==1){{ url('admin/agregado') }}@elseif(Auth::user()->perfil==2){{ url('teo/agregado')}}@endif ">
                 <input type="hidden" name="_token" value="{{ csrf_token() }}">
@@ -232,10 +293,11 @@
                 </div>
                 <div class=" ">
                     <input type="hidden" class="form-control" name="teleoperador" value="{{auth::user()->id}}">
+                    <input type="hidden" name="id_captacion" value="{{$capta->id}}">
                 </div>
 
                 <div class="col-md-6">
-                    <label class="control.label">.</label>
+
                     <button type="button" class="btn btn-primary form-control" id="enviar">
                         Ingresar Agendamiento
                     </button>

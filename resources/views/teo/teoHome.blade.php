@@ -125,7 +125,7 @@
                 @elseif($cap->estado_captacion =="Rechazada")
                     <tr class="danger">
                  @elseif($cap->estado_captacion =="")
-                    <tr >
+                    <tr>
                  @endif
                         <td>{{$cap->id}}</td>
                         <td>{{$cap->nombre." ".$cap->apellido}}</td>

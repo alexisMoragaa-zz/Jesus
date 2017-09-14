@@ -121,5 +121,53 @@ class UsersTableSeeder extends Seeder
             'fecha_ingreso'  =>  '10-02-2017',
             'fecha_termino'  =>  '22-04-2017'
         ));
+        \DB::table('users')->insert(array(
+            'name' => 'Teleoperador',
+            'last_name'=>'Teo',
+            'email' => 'teo@teo.com',
+            'perfil' => '2',
+            'estado' => 'Activo',
+            'password' => \Hash::make('123456'),
+            'campana'  => '5',
+            'turno'  =>  'TD',
+            'fecha_ingreso'  =>  '10-02-2017',
+            'fecha_termino'  =>  '22-04-2017'
+        ));
+        \DB::table('users')->insert(array(
+            'name' => 'Operaciones',
+            'last_name'=>'ope',
+            'email' => 'ope@ope.com',
+            'perfil' => '4',
+            'estado' => 'Activo',
+            'password' => \Hash::make('123456'),
+            'campana'  => '5',
+            'turno'  =>  'TD',
+            'fecha_ingreso'  =>  '10-02-2017',
+            'fecha_termino'  =>  '22-04-2017'
+        ));
+        \DB::table('users')->insert(array(
+            'name' => 'Supervisor',
+            'last_name'=>'sup',
+            'email' => 'sup@sup.com',
+            'perfil' => '3',
+            'estado' => 'Activo',
+            'password' => \Hash::make('123456'),
+            'campana'  => '5',
+            'turno'  =>  'TD',
+            'fecha_ingreso'  =>  '10-02-2017',
+            'fecha_termino'  =>  '22-04-2017'
+        ));
+        \DB::table('users')->insert(array(
+            'name' => 'Rutero',
+            'last_name'=>'rut',
+            'email' => 'rut@rut.com',
+            'perfil' => '5',
+            'estado' => 'Activo',
+            'password' => \Hash::make('123456'),
+            'campana'  => '5',
+            'turno'  =>  'TD',
+            'fecha_ingreso'  =>  '10-02-2017',
+            'fecha_termino'  =>  '22-04-2017'
+        ));
     }
 }

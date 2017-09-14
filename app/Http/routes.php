@@ -64,7 +64,7 @@ Route::group(['middleware' => ['auth', 'administrador'], 'prefix' => 'admin'], f
     route::post('capFilter','TeoController@capFilter');
     Route::post('addStatusCap','OperacionesController@addStatusCap');
     route::post('addStatusCapAjax','Teocontroller@addStatusCapAjax');
-
+    route::post('homeBack','Teocontroller@homeBack');
     route::get('ajax-rutero', function () {
         $rutero_id = Input::get('ruteroid');
         $nombre_rutero = comunaRetiro::where('comuna', '=', $rutero_id)->get();
@@ -91,10 +91,11 @@ Route::group(['middleware' => ['auth', 'teleoperador'], 'prefix' => 'teo'], func
     Route::get('edit&{id}', 'TeoController@editar');
     Route::get('mandatoExitoso&{id}&{id_interno_dues}', 'TeoController@create');
     Route::post('agregado', 'TeoController@store');
-    route::post('siguiente{id}', 'teoController@siguinente');
+    route::post('siguiente/{id}', 'teoController@siguiente');
     route::post('capFilter','TeoController@capFilter');
     route::get('teoHome','TeoController@Home');
     route::get('validarSocio', 'OperacionesController@validarSocio');
+    route::post('homeBack','Teocontroller@homeBack');    
 
     route::get('ajax-rutero', function () {
         $rutero_id = Input::get('ruteroid');

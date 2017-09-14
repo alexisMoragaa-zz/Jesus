@@ -11,32 +11,32 @@ class EstadosTableSeeder extends Seeder
     {
         \DB::table('estados')->insert(array(
             'estado'=>'Acepta Agendamiento',
-            'modulo' =>'llamado',
+            'modulo' =>'agendamiento',
             'tipo' => 'cu+'
         ));
         \DB::table('estados')->insert(array(
             'estado'=>'Acepta Grabacion',
-            'modulo' =>'llamado',
+            'modulo' =>'agendamiento',
             'tipo' => 'cu+'
         ));
         \DB::table('estados')->insert(array(
             'estado'=>'Acepta Delivery',
-            'modulo' =>'llamado',
+            'modulo' =>'agendamiento',
             'tipo' => 'cu+'
         ));
         \DB::table('estados')->insert(array(
             'estado'=>'Acepta Upgrade',
-            'modulo' =>'llamado',
+            'modulo' =>'agendamiento',
             'tipo' => 'cu+'
         ));
         \DB::table('estados')->insert(array(
             'estado'=>'Acepta Chilexpress',
-            'modulo' =>'llamado',
+            'modulo' =>'agendamiento',
             'tipo' => 'cu+'
         ));
         \DB::table('estados')->insert(array(
             'estado'=>'Acepta ir a Dues',
-            'modulo' =>'llamado',
+            'modulo' =>'agendamiento',
             'tipo' => 'cu+'
         ));
     //-------estados de agendamiento-----

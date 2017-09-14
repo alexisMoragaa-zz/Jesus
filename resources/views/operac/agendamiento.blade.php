@@ -334,6 +334,8 @@
                     <th class="detalle">Agendamiento</th>
                     <th>Monto</th>
                     <th>rutero</th>
+                    <th>Detalle</th>
+                    <th id="mdt" ><span id="mdtspan" class=" glyphicon glyphicon-list-alt "></span></th>
                 </tr>
                 </thead>
                 <tbody>
@@ -341,7 +343,15 @@
                 @foreach($datos as $dato)
                     @if($dato == "")
                         @else
-                    <tr>
+                        @if($dato->estado_captacion =="OK")
+                            <tr class="success">
+                        @elseif($dato->estado_captacion =="Con Reparo")
+                            <tr class="warning">
+                        @elseif($dato->estado_captacion =="Rechazada")
+                            <tr class="danger">
+                        @elseif($dato->estado_captacion =="")
+                            <tr>
+                                @endif
                         <td>{{$dato->id}}</td>
                         <td>{{$dato->nombre}} {{$dato->apellido}}</td>
                         <td>{{$dato->fono_1}}</td>
@@ -365,6 +375,15 @@
                             <td><a href="{{route('ope.call.show',$dato->id)}}">Ver <span class="glyphicon glyphicon-search"></span></a></td>
 
                         @endif
+                                @if($dato->estado_mandato =="ok")
+                                    <td class="center"><span class="glyphicon glyphicon-ok"></span></td>
+                                @elseif($dato->estado_mandato =="Con Reparo")
+                                    <td class="center"><span class="glyphicon glyphicon-minus-sign"></span></td>
+                                @elseif($dato->estado_mandato =="Rechazado")
+                                    <td center="center"><span class="glyphicon glyphicon-remove"></span></td>
+                                @elseif($dato->estado_mandato =="")
+                                    <td center="center"><span class="glyphicon "></span></td>
+                                @endif
                     </tr>
                     @endif
                 @endforeach

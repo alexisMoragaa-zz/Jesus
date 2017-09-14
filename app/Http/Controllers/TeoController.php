@@ -124,7 +124,12 @@ class TeoController extends Controller
                 'volver_llamar' => $call_again
             ]);
 
-        return redirect()->route('admin.call.index');
+        if(Auth::user()->perfil==1){
+            return redirect()->route('admin.call.index');
+        }elseif (Auth::user()->perfil==2){
+            return redirect()->route('teo.call.index');
+        }
+
 
 
     }
@@ -168,19 +173,20 @@ class TeoController extends Controller
     }
     public function create($id, $estado)
     {
-       
 
 
+        $status = estado::where('modulo', '=', 'llamado')->get();
         $capta = captaciones::findOrFail($id);
 
         $comunas = comunaRetiro::where('region', '=', 'metropolitana')->where('ciudad', '=', 'santiago')->get();
 
-        return view('teo/mandatoRegistrado', compact('capta', 'comunas'));
+        return view('teo/mandatoRegistrado', compact('capta', 'comunas','status'));
     }
 
 
     public function store(Request $request)
     {
+        /**Primera parte*/
         $data = $request->all();
         $date = Carbon::now()->format('d/m/Y');
    
@@ -208,9 +214,44 @@ class TeoController extends Controller
             'forma_pago' => $data['forma_pago'],
 
         ]);
+        /**Segunda Parte*/
+$id = $request->id_captacion;
+        $llamado1 = captaciones::where('id', '=', $id)->pluck('primer_llamado');
+        $llamado2 = captaciones::where('id', '=', $id)->pluck('segundo_llamado');
+
+        if ($llamado1 == null) {
+            $name_status = 'estado_llamada1';
+        } elseif ($llamado2 == null) {
+            $name_status = 'estado_llamada2';
+        } else {
+            $name_status = 'estado_llamada3';
+        }
+
+        $t_retiro=$request->tipo_retiro;
+
+        if($t_retiro==1){
+            $retiro="Acepta Agendamiento";
+        }elseif($t_retiro==2){
+            $retiro="Acepta Grabacion";
+        }elseif($t_retiro==3){
+            $retiro="Acepta Delivery";
+        }elseif($t_retiro==4){
+            $retiro="Acepta Chilexpress";
+        }elseif($t_retiro==5){
+            $retiro="Acepta ir a Dues";
+        }elseif($t_retiro==6){
+            $retiro="Acepta ir a Fundacion";
+        }
+        DB::table('captaciones')
+            ->where('id', '=', $id)
+            ->update([
+                'estado_registro' => 0,
+                'estado' => 'cu+',
+                $name_status=>$retiro
 
 
-
+            ]);
+    /**Tercera Parte*/
         if ($data['tipo_retiro'] == 1) {
 
            $id =DB::table('estado_rutas')->insertGetId([
@@ -226,16 +267,13 @@ class TeoController extends Controller
             ]);
         }
 
-if(Auth::user()->perfil==1){
-
-    return redirect(url('admin/teoHome'));
-}elseif (Auth::user()->perfil==2){
-
-    return redirect(url('teo/teoHome'));
-}
-
+        
+         if(Auth::user()->perfil==1){
+            return redirect(url('admin/teoHome'));
+         }elseif (Auth::user()->perfil==2){
+            return redirect(url('teo/teoHome'));
+         }
     }
-
 
 
     public function editar($id)
@@ -264,7 +302,22 @@ if(Auth::user()->perfil==1){
         return view('teo/actualizado');
     }
 
+    public function homeBack(Request $request){
 
+        $id=$request->id;
+        DB::table('captaciones')
+            ->where('id', '=', $id)
+            ->update([
+                'estado_registro' => 0
+                
+            ]);
+
+        if(Auth::user()->perfil==1){
+            return redirect(url('admin/teoHome'));
+        }elseif (Auth::user()->perfil==2){
+            return redirect(url('teo/teoHome'));
+        }
+    }
     public function destroy($id)
     {
         //
@@ -285,9 +338,11 @@ if(Auth::user()->perfil==1){
      *Siguiente: toma el registro entregado por la vista, inserta un 0 para desbloquear el registro, he inserta la fecha correspondiente
      *             al dia, para que de esta forma no se llamena los mismos registros el mismo dia. luego redirecciona al index y se repite el proceso
      *
-     *Store    : la funcaion store inserta los datos rescatados del formulario en la tabla captaciones exitosas, y si el tipo de retiro es
-     *            agendamiento adicionalmente inserta el id y la fecha de agendamiento en la tabla estado ruta que  es parte de la relacion
-     *            uno a uno
+     *Store    : Esta funcion se divide en tres partes fundamentales.
+     *          parte 1: inserta los datos rescatados del formulario en la tabla captaciones_exitosas
+     *          parte 2: con un if identifica el numero de llamados he inserta el estado de la captacion en la tabla captaciones
+     *          parte 3: si el tipod e retiro es 1, o agendamiento inserta la fecha de agendamiento en la tabla estado_ruta y el estado
+     *                  del primer agendamiento como visita pendiente
      *
      * capFilter: en este metodo de tipo post, evaluamos  los valores obtenidos del campo select searchFor, y con un grupo de if anidados
      *              determinamos la informacion que enviaremos a la vista teo Home segun corresponda
