@@ -26,28 +26,17 @@
 
             $("#pm").hide();
 
-            $("#formulario").submit(function(e) {
-                e.preventDefault();
+            $("#addstatuscap").click(function() {
+
 
                 if($("#checkRecord").val()=="1"){
                     alert('ingrese una opcion valida');
+                    return false;
                 }else {
-                    var info = $("#formulario").serialize();
-
-
-                    $.post('/admin/addStatusCap', info, processData);
-                    console.log(info);
-
-                    function processData(data) {
-                        if (data == "exito") {
-                        $("#pm").show();
-                            $("#dialog").dialog({});
-                            $("#status").text($("#checkRecord").val());
-                            $("#reason").text($("#motivo").val());
-                        }
+                   $("#formulario").submit();
 
                     }
-                }
+
 
             });
 
@@ -69,10 +58,30 @@
                 }
             });
 
+            //segunda parte
+            $("#statusRecordMdt").hide();
+
+            $("#status_mdt").change(function(){
+
+                if($(this).val() !="OK"){
+                    $("#statusRecordMdt").fadeIn();
+                    if($(this).val() !="1"){
+                        $("#statusRecordMdt").fadeIn();
+                    }else{
+                        $("#statusRecordMdt").fadeOut();
+                        $("#motivoMdt").val('');
+                    }
+                }else{
+                    $("#statusRecordMdt").fadeOut();
+                    $("#motivoMdt").val('');
+                }
+            });
+
         });
     </script>
 
-    <div class="container">
+ <div class="container">
+
         <div class="col-md-2">
             <button type="button" class="btn btn-outline btn-default or" onclick="history.go(-1); return false;"><span class="glyphicon glyphicon-arrow-left"></span> Regresar</button>
 
@@ -211,33 +220,74 @@
             </table>
 
             @if(Auth::user()->perfil ==1 || Auth::user()->perfil==4)
-                {!! Form::open(array('url'=>'admin/addStatusCap','id'=>'formulario')) !!}
-                <div class="col-md-2">
-                    <label for="" class="control-label">Revisar Captacion</label>
+                @if($d->estado_captacion != 'OK')
 
-                    <select name="checkRecord" id="checkRecord" class="form-control">
-                        <option value="1">-- Seleccione --</option>
-                        <option value="OK">OK</option>
-                        <option value="Con Reparo">Con Reparo</option>
-                        <option value="Rechazada">Rechazada</option>
-                    </select>
-                </div>
-                <div class="col-md-2">
-                    <input type="submit" class="btn btn-success " id="enviar">
-                </div>
-                <div class="col-md-4" id="statusRecord">
-                    <label for="" class="control-label">Añadir Estado</label>
-                    <input type="text" class="form-control" name="motivo" id="motivo">
-                </div>
+                     @if(Auth::user()->perfil==1)
+                         {!! Form::open(array('url'=>'admin/addStatusCap','id'=>'formulario')) !!}
+                    @elseif(Auth::user()->perfil==4)
+                        {!! Form::open(array('url'=>'ope/addStatusCap','id'=>'formulario')) !!}
+                    @endif
+                            <div class="col-md-2">
+                                <label for="status_cap" class="control-label">Revisar Captacion</label>
 
-                <input type="hidden" id="id_cap" name="cap_id" value="{{$d->id}}">
+                                <select name="status_cap" id="checkRecord" class="form-control">
+                                    <option value="1">-- Seleccione --</option>
+                                    <option value="OK">OK</option>
+                                    <option value="conReparo">Con Reparo</option>
+                                    <option value="rechazada">Rechazada</option>
+                                </select>
+                            </div>
+                            <div class="col-md-2">
+                                <input type="submit" class="btn btn-success " id="addstatuscap" >
+                            </div>
 
-                {!! Form::close() !!}
-            @endif
+                            <div class="col-md-4" id="statusRecord">
+                                <label for="" class="control-label">Añadir Estado</label>
+                                <input type="text" class="form-control" name="motivo_cap" id="motivo">
+                            </div>
+
+                            <input type="hidden" id="cap_id" name="cap_id" value="{{$d->id}}">
+
+                      {!! Form::close() !!}
+                     <div class="col-md-4">
+                        <label for=""></label>
+                     </div>
+                @else
+
+
+                <div class="mdt">
+
+                    @if(Auth::user()->perfil==1)
+                        {!! Form::open(array('url'=>'admin/addStatusMdt','id'=>'form-mandato'))!!}
+                    @elseif(Auth::user()->perfil==4)
+                        {!! Form::open(array('url'=>'ope/addStatusMdt','id'=>'form-mandato'))!!}
+                    @endif
+                        <div class="col-md-2">
+                             <label for="status-mdt" class="control-label"> Revision Mandato</label>
+                             <select name="status_mdt" id="status_mdt" class="form-control">
+                                 <option value="1">-- Seleccione --</option>
+                                <option value="OK">OK</option>
+                                <option value="conReparo">Con Reparo</option>
+                                <option value="rechazado">Rechazado</option>
+                             </select>
+                        </div>
+                        <div class="col-md-2">
+                            <input type="submit" class="btn btn-success " id="enviarmdt">
+                        </div>
+
+                        <div class="col-md-4" id="statusRecordMdt">
+                             <label for="reasonmdt" class="control-label">Estado</label>
+                            <input type="text" class="form-control" id="motivoMdt" name="motivoMdt">
+                         </div>
+                        <input type="hidden" name="cap_id" value="{{$d->id}}">
+                    {!! Form::close() !!}
+                 </div>
+
+         @endif<!--cierre if estado_captacion-->
+         @endif<!--cierre if perfiles-->
         @endforeach
 
-
-    </div>
+ </div>
 
 
 @endsection

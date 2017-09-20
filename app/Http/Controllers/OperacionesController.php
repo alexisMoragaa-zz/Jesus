@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Response;
 use Monolog\Handler\ElasticSearchHandler;
+use Illuminate\Support\Facades\Auth;
 
 
 class OperacionesController extends Controller
@@ -43,56 +44,29 @@ class OperacionesController extends Controller
         return 'accion create';
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @return Response
-     */
+
     public function store()
     {
         //
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int $id
-     * @return Response
-     */
 
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int $id
-     * @return Response
-     */
     public function edit($id)
     {
         //
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  int $id
-     * @return Response
-     */
     public function update($id)
     {
         //
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int $id
-     * @return Response
-     */
+
     public function destroy($id)
     {
         //
     }
+
 
     public function showDay(Request $request)
     {
@@ -269,24 +243,44 @@ class OperacionesController extends Controller
         }
     }
 
-    public function addStatusCap(){
-        $capStatus =$_POST['checkRecord'];
-        $reason =$_POST['motivo'];
-        $id =$_POST['cap_id'];
+    public function addStatusCap(Request $request){
 
+        $capStatus = $request->status_cap;
+        $reason = $request->motivo_cap;
+        $id = $request->cap_id;
 
-       $cap = CaptacionesExitosa::find($id);
+        $cap = CaptacionesExitosa::find($id);
         $cap->estado_captacion=$capStatus;
-        $cap->motivo=$reason;
+        $cap->motivo_cap=$reason;
         $cap->save();
 
-        $verificar =CaptacionesExitosa::where('id','=',$id)->pluck('estado_Captacion');
 
-        if($verificar == $capStatus){
+        if(Auth::user()->perfil==1){
+            return redirect()->route('admin.ope.index');
+        }elseif(Auth::user()->perfil==4){
+            return redirect()->route('ope.ope.index');
+        }
 
-            return Response::json("exito");
-        }else{
-            return Response::json('error');
+
+    }
+
+    public function addStatusMdt(Request $request)
+    {
+
+        $id= $request->cap_id;
+        $statusMdt=$request->status_mdt;
+        $reasonMdt=$request->motivoMdt;
+
+        $cap=CaptacionesExitosa::find($id);
+
+        $cap->estado_mandato=$statusMdt;
+        $cap->motivo_mdt=$reasonMdt;
+        $cap->save();
+
+        if(Auth::user()->perfil==1){
+        return redirect()->route('admin.ope.index');
+        }elseif(Auth::user()->perfil==4){
+            return redirect()->route('ope.ope.index');
         }
 
     }

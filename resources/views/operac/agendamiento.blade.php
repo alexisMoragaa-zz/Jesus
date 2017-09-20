@@ -375,11 +375,11 @@
                             <td><a href="{{route('ope.call.show',$dato->id)}}">Ver <span class="glyphicon glyphicon-search"></span></a></td>
 
                         @endif
-                                @if($dato->estado_mandato =="ok")
+                                @if($dato->estado_mandato =="OK")
                                     <td class="center"><span class="glyphicon glyphicon-ok"></span></td>
-                                @elseif($dato->estado_mandato =="Con Reparo")
+                                @elseif($dato->estado_mandato =="conReparo")
                                     <td class="center"><span class="glyphicon glyphicon-minus-sign"></span></td>
-                                @elseif($dato->estado_mandato =="Rechazado")
+                                @elseif($dato->estado_mandato =="rechazado")
                                     <td center="center"><span class="glyphicon glyphicon-remove"></span></td>
                                 @elseif($dato->estado_mandato =="")
                                     <td center="center"><span class="glyphicon "></span></td>

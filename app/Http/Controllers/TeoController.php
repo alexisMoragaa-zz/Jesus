@@ -75,6 +75,15 @@ class TeoController extends Controller
         }else if($option == 2){
             $captaciones = CaptacionesExitosa::where('teleoperador','=',Auth::user()->id)->where('fecha_captacion','=',$date)->get();
             return view('teo/teoHome', compact('captaciones'));
+        }elseif($option == 3){
+            $captaciones = CaptacionesExitosa::where('teleoperador','=',Auth::user()->id)->where('estado_captacion','=','OK')->get();
+            return view('teo/teoHome', compact('captaciones'));
+        }elseif($option == 4){
+            $captaciones = CaptacionesExitosa::where('teleoperador','=',Auth::user()->id)->where('estado_captacion','=','rechazada')->get();
+            return view('teo/teoHome', compact('captaciones'));
+        }elseif($option == 5){
+            $captaciones = CaptacionesExitosa::where('teleoperador','=',Auth::user()->id)->where('estado_captacion','=','conReparo')->get();
+            return view('teo/teoHome', compact('captaciones'));
         }else if($option == 6){
 
             $captaciones = CaptacionesExitosa::where('teleoperador','=',Auth::user()->id)->get();
@@ -176,11 +185,13 @@ class TeoController extends Controller
 
 
         $status = estado::where('modulo', '=', 'llamado')->get();
+
         $capta = captaciones::findOrFail($id);
 
         $comunas = comunaRetiro::where('region', '=', 'metropolitana')->where('ciudad', '=', 'santiago')->get();
+        $function="nada";
 
-        return view('teo/mandatoRegistrado', compact('capta', 'comunas','status'));
+        return view('teo/mandatoRegistrado', compact('capta', 'comunas','status','function'));
     }
 
 
@@ -321,6 +332,47 @@ $id = $request->id_captacion;
     public function destroy($id)
     {
         //
+    }
+    public function editCap($id){
+        $status = estado::where('modulo', '=', 'llamado')->get();
+
+        $capta = captacionesExitosa::findOrFail($id);
+
+        $comunas = comunaRetiro::where('region', '=', 'metropolitana')->where('ciudad', '=', 'santiago')->get();
+        $function="editar";
+
+        return view('teo/mandatoRegistrado', compact('capta', 'comunas','status','function'));
+
+    }
+    
+    public function editCapPost(Request $request){
+        
+        $id =$request->id_captacion;
+        $editCap =CaptacionesExitosa::find($id);
+
+            $editCap->tipo_retiro= $request->tipo_retiro;
+            $editCap->comuna=$request->comuna;
+            $editCap->fecha_agendamiento =$request->fecha_agendamiento;
+            $editCap->horario =$request->horario;
+            $editCap->rut = $request->rut;
+            $editCap->jornada = $request->jornada;
+            $editCap->fono_1 = $request->fono_1;
+            $editCap->nombre = $request->nombre;
+            $editCap->apellido = $request->apellido;
+            $editCap->direccion = $request->direccion;
+            $editCap->correo_1 =$request->correo_1;
+            $editCap->rutero = $request->rutero;
+            $editCap->monto = $request->monto;
+            $editCap->forma_pago = $request->forma_pago;
+            $editCap->observaciones = $request->observacion;
+        $editCap->save();
+
+        if(Auth::user()->perfil==1){
+            return redirect(url('admin/teoHome'));
+        }elseif (Auth::user()->perfil==2){
+            return redirect(url('teo/teoHome'));
+        }
+
     }
 
 

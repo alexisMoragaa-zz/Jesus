@@ -65,7 +65,16 @@ Route::group(['middleware' => ['auth', 'administrador'], 'prefix' => 'admin'], f
     Route::post('addStatusCap','OperacionesController@addStatusCap');
     route::post('addStatusCapAjax','Teocontroller@addStatusCapAjax');
     route::post('homeBack','Teocontroller@homeBack');
+    Route::post('addStatusMdt','OperacionesController@addStatusMdt');
+    Route::get('editCap{id}','Teocontroller@editCap');
+    route::post('editCapPost','TeoController@editCapPost');
     route::get('ajax-rutero', function () {
+        $rutero_id = Input::get('ruteroid');
+        $nombre_rutero = comunaRetiro::where('comuna', '=', $rutero_id)->get();
+
+        return Response::json($nombre_rutero);
+    });
+    route::get('/editCap/ajax-rutero', function () {
         $rutero_id = Input::get('ruteroid');
         $nombre_rutero = comunaRetiro::where('comuna', '=', $rutero_id)->get();
 
@@ -95,7 +104,9 @@ Route::group(['middleware' => ['auth', 'teleoperador'], 'prefix' => 'teo'], func
     route::post('capFilter','TeoController@capFilter');
     route::get('teoHome','TeoController@Home');
     route::get('validarSocio', 'OperacionesController@validarSocio');
-    route::post('homeBack','Teocontroller@homeBack');    
+    route::post('homeBack','Teocontroller@homeBack');
+    Route::get('editCap/{id}','Teocontroller@editCap');
+    route::post('editCapPost','TeoController@editCapPost');
 
     route::get('ajax-rutero', function () {
         $rutero_id = Input::get('ruteroid');
@@ -140,6 +151,8 @@ Route::group(['middleware' => ['auth', 'operaciones'], 'prefix' => 'ope'], funct
     Route::Resource('call', 'TeoController');
     Route::get('verRutas','OperacionesController@verRutas');
     route::post('filtroRutas','OperacionesController@verRutasFiltradas');
+    Route::post('addStatusCap','OperacionesController@addStatusCap');
+    Route::post('addStatusMdt','OperacionesController@addStatusMdt');
 
     /*Route::get('/', function(){
 

@@ -21,7 +21,8 @@ class CreateCaptacionesExitosasTable extends Migration {
 			$table->string('fecha_captacion');
 			$table->string('fecha_agendamiento');
 			$table->string('estado_captacion');
-			$table->string('motivo');
+			$table->string('motivo_cap');
+			$table->string('motivo_mdt');
 			$table->string('estado_mandato');
 			$table->string('tipo_retiro');
 			$table->string('jornada');

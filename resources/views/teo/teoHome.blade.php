@@ -139,21 +139,29 @@
                         @else
                             <td>{{$cap->fecha_agendamiento}}</td>
                          @endif
+
                         <td>{{$cap->monto}}</td>
                         @if(Auth::user()->perfil==1)
                             <td><a href="{{route('admin.call.show',$cap)}}">Ver <span class="glyphicon glyphicon-search"></span></a></td>
                         @elseif(Auth::user()->perfil==2)
                             <td><a href="{{route('teo.call.show',$cap)}}">Ver <span class="glyphicon glyphicon-search"></span></a></td>
                         @endif
-                        @if($cap->estado_mandato =="ok")
-                            <td class="center"><span class="glyphicon glyphicon-ok"></span></td>
-                         @elseif($cap->estado_mandato =="Con Reparo")
-                            <td class="center"><span class="glyphicon glyphicon-minus-sign"></span></td>
-                         @elseif($cap->estado_mandato =="Rechazado")
-                            <td center="center"><span class="glyphicon glyphicon-remove"></span></td>
-                        @elseif($cap->estado_mandato =="")
-                            <td center="center"><span class="glyphicon "></span></td>
-                        @endif
+
+                             @if($cap->estado_mandato =="OK")
+                                <td class="center"><span class="glyphicon glyphicon-ok"></span></td>
+                            @elseif($cap->estado_mandato =="conReparo")
+                                 @if(Auth::user()->perfil==1)
+                                    <td class="center"><a href="{{url('admin/editCap/')}}{{$cap->id}}"><span class="glyphicon glyphicon-minus-sign"></span></a></td>
+                                 @elseif(Auth::user()->perfil==4)
+                                    <td class="center"><a href="{{url('teo/editCap')}}/{{$cap->id}}"><span class="glyphicon glyphicon-minus-sign"></span></a></td>
+                                 @endif
+                            @elseif($cap->estado_mandato =="rechazado")
+                                <td center="center"><span class="glyphicon glyphicon-remove"></span></td>
+                            @elseif($cap->estado_mandato =="")
+                                <td center="center"><span class="glyphicon "></span></td>
+                            @endif
+
+
                     </tr>
 
                 @endforeach

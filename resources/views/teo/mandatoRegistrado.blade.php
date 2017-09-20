@@ -116,13 +116,13 @@
     <link href="{{ asset('/css/style.css') }}" rel="stylesheet">
 
     <div class="container">
-
+@if($function=="nada")
         <div class="col-md-12">
             <div class="col-md-1" style="margin-left: 90%">
                 <input type="button" value="Cancelar" class="btn btn-danger" id="btn-cancel">
             </div>
         </div>
-
+ @endif
         <div class="modal-form" title="Cancelar Agendamiento">
             @if(Auth::user()->perfil==1)
                 {!! Form::open(['url'=>['admin/siguiente',$capta->id],'method'=>'POST','id'=>'form-cap']) !!}
@@ -146,12 +146,18 @@
 
            {!! Form::close() !!}
         </div>
+
         <div class="panel panel-default ">
 
 
             <form class="form-horizontal" role="form" id="send" method="POST"
-                  action="@if(Auth::user()->perfil==1){{ url('admin/agregado') }}@elseif(Auth::user()->perfil==2){{ url('teo/agregado')}}@endif ">
-                <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                  action="
+                  @if($function=="nada")
+                        @if(Auth::user()->perfil==1){{ url('admin/agregado') }}@elseif(Auth::user()->perfil==2){{ url('teo/agregado')}}@endif ">
+                @elseif($function=="editar")
+                    @if(Auth::user()->perfil==1){{ url('admin/editCapPost') }}@elseif(Auth::user()->perfil==2){{ url('teo/editCapPost')}}@endif ">
+                @endif
+                    <input type="hidden" name="_token" value="{{ csrf_token() }}">
 
                 <div>
 
@@ -174,8 +180,15 @@
                 <div class="col-md-3">
                     <label class=" control-label">Tipo Retiro</label>
                     <div class="">
-                        <select name="tipo_retiro" class="form-control" id="tipo_retiro">
-                            <option>--seleccione--</option>
+                        <select name="tipo_retiro" class="form-control" id="tipo_retiro" value="">
+                            @if($function=="editar")
+                                @if($capta->tipo_retiro==1) <option value="{{$capta->tipo_retiro}}">Agendamiento</option>@elseif($capta->tipo_retiro==2)
+                                    <option value="{{$capta->tipo_retiro}}">Grabacion</option>@elseif($capta->tipo_retiro==3)<option value="{{$capta->tipo_retiro}}">Delivery</option>
+                                    @elseif($capta->tipo_retiro==4)<option value="{{$capta->tipo_retiro}}">chilexpress</option> @elseif($capta->tipo_retiro==5)
+                                    <option value="{{$capta->tipo_retiro}}">Ir Dues</option>@elseif($capta->tipo_retiro==6)
+                                    <option value="{{$capta->tipo_retiro}}">Ir a Fundacion</option>@endif
+                                @endif
+                            <option value="">--seleccione--</option>
                             <option value="1">Agendamiento</option>
                             <option value="2">Grabacion</option>
                             <option value="3">Delivery</option>
@@ -189,6 +202,9 @@
                 <div class="col-md-3">
                     <label class=" control-label">Comuna</label>
                     <select name="comuna" id="comuna" class="form-control">
+                        @if($function=="editar")
+                            <option value="{{$capta->comuna}}">{{$capta->comuna}}</option>
+                        @endif
                         <option value="">-- Seleccione --</option>
                         @foreach($comunas as $comuna)
                             <option value="{{$comuna->comuna}}">{{$comuna->comuna}}</option>
@@ -199,25 +215,28 @@
                 <div class="col-md-3 grabacion">
                     <label class=" control-label">Fecha Agendamiento</label>
                     <div class="">
-                        <input type="date" class="form-control" name="fecha_agendamiento" value="">
+                        <input type="date" class="form-control" name="fecha_agendamiento" value="{{$capta->fecha_agendamiento}}">
                     </div>
                 </div>
 
                 <div class="col-md-3 grabacion">
                     <label class=" control-label">Horario .</label>
-                    <input type="time" class="form-control" name="horario" value="">
+                    <input type="time" class="form-control" name="horario" value="{{$capta->horario}}">
                 </div>
 
 
                 <div class="col-md-3">
                     <label class=" control-label">Rut</label>
-                    <input type="text" class="form-control" id="rut" name="rut" placeholder="18.202.912-2">
+                    <input type="text" class="form-control" id="rut" name="rut" placeholder="18.202.912-2" value="{{$capta->rut}}">
                 </div>
 
                 <div class="col-md-3">
                     <label class="control-label">Jornada</label>
 
                     <select name="jornada" class="form-control">
+                        @if($function=="editar")
+                            <option value="{{$capta->jornada}}">{{$capta->jornada}}</option>
+                        @endif
                         <option>--Seleccione--</option>
                         <option>AM</option>
                         <option>PM</option>
@@ -244,7 +263,7 @@
 
                 <div class="col-md-6">
                     <label class="control-label">Direccion</label>
-                    <input type="text" name="direccion" class="form-control" placeholder="Ej: Santa Magdalena #10">
+                    <input type="text" name="direccion" class="form-control" placeholder="Ej: Santa Magdalena #10" value="{{$capta->direccion}}">
 
                 </div>
 
@@ -257,18 +276,18 @@
 
                 <div class="col-md-3 grabacion">
                     <label class="control-label">Voluntario Ruta</label>
-                    <input type="text" class="form-control" name="rutero" id="rutero">
+                    <input type="text" class="form-control" name="rutero" id="rutero" value="{{$capta->rutero}}" onfocus="this.blur()">
                 </div>
 
 
                 <div class="col-md-2">
                     <label class="control-label">Campaña</label>
-                    <input type="text" class="form-control" name="nom_campana" value="{{$capta->campana}}">
+                    <input type="text" class="form-control" name="nom_campana" value="@if($function=="nada"){{$capta->campana}}@elseif($function=="editar"){{$capta->nom_campana}}@endif"onfocus="this.blur()" >
                 </div>
 
                 <div class="col-md-2">
                     <label class="control-label">Monto</label>
-                    <input type="text" class="form-control" name="monto">
+                    <input type="text" class="form-control" name="monto" value="{{$capta->monto}}">
                 </div>
 
                 <div class="col-md-2">
@@ -276,6 +295,9 @@
                     <label class="control-label">Forma Pago</label>
 
                     <select name="forma_pago" class="form-control">
+                        @if($function=="editar")
+                            <option value="{{$capta->forma_pago}}">{{$capta->forma_pago}}</option>
+                        @endif
                         <option>--Seleccione--</option>
                         <option class="grabacion">Cuenta Vista</option>
                         <option class="grabacion">Cuenta Corriente</option>
@@ -288,7 +310,7 @@
                 <div class="col-md-6">
                     <label class=" control-label">Observaciones</label>
 
-                    <input type="text" class="form-control" name="observaciones">
+                    <input type="text" class="form-control" name="observaciones" value="{{$capta->observaciones}}">
 
                 </div>
                 <div class=" ">
@@ -297,10 +319,15 @@
                 </div>
 
                 <div class="col-md-6">
-
+        @if($function==="nada")
                     <button type="button" class="btn btn-primary form-control" id="enviar">
                         Ingresar Agendamiento
                     </button>
+         @elseif($function=="editar")
+                        <button type="button" class="btn btn-warning form-control" id="enviar">
+                            Editar Agendamiento
+                        </button>
+         @endif
                 </div>
                 <div class="form-group ">
                 </div>
