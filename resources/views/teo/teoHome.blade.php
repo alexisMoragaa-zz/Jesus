@@ -120,21 +120,34 @@
             @foreach($captaciones as $cap)
                 @if($cap->estado_captacion =="OK")
                     <tr class="success">
-                @elseif($cap->estado_captacion =="Con Reparo")
+                @elseif($cap->edit =="editado")
+                    <tr class="info">
+                @elseif($cap->estado_captacion =="conReparo")
                     <tr class="warning">
-                @elseif($cap->estado_captacion =="Rechazada")
+                @elseif($cap->estado_captacion =="rechazada")
                     <tr class="danger">
+
                  @elseif($cap->estado_captacion =="")
+
+
                     <tr>
                  @endif
                         <td>{{$cap->id}}</td>
-                        <td>{{$cap->nombre." ".$cap->apellido}}</td>
+                        @if($cap->estado_captacion =="conReparo")
+                            @if(Auth::user()->perfil==1)
+                                <td ><a href="{{url('admin/editCap')}}{{$cap->id}}">{{$cap->nombre." ".$cap->apellido}}</a></td>
+                            @elseif(Auth::user()->perfil==2)
+                                <td ><a href="{{url('teo/editCap')}}{{$cap->id}}">{{$cap->nombre." ".$cap->apellido}}</a></td>
+                            @endif
+                        @else
+                            <td >{{$cap->nombre." ".$cap->apellido}}</td>
+                        @endif
                         <td>{{$cap->fono_1}}</td>
                         <td>{{$cap->rut}}</td>
                         <td>{{$cap->comuna}}</td>
                         <td>{{$cap->nom_campana}}</td>
                         <td>{{$cap->fecha_captacion}}</td>
-                        @if($cap->tipo_retiro =="2")
+                        @if($cap->tipo_retiro =="Acepta Grabacion")
                             <td>Grabacion</td>
                         @else
                             <td>{{$cap->fecha_agendamiento}}</td>
@@ -146,15 +159,10 @@
                         @elseif(Auth::user()->perfil==2)
                             <td><a href="{{route('teo.call.show',$cap)}}">Ver <span class="glyphicon glyphicon-search"></span></a></td>
                         @endif
-
                              @if($cap->estado_mandato =="OK")
                                 <td class="center"><span class="glyphicon glyphicon-ok"></span></td>
                             @elseif($cap->estado_mandato =="conReparo")
-                                 @if(Auth::user()->perfil==1)
-                                    <td class="center"><a href="{{url('admin/editCap/')}}{{$cap->id}}"><span class="glyphicon glyphicon-minus-sign"></span></a></td>
-                                 @elseif(Auth::user()->perfil==4)
-                                    <td class="center"><a href="{{url('teo/editCap')}}/{{$cap->id}}"><span class="glyphicon glyphicon-minus-sign"></span></a></td>
-                                 @endif
+                                <td class="center"><span class="glyphicon glyphicon-minus-sign"></span></td>
                             @elseif($cap->estado_mandato =="rechazado")
                                 <td center="center"><span class="glyphicon glyphicon-remove"></span></td>
                             @elseif($cap->estado_mandato =="")

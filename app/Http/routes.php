@@ -74,18 +74,7 @@ Route::group(['middleware' => ['auth', 'administrador'], 'prefix' => 'admin'], f
 
         return Response::json($nombre_rutero);
     });
-    route::get('/editCap/ajax-rutero', function () {
-        $rutero_id = Input::get('ruteroid');
-        $nombre_rutero = comunaRetiro::where('comuna', '=', $rutero_id)->get();
 
-        return Response::json($nombre_rutero);
-    });
-
-
-    /*Route::get('/', function(){
-
-        return view('admin/administradorr');
-    });*/
 });
 
 /*

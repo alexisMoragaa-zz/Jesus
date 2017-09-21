@@ -345,9 +345,11 @@
                         @else
                         @if($dato->estado_captacion =="OK")
                             <tr class="success">
-                        @elseif($dato->estado_captacion =="Con Reparo")
+                        @elseif($dato->edit =="editado")
+                            <tr class="info">
+                        @elseif($dato->estado_captacion =="conReparo")
                             <tr class="warning">
-                        @elseif($dato->estado_captacion =="Rechazada")
+                        @elseif($dato->estado_captacion =="rechazada")
                             <tr class="danger">
                         @elseif($dato->estado_captacion =="")
                             <tr>

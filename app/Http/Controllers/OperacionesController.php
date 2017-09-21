@@ -252,6 +252,7 @@ class OperacionesController extends Controller
         $cap = CaptacionesExitosa::find($id);
         $cap->estado_captacion=$capStatus;
         $cap->motivo_cap=$reason;
+        $cap->edit="revisado";
         $cap->save();
 
 

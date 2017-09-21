@@ -139,17 +139,18 @@
 
                 <tr>
                     <td>Tipo Retiro</td>
-                    @if($d->tipo_retiro ==1) <td>: Agendamiento</td>@elseif($d->tipo_retiro==2)<td>: Grabacion</td>
-                       @elseif($d->tipo_retiro==3)<td>: Delivery</td>@elseif($d->tipo_retiro==4)<td>: Chilexpress</td>
-                        @elseif($d->tipo_retiro==5)<td>: Ir a Dues</td>@elseif($d->tipo_retiro==6)<td>: Ir a Fundacion</td>@endif
+                    <td>: {{$d->tipo_retiro}}</td>
                 </tr>
 
                 <tr>
                     <td>Fecha Captacion</td>
                     <td>: {{$d->fecha_captacion}}</td>
                 </tr>
-     @if($d->tipo_retiro ==2)
-
+     @if($d->tipo_retiro =="Acepta Grabacion")
+                    <tr>
+                        <td>Cuenta Movistar</td>
+                        <td>: {{$d->cuenta_movistar}}</td>
+                    </tr>
     @else
                     <tr>
                         <td>Rutero</td>
@@ -160,13 +161,12 @@
                         <td>Fecha Retiro</td>
                         <td>: {{$d->fecha_agendamiento}}</td>
                     </tr>
-
                     <tr>
                         <td>Horario</td>
                         <td>: {{$d->horario}}</td>
                     </tr>
-    @endif
 
+    @endif
                 <tr>
                     <td>Comuna</td>
                     <td>: {{$d->comuna}}</td>
@@ -203,18 +203,23 @@
                 </tr>
 
                 <tr>
-                    <td >Estado</td>
+                    <td >Estado Captacion</td>
                     <td id="status">: {{$d->estado_captacion}}</td>
                 </tr>
 
                 <tr>
-                    <td >Motivo</td>
-                    <td id="reason">: {{$d->motivo}}</td>
+                    <td >Motivo Captacion</td>
+                    <td id="reason">: {{$d->motivo_cap}}</td>
                 </tr>
 
                 <tr>
                     <td>Estado Mandato</td>
                     <td>: {{$d->estado_mandato}}</td>
+                </tr>
+
+                <tr>
+                    <td>Motivo Mandato</td>
+                    <td>: {{$d->motivo_mdt}}</td>
                 </tr>
                 </tbody>
             </table>

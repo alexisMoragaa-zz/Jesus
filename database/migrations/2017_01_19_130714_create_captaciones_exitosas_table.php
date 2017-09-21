@@ -20,10 +20,6 @@ class CreateCaptacionesExitosasTable extends Migration {
 			$table->string('id_fundacion');
 			$table->string('fecha_captacion');
 			$table->string('fecha_agendamiento');
-			$table->string('estado_captacion');
-			$table->string('motivo_cap');
-			$table->string('motivo_mdt');
-			$table->string('estado_mandato');
 			$table->string('tipo_retiro');
 			$table->string('jornada');
 			$table->string('horario');
@@ -43,6 +39,12 @@ class CreateCaptacionesExitosasTable extends Migration {
 			$table->string('nom_campana');
 			$table->string('monto');
 			$table->string('forma_pago');
+			$table->string('estado_captacion');
+			$table->string('motivo_cap');
+			$table->string('estado_mandato');
+			$table->string('motivo_mdt');
+			$table->string('cuenta_movistar');
+			$table->string('edit');
 			$table->timestamps();
 
 		});

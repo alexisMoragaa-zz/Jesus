@@ -69,24 +69,24 @@ class TeoController extends Controller
         $date =$request->input('date');
 
         if($option==1){
-            $captaciones = CaptacionesExitosa::where('teleoperador','=',Auth::user()->id)->where('fecha_captacion','=',$hoy)->get();
+            $captaciones = CaptacionesExitosa::where('teleoperador','=',Auth::user()->id)->where('fecha_captacion','=',$hoy)->get()->sortByDesc('created_at');
             return view('teo/teoHome', compact('captaciones'));
 
         }else if($option == 2){
-            $captaciones = CaptacionesExitosa::where('teleoperador','=',Auth::user()->id)->where('fecha_captacion','=',$date)->get();
+            $captaciones = CaptacionesExitosa::where('teleoperador','=',Auth::user()->id)->where('fecha_captacion','=',$date)->get()->sortByDesc('created_at');
             return view('teo/teoHome', compact('captaciones'));
         }elseif($option == 3){
-            $captaciones = CaptacionesExitosa::where('teleoperador','=',Auth::user()->id)->where('estado_captacion','=','OK')->get();
+            $captaciones = CaptacionesExitosa::where('teleoperador','=',Auth::user()->id)->where('estado_captacion','=','OK')->get()->sortByDesc('created_at');
             return view('teo/teoHome', compact('captaciones'));
         }elseif($option == 4){
-            $captaciones = CaptacionesExitosa::where('teleoperador','=',Auth::user()->id)->where('estado_captacion','=','rechazada')->get();
+            $captaciones = CaptacionesExitosa::where('teleoperador','=',Auth::user()->id)->where('estado_captacion','=','rechazada')->get()->sortByDesc('created_at');
             return view('teo/teoHome', compact('captaciones'));
         }elseif($option == 5){
-            $captaciones = CaptacionesExitosa::where('teleoperador','=',Auth::user()->id)->where('estado_captacion','=','conReparo')->get();
+            $captaciones = CaptacionesExitosa::where('teleoperador','=',Auth::user()->id)->where('estado_captacion','=','conReparo')->get()->sortByDesc('created_at');
             return view('teo/teoHome', compact('captaciones'));
         }else if($option == 6){
 
-            $captaciones = CaptacionesExitosa::where('teleoperador','=',Auth::user()->id)->get();
+            $captaciones = CaptacionesExitosa::where('teleoperador','=',Auth::user()->id)->get()->sortByDesc('created_at');
                 return view('teo/teoHome', compact('captaciones'));
 
     }
@@ -185,13 +185,15 @@ class TeoController extends Controller
 
 
         $status = estado::where('modulo', '=', 'llamado')->get();
+        $estado = estado::where('modulo','=','agendamiento')->get();
+        $f_pago = estado::where('modulo','=','pago')->get();
 
         $capta = captaciones::findOrFail($id);
 
         $comunas = comunaRetiro::where('region', '=', 'metropolitana')->where('ciudad', '=', 'santiago')->get();
         $function="nada";
 
-        return view('teo/mandatoRegistrado', compact('capta', 'comunas','status','function'));
+        return view('teo/mandatoRegistrado', compact('capta', 'comunas','status','function','estado','f_pago'));
     }
 
 
@@ -200,31 +202,68 @@ class TeoController extends Controller
         /**Primera parte*/
         $data = $request->all();
         $date = Carbon::now()->format('d/m/Y');
-   
-        CaptacionesExitosa::create([
-            'n_dues' => $data['n_dues'],
-            'id_fundacion' => $data['id_fundacion'],
-            'fecha_captacion' => $date,
-            'fecha_agendamiento' => $data['fecha_agendamiento'],
-            'tipo_retiro' => $data['tipo_retiro'],
-            'jornada' => $data['jornada'],
-            'horario' => $data['horario'],
-            'rut' => $data['rut'],
-            'fono_1' => $data['fono_1'],
-            'nombre' => $data['nombre'],
-            'apellido' => $data['apellido'],
-            'direccion' => $data['direccion'],
-            'comuna' => $data['comuna'],
-            'correo_1' => $data['correo_1'],
-            'monto' => $data['monto'],
-            'rutero' => $data['rutero'],
-            'teleoperador' => $data['teleoperador'],
-            'nom_campana' => $data['nom_campana'],
-            'fundacion' => $data ['fundacion'],
-            'observaciones' => $data['observaciones'],
-            'forma_pago' => $data['forma_pago'],
 
-        ]);
+        $comunas=comunaRetiro::where('comuna','=',$request->comuna)->get()->first();
+        $ciudad =$comunas->ciudad;
+        $region =$comunas->region;
+        if($request->tipo_retiro=="Acepta Grabacion"){
+
+            CaptacionesExitosa::create([
+                'n_dues' => $data['n_dues'],
+                'id_fundacion' => $data['id_fundacion'],
+                'fecha_captacion' => $date,
+                'fecha_agendamiento' => $date,
+                'tipo_retiro' => $data['tipo_retiro'],
+                'jornada' => $data['jornada'],
+                'horario' => $data['horario'],
+                'rut' => $data['rut'],
+                'fono_1' => $data['fono_1'],
+                'nombre' => $data['nombre'],
+                'apellido' => $data['apellido'],
+                'direccion' => $data['direccion'],
+                'comuna' => $data['comuna'],
+                'ciudad' =>$ciudad,
+                'region' =>$region,
+                'correo_1' => $data['correo_1'],
+                'monto' => $data['monto'],
+                'teleoperador' => $data['teleoperador'],
+                'nom_campana' => $data['nom_campana'],
+                'fundacion' => $data ['fundacion'],
+                'observaciones' => $data['observaciones'],
+                'forma_pago' => $data['forma_pago'],
+                'cuenta_movistar' => $data['c_movistar'],
+
+            ]);
+        }else{
+            CaptacionesExitosa::create([
+                'n_dues' => $data['n_dues'],
+                'id_fundacion' => $data['id_fundacion'],
+                'fecha_captacion' => $date,
+                'fecha_agendamiento' => $data['fecha_agendamiento'],
+                'tipo_retiro' => $data['tipo_retiro'],
+                'jornada' => $data['jornada'],
+                'horario' => $data['horario'],
+                'rut' => $data['rut'],
+                'fono_1' => $data['fono_1'],
+                'nombre' => $data['nombre'],
+                'apellido' => $data['apellido'],
+                'direccion' => $data['direccion'],
+                'comuna' => $data['comuna'],
+                'ciudad' =>$ciudad,
+                'region' =>$region,
+                'correo_1' => $data['correo_1'],
+                'monto' => $data['monto'],
+                'rutero' => $data['rutero'],
+                'teleoperador' => $data['teleoperador'],
+                'nom_campana' => $data['nom_campana'],
+                'fundacion' => $data ['fundacion'],
+                'observaciones' => $data['observaciones'],
+                'forma_pago' => $data['forma_pago'],
+                'cuenta_movistar' => $data['c_movistar'],
+
+            ]);
+        }
+
         /**Segunda Parte*/
 $id = $request->id_captacion;
         $llamado1 = captaciones::where('id', '=', $id)->pluck('primer_llamado');
@@ -240,25 +279,13 @@ $id = $request->id_captacion;
 
         $t_retiro=$request->tipo_retiro;
 
-        if($t_retiro==1){
-            $retiro="Acepta Agendamiento";
-        }elseif($t_retiro==2){
-            $retiro="Acepta Grabacion";
-        }elseif($t_retiro==3){
-            $retiro="Acepta Delivery";
-        }elseif($t_retiro==4){
-            $retiro="Acepta Chilexpress";
-        }elseif($t_retiro==5){
-            $retiro="Acepta ir a Dues";
-        }elseif($t_retiro==6){
-            $retiro="Acepta ir a Fundacion";
-        }
+
         DB::table('captaciones')
             ->where('id', '=', $id)
             ->update([
                 'estado_registro' => 0,
                 'estado' => 'cu+',
-                $name_status=>$retiro
+                $name_status=>$t_retiro
 
 
             ]);
@@ -335,13 +362,15 @@ $id = $request->id_captacion;
     }
     public function editCap($id){
         $status = estado::where('modulo', '=', 'llamado')->get();
+        $estado = estado::where('modulo','=','agendamiento')->get();
+        $f_pago = estado::where('modulo','=','pago')->get();
 
         $capta = captacionesExitosa::findOrFail($id);
 
         $comunas = comunaRetiro::where('region', '=', 'metropolitana')->where('ciudad', '=', 'santiago')->get();
         $function="editar";
 
-        return view('teo/mandatoRegistrado', compact('capta', 'comunas','status','function'));
+        return view('teo/mandatoRegistrado', compact('capta', 'comunas','status','function','estado','f_pago'));
 
     }
     
@@ -364,7 +393,9 @@ $id = $request->id_captacion;
             $editCap->rutero = $request->rutero;
             $editCap->monto = $request->monto;
             $editCap->forma_pago = $request->forma_pago;
-            $editCap->observaciones = $request->observacion;
+            $editCap->observaciones = $request->observaciones;
+            $editCap->cuenta_movistar =$request->c_movistar;
+            $editCap->edit ="editado";
         $editCap->save();
 
         if(Auth::user()->perfil==1){

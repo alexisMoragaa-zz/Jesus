@@ -23,6 +23,7 @@
         $(document).ready(function () {
             $(".modal-form").hide();
             $(".v_llamar").hide();
+            $("#fixedPhone").hide();
 
             $("#status").change(function(){
                 if($(this).val()=="Volver a llamar"){
@@ -101,13 +102,19 @@
 
             });
 
+            if($("#tipo_retiro").val()=="Acepta Grabacion"){
+                $("#fixedPhone").show();
+            }
+
             $("#tipo_retiro").change(function(){
 
-                if($(this).val()==2){
+                if($(this).val()=="Acepta Grabacion"){
 
                     $(".grabacion").fadeOut();
+                    $("#fixedPhone").show();
                 }else{
-                    $(".grabacion").fadeIn();
+                    $(".grabacion").fadeIn()
+                    $("#fixedPhone").hide();
                 }
             });
         });
@@ -122,7 +129,11 @@
                 <input type="button" value="Cancelar" class="btn btn-danger" id="btn-cancel">
             </div>
         </div>
- @endif
+@else
+
+            <h3 style="text-align:center; color:red">{{$capta->motivo_cap}}</h3>
+
+@endif
         <div class="modal-form" title="Cancelar Agendamiento">
             @if(Auth::user()->perfil==1)
                 {!! Form::open(['url'=>['admin/siguiente',$capta->id],'method'=>'POST','id'=>'form-cap']) !!}
@@ -180,21 +191,14 @@
                 <div class="col-md-3">
                     <label class=" control-label">Tipo Retiro</label>
                     <div class="">
-                        <select name="tipo_retiro" class="form-control" id="tipo_retiro" value="">
+                        <select name="tipo_retiro" class="form-control" id="tipo_retiro">
                             @if($function=="editar")
-                                @if($capta->tipo_retiro==1) <option value="{{$capta->tipo_retiro}}">Agendamiento</option>@elseif($capta->tipo_retiro==2)
-                                    <option value="{{$capta->tipo_retiro}}">Grabacion</option>@elseif($capta->tipo_retiro==3)<option value="{{$capta->tipo_retiro}}">Delivery</option>
-                                    @elseif($capta->tipo_retiro==4)<option value="{{$capta->tipo_retiro}}">chilexpress</option> @elseif($capta->tipo_retiro==5)
-                                    <option value="{{$capta->tipo_retiro}}">Ir Dues</option>@elseif($capta->tipo_retiro==6)
-                                    <option value="{{$capta->tipo_retiro}}">Ir a Fundacion</option>@endif
-                                @endif
-                            <option value="">--seleccione--</option>
-                            <option value="1">Agendamiento</option>
-                            <option value="2">Grabacion</option>
-                            <option value="3">Delivery</option>
-                            <option value="4">Chilexpress</option>
-                            <option value="5">Ir Dues</option>
-                            <option value="6">Ir a Fundacion</option>
+                                <option value="{{$capta->tipo_retiro}}">{{$capta->tipo_retiro}}</option>
+                            @endif
+                            <option value="">-- Seleccione --</option>
+                            @foreach($estado as $est)
+                                <option value="{{$est->Estado}}">{{$est->Estado}}</option>
+                            @endforeach    
                         </select>
                     </div>
                 </div>
@@ -261,6 +265,11 @@
 
                 </div>
 
+                 <div class="col-md-3" id="fixedPhone" >
+                        <label for="c_movistar" class="control-label">Telefono Cuenta</label>
+                        <input type="text" class="form-control" name="c_movistar" value="{{$capta->cuenta_movistar}}">
+                  </div>
+
                 <div class="col-md-6">
                     <label class="control-label">Direccion</label>
                     <input type="text" name="direccion" class="form-control" placeholder="Ej: Santa Magdalena #10" value="{{$capta->direccion}}">
@@ -298,12 +307,10 @@
                         @if($function=="editar")
                             <option value="{{$capta->forma_pago}}">{{$capta->forma_pago}}</option>
                         @endif
-                        <option>--Seleccione--</option>
-                        <option class="grabacion">Cuenta Vista</option>
-                        <option class="grabacion">Cuenta Corriente</option>
-                        <option class="grabacion">Cuenta Rut</option>
-                        <option>Tarjeta De Credito</option>
-                        <option class="grabacion">Cuenta Rut</option>
+                            <option value="">-- Seleccione --</option>
+                        @foreach($f_pago as $pago)
+                                <option value="{{$pago->Estado}}">{{$pago->Estado}}</option>
+                         @endforeach
                     </select>
                 </div>
 
