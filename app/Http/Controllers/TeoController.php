@@ -4,6 +4,7 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\captaciones;
 use App\CaptacionesExitosa;
+use App\maxCap;
 use Illuminate\Http\Request;
 use DB;
 use Carbon\Carbon;
@@ -189,11 +190,12 @@ class TeoController extends Controller
         $f_pago = estado::where('modulo','=','pago')->get();
 
         $capta = captaciones::findOrFail($id);
+        $minmax =maxCap::find(1);
 
         $comunas = comunaRetiro::where('region', '=', 'metropolitana')->where('ciudad', '=', 'santiago')->get();
         $function="nada";
 
-        return view('teo/mandatoRegistrado', compact('capta', 'comunas','status','function','estado','f_pago'));
+        return view('teo/mandatoRegistrado', compact('capta', 'comunas','status','function','estado','f_pago','minmax'));
     }
 
 
@@ -202,6 +204,7 @@ class TeoController extends Controller
         /**Primera parte*/
         $data = $request->all();
         $date = Carbon::now()->format('d/m/Y');
+
 
         $comunas=comunaRetiro::where('comuna','=',$request->comuna)->get()->first();
         $ciudad =$comunas->ciudad;
@@ -214,8 +217,8 @@ class TeoController extends Controller
                 'fecha_captacion' => $date,
                 'fecha_agendamiento' => $date,
                 'tipo_retiro' => $data['tipo_retiro'],
-                'jornada' => $data['jornada'],
-                'horario' => $data['horario'],
+             
+                'horario' => $data['jornada'],
                 'rut' => $data['rut'],
                 'fono_1' => $data['fono_1'],
                 'nombre' => $data['nombre'],
@@ -241,8 +244,8 @@ class TeoController extends Controller
                 'fecha_captacion' => $date,
                 'fecha_agendamiento' => $data['fecha_agendamiento'],
                 'tipo_retiro' => $data['tipo_retiro'],
-                'jornada' => $data['jornada'],
-                'horario' => $data['horario'],
+                
+                'horario' => $data['jornada'],
                 'rut' => $data['rut'],
                 'fono_1' => $data['fono_1'],
                 'nombre' => $data['nombre'],
@@ -366,11 +369,12 @@ $id = $request->id_captacion;
         $f_pago = estado::where('modulo','=','pago')->get();
 
         $capta = captacionesExitosa::findOrFail($id);
+        $minmax=maxCap::find(1);
 
         $comunas = comunaRetiro::where('region', '=', 'metropolitana')->where('ciudad', '=', 'santiago')->get();
         $function="editar";
 
-        return view('teo/mandatoRegistrado', compact('capta', 'comunas','status','function','estado','f_pago'));
+        return view('teo/mandatoRegistrado', compact('capta', 'comunas','status','function','estado','f_pago','minmax'));
 
     }
     
@@ -403,6 +407,17 @@ $id = $request->id_captacion;
         }elseif (Auth::user()->perfil==2){
             return redirect(url('teo/teoHome'));
         }
+
+    }
+
+    public function dispRutas(){
+        $rutero= $_GET['rutero'];
+        $date =$_GET['fecha'];
+
+
+        $info = CaptacionesExitosa::where('fecha_agendamiento','=',$date)->where('rutero','=',$rutero)->get();
+
+    return Response::json($info);
 
     }
 

@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Response;
 use Monolog\Handler\ElasticSearchHandler;
 use Illuminate\Support\Facades\Auth;
+use App\maxCap;
 
 
 class OperacionesController extends Controller
@@ -433,5 +434,30 @@ class OperacionesController extends Controller
         }
         
     }//fin metodo verRutasFiltradas
+
+    public function adminMaxMinCap(Request $request){
+        
+        $dia=$request->maxDayCap;
+        $am=$request->maxAmCap;
+        $pm=$request->maxPmCap;
+
+
+
+
+        DB::table('max_caps')
+            ->where('id', 1)
+            ->update(['maxDay' => $dia,'maxAm'=>$am,'maxPm'=>$pm]);
+
+
+
+        if(Auth::user()->perfil==1){
+            return redirect('admin/adminconfig');
+
+        }else if(Auth::user()->perfil==4){
+            return redirect('ope/adminconfig');
+        }
+
+
+    }
 }//fin controlador
 

@@ -2,6 +2,9 @@
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
+use App\CaptacionesExitosa;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 
 use Illuminate\Http\Request;
 
@@ -14,18 +17,15 @@ class RutasController extends Controller {
 	 */
 	public function index()
 	{
-		//
-		return view('rutas/rutas');
+		$cap =CaptacionesExitosa::all();
+			return view('rutas/rutasDiarias',compact('cap'));
 	}
 
-	/**
-	 * Show the form for creating a new resource.
-	 *
-	 * @return Response
-	 */
-	public function create()
+
+	public function create(Request $request)
 	{
-		//
+
+		return view('');
 	}
 
 	/**

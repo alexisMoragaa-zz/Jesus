@@ -6,9 +6,11 @@
     <script>
         $(document).ready(function(){
 
-           $("#add-status").hide();
+            $("#add-status").hide();
             $("#add-status-retiro").hide();
             $("#add-payment-methods").hide();
+            $(".form_dialog_cap").hide();
+
 
 
             $("#add-campain-stats").toggle(function(){
@@ -36,6 +38,39 @@
                 $("#add-payment-methods").fadeOut(1000);
             });
 
+            $("#addMiMaxCap").click(function(){
+
+                $(".form_dialog_cap").dialog({
+                    heigh:"auto",
+                    width:"auto",
+                    buttons: [{
+                        text: "Cancelar","class":'btn btn-danger space',"id":'space',click: function () {
+
+                            $(this).dialog("close");
+                        }},{
+                        text:"Aceptar","class":'btn btn-success',"id":'space2',click : function(){
+                            var diaq =$("#day").val();
+                            var amq=$("#am").val();
+                            var pmq=$("#pm").val();
+                            var am=parseInt(amq);
+                            var pm =parseInt(pmq);
+                            var dia=parseInt(diaq);
+
+                            var ampm = am + pm;
+
+                             if(ampm === dia){
+                                 $("#form_max_cap").submit();
+                             }else{
+
+                                 alert("La summa  de agendamientos Am y Pm no pueden superar ni ser menores a la cantidad diaria");
+                             }
+
+
+                        }
+                    }]
+                });
+            });
+
         });
     </script>
     <style>
@@ -48,9 +83,45 @@
         }
     </style>
 <div class="container">
-    <input type="button" class="btn btn-info" value="Agregar Estado Llamada" id="add-campain-stats">
-    <input type="button" class="btn btn-info" value="Agregar Estado Retiro" id="btn-add-status-retiro">
-    <input type="button" class="btn btn-info" value="Agregar Formas de Pago" id="btn-add-payment-methods">
+    <div class="col-md-12">
+
+        <div class="col-md-2">
+            <input type="button" class="btn btn-info" value="Agregar Estado Llamada" id="add-campain-stats">
+        </div>
+
+        <div class="col-md-2">
+            <input type="button" class="btn btn-info" value="Agregar Estado Retiro" id="btn-add-status-retiro">
+        </div>
+
+        <div class="col-md-2">
+            <input type="button" class="btn btn-info" value="Agregar Formas de Pago" id="btn-add-payment-methods">
+        </div>
+        <div class="col-md-2">
+            <input type="button" id="addMiMaxCap" value="N° Agendamientos Diarios" class="btn btn-info">
+        </div>
+
+
+
+    </div>
+
+    <div class="form_dialog_cap">
+        @if(Auth::user()->perfil==1)
+            {!! Form::open(['url'=>['admin/addMinMaxCap'],'method'=>'post','id'=>'form_max_cap']) !!}
+        @elseif(Auth::user()->perfil==4)
+            {!! Form::open(['url'=>['ope/addMinMaxCap'],'method'=>'post','id'=>'form_max_cap']) !!}
+        @endif
+
+            <label for="maxDayCap" class="control-label">Agendamientos diarios</label>
+            <input type="text" class="form-control" name="maxDayCap" id="day">
+
+            <label for="maxAmCap" class="control-label">Agendamientos AM</label>
+            <input type="text" class="form-control" name="maxAmCap" id="am">
+
+            <label for="maxPmCap" class="control-label">Agendamientos PM</label>
+            <input type="text" class="form-control" name="maxPmCap" id="pm">
+
+        {!! Form::close() !!}
+    </div>
 
 </div>
     <div class="container" id="add-status">

@@ -68,7 +68,14 @@ Route::group(['middleware' => ['auth', 'administrador'], 'prefix' => 'admin'], f
     Route::post('addStatusMdt','OperacionesController@addStatusMdt');
     Route::get('editCap{id}','Teocontroller@editCap');
     route::post('editCapPost','TeoController@editCapPost');
+    route::get('dispRutas', 'Teocontroller@dispRutas');
+    Route::post('addMinMaxCap','Operacionescontroller@adminMaxMinCap');
+
+
+
+
     route::get('ajax-rutero', function () {
+
         $rutero_id = Input::get('ruteroid');
         $nombre_rutero = comunaRetiro::where('comuna', '=', $rutero_id)->get();
 
@@ -142,6 +149,9 @@ Route::group(['middleware' => ['auth', 'operaciones'], 'prefix' => 'ope'], funct
     route::post('filtroRutas','OperacionesController@verRutasFiltradas');
     Route::post('addStatusCap','OperacionesController@addStatusCap');
     Route::post('addStatusMdt','OperacionesController@addStatusMdt');
+    route::get('adminconfig', 'AdminController@adminConfig');
+    Route::post('addMinMaxCap','Operacionescontroller@adminMaxMinCap');
+    
 
     /*Route::get('/', function(){
 
@@ -166,7 +176,8 @@ Route::group(['middleware' => ['auth', 'operaciones'], 'prefix' => 'ope'], funct
 */
 Route::group(['middleware' => ['auth', 'ruteros'], 'prefix' => 'rutas'], function () {
 
-    Route::Resource('/', 'RutasController');
+    Route::Resource('rutas', 'RutasController');
+
 
 });
 

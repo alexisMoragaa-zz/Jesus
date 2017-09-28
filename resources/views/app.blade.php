@@ -58,7 +58,7 @@
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Administrador <span class="caret"></span></a>
 							<ul class="dropdown-menu">
 								<li><a href="{{ url('/admin/rutas') }}">Modificar Rutas</a></li>
-								<li><a href="{{ url('/admin/adminconfig') }}">Añadir Estados</a></li>
+								<li><a href="{{ url('/admin/adminconfig') }}">Configuraciones</a></li>
 							</ul>
 						</li>
 						<li><a href="{{ url('/admin/user') }}">Usuarios</a></li>
@@ -70,6 +70,7 @@
 							<ul class="dropdown-menu">
 								<li><a href="{{ url('/admin/ope') }}">Captaciones</a></li>
 								<li><a href="{{ url('/admin/verRutas')}}">Rutas</a></li>
+								<li><a href="{{ url('/admin/adminconfig') }}">Configuraciones</a></li>
 							</ul>
 
 						</li>
@@ -91,6 +92,7 @@
 							<ul class="dropdown-menu">
 								<li><a href="{{ url('/ope/ope') }}">Captaciones</a></li>
 								<li><a href="{{ url('/ope/verRutas')}}">Rutas</a></li>
+								<li><a href="{{ url('/ope/adminconfig') }}">Configuraciones</a></li>
 							</ul>
 
 						</li>
@@ -99,7 +101,13 @@
 
 					@elseif(Auth::user()->perfil==5)
 
-						<li><a href="{{ url('/rutas') }}">Rutas</a></li>
+						<li class="dropdown">
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Rutas<span class="caret"></span></a>
+							<ul class="dropdown-menu">
+								<li><a href="{{url('rutas/rutas')}}">Rutas Diarias</a></li>
+								<li><a href="#">Historial de Rutas</a></li>
+							</ul>
+						</li>
 					@endif
 						<li class="dropdown">
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{ Auth::user()->name }}<span class="caret"></span></a>

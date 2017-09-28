@@ -21,10 +21,14 @@
     </style>
     <script>
         $(document).ready(function () {
+            /**Ocultar ventanas al Inicio*/
             $(".modal-form").hide();
+            $(".modal_form_rutas").hide();
             $(".v_llamar").hide();
             $("#fixedPhone").hide();
+            $(".send_data").attr("disabled",true);
 
+            /**Si esl estado es Volver a Llamar despliega un input oculto*/
             $("#status").change(function(){
                 if($(this).val()=="Volver a llamar"){
                     $(".v_llamar").fadeIn();
@@ -33,6 +37,7 @@
                 }
             });
 
+            /**si se apreta cancelar despliega una ventana modal para regresar*/
             $("#btn-cancel").click(function(){
                 $( ".modal-form" ).dialog({
                     buttons: [{
@@ -45,14 +50,12 @@
                         }
                     }]
                 });
-
             });
-            $("#comuna").on('change', function (e) {
 
+            /**Funcion ajax para mostrar el rutero que corresponde segun la comuna seleccionada*/
+            $("#comuna").on('change', function (e) {
                 console.log(e);
                 var rutero_id = e.target.value;
-
-
                 $.get('ajax-rutero?ruteroid=' + rutero_id, function (data) {
                     console.log(data);
                     $.each(data, function (index, obj) {
@@ -70,6 +73,8 @@
                 });
             });
 
+            /**llamado a una funcion rur, la cual valida si el es chileno, y marca el input en rojo
+             * de no ser unrut valido para chile*/
             $("#rut").rut({validateOn: 'keyup change'})
                     .on('rutInvalido', function () {
                         $(this).addClass("error")
@@ -80,53 +85,164 @@
                         $(this).removeClass("error")
                     });
 
+            /**Validaciones que se desencadenan cuando le damos click al boton enviar*/
             $("#enviar").click(function () {
 
-                var datos = {rut: $("#rut").val(), fundacion: $("#fundacion").val()}
+                if($("#tipo_retiro").val()!=""){
 
-                $.get('validarSocio', datos, procesarDatos);
-                console.log(datos);
+                    if($("#tipo_retiro").val()=="Acepta Agendamiento"||$("#tipo_retiro").val()=="Acepta Delivery"||$("#tipo_retiro").val()=="Acepta Upgrade"||$("#tipo_retiro").val()=="Acepta ir a Dues"||$("#tipo_retiro").val()=="Acepta Chilexpress"){
+                        if($("#f_pago").val()=="Tarjeta de Credito"||$("#f_pago").val()=="Movistar"){
 
-                function procesarDatos(data) {
+                            alert(" Porfavor Seleccione Una Forma de Pago  Valida");
+                            return false;
+                        }
+                    }else if($("#tipo_retiro").val()=="Acepta Grabacion"){
+                        if($("#f_pago").val()=="Cuenta Corriente"||$("#f_pago").val()=="Cuenta Vista"||$("#f_pago").val()=="Cuenta Rut") {
 
-                    console.log(data);
-                    if (data == 2) {
-                        alert("este usuarios ya es socio o tiene uina visita pendiente de greenpeace");
+                            alert("Porfavor Seleccione Una Forma de Pago  Valida");
+                            return false;
+                        }
 
+                        }
+                };
+                    /**inicio validar socio
+                     * Esta funcion toma el rut y la fundacion, y lo consulta en la base de datos, si el rut ya existe retorna un alert,
+                     * y frena la ejecucion del formulario evitando al insercion de datos indeseados, si el rut no existe
+                     * como socio de esta fundacion continua la ejecucion normal*/
+                    var datos = {rut: $("#rut").val(), fundacion: $("#fundacion").val()}
+                    $.get('validarSocio', datos, procesarDatos);
+                        console.log(datos);
 
-                    } else {
+                    function procesarDatos(data)
+                    {
+                        console.log(data);
+                        if (data == 2) {
+                            alert("este usuarios ya es socio o tiene uina visita pendiente de greenpeace");
+                        }else{
 
-                        $("#send").submit();
-                    }
-                }
+                            $("#send").submit();
+                        }
+                    }/**Fin validar socio*/
 
             });
 
             if($("#tipo_retiro").val()=="Acepta Grabacion"){
                 $("#fixedPhone").show();
+                $(".send_data").attr("disabled",false);
             }
 
             $("#tipo_retiro").change(function(){
 
-                if($(this).val()=="Acepta Grabacion"){
+                if($(this).val()=="Acepta Grabacion"||$(this).val()=="Acepta Upgrade"){
 
                     $(".grabacion").fadeOut();
                     $("#fixedPhone").show();
+                    $(".send_data").attr("disabled",false);
+                    $("#btn_rutas").hide();
                 }else{
-                    $(".grabacion").fadeIn()
+                    $(".grabacion").fadeIn();
                     $("#fixedPhone").hide();
+                    $("#btn_rutas").show();
+                    $(".send_data").attr("disabled",true);
                 }
             });
-        });
 
+
+            /**funncion que desbloquea un boton para ver la disponivilidad de ruta*/
+            $("#comuna").change(function(){
+                 $("#f_agendamiento").change(function(){
+                     $("#jornada").change(function(){
+
+                         $("#btn_rutas").attr("disabled",false);
+                     });
+                 });
+            });
+
+            /**esta funcion mediante ajax nos muestra la disponivilidad de rutas para el dia y el rutero seleccionados*/
+            $("#btn_rutas").click(function(){
+
+                info={fecha:$("#f_agendamiento").val(),rutero:$("#rutero").val()} //creamos un literal con la informacion que enviaremos al servidor
+
+                $.get('dispRutas',info,procDatos); //enviamos la informacion del literal y asignam,os la funcion encargada de procesar la ifnormacion con el metodo get
+                    console.log(info);
+                /**limpiamos la tabla que usaremos para mostrar la informacion
+                 * asignamos la variable fila segun el largo del array que tiene la informacion
+                 * con un ciclo for recorremos la informacion y guardamos los datos en una bariable la cual contiene el formato para mostrar la tabla
+                 * usamos la funcio append para mostra el contenido de la variable en la tabla
+                 * por ultimo mostramos la tabla en una ventamos modal usando la funcion dialog
+                 * si el largo de el array es igual o mayor que la cantidad maxima asignada se bloquea el boton agendar y salta una alerta idnicando que se exedio el maximo
+                 * de agendamientos para el dia y ruteros seleccionado*/
+                function procDatos(data){
+                    console.log(data);
+                    $("#rutas_dias_table > tbody").empty();
+                    $("#rutas_dias_tablePm > tbody").empty();
+                    var fila = data.length;
+                    $("#titulo").text("Agendamientos "+fila);
+                    var countAm=0;
+                    var countPm=0;
+                    for(var i = 0;i<fila;i++){
+
+                        var nuevaFilaAm = "<tr><td>"+
+                            data[i].rutero+"</td><td>"+
+                            data[i].comuna+"</td><td>"+
+                            data[i].horario+"</td></tr>"
+
+                        if(data[i].horario=="AM"){
+
+                            $("#rutas_dias_table").append(nuevaFilaAm);
+                                countAm++;
+
+                        }else{
+                            $("#rutas_dias_tablePm").append(nuevaFilaAm);
+                              countPm++;
+                        }
+
+                    }/***Fin for*/
+                    $("#tituloam").text("Agendamientos AM :"+countAm);
+                    $("#titulopm").text("Agendamientos PM :"+countPm);
+                    $(".modal_form_rutas").dialog({heigh:"auto",width:"auto"});
+                    var day= parseInt($("#max_day").val());
+                    var am= parseInt($("#max_am").val());
+                    var pm= parseInt($("#max_pm").val());
+
+
+                    if(fila >= day){
+
+                        $(".send_data").attr("disabled",true);
+                        alert("Excede maximo de rutas diarias");
+                    }else{
+
+                        if($("#jornada").val()=="AM"){
+                            if(countAm >=am) {
+                                $(".send_data").attr("disabled", true);
+                                alert("Excede maximo de rutas AM");
+                            }else{
+                                $(".send_data").attr("disabled", false);
+                            }
+                        }else if($("#jornada").val()=="PM"){
+                                if(countPm >=pm){
+                                    $(".send_data").attr("disabled",true);
+                                    alert("Excede maximo de rutas PM");
+                                }else{
+                                    $(".send_data").attr("disabled", false);
+                                }
+                        }
+                    }
+                }/**Fin ProcDatos*/
+            });/**Fin Funcion para validar Rutas*/
+        });/**fin document.ready*/
     </script>
+
     <link href="{{ asset('/css/style.css') }}" rel="stylesheet">
 
     <div class="container">
 @if($function=="nada")
         <div class="col-md-12">
-            <div class="col-md-1" style="margin-left: 90%">
+            <div class="col-md-1" style="padding-right: 80%" >
                 <input type="button" value="Cancelar" class="btn btn-danger" id="btn-cancel">
+            </div>
+            <div class="col-md-2">
+                <input type="button" class="btn btn-info" value="Ver Disponivilidad Rutas" disabled id="btn_rutas">
             </div>
         </div>
 @else
@@ -157,6 +273,34 @@
 
            {!! Form::close() !!}
         </div>
+    <div class="modal_form_rutas" title="Verificar Rutas">
+        <h3 id="titulo" style="padding-bottom: 10px"></h3>
+
+        <h5 id="tituloam"></h5>
+        <table class="table " id="rutas_dias_table">
+            <thead>
+                <th>Rutero</th>
+                <th>Comuna</th>
+                <th>Horario</th>
+            </thead>
+            <tbody>
+
+            </tbody>
+
+        </table>
+        <table class="table " id="rutas_dias_tablePm">
+            <h5 id="titulopm"></h5>
+            <thead>
+            <th>Rutero</th>
+            <th>Comuna</th>
+            <th>Horario</th>
+            </thead>
+            <tbody>
+
+            </tbody>
+
+        </table>
+    </div>
 
         <div class="panel panel-default ">
 
@@ -164,7 +308,7 @@
             <form class="form-horizontal" role="form" id="send" method="POST"
                   action="
                   @if($function=="nada")
-                        @if(Auth::user()->perfil==1){{ url('admin/agregado') }}@elseif(Auth::user()->perfil==2){{ url('teo/agregado')}}@endif ">
+                        @if(Auth::user()->perfil==1){{ url('admin/agregado')}}@elseif(Auth::user()->perfil==2){{ url('teo/agregado')}}@endif ">
                 @elseif($function=="editar")
                     @if(Auth::user()->perfil==1){{ url('admin/editCapPost') }}@elseif(Auth::user()->perfil==2){{ url('teo/editCapPost')}}@endif ">
                 @endif
@@ -172,8 +316,11 @@
 
                 <div>
 
-                    <input type="hidden" class="form-control" name="fundacion" value="{{$capta->nom_fundacion}}"
-                           id="fundacion">
+                    <input type="hidden" class="form-control" name="fundacion" value="{{$capta->nom_fundacion}}" id="fundacion">
+
+                    <input type="hidden" value="{{$minmax->maxDay}}" id="max_day">
+                    <input type="hidden" value="{{$minmax->maxAm}}" id="max_am">
+                    <input type="hidden" value="{{$minmax->maxPm}}" id="max_pm">
                 </div>
 
                 <div class="col-md-4 ">
@@ -219,14 +366,22 @@
                 <div class="col-md-3 grabacion">
                     <label class=" control-label">Fecha Agendamiento</label>
                     <div class="">
-                        <input type="date" class="form-control" name="fecha_agendamiento" value="{{$capta->fecha_agendamiento}}">
+                        <input type="date" id="f_agendamiento" class="form-control" name="fecha_agendamiento" value="{{$capta->fecha_agendamiento}}">
                     </div>
                 </div>
 
-                <div class="col-md-3 grabacion">
-                    <label class=" control-label">Horario .</label>
-                    <input type="time" class="form-control" name="horario" value="{{$capta->horario}}">
-                </div>
+                    <div class="col-md-3">
+                        <label class="control-label">Horario Retiro</label>
+
+                        <select name="jornada" class="form-control" id="jornada">
+                            @if($function=="editar")
+                                <option value="{{$capta->jornada}}">{{$capta->jornada}}</option>
+                            @endif
+                            <option>--Seleccione--</option>
+                            <option>AM</option>
+                            <option>PM</option>
+                        </select>
+                    </div>
 
 
                 <div class="col-md-3">
@@ -234,18 +389,7 @@
                     <input type="text" class="form-control" id="rut" name="rut" placeholder="18.202.912-2" value="{{$capta->rut}}">
                 </div>
 
-                <div class="col-md-3">
-                    <label class="control-label">Jornada</label>
 
-                    <select name="jornada" class="form-control">
-                        @if($function=="editar")
-                            <option value="{{$capta->jornada}}">{{$capta->jornada}}</option>
-                        @endif
-                        <option>--Seleccione--</option>
-                        <option>AM</option>
-                        <option>PM</option>
-                    </select>
-                </div>
 
                 <div class="col-md-3">
                     <label class=" control-label">Fono</label>
@@ -284,7 +428,7 @@
 
 
                 <div class="col-md-3 grabacion">
-                    <label class="control-label">Voluntario Ruta</label>
+                    <label class="control-label">Voluntario Ruta</label>c
                     <input type="text" class="form-control" name="rutero" id="rutero" value="{{$capta->rutero}}" onfocus="this.blur()">
                 </div>
 
@@ -303,7 +447,7 @@
 
                     <label class="control-label">Forma Pago</label>
 
-                    <select name="forma_pago" class="form-control">
+                    <select name="forma_pago" class="form-control" id="f_pago">
                         @if($function=="editar")
                             <option value="{{$capta->forma_pago}}">{{$capta->forma_pago}}</option>
                         @endif
@@ -327,7 +471,7 @@
 
                 <div class="col-md-6">
         @if($function==="nada")
-                    <button type="button" class="btn btn-primary form-control" id="enviar">
+                    <button type="button" class="btn btn-primary form-control send_data" id="enviar">
                         Ingresar Agendamiento
                     </button>
          @elseif($function=="editar")
@@ -336,8 +480,8 @@
                         </button>
          @endif
                 </div>
-                <div class="form-group ">
-                </div>
+                <div class="form-group "></div>
+
             </form>
 
 
