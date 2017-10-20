@@ -200,66 +200,38 @@ class EstadosTableSeeder extends Seeder
             'modulo' =>'Ruta',
             'tipo' => ''
         ));
-        DB::table('estados')->insert(array(
-            'estado'=>'No recuerda visita',
-            'modulo' =>'Ruta',
-            'tipo' => ''
-        ));
-        DB::table('estados')->insert(array(
-            'estado'=>'Desconfia',
-            'modulo' =>'Ruta',
-            'tipo' => ''
-        ));
+
+
         DB::table('estados')->insert(array(
             'estado'=>'Direccion erronea',
             'modulo' =>'Ruta',
             'tipo' => ''
         ));
+
         DB::table('estados')->insert(array(
             'estado'=>'Desiste',
             'modulo' =>'Ruta',
             'tipo' => ''
         ));
+
         DB::table('estados')->insert(array(
             'estado'=>'Pide Reagendar visita',
             'modulo' =>'Ruta',
             'tipo' => ''
         ));
+
         DB::table('estados')->insert(array(
             'estado'=>'Rutero no alcanza a llegar',
             'modulo' =>'Ruta',
             'tipo' => ''
         ));
-        DB::table('estados')->insert(array(
-            'estado'=>'Persona va de camino a casa',
-            'modulo' =>'Ruta',
-            'tipo' => ''
-        ));
-        DB::table('estados')->insert(array(
-            'estado'=>'Ruta con problema',
-            'modulo' =>'Ruta',
-            'tipo' => ''
-        ));
-        DB::table('estados')->insert(array(
-            'estado'=>'Persona no confirmado',
-            'modulo' =>'Ruta',
-            'tipo' => ''
-        ));
-        DB::table('estados')->insert(array(
-            'estado'=>'Persona en reunion',
-            'modulo' =>'Ruta',
-            'tipo' => ''
-        ));
-        DB::table('estados')->insert(array(
-            'estado'=>'No atienden al Voluntario',
-            'modulo' =>'Ruta',
-            'tipo' => ''
-        ));
-        DB::table('estados')->insert(array(
-            'estado'=>'No entrega Documentacion',
-            'modulo' =>'Ruta',
-            'tipo' => ''
-        ));
+
+
+
+
+
+
+
     //-----------estados de ruta-----------
 
 

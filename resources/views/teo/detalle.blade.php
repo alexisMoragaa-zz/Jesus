@@ -243,7 +243,7 @@
                                 </select>
                             </div>
                             <div class="col-md-2">
-                                <input type="submit" class="btn btn-success " id="addstatuscap" >
+                                <input type="submit" class="btn btn1 btn-success " id="addstatuscap" >
                             </div>
 
                             <div class="col-md-4" id="statusRecord">
@@ -277,7 +277,7 @@
                              </select>
                         </div>
                         <div class="col-md-2">
-                            <input type="submit" class="btn btn-success " id="enviarmdt">
+                            <input type="submit" class="btn btn1 btn-success " id="enviarmdt">
                         </div>
 
                         <div class="col-md-4" id="statusRecordMdt">

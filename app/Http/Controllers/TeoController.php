@@ -217,7 +217,6 @@ class TeoController extends Controller
                 'fecha_captacion' => $date,
                 'fecha_agendamiento' => $date,
                 'tipo_retiro' => $data['tipo_retiro'],
-             
                 'horario' => $data['jornada'],
                 'rut' => $data['rut'],
                 'fono_1' => $data['fono_1'],
@@ -230,6 +229,7 @@ class TeoController extends Controller
                 'correo_1' => $data['correo_1'],
                 'monto' => $data['monto'],
                 'teleoperador' => $data['teleoperador'],
+                'originalTeo'=>$data['teleoperador'],
                 'nom_campana' => $data['nom_campana'],
                 'fundacion' => $data ['fundacion'],
                 'observaciones' => $data['observaciones'],
@@ -244,7 +244,6 @@ class TeoController extends Controller
                 'fecha_captacion' => $date,
                 'fecha_agendamiento' => $data['fecha_agendamiento'],
                 'tipo_retiro' => $data['tipo_retiro'],
-                
                 'horario' => $data['jornada'],
                 'rut' => $data['rut'],
                 'fono_1' => $data['fono_1'],
@@ -258,6 +257,7 @@ class TeoController extends Controller
                 'monto' => $data['monto'],
                 'rutero' => $data['rutero'],
                 'teleoperador' => $data['teleoperador'],
+                'originalTeo'=>$data['teleoperador'],
                 'nom_campana' => $data['nom_campana'],
                 'fundacion' => $data ['fundacion'],
                 'observaciones' => $data['observaciones'],
@@ -293,14 +293,14 @@ $id = $request->id_captacion;
 
             ]);
     /**Tercera Parte*/
-        if ($data['tipo_retiro'] == 1) {
+        if ($data['tipo_retiro'] == "Acepta Agendamiento") {
 
            $id =DB::table('estado_rutas')->insertGetId([
                 'primer_agendamiento' => $data['fecha_agendamiento'],
                 'estado_primer_agendamiento' => 'Visita Pendiente',
             ]);
 
-        } else {
+        }else{
 
             $id =DB::table('estado_rutas')->insertGetId([
                 'primer_agendamiento' =>'no aplica',
@@ -364,16 +364,16 @@ $id = $request->id_captacion;
         //
     }
     public function editCap($id){
+
+        $function="editar";
+        $f_pago = estado::where('modulo','=','pago')->get();
         $status = estado::where('modulo', '=', 'llamado')->get();
         $estado = estado::where('modulo','=','agendamiento')->get();
-        $f_pago = estado::where('modulo','=','pago')->get();
-
-        $capta = captacionesExitosa::findOrFail($id);
-        $minmax=maxCap::find(1);
-
         $comunas = comunaRetiro::where('region', '=', 'metropolitana')->where('ciudad', '=', 'santiago')->get();
-        $function="editar";
 
+        $minmax=maxCap::find(1);
+        $capta = captacionesExitosa::findOrFail($id);
+      
         return view('teo/mandatoRegistrado', compact('capta', 'comunas','status','function','estado','f_pago','minmax'));
 
     }
@@ -415,11 +415,74 @@ $id = $request->id_captacion;
         $date =$_GET['fecha'];
 
 
-        $info = CaptacionesExitosa::where('fecha_agendamiento','=',$date)->where('rutero','=',$rutero)->get();
+        $info = CaptacionesExitosa::where('fecha_agendamiento','=',$date)
+                                    ->where('rutero','=',$rutero)
+                                    ->where('estado_captacion','!=','rechazada')->get();
 
     return Response::json($info);
 
     }
+    public function PorReagendar(){
+
+        $porReagendar = CaptacionesExitosa::where('reagendar','=',1)->where('teleoperador','=',Auth::user()->perfil)->get();
+
+        return view('teo/porReagendar',['reage'=>$porReagendar]);
+    }
+    public function detalleReagendamiento($id){
+        $reagendamiento=CaptacionesExitosa::find($id);
+        $minmax =maxCap::find(1);
+
+        return view('teo.detalleReagendamientoTeo',['reage'=>$reagendamiento,'minmax'=>$minmax]);
+    }
+    public function reagendado(Request $request){
+
+        $date =$request->fecha_reagendamiento;
+        $time =$request->horario;
+
+        $visit = estadoRuta::find($request->id_captacion);
+
+        $visit_capta=CaptacionesExitosa::find($request->id_captacion);
+
+        if($visit->estado_segundo_agendamiento == "noRetirado"){
+            if($visit->estado_tercer_agendamiento==""){
+
+                $visit->tercer_agendamiento = $date;
+                $visit->save();
+
+                $visit_capta->fecha_agendamiento=$date;
+                $visit_capta->horario =$time;
+                $visit_capta->reagendar =2;
+                $visit_capta->estado_captacion="";
+                $visit_capta->save();
+
+                if(Auth::user()->perfil==1){
+                    return redirect('/admin/PorReagendar');
+                }elseif (Auth::user()->perfil==2){
+                    return redirect('/teo/PorReagendar');
+                }
+            }
+        }elseif($visit->estado_primer_agendamiento=="noRetirado"){
+            if($visit->estado_segundo_agendamiento==""){
+
+                $visit->segundo_agendamiento = $date;
+                $visit->save();
+
+                $visit_capta->fecha_agendamiento=$date;
+                $visit_capta->horario =$time;
+                $visit_capta->reagendar =2;
+                $visit_capta->estado_captacion="";
+                $visit_capta->save();
+
+                if(Auth::user()->perfil==1){
+                    return redirect('/admin/PorReagendar');
+                }elseif (Auth::user()->perfil==2){
+                    return redirect('/teo/PorReagendar');
+                }
+            }
+        }
+       
+    }
+
 
 
 
@@ -447,6 +510,17 @@ $id = $request->id_captacion;
      *
      * show:    busca una captacion por id,(id  enviado desde la vista) y muestra la informacuion completa y detallada de esa captacion en particular
      *
+     * dispRutas => consulta la disponivilidad del de rutas con el rutero y fechas que se pasan como parametros
+     *
+     * PorReagendar => retorna una vista con todos los registros disponibles para el teleoperador que tenga a session iniciada
+     * 
+     * detalleReagendamiento => retorna la captacion seleccionada y la vista muestra el detalle de esa captacion,
+     *          ademas entrega un formulario para reagendar la visita
+     * 
+     * reagedado => actualiza la fecha de agendamiento, he inserta la nueva fecha de visita en la tabla estado de rutas 
+     *          actualiza el campo reagendar con el numero 2, el cual significa que el teleoperador ya realizo el reagendamiento
+     * 
+     * 
      */
 
 }

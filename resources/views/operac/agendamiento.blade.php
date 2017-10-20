@@ -143,9 +143,9 @@
 
         <div class="col-md-2">
 
-            <input type="submit" class="btn btn-success busqueda" value="Buscar" id="btn_search" >
-            <input type="button" class="btn btn-success mas" value="Buscar" id="btn_search_mas" >
-            <input type="button" class="btn btn-info mas+" value="Mas +" id="mas" >
+            <input type="submit" class="btn btn1 btn-success busqueda" value="Buscar" id="btn_search" >
+            <input type="button" class="btn btn1 btn-success mas" value="Buscar" id="btn_search_mas" >
+            <input type="button" class="btn btn1 btn-info mas+" value="Mas +" id="mas" >
 
         </div>
 {!! Form::close() !!}
@@ -205,7 +205,7 @@
                         <td class="detalle">{{$dato->comuna}}</td>
                         <td class="detalle">{{$dato->horario}}</td>
                         <td>{{$dato->observaciones}}</td>
-                        <td class="detalle">{{$dato->teleoperador}}</td>
+                        <td class="detalle">{{$dato->user->name}}</td>
                         <td class="detalle">{{$dato->fundacion}}</td>
                         <td class="detalle">{{$dato->nom_campana}}</td>
                         <td class="detalle">{{$dato->forma_pago}}</td>

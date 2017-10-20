@@ -258,7 +258,7 @@ class AdminController extends Controller {
 		$update->save();
 
 
-		return redirect()->to('admin/rutas');
+		return redirect()->to('admin/createRutas');
 
 	}
 /**

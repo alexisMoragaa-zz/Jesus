@@ -18,7 +18,7 @@
 
 <link href="{{ asset('/css/style.css') }}" rel="stylesheet">
 <div class="col-md-1">
- <img class="logosu" src="/imagenes/supervisor.png"  >
+
 </div>
 
  <div class="container ">

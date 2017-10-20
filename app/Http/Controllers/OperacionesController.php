@@ -1,6 +1,7 @@
 <?php namespace App\Http\Controllers;
 
 use App\CaptacionesExitosa;
+use App\estadoRuta;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use Carbon\Carbon;
@@ -24,9 +25,10 @@ class OperacionesController extends Controller
      */
     public function index()
     {
+        $hoy = Carbon::now()->format('d/m/Y');
         $teos = User::where('perfil', '=', 2)->get();
         $ruteros = User::where('perfil', '=', 5)->get();
-        $datos = CaptacionesExitosa::all()->sortByDesc('created_at');
+        $datos = CaptacionesExitosa::where('fecha_captacion','=',$hoy)->where('reagendamiento','=',1);
         return view('operac/agendamiento', compact('datos', 'teos', 'ruteros'));
 
     }
@@ -35,7 +37,6 @@ class OperacionesController extends Controller
     {
 
         $detalle =CaptacionesExitosa::where('id','=',$id)->get();
-
         return view('teo/detalle', compact('detalle'));
     }
 
@@ -441,13 +442,9 @@ class OperacionesController extends Controller
         $am=$request->maxAmCap;
         $pm=$request->maxPmCap;
 
-
-
-
         DB::table('max_caps')
             ->where('id', 1)
             ->update(['maxDay' => $dia,'maxAm'=>$am,'maxPm'=>$pm]);
-
 
 
         if(Auth::user()->perfil==1){
@@ -459,5 +456,59 @@ class OperacionesController extends Controller
 
 
     }
-}//fin controlador
 
+    public function reAgendamiento(){
+
+        $reagendar = CaptacionesExitosa::where('reagendar','=','1')->get();
+        $reagendado = CaptacionesExitosa::where('reagendar','=','2')->get();
+
+        return view('operac/reAgendamiento',[
+            'reagendar'=>$reagendar,
+            'reagendado'=>$reagendado]);
+
+    }
+    public function detalleReagendamiento($id){
+
+        $detalleReagendamiento = CaptacionesExitosa::find($id);
+            $teos= User::where('perfil','=',2)->get();
+
+        return view('operac/detalleReagendamiento',
+            ['reage'=>$detalleReagendamiento, 'teos'=>$teos,
+            ]);
+
+    }
+
+    public function reagendar(Request $request){
+
+        $newTeo= User::find($request->newTeo);
+            $cap= CaptacionesExitosa::find($request->id);
+            $cap->user()->associate($newTeo);
+            $cap->save();
+      
+        if(Auth::user()->perfil==1){
+            return redirect('admin/reAgendamiento');
+        }elseif(Auth::user()->perfil==4){
+            return redirect('ope/reAgendamiento');
+        }
+
+
+    }
+}//fin controlador
+/**CONTROLADOR OPERACIONES
+*
+ *  reagendado => este metodo cambia el valor de el campo reagendar de 1, que significa que el registro debe ser reagendado
+ *                 a 2, que significa que el reagendado ya fue solicitado al teleoperador correspondiente
+ *                  si el teleoperador seleccionado para reagendar es diferente al original ademas actualiza este campo
+ *
+ * detalleReagendamiento => este metodo muestra informacion detallada de un registro en particular sacado de la lista de los
+ *                  registros que estan para ser reagendados
+ *
+ * reAgendamiento => este metodo retorna todos los registros que deven ser reagendados en resultado de lo que informan los ruteros
+ *
+ * adminMaxMinCap => este metodo modifica el la cantidad maxima de captaciones diarias establecidas por defalul(8, 4 am, 4pm)
+ *
+ * verRutasFiltradas => este metodo es basicamente una coleccion de filtros para mostrar informacion mas espesifica de as rutas
+ *
+ * verRutas => este metodo retorna una coleccion de las rutas disponibles para el dia en curso
+ *
+ */

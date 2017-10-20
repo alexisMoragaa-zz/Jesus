@@ -126,9 +126,9 @@
                 </div>
               
                 <div class="col-md-3">
-                    <input type="submit" class="btn btn-success" value="Buscar">
+                    <input type="submit" class="btn btn1 btn-success" value="Buscar">
 
-                    <input type="button" class="btn btn-info" value="Mas Info" id="info">
+                    <input type="button" class="btn btn1 btn-info" value="Mas Info" id="info">
                 </div>
 
 
@@ -140,8 +140,8 @@
             <th>direccion</th>
             <th>Comuna</th>
             <th>Fono</th>
-            <th>Jornada</th>
-            <th>Hora</th>
+
+            <th>Horario</th>
             <th id="dia">Dia</th>
             <th>Voluntario</th>
             <th>Estado</th>
@@ -155,7 +155,7 @@
                     <td>{{$ruta->direccion}}</td>
                     <td>{{$ruta->comuna}}</td>
                     <td>{{$ruta->fono_1}}</td>
-                    <td>{{$ruta->jornada}}</td>
+
                     <td>{{$ruta->horario}}</td>
                     <td id="dia">{{$ruta->fecha_agendamiento}}</td>
                      <td>{{$ruta->rutero}}</td>

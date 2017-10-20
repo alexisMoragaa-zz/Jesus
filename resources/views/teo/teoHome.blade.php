@@ -88,14 +88,14 @@
             <input type="text" id="datepiker" name="date"  class="form-control">
         </div>
         <div class="col-md-2 call" id="btn-start-search">
-            <input type="submit" class="btn btn-info" value="Buscar">
+            <input type="submit" class="btn btn1 btn-info" value="Buscar">
         </div>
 
         <div class="col-md-2 " id="btn-start-call">
             @if(Auth::user()->perfil ==1)
-                <a href="{{route('admin.call.index')}}"  class="btn btn-success btn-ajax">Comenzar a Llamar</a>
+                <a href="{{route('admin.call.index')}}"  class="btn btn-success btn1 btn-ajax">Comenzar a Llamar</a>
              @elseif(Auth::user()->perfil ==2)
-                <a href="{{route('teo.call.index')}}"  class="btn btn-success btn-ajax">Comenzar a Llamar</a>
+                <a href="{{route('teo.call.index')}}"  class="btn btn-success btn1 btn-ajax">Comenzar a Llamar</a>
             @endif
         </div>
 </div>

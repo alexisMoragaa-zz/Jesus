@@ -1,11 +1,5 @@
 <?php
 
-
-/*/*
-grupo las rutas por middleware para luego atravez de el middleware definir los roles y que usuarios pueden
-acceder a las vistas que se programan en el grupo de rutas correspondiente a el rol.
-*/
-
 use App\comunaRetiro;
 use App\CaptacionesExitosa;
 use Illuminate\Support\Facades\Input;
@@ -53,7 +47,7 @@ Route::group(['middleware' => ['auth', 'administrador'], 'prefix' => 'admin'], f
     route::post('createcallstatus', 'Admincontroller@create_status_retirement');
     route::post('createpaymentstatus', 'Admincontroller@create_status_payment_method');
     route::get('teoHome', 'Teocontroller@Home');
-    route::get('rutas', 'Admincontroller@rutas');
+    route::get('createRutas', 'Admincontroller@rutas');
     route::get('admin', 'Admincontroller@admin');
     route::post('comuna', 'Admincontroller@addcomuna');
     route::get('filtrarpor', 'OperacionesController@filtrarpor');
@@ -70,11 +64,17 @@ Route::group(['middleware' => ['auth', 'administrador'], 'prefix' => 'admin'], f
     route::post('editCapPost','TeoController@editCapPost');
     route::get('dispRutas', 'Teocontroller@dispRutas');
     Route::post('addMinMaxCap','Operacionescontroller@adminMaxMinCap');
-
-
-
-
-    route::get('ajax-rutero', function () {
+    Route::post('secondRoute','RutasController@addSecondRoute');
+    Route::post('thirdRoute','RutasController@addThirdRoute');
+    Route::get('reAgendamiento','OperacionesController@reAgendamiento');
+    Route::get('detalleReAgendamiento/{id}','OperacionesController@detalleReagendamiento');
+    Route::Post('reagendar','OperacionesController@reagendar');
+    Route::get('PorReagendar','TeoController@PorReagendar');
+    route::get('detalleReagendamientoTeo/{id}','TeoController@detalleReagendamiento');
+    route::post('reagendado','TeoController@reagendado');
+    
+ 
+     route::get('ajax-rutero', function () {
 
         $rutero_id = Input::get('ruteroid');
         $nombre_rutero = comunaRetiro::where('comuna', '=', $rutero_id)->get();
@@ -103,6 +103,10 @@ Route::group(['middleware' => ['auth', 'teleoperador'], 'prefix' => 'teo'], func
     route::post('homeBack','Teocontroller@homeBack');
     Route::get('editCap/{id}','Teocontroller@editCap');
     route::post('editCapPost','TeoController@editCapPost');
+    Route::get('PorReagendar','TeoController@PorReagendar');
+    route::get('detalleReagendamientoTeo/{id}','TeoController@detalleReagendamiento');
+    route::post('reagendado','TeoController@reagendado');
+    route::get('dispRutas', 'Teocontroller@dispRutas');
 
     route::get('ajax-rutero', function () {
         $rutero_id = Input::get('ruteroid');
@@ -151,6 +155,10 @@ Route::group(['middleware' => ['auth', 'operaciones'], 'prefix' => 'ope'], funct
     Route::post('addStatusMdt','OperacionesController@addStatusMdt');
     route::get('adminconfig', 'AdminController@adminConfig');
     Route::post('addMinMaxCap','Operacionescontroller@adminMaxMinCap');
+    Route::get('reAgendamiento','OperacionesController@reAgendamiento');
+    Route::get('detalleReAgendamiento/{id}','OperacionesController@detalleReagendamiento');
+    Route::Post('reagendar','OperacionesController@reagendar');
+  
     
 
     /*Route::get('/', function(){
@@ -177,6 +185,10 @@ Route::group(['middleware' => ['auth', 'operaciones'], 'prefix' => 'ope'], funct
 Route::group(['middleware' => ['auth', 'ruteros'], 'prefix' => 'rutas'], function () {
 
     Route::Resource('rutas', 'RutasController');
+    Route::post('secondRoute','RutasController@addSecondRoute');
+    Route::post('thirdRoute','RutasController@addThirdRoute');
+    
+
 
 
 });

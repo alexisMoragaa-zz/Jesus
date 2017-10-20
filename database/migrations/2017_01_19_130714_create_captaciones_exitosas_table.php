@@ -34,7 +34,7 @@ class CreateCaptacionesExitosasTable extends Migration {
 			$table->string('correo_1');
 			$table->string('observaciones');
 			$table->string('rutero');
-			$table->string('teleoperador');
+			$table->integer('teleoperador')->unsigned();
 			$table->string('fundacion');
 			$table->string('nom_campana');
 			$table->string('monto');
@@ -45,7 +45,10 @@ class CreateCaptacionesExitosasTable extends Migration {
 			$table->string('motivo_mdt');
 			$table->string('cuenta_movistar');
 			$table->string('edit');
+			$table->string('reagendar');
+			$table->integer('originalTeo');
 			$table->timestamps();
+			$table->foreign('teleoperador')->references('id')->on('users');
 
 		});
 	}

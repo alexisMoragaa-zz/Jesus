@@ -73,7 +73,7 @@
                 });
             });
 
-            /**llamado a una funcion rur, la cual valida si el es chileno, y marca el input en rojo
+            /**llamado a una funcion rut, la cual valida si el es chileno, y marca el input en rojo
              * de no ser unrut valido para chile*/
             $("#rut").rut({validateOn: 'keyup change'})
                     .on('rutInvalido', function () {
@@ -185,7 +185,8 @@
                         var nuevaFilaAm = "<tr><td>"+
                             data[i].rutero+"</td><td>"+
                             data[i].comuna+"</td><td>"+
-                            data[i].horario+"</td></tr>"
+                            data[i].horario+"</td><td>"+
+                            data[i].estado_captacion+"</td></td>"
 
                         if(data[i].horario=="AM"){
 
@@ -239,10 +240,10 @@
 @if($function=="nada")
         <div class="col-md-12">
             <div class="col-md-1" style="padding-right: 80%" >
-                <input type="button" value="Cancelar" class="btn btn-danger" id="btn-cancel">
+                <input type="button" value="Cancelar" class="btn btn1 btn-danger" id="btn-cancel">
             </div>
             <div class="col-md-2">
-                <input type="button" class="btn btn-info" value="Ver Disponivilidad Rutas" disabled id="btn_rutas">
+                <input type="button" class="btn btn1 btn-info" value="Ver Disponivilidad Rutas" disabled id="btn_rutas">
             </div>
         </div>
 @else
@@ -282,6 +283,7 @@
                 <th>Rutero</th>
                 <th>Comuna</th>
                 <th>Horario</th>
+                <th>Verificacion</th>
             </thead>
             <tbody>
 
@@ -294,6 +296,7 @@
             <th>Rutero</th>
             <th>Comuna</th>
             <th>Horario</th>
+            <th>Verificacion</th>
             </thead>
             <tbody>
 
@@ -471,11 +474,11 @@
 
                 <div class="col-md-6">
         @if($function==="nada")
-                    <button type="button" class="btn btn-primary form-control send_data" id="enviar">
+                    <button type="button" class="btn btn1 btn-primary form-control send_data" id="enviar">
                         Ingresar Agendamiento
                     </button>
          @elseif($function=="editar")
-                        <button type="button" class="btn btn-warning form-control" id="enviar">
+                        <button type="button" class="btn btn1 btn-warning form-control" id="enviar">
                             Editar Agendamiento
                         </button>
          @endif
