@@ -6,9 +6,6 @@ use Session;
 
 class teleoperador {
 
-
-
-
 protected $auth;
 public function __construct(Guard $auth)
 {

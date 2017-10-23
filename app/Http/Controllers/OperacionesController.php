@@ -36,7 +36,7 @@ class OperacionesController extends Controller
     public function show($id)
     {
 
-        $detalle =CaptacionesExitosa::where('id','=',$id)->get();
+      $detalle =CaptacionesExitosa::where('id','=',$id)->get();
         return view('teo/detalle', compact('detalle'));
     }
 
@@ -462,7 +462,7 @@ class OperacionesController extends Controller
         $reagendar = CaptacionesExitosa::where('reagendar','=','1')->get();
         $reagendado = CaptacionesExitosa::where('reagendar','=','2')->get();
 
-        return view('operac/reAgendamiento',[
+        return view('operac.reAgendamiento',[
             'reagendar'=>$reagendar,
             'reagendado'=>$reagendado]);
 

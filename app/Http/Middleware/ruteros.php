@@ -3,9 +3,10 @@
 use Closure;
 use Illuminate\Contracts\Auth\Guard;
 use Session;
+
 class ruteros {
 
-	protected $auth;
+protected $auth;
 public function __construct(Guard $auth)
 {
 
@@ -21,7 +22,6 @@ public function __construct(Guard $auth)
 	public function handle($request, Closure $next)
 	{
 		switch ($this->auth->user()->perfil) {
-
 			case '1':
 				# code...
 				return redirect()->to('admin');

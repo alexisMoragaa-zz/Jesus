@@ -213,9 +213,9 @@
                         <td class="detalle">{{$dato->fecha_agendamiento}}</td>
                         <td>{{$dato->monto}}</td>
                         <td class="rutero">{{$dato->rutero}}</td>
-                        @if(Auth::user()->perfil == 1)
+                        @if(Auth::User()->perfil == 1)
                             <td><a href="{{route('admin.call.show',$dato->id)}}">Ver <span class="glyphicon glyphicon-search"></span></a></td>
-                        @elseif(Auth::user()->perfil == 4)
+                        @elseif(Auth::User()->perfil == 4)
                             <td><a href="{{route('ope.call.show',$dato->id)}}">Ver <span class="glyphicon glyphicon-search"></span></a></td>
 
                         @endif

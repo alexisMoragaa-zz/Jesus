@@ -22,7 +22,7 @@ Route::get('home', 'HomeController@index');
 	el grupo de rutas del administrador tiene acceso a todas las rutas del sistema
 */
 
-Route::group(['middleware' => ['auth', 'administrador'], 'prefix' => 'admin'], function () {
+Route::group(['Middleware' => ['auth', 'administrador'], 'prefix' => 'admin'], function () {
 
 
     Route::Resource('user', 'AdminController');
@@ -44,12 +44,12 @@ Route::group(['middleware' => ['auth', 'administrador'], 'prefix' => 'admin'], f
     route::post('siguiente/{id}', 'teoController@siguiente');
     route::get('adminconfig', 'AdminController@adminConfig');
     route::post('createstatus', 'AdminController@create_status');
-    route::post('createcallstatus', 'Admincontroller@create_status_retirement');
-    route::post('createpaymentstatus', 'Admincontroller@create_status_payment_method');
-    route::get('teoHome', 'Teocontroller@Home');
-    route::get('createRutas', 'Admincontroller@rutas');
-    route::get('admin', 'Admincontroller@admin');
-    route::post('comuna', 'Admincontroller@addcomuna');
+    route::post('createcallstatus', 'AdminController@create_status_retirement');
+    route::post('createpaymentstatus', 'AdminController@create_status_payment_method');
+    route::get('teoHome', 'TeoController@Home');
+    Route::get('createRutas', 'AdminController@rutas');
+    route::get('admin', 'AdminController@admin');
+    route::post('comuna', 'AdminController@addcomuna');
     route::get('filtrarpor', 'OperacionesController@filtrarpor');
     route::post('showDay1', 'OperacionesController@showDay1');
     route::get('validarSocio', 'OperacionesController@validarSocio');
@@ -57,13 +57,13 @@ Route::group(['middleware' => ['auth', 'administrador'], 'prefix' => 'admin'], f
     route::post('filtroRutas','OperacionesController@verRutasFiltradas');
     route::post('capFilter','TeoController@capFilter');
     Route::post('addStatusCap','OperacionesController@addStatusCap');
-    route::post('addStatusCapAjax','Teocontroller@addStatusCapAjax');
-    route::post('homeBack','Teocontroller@homeBack');
+    route::post('addStatusCapAjax','TeoController@addStatusCapAjax');
+    route::post('homeBack','TeoController@homeBack');
     Route::post('addStatusMdt','OperacionesController@addStatusMdt');
-    Route::get('editCap{id}','Teocontroller@editCap');
+    Route::get('editCap{id}','TeoController@editCap');
     route::post('editCapPost','TeoController@editCapPost');
-    route::get('dispRutas', 'Teocontroller@dispRutas');
-    Route::post('addMinMaxCap','Operacionescontroller@adminMaxMinCap');
+    route::get('dispRutas', 'TeoController@dispRutas');
+    Route::post('addMinMaxCap','OperacionesController@adminMaxMinCap');
     Route::post('secondRoute','RutasController@addSecondRoute');
     Route::post('thirdRoute','RutasController@addThirdRoute');
     Route::get('reAgendamiento','OperacionesController@reAgendamiento');
@@ -89,7 +89,7 @@ Route::group(['middleware' => ['auth', 'administrador'], 'prefix' => 'admin'], f
 	y adicionalmente tiene acceso a las rutas de el controlador de agendamiento, al cual solo tendra acceso
 	a la funcion show y create
 */
-Route::group(['middleware' => ['auth', 'teleoperador'], 'prefix' => 'teo'], function () {
+Route::group(['Middleware' => ['auth', 'teleoperador'], 'prefix' => 'teo'], function () {
 
     Route::Resource('call', 'TeoController');
     Route::post('actualizado&{id}', 'TeoController@actualizar');
@@ -127,7 +127,7 @@ Route::group(['middleware' => ['auth', 'teleoperador'], 'prefix' => 'teo'], func
 	(por definir -> tendra acceso a editar los agendamientos en caso de ser necesario, ya que los teleopradores
 	no podran hacerlo)	
 */
-Route::group(['middleware' => ['auth', 'supervisor'], 'prefix' => 'sup'], function () {
+Route::group(['Middleware' => ['auth', 'supervisor'], 'prefix' => 'sup'], function () {
 
     Route::Resource('sup', 'supController');
     Route::Resource('call', 'TeoController');
@@ -144,7 +144,7 @@ Route::group(['middleware' => ['auth', 'supervisor'], 'prefix' => 'sup'], functi
 	El grupo de rutas de Operaciones tendra un acceso casi completo al sistema, salvo algunas funciones especificas de el administrador
 */
 
-Route::group(['middleware' => ['auth', 'operaciones'], 'prefix' => 'ope'], function () {
+Route::group(['Middleware' => ['auth', 'operaciones'], 'prefix' => 'ope'], function () {
 
     Route::Resource('ope', 'OperacionesController');
     Route::Resource('sup', 'supController');
@@ -156,8 +156,10 @@ Route::group(['middleware' => ['auth', 'operaciones'], 'prefix' => 'ope'], funct
     route::get('adminconfig', 'AdminController@adminConfig');
     Route::post('addMinMaxCap','Operacionescontroller@adminMaxMinCap');
     Route::get('reAgendamiento','OperacionesController@reAgendamiento');
+    Route::get('reAgendamiento','OperacionesController@reAgendamiento');
     Route::get('detalleReAgendamiento/{id}','OperacionesController@detalleReagendamiento');
     Route::Post('reagendar','OperacionesController@reagendar');
+
   
     
 
@@ -182,7 +184,7 @@ Route::group(['middleware' => ['auth', 'operaciones'], 'prefix' => 'ope'], funct
 /*
 	El grupo de rutas para rutero tendra acceso al controlador para el agendamiento de rutas
 */
-Route::group(['middleware' => ['auth', 'ruteros'], 'prefix' => 'rutas'], function () {
+Route::group(['Middleware' => ['auth', 'ruteros'], 'prefix' => 'rutas'], function () {
 
     Route::Resource('rutas', 'RutasController');
     Route::post('secondRoute','RutasController@addSecondRoute');

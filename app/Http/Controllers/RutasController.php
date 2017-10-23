@@ -147,7 +147,7 @@ class RutasController extends Controller {
 
 
 
-		return view('rutas/detalleRutasDiarias',compact('ruta','est','hoy','esta'));
+		return view('rutas/DetalleRutasDiarias',compact('ruta','est','hoy','esta'));
 	}
 
 
