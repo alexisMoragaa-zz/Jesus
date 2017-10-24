@@ -92,7 +92,7 @@
                                 @if(Auth::user()->perfil==1)
                                     <a href="{{route('admin.call.show',$rea->id)}}">Validar Ruta<span class=""></span></a>
                                @elseif(Auth::user()->perfil==4)
-                                    <a href="{{route('/ope.call.show',$rea->id)}}">Validar Ruta<span class=""></span></a>
+                                    <a href="{{route('ope.call.show',$rea->id)}}">Validar Ruta<span class=""></span></a>
                                 @endif
                             </td>
                         </tr>

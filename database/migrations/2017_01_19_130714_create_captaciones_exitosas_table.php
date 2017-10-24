@@ -7,7 +7,7 @@ class CreateCaptacionesExitosasTable extends Migration {
 
 	/**
 *
-	 * ejn la tabla de captaciones exitosas se guarda la informacion de los "clientes"
+	 * en la tabla de captaciones exitosas se guarda la informacion de los "clientes"
 	 * una vez que aceptan la ser socios de la fundacion. es aca donde se registra datos como la direccion entre otros datos 
 	 * necesarios para la creacion de rutas
 	 */
@@ -32,7 +32,7 @@ class CreateCaptacionesExitosasTable extends Migration {
 			$table->string('region');
 			$table->string('fono_1');
 			$table->string('correo_1');
-			$table->string('observaciones');
+			$table->text('observaciones');
 			$table->string('rutero');
 			$table->integer('teleoperador')->unsigned();
 			$table->string('fundacion');

@@ -100,13 +100,13 @@ Route::group(['Middleware' => ['auth', 'teleoperador'], 'prefix' => 'teo'], func
     route::post('capFilter','TeoController@capFilter');
     route::get('teoHome','TeoController@Home');
     route::get('validarSocio', 'OperacionesController@validarSocio');
-    route::post('homeBack','Teocontroller@homeBack');
-    Route::get('editCap/{id}','Teocontroller@editCap');
+    route::post('homeBack','TeoController@homeBack');
+    Route::get('editCap/{id}','TeoController@editCap');
     route::post('editCapPost','TeoController@editCapPost');
     Route::get('PorReagendar','TeoController@PorReagendar');
     route::get('detalleReagendamientoTeo/{id}','TeoController@detalleReagendamiento');
     route::post('reagendado','TeoController@reagendado');
-    route::get('dispRutas', 'Teocontroller@dispRutas');
+    route::get('dispRutas', 'TeoController@dispRutas');
 
     route::get('ajax-rutero', function () {
         $rutero_id = Input::get('ruteroid');
@@ -154,11 +154,12 @@ Route::group(['Middleware' => ['auth', 'operaciones'], 'prefix' => 'ope'], funct
     Route::post('addStatusCap','OperacionesController@addStatusCap');
     Route::post('addStatusMdt','OperacionesController@addStatusMdt');
     route::get('adminconfig', 'AdminController@adminConfig');
-    Route::post('addMinMaxCap','Operacionescontroller@adminMaxMinCap');
+    Route::post('addMinMaxCap','OperacionesController@adminMaxMinCap');
     Route::get('reAgendamiento','OperacionesController@reAgendamiento');
     Route::get('reAgendamiento','OperacionesController@reAgendamiento');
     Route::get('detalleReAgendamiento/{id}','OperacionesController@detalleReagendamiento');
     Route::Post('reagendar','OperacionesController@reagendar');
+    route::post('showDay1', 'OperacionesController@showDay1');
 
   
     

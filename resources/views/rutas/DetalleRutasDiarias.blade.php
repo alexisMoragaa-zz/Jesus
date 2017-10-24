@@ -18,6 +18,7 @@
             $(".motivo").hide();
             $("#modal-form").hide();
             $(".modal-alert").hide();
+            $(".modal-observacion").hide();
             $("#status").change(function () {
                 if($(this).val()=="noRetirado"){
                     $(".motivo").fadeIn();
@@ -67,6 +68,15 @@
             ]});
         });
 
+            $("#completeobs").click(function(){
+                $(".modal-observacion").dialog({
+                    buttons: [{
+                        text:"Aceptar","class":'btn btn-success','id':'ok',click:function() {
+                                $(this).close();
+                            }}]
+                });
+            });
+
         });
 
     </script>
@@ -76,6 +86,11 @@
     <div class="modal-alert" title="Estado Ruta">
         <p>El estado de esta Ruta ya fue Registrado</p>
         <p>Esta Seguro que desea <span>Modificarlo</span></p>
+    </div>
+    
+    <div class="modal-observacion">
+
+        <textarea class="form-control" rows="19" id="comment" readonly>{{$ruta->observaciones}}</textarea>
     </div>
 
 <div id="modal-form" title="Agregar estado Retiro">
@@ -156,7 +171,7 @@
 
         <tr>
             <td class="q">Observacion</td>
-            <td class="w">{{$ruta->observaciones}}</td>
+            <td class="w">{!! str_limit($ruta->observaciones, $limit=100,$end=" <a id='completeobs'>ver mas</a>")!!}</td>
         </tr>
 
         <tr>

@@ -21,7 +21,7 @@ class TeoController extends Controller
     public function home()
     {
 
-        $captaciones = CaptacionesExitosa::where('teleoperador','=',Auth::user()->id)->get()->sortByDesc('created_at');
+        $captaciones = CaptacionesExitosa::where('teleoperador','=',Auth::User()->id)->get()->sortByDesc('created_at');
 
         return view('teo/teoHome', compact('captaciones'));
 
@@ -424,7 +424,7 @@ $id = $request->id_captacion;
     }
     public function PorReagendar(){
 
-        $porReagendar = CaptacionesExitosa::where('reagendar','=',1)->where('teleoperador','=',Auth::user()->perfil)->get();
+        $porReagendar = CaptacionesExitosa::where('reagendar','=',1)->where('teleoperador','=',Auth::User()->id)->get();
 
         return view('teo/porReagendar',['reage'=>$porReagendar]);
     }

@@ -80,7 +80,11 @@
 
         });
     </script>
-{!! Form::open(array('url'=>'admin/showDay1')) !!}
+    @if(Auth::user()->perfil==1)
+        {!! Form::open(['url'=>['admin/showDay1'],'method'=>'post']) !!}
+    @elseif(Auth::user()->perfil==4)
+        {!! Form::open(['url'=>['ope/showDay1'],'method'=>'POST']) !!}
+    @endif
     <div class=" contenedor1" id="con">
 
         <div class="col-md-2">
@@ -106,7 +110,7 @@
             <select name="teo" id="teo" class="form-control">
                 <option value="">Todos</option>
                 @foreach($teos as $teo)
-                    <option value="{{$teo->name}}">{{$teo->name}}</option>
+                    <option value="{{$teo->id}}">{{$teo->name}}</option>
                 @endforeach
             </select>
         </div>

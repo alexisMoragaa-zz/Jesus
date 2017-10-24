@@ -28,7 +28,7 @@ class OperacionesController extends Controller
         $hoy = Carbon::now()->format('d/m/Y');
         $teos = User::where('perfil', '=', 2)->get();
         $ruteros = User::where('perfil', '=', 5)->get();
-        $datos = CaptacionesExitosa::where('fecha_captacion','=',$hoy)->where('reagendamiento','=',1);
+        $datos = CaptacionesExitosa::where('fecha_captacion','=',$hoy)->where('reagendar','=',"")->get();
         return view('operac/agendamiento', compact('datos', 'teos', 'ruteros'));
 
     }
@@ -103,84 +103,86 @@ class OperacionesController extends Controller
         $last_week = Carbon::now()->startOfWeek()->format('d/m/Y');
         $last_month = Carbon::now()->startOfMonth()->format('d/m/Y');
 
-        $dia=$request->input('dias');
-        $teo=$request->input('teo');
-        $rutero=$request->input('rutero');
+        $dia=$request->dias;
+        $teo=$request->teo;
+        $rutero=$request->rutero;
 
-       /* $dia = isset($_GET['dias']) ? $_GET['dias'] : $_POST['dias'];
-        $teo = isset($_GET['teo']) ? $_GET['teo'] : $_POST['teo'];
-        $rutero = isset($_GET['rutero']) ? $_GET['rutero'] : $_POST['rutero'];
-*/
+
 
        if ($dia == 1 and $teo != "" and $rutero != "") {
-
-            $datos = DB::table('captaciones_exitosas')->where('fecha_captacion', '=', $hoy)->where('teleoperador', '=', $teo)
+            $datos=CaptacionesExitosa::where('fecha_captacion', '=', $hoy)->where('teleoperador', '=', $teo)
                 ->where('rutero', '=', $rutero)->get();
-            return view('operac/agendamiento', compact('datos','teos','ruteros'));
+
+
+          return view('operac/agendamiento', compact('datos','teos','ruteros'));
 
         } elseif ($dia == 1 and $teo != "") {
 
-            $datos = DB::table('captaciones_exitosas')->where('fecha_captacion', '=', $hoy)->where('teleoperador', '=', $teo)
+            $datos =CaptacionesExitosa::where('fecha_captacion', '=', $hoy)->where('teleoperador', '=', $teo)
                 ->get();
             return view('operac/agendamiento', compact('datos', 'teos', 'ruteros'));
 
         } elseif ($dia == 1 and $rutero != "") {
 
-            $datos = DB::table('captaciones_exitosas')->where('fecha_captacion', '=', $hoy)->where('rutero', '=', $rutero)->get();
+            $datos = CaptacionesExitosa::where('fecha_captacion', '=', $hoy)->where('rutero', '=', $rutero)->get();
             return view('operac/agendamiento', compact('datos','teos','ruteros'));
 
         } elseif ($dia == 1) {
-            $datos = DB::table('captaciones_exitosas')->where('fecha_captacion', '=', $hoy)->get();
-            return view('operac/agendamiento', compact('datos','teos','ruteros'));
+           $datos=CaptacionesExitosa::where('fecha_captacion', '=', $hoy)->get();
+           return view('operac/agendamiento', compact('datos','teos','ruteros'));
         }
+/**Fin filtros dia actual*/
 
+/**Comienzo filñtros semana en curso*/
 
         if ($dia == 2 and $teo != "" and $rutero != "") {
 
-          $datos = DB::table('captaciones_exitosas')->whereBetween('fecha_captacion', [$last_week, $hoy])
-                ->where('teleoperador', '=', $teo)->where('rutero', '=', $rutero)->get();
-
+          $datos = CaptacionesExitosa::whereBetween('fecha_captacion', [$last_week, $hoy])
+                ->where('teleoperador','=',$teo)
+                ->where('rutero','=',$rutero)->get();
 
             return view('operac/agendamiento', compact('datos','teos','ruteros'));
 
         } elseif ($dia == 2 and $teo != "") {
 
-            $datos = DB::table('captaciones_exitosas')->whereBetween('fecha_captacion', [$last_week, $hoy])
+            $datos = CaptacionesExitosa::whereBetween('fecha_captacion', [$last_week, $hoy])
                 ->where('teleoperador', '=', $teo)->get();
             return view('operac/agendamiento', compact('datos','teos','ruteros'));
 
         } elseif ($dia == 2 and $rutero != "") {
 
-            $datos = DB::table('captaciones_exitosas')->whereBetween('fecha_captacion', [$last_week, $hoy])
+            $datos = CaptacionesExitosa::whereBetween('fecha_captacion', [$last_week, $hoy])
                 ->where('rutero', '=', $rutero)->get();
             return view('operac/agendamiento', compact('datos','teos','ruteros'));
 
         } elseif ($dia == 2) {
 
 
-        $datos = DB::table('captaciones_exitosas')->whereBetween('fecha_captacion',[$last_week,$hoy])->get();
+        $datos = CaptacionesExitosa::whereBetween('fecha_captacion',[$last_week,$hoy])->get();
 
 
             return view('operac/agendamiento', compact('datos','teos','ruteros'));
 
         }
+/**Fin filtro semana en curso*/
 
+/**Inicio filtro mes en curso*/
 
         if ($dia == 3 and $teo != "" and $rutero != "") {
 
-            $datos = DB::table('captaciones_exitosas')->whereBetween('fecha_captacion', [$last_month, $hoy])
+            $datos = CaptacionesExitosa::whereBetween('fecha_captacion', [$last_month, $hoy])
                 ->where('teleoperador', '=', $teo)->where('rutero', '=', $rutero)->get();
             return view('operac/agendamiento', compact('datos','teos','ruteros'));
 
         } elseif ($dia == 3 and $teo != "") {
 
-            $datos = DB::table('captaciones_exitosas')->whereBetween('fecha_captacion', [$last_month, $hoy])
+            $datos = CaptacionesExitosa::whereBetween('fecha_captacion', [$last_month, $hoy])
                 ->where('teleoperador', '=', $teo)->get();
             return view('operac/agendamiento', compact('datos','teos','ruteros'));
 
         } elseif ($dia == 3 and $rutero != "") {
 
-            $datos = DB::table('captaciones_exitosas')->whereBetween('fecha_captacion', [$last_month, $hoy])
+            $datos = CaptacionesExitosa::whereBetween('fecha_captacion', [$last_month, $hoy])
                 ->where('rutero', '=', $rutero)->get();
             return view('operac/agendamiento', compact('datos','teos','ruteros'));
 
@@ -188,7 +190,7 @@ class OperacionesController extends Controller
 
         } elseif ($dia == 3) {
 
-            $datos = DB::table('captaciones_exitosas')->whereBetween('fecha_captacion', [$last_month, $hoy])->get();
+            $datos = CaptacionesExitosa::whereBetween('fecha_captacion', [$last_month, $hoy])->get();
 
             return view('operac/agendamiento', compact('datos','teos','ruteros'));
 
