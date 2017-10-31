@@ -478,9 +478,9 @@
                         Ingresar Agendamiento
                     </button>
          @elseif($function=="editar")
-                        <button type="button" class="btn btn1 btn-warning form-control" id="enviar">
-                            Editar Agendamiento
-                        </button>
+                        <input type="submit" class="btn btn1 btn-warning form-control" id="enviar" value=" Editar Agendamiento">
+
+
          @endif
                 </div>
                 <div class="form-group "></div>

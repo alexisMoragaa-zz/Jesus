@@ -298,6 +298,7 @@ $id = $request->id_captacion;
            $id =DB::table('estado_rutas')->insertGetId([
                 'primer_agendamiento' => $data['fecha_agendamiento'],
                 'estado_primer_agendamiento' => 'Visita Pendiente',
+               'estado'=>'Esperando Aprobacion ',
             ]);
 
         }else{
@@ -400,6 +401,47 @@ $id = $request->id_captacion;
             $editCap->observaciones = $request->observaciones;
             $editCap->cuenta_movistar =$request->c_movistar;
             $editCap->edit ="editado";
+
+        if($request->reagendamiento ==1){
+
+                $date =$request->fecha_reagendamiento;
+                $time =$request->horario;
+                $visit = estadoRuta::find($request->id_captacion);
+                $visit_capta=CaptacionesExitosa::find($request->id_captacion);
+
+
+                if($visit->estado_segundo_agendamiento == "noRetirado"){
+                    if($visit->estado_tercer_agendamiento==""){
+
+                        $visit->tercer_agendamiento = $date;
+                        $visit->estado="";
+                        $visit->save();
+
+                        $visit_capta->fecha_agendamiento=$date;
+                        $visit_capta->horario =$time;
+                        $visit_capta->reagendar =2;
+                        $visit_capta->estado_captacion="";
+                        $visit_capta->save();
+
+                    }
+                }elseif($visit->estado_primer_agendamiento=="noRetirado"){
+                    if($visit->estado_segundo_agendamiento==""){
+
+                        $visit->segundo_agendamiento = $date;
+                        $visit->estado="";
+                        $visit->save();
+
+                        $visit_capta->fecha_agendamiento=$date;
+                        $visit_capta->horario =$time;
+                        $visit_capta->reagendar =2;
+                        $visit_capta->estado_captacion="";
+                       $visit_capta->save();
+
+                    }
+                }
+        }elseif ($request->reagendamiento ==2){
+            
+        }
         $editCap->save();
 
         if(Auth::user()->perfil==1){
@@ -419,20 +461,50 @@ $id = $request->id_captacion;
                                     ->where('rutero','=',$rutero)
                                     ->where('estado_captacion','!=','rechazada')->get();
 
-    return Response::json($info);
+        return Response::json($info);
 
     }
+
     public function PorReagendar(){
 
         $porReagendar = CaptacionesExitosa::where('reagendar','=',1)->where('teleoperador','=',Auth::User()->id)->get();
 
         return view('teo/porReagendar',['reage'=>$porReagendar]);
     }
+
     public function detalleReagendamiento($id){
         $reagendamiento=CaptacionesExitosa::find($id);
+        $status = estado::where('modulo', '=', 'llamado')->get();
+        $estado = estado::where('modulo','=','agendamiento')->get();
+        $f_pago = estado::where('modulo','=','pago')->get();
+        $comunas = comunaRetiro::where('region', '=', 'metropolitana')->where('ciudad', '=', 'santiago')->get();
         $minmax =maxCap::find(1);
 
-        return view('teo.detalleReagendamientoTeo',['reage'=>$reagendamiento,'minmax'=>$minmax]);
+        return view('teo.detalleReagendamientoTeo',
+                ['reage'=>$reagendamiento,
+                'minmax'=>$minmax,
+                'status'=>$status,
+                'estado'=>$estado,
+                'f_pago'=>$f_pago,
+                'comunas'=>$comunas]);
+    }
+
+    public function reagendarConEdicion($id){
+        $reagendamiento=CaptacionesExitosa::find($id);
+        $status = estado::where('modulo', '=', 'llamado')->get();
+        $estado = estado::where('modulo','=','agendamiento')->get();
+        $f_pago = estado::where('modulo','=','pago')->get();
+        $comunas = comunaRetiro::where('region', '=', 'metropolitana')->where('ciudad', '=', 'santiago')->get();
+        $minmax =maxCap::find(1);
+
+        return view('teo.reagWithEdition',
+            ['reage'=>$reagendamiento,
+                'minmax'=>$minmax,
+                'status'=>$status,
+                'estado'=>$estado,
+                'f_pago'=>$f_pago,
+                'comunas'=>$comunas,
+               ]);
     }
     public function reagendado(Request $request){
 
@@ -447,6 +519,7 @@ $id = $request->id_captacion;
             if($visit->estado_tercer_agendamiento==""){
 
                 $visit->tercer_agendamiento = $date;
+                $visit->estado="";
                 $visit->save();
 
                 $visit_capta->fecha_agendamiento=$date;
@@ -465,6 +538,7 @@ $id = $request->id_captacion;
             if($visit->estado_segundo_agendamiento==""){
 
                 $visit->segundo_agendamiento = $date;
+                $visit->estado="";
                 $visit->save();
 
                 $visit_capta->fecha_agendamiento=$date;
@@ -484,7 +558,7 @@ $id = $request->id_captacion;
     }
 
 
-
+   
 
     /** comentarios del controlador
      *

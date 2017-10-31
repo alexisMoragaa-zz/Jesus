@@ -206,21 +206,28 @@
                     <td >Estado Captacion</td>
                     <td id="status">: {{$d->estado_captacion}}</td>
                 </tr>
-
-                <tr>
+@if($d->estado_captacion !="OK" && $d->estado_captacion!="")
+                <tr id="cap">
                     <td >Motivo Captacion</td>
                     <td id="reason">: {{$d->motivo_cap}}</td>
+                </tr>
+ @endif
+                <tr id="ruta">
+                    <td>Estado de Ruta</td>
+                    <td>: {{$d->estadoRuta->estado}}</td>
                 </tr>
 
                 <tr>
                     <td>Estado Mandato</td>
                     <td>: {{$d->estado_mandato}}</td>
                 </tr>
-
-                <tr>
+    @if($d->estado_mandato !="OK" &&$d->estado_mandato !="")
+                <tr id="mdt">
                     <td>Motivo Mandato</td>
                     <td>: {{$d->motivo_mdt}}</td>
                 </tr>
+     @endif
+
                 </tbody>
             </table>
 
@@ -257,10 +264,10 @@
                      <div class="col-md-4">
                         <label for=""></label>
                      </div>
-                @else
+                @elseif($d->estadoRuta->estado =="OK")
 
 
-                <div class="mdt">
+                     <div class="mdt">
 
                     @if(Auth::user()->perfil==1)
                         {!! Form::open(array('url'=>'admin/addStatusMdt','id'=>'form-mandato'))!!}
@@ -277,19 +284,31 @@
                              </select>
                         </div>
                         <div class="col-md-2">
-                            <input type="submit" class="btn btn1 btn-success " id="enviarmdt">
+                            <input type="submit" class="btn btn1 btn-success " id="enviarmdt" value="Agregar Estado Mandato">
+
+                        </div>
+                        <div class="col-md-4">
+                            <a href="{{url('ope/mdtWhithEdition',$d->id)}}" class="btn btn-warning btn1"> Agregar Estado Con Edicion</a>
                         </div>
 
                         <div class="col-md-4" id="statusRecordMdt">
                              <label for="reasonmdt" class="control-label">Estado</label>
                             <input type="text" class="form-control" id="motivoMdt" name="motivoMdt">
                          </div>
-                        <input type="hidden" name="cap_id" value="{{$d->id}}">
+                        <input type="hidden" name="id_captacion" value="{{$d->id}}">
                     {!! Form::close() !!}
-                 </div>
+                    </div>
+                 @else
+                         <h3>Estado Actual del Mandato</h3>
+                        <h4>{{$d->estadoRuta->estado}}</h4>
+                 @endif
 
-         @endif<!--cierre if estado_captacion-->
-         @endif<!--cierre if perfiles-->
+
+         @else
+             <h3>Estado Actual del Mandato</h3>
+             <h4>{{$d->estadoRuta->estado}}</h4>
+             @endif<!--cierre if perfiles-->
+
         @endforeach
 
  </div>

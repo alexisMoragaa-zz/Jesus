@@ -56,7 +56,7 @@
                                @if(Auth::user()->perfil==1)
                                    <a href="{{url('admin/detalleReAgendamiento')}}/{{$re->id}}">Cambiar Teo<span class=""></span></a>
                                @elseif(Auth::user()->perfil==4)
-                                   <a href="{{url('/ope/detalleReAgendamiernto')}}/{{$re->id}}">Cambiar Teo<span class=""></span></a>
+                                   <a href="{{url('/ope/detalleReAgendamiento')}}/{{$re->id}}">Cambiar Teo<span class=""></span></a>
                                @endif
                              </td>
                         </tr>

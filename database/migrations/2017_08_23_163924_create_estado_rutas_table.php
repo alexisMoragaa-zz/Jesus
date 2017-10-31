@@ -16,6 +16,7 @@ class CreateEstadoRutasTable extends Migration {
 		{
 			$table->increments('id')->unsigned();
 			$table->integer('id_agendamiento')->unsigned();
+			$table->string('estado');
 			$table->string('primer_agendamiento');
 			$table->string('estado_primer_agendamiento');
 			$table->string('detalle_primer_agendamiento');

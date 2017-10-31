@@ -13,7 +13,8 @@ use Illuminate\Support\Facades\Response;
 use Monolog\Handler\ElasticSearchHandler;
 use Illuminate\Support\Facades\Auth;
 use App\maxCap;
-
+use App\estado;
+use App\comunaRetiro;
 
 class OperacionesController extends Controller
 {
@@ -252,8 +253,20 @@ class OperacionesController extends Controller
         $capStatus = $request->status_cap;
         $reason = $request->motivo_cap;
         $id = $request->cap_id;
-
+        $ruta=estadoRuta::find($id);
         $cap = CaptacionesExitosa::find($id);
+        if($capStatus=="OK"){
+            if($cap->reagendar==2){
+                $ruta->estado ="Reagendado Visita Pendiente";
+                $ruta->save();
+            }else{
+                $ruta->estado ="Visita Pendiente";
+                $ruta->save();
+            }
+
+        }
+
+
         $cap->estado_captacion=$capStatus;
         $cap->motivo_cap=$reason;
         $cap->edit="revisado";
@@ -271,15 +284,32 @@ class OperacionesController extends Controller
 
     public function addStatusMdt(Request $request)
     {
-
-        $id= $request->cap_id;
-        $statusMdt=$request->status_mdt;
-        $reasonMdt=$request->motivoMdt;
-
-        $cap=CaptacionesExitosa::find($id);
-
-        $cap->estado_mandato=$statusMdt;
+        $id= $request->id_captacion;
+            $statusMdt=$request->status_mdt;
+                $reasonMdt=$request->motivoMdt;
+                $cap=CaptacionesExitosa::find($id);
+            $cap->estado_mandato=$statusMdt;
         $cap->motivo_mdt=$reasonMdt;
+        
+        if($request->reagendamiento==1){
+
+            $cap->tipo_retiro= $request->tipo_retiro;
+            $cap->comuna=$request->comuna;
+            $cap->fecha_agendamiento =$request->fecha_agendamiento;
+            $cap->horario =$request->horario;
+            $cap->rut = $request->rut;
+            $cap->jornada = $request->jornada;
+            $cap->fono_1 = $request->fono_1;
+            $cap->nombre = $request->nombre;
+            $cap->apellido = $request->apellido;
+            $cap->direccion = $request->direccion;
+            $cap->correo_1 =$request->correo_1;
+            $cap->rutero = $request->rutero;
+            $cap->monto = $request->monto;
+            $cap->forma_pago = $request->forma_pago;
+            $cap->observaciones = $request->observaciones;
+            $cap->cuenta_movistar =$request->c_movistar;
+        }
         $cap->save();
 
         if(Auth::user()->perfil==1){
@@ -494,6 +524,24 @@ class OperacionesController extends Controller
         }
 
 
+    }
+    
+    public function mdtWithEdition($id){
+
+        $reagendamiento=CaptacionesExitosa::find($id);
+        $status = estado::where('modulo', '=', 'llamado')->get();
+        $estado = estado::where('modulo','=','agendamiento')->get();
+        $f_pago = estado::where('modulo','=','pago')->get();
+        $comunas = comunaRetiro::where('region', '=', 'metropolitana')->where('ciudad', '=', 'santiago')->get();
+        $minmax =maxCap::find(1);
+
+        return view('operac.mdtWithEdition',
+            ['reage'=>$reagendamiento,
+                'minmax'=>$minmax,
+                'status'=>$status,
+                'estado'=>$estado,
+                'f_pago'=>$f_pago,
+                'comunas'=>$comunas]);
     }
 }//fin controlador
 /**CONTROLADOR OPERACIONES

@@ -39,7 +39,7 @@
                 <div class="col-md-12" id="colum2">
                   @if(Auth::user()->perfil==1)
                     {!! Form::open(['url'=>['admin/reagendar'],'method'=>'POST','id'=>'reagendado']) !!}
-                  @elseif(Auth::user()-perfil==4)
+                  @elseif(Auth::user()->perfil==4)
                     {!! Form::open(['url'=>['ope/reagendar'],'method'=>'POST','id'=>'reagendado']) !!}
                   @endif
 

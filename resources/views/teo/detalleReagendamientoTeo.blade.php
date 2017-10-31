@@ -9,6 +9,7 @@
         $(document).ready(function(){
 
             $(".dialog").hide();
+            $(".edition").hide();
             $("#btn-info").click(function(e){
                 var rutero_id =$("#comuna").val();
                 $.get('/admin/ajax-rutero?ruteroid=' + rutero_id, function (data) {
@@ -28,6 +29,7 @@
                 e.preventDefault();
                 $(".dialog").dialog({height:"auto",width:"auto"});
             });
+
         });
     </script>
     <script src="{{asset('/js/validarRuta.js')}}"></script>
@@ -61,6 +63,7 @@
                 </tbody>
             </table>
         </div>
+
         <div class="row">
             @include('partials.partialDetalleReagendamiento')
             <div class="col-md-4">
@@ -113,9 +116,9 @@
                         <input type="hidden" value="{{$reage->comuna}}" id="comuna">
                         <input type="hidden" value="{{$reage->id}}" name="id_captacion">
 
-                        <div class="col-md-12 ">
+                        <div class="col-md-12">
                             <a href="" id="btn-info" class="btn btn1 btn-info"><span class="glyphicon glyphicon-exclamation-sign"></span></a>
-                            <input type="button" value="Reagendar con edicion" class="btn btn-warning btn1 send_data ">
+                            <a href="{{url('teo/reageWithEdition',$reage->id)}}"  class="btn btn-warning btn1  " id="reageWithEdit">Reagendar con edicion</a>
                             <input type="submit" value="Reagendar" class="btn btn-success btn1 send_data" >
 
                         </div>

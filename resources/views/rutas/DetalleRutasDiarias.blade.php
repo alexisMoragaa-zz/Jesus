@@ -72,7 +72,7 @@
                 $(".modal-observacion").dialog({
                     buttons: [{
                         text:"Aceptar","class":'btn btn-success','id':'ok',click:function() {
-                                $(this).close();
+                                $(this).dialog("close");
                             }}]
                 });
             });
@@ -176,7 +176,7 @@
 
         <tr>
             <td class="q">Teleopetador</td>
-            <td class="w">{{$ruta->teleoperador}}</td>
+            <td class="w">{{$ruta->user->name}}</td>
         </tr>
 
         <tr>

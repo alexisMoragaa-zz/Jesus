@@ -2,10 +2,30 @@
 
 $(document).ready(function(){
     $(".send_data").attr("disabled", true);
+
+
+    $("#comuna").on('change', function (e) {
+        console.log(e);
+        var rutero_id = e.target.value;
+        $.get('/admin/ajax-rutero?ruteroid=' + rutero_id, function (data) {
+            console.log(data);
+            $.each(data, function (index, obj) {
+
+                $("#rutero").val(obj.rutero);
+
+                $("#comunatable").text(obj.comuna);
+                $("#voluntario").text(obj.rutero);
+                $("#lunes").text(obj.h_lunes);
+                $("#martes").text(obj.h_martes);
+                $("#miercoles").text(obj.h_miercoles);
+                $("#jueves").text(obj.h_jueves);
+                $("#viernes").text(obj.h_viernes);
+            });
+        });
+    });
+
     $("#f_agendamiento").change(function(){
         $("#jornada").val("");
-
-
         info={fecha:$("#f_agendamiento").val(),rutero:$("#rutero").val()} //creamos un literal con la informacion que enviaremos al servidor
 
         $.get('/admin/dispRutas',info,procDatos); //enviamos la informacion del literal y asignam,os la funcion encargada de procesar la ifnormacion con el metodo get

@@ -60,7 +60,7 @@ Route::group(['Middleware' => ['auth', 'administrador'], 'prefix' => 'admin'], f
     route::post('addStatusCapAjax','TeoController@addStatusCapAjax');
     route::post('homeBack','TeoController@homeBack');
     Route::post('addStatusMdt','OperacionesController@addStatusMdt');
-    Route::get('editCap{id}','TeoController@editCap');
+    Route::get('editCap/{id}','TeoController@editCap');
     route::post('editCapPost','TeoController@editCapPost');
     route::get('dispRutas', 'TeoController@dispRutas');
     Route::post('addMinMaxCap','OperacionesController@adminMaxMinCap');
@@ -92,21 +92,23 @@ Route::group(['Middleware' => ['auth', 'administrador'], 'prefix' => 'admin'], f
 Route::group(['Middleware' => ['auth', 'teleoperador'], 'prefix' => 'teo'], function () {
 
     Route::Resource('call', 'TeoController');
-    Route::post('actualizado&{id}', 'TeoController@actualizar');
-    Route::get('edit&{id}', 'TeoController@editar');
-    Route::get('mandatoExitoso&{id}&{id_interno_dues}', 'TeoController@create');
-    Route::post('agregado', 'TeoController@store');
-    route::post('siguiente/{id}', 'teoController@siguiente');
-    route::post('capFilter','TeoController@capFilter');
-    route::get('teoHome','TeoController@Home');
-    route::get('validarSocio', 'OperacionesController@validarSocio');
-    route::post('homeBack','TeoController@homeBack');
-    Route::get('editCap/{id}','TeoController@editCap');
-    route::post('editCapPost','TeoController@editCapPost');
-    Route::get('PorReagendar','TeoController@PorReagendar');
-    route::get('detalleReagendamientoTeo/{id}','TeoController@detalleReagendamiento');
-    route::post('reagendado','TeoController@reagendado');
-    route::get('dispRutas', 'TeoController@dispRutas');
+    Route::Post('actualizado&{id}', 'TeoController@actualizar');
+    Route::Get('edit&{id}', 'TeoController@editar');
+    Route::Get('mandatoExitoso&{id}&{id_interno_dues}', 'TeoController@create');
+    Route::Post('agregado', 'TeoController@store');
+    Route::Post('siguiente/{id}', 'TeoController@siguiente');
+    Route::post('capFilter','TeoController@capFilter');
+    Route::Get('teoHome','TeoController@Home');
+    Route::Get('validarSocio', 'OperacionesController@validarSocio');
+    route::Post('homeBack','TeoController@homeBack');
+    Route::Get('editCap/{id}','TeoController@editCap');
+    Route::Post('editCapPost','TeoController@editCapPost');
+    Route::Get('PorReagendar','TeoController@PorReagendar');
+    Route::get('detalleReagendamientoTeo/{id}','TeoController@detalleReagendamiento');
+    Route::Post('reagendado','TeoController@reagendado');
+    Route::Get('dispRutas', 'TeoController@dispRutas');
+    Route::Get('reageWithEdition/{id}', 'TeoController@reagendarConEdicion');
+    Route::Post('reagece', 'TeoController@editAge');
 
     route::get('ajax-rutero', function () {
         $rutero_id = Input::get('ruteroid');
@@ -114,9 +116,9 @@ Route::group(['Middleware' => ['auth', 'teleoperador'], 'prefix' => 'teo'], func
 
         return Response::json($nombre_rutero);
     });
-    Route::get(' ', function () {
+    Route::get('/', function () {
 
-        return view('teo/call');
+        return view('teo/home');
     });
 
 });
@@ -160,6 +162,8 @@ Route::group(['Middleware' => ['auth', 'operaciones'], 'prefix' => 'ope'], funct
     Route::get('detalleReAgendamiento/{id}','OperacionesController@detalleReagendamiento');
     Route::Post('reagendar','OperacionesController@reagendar');
     route::post('showDay1', 'OperacionesController@showDay1');
+    Route::get('createRutas', 'AdminController@rutas');
+    Route::get('mdtWhithEdition/{id}','OperacionesController@mdtWithEdition');
 
   
     

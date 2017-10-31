@@ -208,7 +208,7 @@
                         <td>{{$dato->direccion}}</td>
                         <td class="detalle">{{$dato->comuna}}</td>
                         <td class="detalle">{{$dato->horario}}</td>
-                        <td>{{$dato->observaciones}}</td>
+                        <td>{{ str_limit($dato->observaciones,$limit=30,$end="...")}}</td>
                         <td class="detalle">{{$dato->user->name}}</td>
                         <td class="detalle">{{$dato->fundacion}}</td>
                         <td class="detalle">{{$dato->nom_campana}}</td>

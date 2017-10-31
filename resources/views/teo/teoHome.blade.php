@@ -135,9 +135,9 @@
                         <td>{{$cap->id}}</td>
                         @if($cap->estado_captacion =="conReparo")
                             @if(Auth::user()->perfil==1)
-                                <td ><a href="{{url('admin/editCap')}}{{$cap->id}}">{{$cap->nombre." ".$cap->apellido}}</a></td>
+                                <td ><a href="{{url('admin/editCap')}}/{{$cap->id}}">{{$cap->nombre." ".$cap->apellido}}</a></td>
                             @elseif(Auth::user()->perfil==2)
-                                <td ><a href="{{url('teo/editCap')}}{{$cap->id}}">{{$cap->nombre." ".$cap->apellido}}</a></td>
+                                <td ><a href="{{url('teo/editCap')}}/{{$cap->id}}">{{$cap->nombre." ".$cap->apellido}}</a></td>
                             @endif
                         @else
                             <td >{{$cap->nombre." ".$cap->apellido}}</td>

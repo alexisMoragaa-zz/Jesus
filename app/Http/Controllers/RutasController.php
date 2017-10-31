@@ -45,6 +45,7 @@ class RutasController extends Controller {
 				'estado_primer_agendamiento'=>$estado,
 				'detalle_primer_agendamiento'=>$motivo,
 				'observacion_primer_agendamiento'=>$observacion,
+				'estado'=>$estado,
 				'updated_at'=>$hoy
 
 			]);
@@ -83,6 +84,7 @@ class RutasController extends Controller {
 				'estado_segundo_agendamiento'=>$estado,
 				'detalle_segundo_agendamiento'=>$motivo,
 				'observacion_segundo_agendamiento'=>$observacion,
+				'estado'=>$estado,
 				'updated_at'=>$hoy
 
 			]);
@@ -118,6 +120,7 @@ class RutasController extends Controller {
 				'estado_tercer_agendamiento'=>$estado,
 				'detalle_tercer_agendamiento'=>$motivo,
 				'observacion_tercer_agendamiento'=>$observacion,
+				'estado'=>$estado,
 				'updated_at'=>$hoy
 
 			]);

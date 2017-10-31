@@ -110,8 +110,9 @@
 							<ul class="dropdown-menu">
 								<li><a href="{{ url('/ope/ope') }}">Captaciones</a></li>
 								<li><a href="{{url('/ope/reAgendamiento')}}">Re-Agendamientos</a></li>
-								<li><a href="{{ url('/ope/verRutas')}}">Rutas</a></li>
+								<li><a href="{{ url('/ope/verRutas')}}">Rutas Diarias</a></li>
 								<li><a href="{{ url('/ope/adminconfig') }}">Configuraciones</a></li>
+								<li><a href="{{url('ope/createRutas')}}">Calendario de Rutas</a></li>
 
 							</ul>
 
