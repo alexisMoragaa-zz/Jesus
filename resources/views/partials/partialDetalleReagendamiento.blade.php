@@ -47,6 +47,12 @@
                 <th>Rutero</th>
                 <td>{{$reage->rutero}}</td>
             </tr>
+            <tr>
+                <th>Fecha Captacion</th>
+                <td>{{$reage->fecha_captacion}}</td>
+                <th>Teleoperador</th>
+                <td>{{$reage->user->name}}</td>
+            </tr>
         </table>
     </div>
     <div class="col-md-12 bord1">

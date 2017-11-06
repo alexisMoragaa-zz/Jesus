@@ -7,6 +7,7 @@ use App\CaptacionesExitosa;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use DB;
+use App\informeRuta;
 
 use Illuminate\Http\Request;
 
@@ -18,8 +19,8 @@ class RutasController extends Controller {
 		$cap =CaptacionesExitosa::where('rutero','=',Auth::user()->name)->where('estado_captacion','=','OK')
 			//->where('fecha_agendamiento','=',$hoy)
 		->get();
-		
-	
+
+
 			return view('rutas/rutasDiarias',compact('cap'));
 	}
 
@@ -38,7 +39,7 @@ class RutasController extends Controller {
 		$observacion =$request->observacion;
 		$id =$request->id;
 		$reagendar =CaptacionesExitosa::find($id);
-        
+
 		DB::table('estado_rutas')
 			->where('id','=',$id)
 			->update([
@@ -49,7 +50,10 @@ class RutasController extends Controller {
 				'updated_at'=>$hoy
 
 			]);
-        if($estado=="noRetirado"){
+
+
+
+    if($estado=="noRetirado"){
 			if($motivo !="retracta"){
 				$reagendar->reagendar=1;
 				$reagendar->save();
@@ -59,9 +63,11 @@ class RutasController extends Controller {
 				$reagendar->save();
 			}
 		}
-		
-		
-		
+		$ruta =informeRuta::where('id_captacion','=',$request->id)->where('num_retiro','=',1)->get()->first();
+			$ruta->estado =$estado;
+			$ruta->save();
+
+
 	if(Auth::user()->perfil==5){
 		return redirect(route('rutas.rutas.index'));
 	}else if(Auth::user()->perfil==1){
@@ -88,6 +94,11 @@ class RutasController extends Controller {
 				'updated_at'=>$hoy
 
 			]);
+
+			$ruta =informeRuta::where('id_captacion','=',$request->id)->where('num_retiro','=',2)->get()->first();
+				$ruta->estado =$estado;
+				$ruta->save();
+
 		if($estado=="noRetirado"){
 			if($motivo !="retracta"){
 				$reagendar->reagendar=1;
@@ -124,6 +135,10 @@ class RutasController extends Controller {
 				'updated_at'=>$hoy
 
 			]);
+
+			$ruta =informeRuta::where('id_captacion','=',$request->id)->where('num_retiro','=',3)->get()->first();
+				$ruta->estado =$estado;
+				$ruta->save();
 
 		if($estado=="noRetirado"){
 			$reagendar =CaptacionesExitosa::find($id);
@@ -169,6 +184,64 @@ class RutasController extends Controller {
 	public function destroy($id)
 	{
 		//
+	}
+
+	public function historialRutas(){
+		$hoy = Carbon::now()->format('Y-m-d');
+		$ruta = CaptacionesExitosa::where('rutero','=',Auth::user()->name)->where('fecha_agendamiento','<=',$hoy)
+		->orderBy('fecha_agendamiento')->get();
+
+		return view('rutas.historialRutas',['rutas'=>$ruta]);
+	}
+
+	public function historialFiltrado(Request $request){
+
+		$dia = $request->dia;
+		$estado =$request->estado;
+
+
+		if($estado !=""){
+
+			if($dia !=""){
+				if($estado ==1){
+					$filtro = "Rutas Exitosas El Dia ".$dia;
+					$ruta =CaptacionesExitosa::where('estado_mandato','=','OK')->where('fecha_agendamiento','=',$dia)->get();
+					return view('rutas.historialRutas',['rutas'=>$ruta,'filtro'=>$filtro]);
+				}elseif($estado ==2){
+					$filtro = "Rutas Rechazadas Dia ".$dia;
+					$ruta =CaptacionesExitosa::where('estado_mandato','=','rechazado')->where('fecha_agendamiento','=',$dia)->get();
+					return view('rutas.historialRutas',['rutas'=>$ruta,'filtro'=>$filtro]);
+				}
+
+			}else{
+				if($estado==1){
+					$filtro = "Rutas Exitosas";
+					$ruta = CaptacionesExitosa::where('estado_mandato', '=', 'OK')->get();
+					return view('rutas.historialRutas',['rutas'=>$ruta,'filtro'=>$filtro]);
+				}elseif($estado ==2){
+					$filtro = "Rutas Rechazadas";
+					$ruta = CaptacionesExitosa::where('estado_mandato', '=', 'retracta')->get();
+					return view('rutas.historialRutas',['rutas'=>$ruta,'filtro'=>$filtro]);
+				}
+
+			}
+
+		}else{
+			$filtro = "Rutas Dia ".$dia;
+			$ruta =CaptacionesExitosa::where('fecha_agendamiento','=',$dia)->get();
+			return view('rutas.historialRutas',['rutas'=>$ruta,'filtro'=>$filtro]);
+		}
+
+
+
+
+	}
+
+	public function detalleRuta($id){
+
+		$ruta = CaptacionesExitosa::findOrFail($id);
+
+		return view('rutas.detalleRuta',['reage'=>$ruta]);
 	}
 /**DOCUMENTACION RUTAS CONTROLLER
  *

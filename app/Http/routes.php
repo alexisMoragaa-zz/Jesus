@@ -72,8 +72,8 @@ Route::group(['Middleware' => ['auth', 'administrador'], 'prefix' => 'admin'], f
     Route::get('PorReagendar','TeoController@PorReagendar');
     route::get('detalleReagendamientoTeo/{id}','TeoController@detalleReagendamiento');
     route::post('reagendado','TeoController@reagendado');
-    
- 
+
+
      route::get('ajax-rutero', function () {
 
         $rutero_id = Input::get('ruteroid');
@@ -109,6 +109,7 @@ Route::group(['Middleware' => ['auth', 'teleoperador'], 'prefix' => 'teo'], func
     Route::Get('dispRutas', 'TeoController@dispRutas');
     Route::Get('reageWithEdition/{id}', 'TeoController@reagendarConEdicion');
     Route::Post('reagece', 'TeoController@editAge');
+    Route::Get('fallidos','TeoController@fallidos');
 
     route::get('ajax-rutero', function () {
         $rutero_id = Input::get('ruteroid');
@@ -127,7 +128,7 @@ Route::group(['Middleware' => ['auth', 'teleoperador'], 'prefix' => 'teo'], func
 	El grupo de rutas para el supervior entregara acceso commpleto a las rutas de teleoperador y adicionalmente
 	tendra acceso a un controlador que le permitira asignar los teleoperadores para trabajar en campañas
 	(por definir -> tendra acceso a editar los agendamientos en caso de ser necesario, ya que los teleopradores
-	no podran hacerlo)	
+	no podran hacerlo)
 */
 Route::group(['Middleware' => ['auth', 'supervisor'], 'prefix' => 'sup'], function () {
 
@@ -165,8 +166,8 @@ Route::group(['Middleware' => ['auth', 'operaciones'], 'prefix' => 'ope'], funct
     Route::get('createRutas', 'AdminController@rutas');
     Route::get('mdtWhithEdition/{id}','OperacionesController@mdtWithEdition');
 
-  
-    
+
+
 
     /*Route::get('/', function(){
 
@@ -194,10 +195,11 @@ Route::group(['Middleware' => ['auth', 'ruteros'], 'prefix' => 'rutas'], functio
     Route::Resource('rutas', 'RutasController');
     Route::post('secondRoute','RutasController@addSecondRoute');
     Route::post('thirdRoute','RutasController@addThirdRoute');
-    
+    Route::get('historialRutas','RutasController@historialRutas');
+    Route::Post('historialRutasFiltrado','RutasController@historialFiltrado');
+    Route::Get('detalleRuta/{id}','RutasController@detalleRuta');
+
 
 
 
 });
-
-

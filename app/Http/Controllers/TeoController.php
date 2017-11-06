@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Auth;
 use App\comunaRetiro;
 use App\estadoRuta;
+use App\informeRuta;
 
 class TeoController extends Controller
 {
@@ -58,7 +59,7 @@ class TeoController extends Controller
     {
 
         $detalle =CaptacionesExitosa::where('id','=',$id)->get();
-        
+
         return view('teo/detalle', compact('detalle'));
 
     }
@@ -70,24 +71,30 @@ class TeoController extends Controller
         $date =$request->input('date');
 
         if($option==1){
-            $captaciones = CaptacionesExitosa::where('teleoperador','=',Auth::user()->id)->where('fecha_captacion','=',$hoy)->get()->sortByDesc('created_at');
+            $captaciones = CaptacionesExitosa::where('teleoperador','=',Auth::user()->id)
+            ->where('fecha_captacion','=',$hoy)->where('estado_mandato','!=','AgendamientoFallido')->get()->sortByDesc('created_at');
             return view('teo/teoHome', compact('captaciones'));
 
         }else if($option == 2){
-            $captaciones = CaptacionesExitosa::where('teleoperador','=',Auth::user()->id)->where('fecha_captacion','=',$date)->get()->sortByDesc('created_at');
+            $captaciones = CaptacionesExitosa::where('teleoperador','=',Auth::user()->id)
+            ->where('estado_mandato','!=','AgendamientoFallido')->where('fecha_captacion','=',$date)->get()->sortByDesc('created_at');
             return view('teo/teoHome', compact('captaciones'));
         }elseif($option == 3){
-            $captaciones = CaptacionesExitosa::where('teleoperador','=',Auth::user()->id)->where('estado_captacion','=','OK')->get()->sortByDesc('created_at');
+            $captaciones = CaptacionesExitosa::where('teleoperador','=',Auth::user()->id)
+            ->where('estado_mandato','!=','AgendamientoFallido')->where('estado_captacion','=','OK')->get()->sortByDesc('created_at');
             return view('teo/teoHome', compact('captaciones'));
         }elseif($option == 4){
-            $captaciones = CaptacionesExitosa::where('teleoperador','=',Auth::user()->id)->where('estado_captacion','=','rechazada')->get()->sortByDesc('created_at');
+            $captaciones = CaptacionesExitosa::where('teleoperador','=',Auth::user()->id)
+            ->where('estado_mandato','!=','AgendamientoFallido')->where('estado_captacion','=','rechazada')->get()->sortByDesc('created_at');
             return view('teo/teoHome', compact('captaciones'));
         }elseif($option == 5){
-            $captaciones = CaptacionesExitosa::where('teleoperador','=',Auth::user()->id)->where('estado_captacion','=','conReparo')->get()->sortByDesc('created_at');
+            $captaciones = CaptacionesExitosa::where('teleoperador','=',Auth::user()->id)
+            ->where('estado_mandato','!=','AgendamientoFallido')->where('estado_captacion','=','conReparo')->get()->sortByDesc('created_at');
             return view('teo/teoHome', compact('captaciones'));
         }else if($option == 6){
 
-            $captaciones = CaptacionesExitosa::where('teleoperador','=',Auth::user()->id)->get()->sortByDesc('created_at');
+            $captaciones = CaptacionesExitosa::where('teleoperador','=',Auth::user()
+            ->where('estado_mandato','!=','AgendamientoFallido')->id)->get()->sortByDesc('created_at');
                 return view('teo/teoHome', compact('captaciones'));
 
     }
@@ -238,7 +245,7 @@ class TeoController extends Controller
 
             ]);
         }else{
-            CaptacionesExitosa::create([
+        $cap= CaptacionesExitosa::create([
                 'n_dues' => $data['n_dues'],
                 'id_fundacion' => $data['id_fundacion'],
                 'fecha_captacion' => $date,
@@ -301,6 +308,15 @@ $id = $request->id_captacion;
                'estado'=>'Esperando Aprobacion ',
             ]);
 
+            informeRuta::create([
+              'id_captacion'=>$cap->id,
+              'id_ruta'=>$id,
+              'fecha_agendamiento'=>$data['fecha_agendamiento'],
+              'estado'=>'visita pendiente',
+              'num_retiro'=>1,
+            ]);
+
+
         }else{
 
             $id =DB::table('estado_rutas')->insertGetId([
@@ -309,7 +325,7 @@ $id = $request->id_captacion;
             ]);
         }
 
-        
+
          if(Auth::user()->perfil==1){
             return redirect(url('admin/teoHome'));
          }elseif (Auth::user()->perfil==2){
@@ -351,7 +367,7 @@ $id = $request->id_captacion;
             ->where('id', '=', $id)
             ->update([
                 'estado_registro' => 0
-                
+
             ]);
 
         if(Auth::user()->perfil==1){
@@ -374,13 +390,13 @@ $id = $request->id_captacion;
 
         $minmax=maxCap::find(1);
         $capta = captacionesExitosa::findOrFail($id);
-      
+
         return view('teo/mandatoRegistrado', compact('capta', 'comunas','status','function','estado','f_pago','minmax'));
 
     }
-    
+
     public function editCapPost(Request $request){
-        
+
         $id =$request->id_captacion;
         $editCap =CaptacionesExitosa::find($id);
 
@@ -440,7 +456,7 @@ $id = $request->id_captacion;
                     }
                 }
         }elseif ($request->reagendamiento ==2){
-            
+
         }
         $editCap->save();
 
@@ -528,6 +544,14 @@ $id = $request->id_captacion;
                 $visit_capta->estado_captacion="";
                 $visit_capta->save();
 
+                informeRuta::create([
+                  'id_captacion'=>$request->id_captacion,
+                  'id_ruta'=>$request->id_captacion,
+                  'fecha_agendamiento'=>$date,
+                  'estado'=>'visita pendiente',
+                  'num_retiro'=>3,
+                ]);
+
                 if(Auth::user()->perfil==1){
                     return redirect('/admin/PorReagendar');
                 }elseif (Auth::user()->perfil==2){
@@ -547,6 +571,13 @@ $id = $request->id_captacion;
                 $visit_capta->estado_captacion="";
                 $visit_capta->save();
 
+                informeRuta::create([
+                  'id_captacion'=>$request->id_captacion,
+                  'id_ruta'=>$request->id_captacion,
+                  'fecha_agendamiento'=>$date,
+                  'estado'=>'visita pendiente',
+                  'num_retiro'=>2,
+                ]);
                 if(Auth::user()->perfil==1){
                     return redirect('/admin/PorReagendar');
                 }elseif (Auth::user()->perfil==2){
@@ -554,11 +585,15 @@ $id = $request->id_captacion;
                 }
             }
         }
-       
-    }
+  }
 
+  public function fallidos(){
 
-   
+    $fallidos = CaptacionesExitosa::where('estado_mandato','=','AgendamientoFallido')->get();
+
+    return view('teo.fallidos',['fallidos'=>$fallidos,]);
+  }
+
 
     /** comentarios del controlador
      *
@@ -587,14 +622,14 @@ $id = $request->id_captacion;
      * dispRutas => consulta la disponivilidad del de rutas con el rutero y fechas que se pasan como parametros
      *
      * PorReagendar => retorna una vista con todos los registros disponibles para el teleoperador que tenga a session iniciada
-     * 
+     *
      * detalleReagendamiento => retorna la captacion seleccionada y la vista muestra el detalle de esa captacion,
      *          ademas entrega un formulario para reagendar la visita
-     * 
-     * reagedado => actualiza la fecha de agendamiento, he inserta la nueva fecha de visita en la tabla estado de rutas 
+     *
+     * reagedado => actualiza la fecha de agendamiento, he inserta la nueva fecha de visita en la tabla estado de rutas
      *          actualiza el campo reagendar con el numero 2, el cual significa que el teleoperador ya realizo el reagendamiento
-     * 
-     * 
+     *
+     *
      */
 
 }

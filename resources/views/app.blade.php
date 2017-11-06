@@ -95,7 +95,7 @@
 							<ul class="dropdown-menu">
 								<li><a href="{{url('teo/teoHome')}}">Home</a></li>
 								<li><a href="{{url('teo/PorReagendar')}}">Por Reagendar</a></li>
-								<li><a href="">Agendamientos Fallidos</a></li>
+								<li><a href="{{url('/teo/fallidos')}}">Agendamientos Fallidos</a></li>
 							</ul>
 						</li>
 
@@ -126,7 +126,7 @@
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Rutas<span class="caret"></span></a>
 							<ul class="dropdown-menu">
 								<li><a href="{{url('rutas/rutas')}}">Rutas Diarias</a></li>
-								<li><a href="#">Historial de Rutas</a></li>
+								<li><a href="{{url('rutas/historialRutas')}}">Historial de Rutas</a></li>
 							</ul>
 						</li>
 					@endif

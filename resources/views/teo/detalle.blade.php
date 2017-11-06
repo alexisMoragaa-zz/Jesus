@@ -221,7 +221,7 @@
                     <td>Estado Mandato</td>
                     <td>: {{$d->estado_mandato}}</td>
                 </tr>
-    @if($d->estado_mandato !="OK" &&$d->estado_mandato !="")
+    @if($d->estado_mandato !="OK" && $d->estado_mandato !="")
                 <tr id="mdt">
                     <td>Motivo Mandato</td>
                     <td>: {{$d->motivo_mdt}}</td>
@@ -305,7 +305,7 @@
 
 
          @else
-             <h3>Estado Actual del Mandato</h3>
+             <h3>Estado Actual de la Visita</h3>
              <h4>{{$d->estadoRuta->estado}}</h4>
              @endif<!--cierre if perfiles-->
 
@@ -315,11 +315,3 @@
 
 
 @endsection
-
-
-
-
-
-
-
-

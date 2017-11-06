@@ -18,6 +18,9 @@
         #space2{
             margin-left: 40%;
         }
+        .btn2{
+            margin-top: -60px;
+        }
     </style>
     <script>
         $(document).ready(function () {
@@ -389,7 +392,8 @@
 
                 <div class="col-md-3">
                     <label class=" control-label">Rut</label>
-                    <input type="text" class="form-control" id="rut" name="rut" placeholder="18.202.912-2" value="{{$capta->rut}}">
+                    <input type="text" class="form-control" id="rut" name="rut"
+                           placeholder="Ingrese Rut Sin Puntos ni Guion" value="{{$capta->rut}}">
                 </div>
 
 
@@ -463,8 +467,9 @@
 
                 <div class="col-md-6">
                     <label class=" control-label">Observaciones</label>
-
-                    <input type="text" class="form-control" name="observaciones" value="{{$capta->observaciones}}">
+                    <textarea name="observaciones" id="" cols="30" rows="5" value="" class="form-control">
+                        {{$capta->observaciones}}
+                    </textarea>
 
                 </div>
                 <div class=" ">
@@ -474,11 +479,11 @@
 
                 <div class="col-md-6">
         @if($function==="nada")
-                    <button type="button" class="btn btn1 btn-primary form-control send_data" id="enviar">
+                    <button type="button" class="btn btn2 btn-primary form-control send_data" id="enviar">
                         Ingresar Agendamiento
                     </button>
          @elseif($function=="editar")
-                        <input type="submit" class="btn btn1 btn-warning form-control" id="enviar" value=" Editar Agendamiento">
+                        <input type="submit" class="btn btn2 btn-warning form-control" id="enviar" value=" Editar Agendamiento">
 
 
          @endif
