@@ -594,6 +594,13 @@ $id = $request->id_captacion;
     return view('teo.fallidos',['fallidos'=>$fallidos,]);
   }
 
+  public function detalleFallidos($id){
+
+    $fallido = CaptacionesExitosa::find($id);
+    return view('teo.detalleAgendamientosFallidos',['reage'=>$fallido]);
+
+  }
+
 
     /** comentarios del controlador
      *

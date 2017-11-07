@@ -25,7 +25,7 @@
     }
 </style>
 
-<div class="col-md-8 colum" >
+<div class="col-md-8 colum" id="ancho">
     <div class="col-md-12 bord" >
         <h4 class="titulo">Informacion Captacion</h4>
         <table class="table">
@@ -74,10 +74,12 @@
         <div class="col-md-12 bord2">
             <h5 class="titulo">Primer Re Agendamiento</h5>
             <table class="table">
+                <th>Fecha</th>
                 <th>Estado Retiro</th>
                 <th>Detalle Retiro</th>
                 <th>Observacion</th>
                 <tr>
+                    <td>{{$reage->estadoRuta->segundo_agendamiento}}</td>
                     <td>{{$reage->estadoRuta->estado_segundo_agendamiento}}</td>
                     <td>{{$reage->estadoRuta->detalle_segundo_agendamiento}}</td>
                     <td>{{$reage->estadoRuta->observacion_segundo_agendamiento}}</td>
@@ -88,10 +90,12 @@
             <div class="col-md-12 bord3">
                 <h5 class="titulo">Segundo Re Agendamiento</h5>
                 <table class="table">
+                    <th>Fecha</th>
                     <th>Estado Retiro</th>
                     <th>Detalle Retiro</th>
                     <th>Observacion</th>
                     <tr>
+                        <td>{{$reage->estadoRuta->tercer_agendamiento}}</td>
                         <td>{{$reage->estadoRuta->estado_tercer_agendamiento}}</td>
                         <td>{{$reage->estadoRuta->detalle_tercer_agendamiento}}</td>
                         <td>{{$reage->estadoRuta->observacion_tercer_agendamiento}}</td>

@@ -290,7 +290,7 @@ class OperacionesController extends Controller
                 $cap=CaptacionesExitosa::find($id);
             $cap->estado_mandato=$statusMdt;
         $cap->motivo_mdt=$reasonMdt;
-        
+
         if($request->reagendamiento==1){
 
             $cap->tipo_retiro= $request->tipo_retiro;
@@ -328,7 +328,7 @@ class OperacionesController extends Controller
         $estado=DB::table('estado_rutas')->where('primer_agendamiento','!=','no aplica')->get();
         $datos = DB::table('captaciones_exitosas')->where('id','=','1')->get();
 
-    
+
         return view("rutas/rutas", compact('rutas','ruteros','estado','url'));
     }
 
@@ -465,11 +465,11 @@ class OperacionesController extends Controller
                 return view("rutas/rutas", compact('rutas','ruteros','estado'));
             }
         }
-        
+
     }//fin metodo verRutasFiltradas
 
     public function adminMaxMinCap(Request $request){
-        
+
         $dia=$request->maxDayCap;
         $am=$request->maxAmCap;
         $pm=$request->maxPmCap;
@@ -516,7 +516,7 @@ class OperacionesController extends Controller
             $cap= CaptacionesExitosa::find($request->id);
             $cap->user()->associate($newTeo);
             $cap->save();
-      
+
         if(Auth::user()->perfil==1){
             return redirect('admin/reAgendamiento');
         }elseif(Auth::user()->perfil==4){
@@ -525,7 +525,7 @@ class OperacionesController extends Controller
 
 
     }
-    
+
     public function mdtWithEdition($id){
 
         $reagendamiento=CaptacionesExitosa::find($id);
@@ -543,7 +543,46 @@ class OperacionesController extends Controller
                 'f_pago'=>$f_pago,
                 'comunas'=>$comunas]);
     }
+    public function rutasSemanaActual(){
+
+        $diaLunes =Carbon::now()->startOfWeek()->format('Y-m-d');
+        $diaMartes =Carbon::now()->startOfWeek()->addDay(1)->format('Y-m-d');
+        $diaMiercoles =Carbon::now()->startOfWeek()->addDay(2)->format('Y-m-d');
+        $diaJueves =Carbon::now()->startOfWeek()->addDay(3)->format('Y-m-d');
+        $diaViernes =Carbon::now()->startOfWeek()->addDay(4)->format('Y-m-d');
+        $diaSabado =Carbon::now()->startOfWeek()->addDay(5)->format('Y-m-d');
+        $diaDomingo =Carbon::now()->startOfWeek()->addDay(6)->format('Y-m-d');
+        $inicio = Carbon::now()->startOfWeek()->format('d/m/Y');
+        $fin = Carbon::now()->startOfWeek()->addDay(6)->format('d/m/Y');
+
+        $lunes =CaptacionesExitosa::where('fecha_agendamiento','=',$diaLunes)->get();
+        $martes =CaptacionesExitosa::where('fecha_agendamiento','=',$diaMartes)->get();
+        $miercoles =CaptacionesExitosa::where('fecha_agendamiento','=',$diaMiercoles)->get();
+        $jueves =CaptacionesExitosa::where('fecha_agendamiento','=',$diaJueves)->get();
+        $viernes =CaptacionesExitosa::where('fecha_agendamiento','=',$diaViernes)->get();
+        $sabado =CaptacionesExitosa::where('fecha_agendamiento','=',$diaSabado)->get();
+        $domingo =CaptacionesExitosa::where('fecha_agendamiento','=',$diaDomingo)->get();
+
+        return view('operac.ruta',[
+          'lunes'=>$lunes,
+          'martes'=>$martes,
+          'miercoles'=>$miercoles,
+          'jueves'=>$jueves,
+          'viernes'=>$viernes,
+          'sabado'=>$sabado,
+          'domingo'=>$domingo,
+          'inicio'=>$inicio,
+          'fin'=>$fin,
+        ]);
+    }
+
+    public function rutas(){
+
+      $ruteros =User::where('perfil','=',5)->get();
+      return view('operac.filtroRutasSemanales',['ruteros'=>$ruteros]);
+    }
 }//fin controlador
+
 /**CONTROLADOR OPERACIONES
 *
  *  reagendado => este metodo cambia el valor de el campo reagendar de 1, que significa que el registro debe ser reagendado

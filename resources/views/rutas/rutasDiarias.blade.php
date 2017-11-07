@@ -16,7 +16,7 @@
         </thead>
         <tbody>
         @foreach($cap as $c)
-            <tr>
+              <tr>
                 <td>{{$c->nombre}} {{$c->apellido}}</td>
                 <td>{{$c->fono_1}}</td>
                 <td>{{$c->direccion}}</td>

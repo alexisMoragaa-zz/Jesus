@@ -17,11 +17,10 @@ class RutasController extends Controller {
 	{
 		$hoy = Carbon::now()->format('Y-m-d');
 		$cap =CaptacionesExitosa::where('rutero','=',Auth::user()->name)->where('estado_captacion','=','OK')
+		->where('estado_mandato','=',"")
 			//->where('fecha_agendamiento','=',$hoy)
-		->get();
-
-
-			return view('rutas/rutasDiarias',compact('cap'));
+			->get();
+				return view('rutas/rutasDiarias',compact('cap'));
 	}
 
 
@@ -220,7 +219,7 @@ class RutasController extends Controller {
 					return view('rutas.historialRutas',['rutas'=>$ruta,'filtro'=>$filtro]);
 				}elseif($estado ==2){
 					$filtro = "Rutas Rechazadas";
-					$ruta = CaptacionesExitosa::where('estado_mandato', '=', 'retracta')->get();
+					$ruta = CaptacionesExitosa::where('estado_mandato', '=', 'retracta')->orWhere('estado_mandato', '=', 'AgendamientoFallido')->get();
 					return view('rutas.historialRutas',['rutas'=>$ruta,'filtro'=>$filtro]);
 				}
 

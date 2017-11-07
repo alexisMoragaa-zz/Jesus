@@ -111,12 +111,12 @@
 								<li><a href="{{ url('/ope/ope') }}">Captaciones</a></li>
 								<li><a href="{{url('/ope/reAgendamiento')}}">Re-Agendamientos</a></li>
 								<li><a href="{{ url('/ope/verRutas')}}">Rutas Diarias</a></li>
+								<li><a href="{{ url('/ope/rutas')}}">Rutas Semanales</a></li>
 								<li><a href="{{ url('/ope/adminconfig') }}">Configuraciones</a></li>
 								<li><a href="{{url('ope/createRutas')}}">Calendario de Rutas</a></li>
-
 							</ul>
-
 						</li>
+
 						<li><a href="{{ url('/ope/call') }}">TeleOperador</a></li>
 						<li><a href="{{ url('/ope/sup') }}">Supervisor</a></li>
 
