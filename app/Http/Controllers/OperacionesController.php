@@ -543,7 +543,20 @@ class OperacionesController extends Controller
                 'f_pago'=>$f_pago,
                 'comunas'=>$comunas]);
     }
-    public function rutasSemanaActual(){
+
+    public function rutas(){
+
+      if(Auth::User()->perfil==5){
+        return view('rutas.filtroSemana');
+      }else{
+        $ruteros =User::where('perfil','=',5)->get();
+        return view('operac.filtroRutasSemanales',['ruteros'=>$ruteros]);
+      }
+    }
+
+    public function rutasSemanaActual($rutero){
+
+  
 
         $diaLunes =Carbon::now()->startOfWeek()->format('Y-m-d');
         $diaMartes =Carbon::now()->startOfWeek()->addDay(1)->format('Y-m-d');
@@ -552,16 +565,15 @@ class OperacionesController extends Controller
         $diaViernes =Carbon::now()->startOfWeek()->addDay(4)->format('Y-m-d');
         $diaSabado =Carbon::now()->startOfWeek()->addDay(5)->format('Y-m-d');
         $diaDomingo =Carbon::now()->startOfWeek()->addDay(6)->format('Y-m-d');
-        $inicio = Carbon::now()->startOfWeek()->format('d/m/Y');
-        $fin = Carbon::now()->startOfWeek()->addDay(6)->format('d/m/Y');
 
         $lunes =CaptacionesExitosa::where('fecha_agendamiento','=',$diaLunes)->get();
-        $martes =CaptacionesExitosa::where('fecha_agendamiento','=',$diaMartes)->get();
-        $miercoles =CaptacionesExitosa::where('fecha_agendamiento','=',$diaMiercoles)->get();
-        $jueves =CaptacionesExitosa::where('fecha_agendamiento','=',$diaJueves)->get();
-        $viernes =CaptacionesExitosa::where('fecha_agendamiento','=',$diaViernes)->get();
-        $sabado =CaptacionesExitosa::where('fecha_agendamiento','=',$diaSabado)->get();
-        $domingo =CaptacionesExitosa::where('fecha_agendamiento','=',$diaDomingo)->get();
+        $martes =CaptacionesExitosa::where('fecha_agendamiento','=',$diaMartes)->where('rutero','=',$rutero)->get();
+        $miercoles =CaptacionesExitosa::where('fecha_agendamiento','=',$diaMiercoles)->where('rutero','=',$rutero)->get();
+        $jueves =CaptacionesExitosa::where('fecha_agendamiento','=',$diaJueves)->where('rutero','=',$rutero)->get();
+        $viernes =CaptacionesExitosa::where('fecha_agendamiento','=',$diaViernes)->where('rutero','=',$rutero)->get();
+        $sabado =CaptacionesExitosa::where('fecha_agendamiento','=',$diaSabado)->where('rutero','=',$rutero)->get();
+        $domingo =CaptacionesExitosa::where('fecha_agendamiento','=',$diaDomingo)->where('rutero','=',$rutero)->get();
+
 
         return view('operac.ruta',[
           'lunes'=>$lunes,
@@ -571,16 +583,111 @@ class OperacionesController extends Controller
           'viernes'=>$viernes,
           'sabado'=>$sabado,
           'domingo'=>$domingo,
-          'inicio'=>$inicio,
-          'fin'=>$fin,
+          'diaLunes'=>$diaLunes,
+          'diaMartes'=>$diaMartes,
+          'diaMiercoles'=>$diaMiercoles,
+          'diaJueves'=>$diaJueves,
+          'diaViernes'=>$diaViernes,
+          'diaSabado'=>$diaSabado,
+          'diaDomingo'=>$diaDomingo,
+          'rutero'=>$rutero,
+          'semana'=>'actual',
         ]);
     }
 
-    public function rutas(){
+    public function rutasSemanaPasada($rutero){
 
-      $ruteros =User::where('perfil','=',5)->get();
-      return view('operac.filtroRutasSemanales',['ruteros'=>$ruteros]);
+        $diaLunes = Carbon::now()->startOfWeek()->subWeek()->format('Y-m-d');
+        $diaMartes =Carbon::now()->startOfWeek()->subWeek()->addDay(1)->format('Y-m-d');
+        $diaMiercoles =Carbon::now()->startOfWeek()->subWeek()->addDay(2)->format('Y-m-d');
+        $diaJueves =Carbon::now()->startOfWeek()->subWeek()->addDay(3)->format('Y-m-d');
+        $diaViernes =Carbon::now()->startOfWeek()->subWeek()->addDay(4)->format('Y-m-d');
+        $diaSabado =Carbon::now()->startOfWeek()->subWeek()->addDay(5)->format('Y-m-d');
+        $diaDomingo =Carbon::now()->startOfWeek()->subWeek()->addDay(6)->format('Y-m-d');
+      //dd($diaLunes." ".$diaMartes." ".$diaMiercoles." ".$diaJueves." ".$diaViernes." ".$diaSabado." ".$diaDomingo);
+
+
+        $lunes =CaptacionesExitosa::where('fecha_agendamiento','=',$diaLunes)->get();
+        $martes =CaptacionesExitosa::where('fecha_agendamiento','=',$diaMartes)->where('rutero','=',$rutero)->get();
+        $miercoles =CaptacionesExitosa::where('fecha_agendamiento','=',$diaMiercoles)->where('rutero','=',$rutero)->get();
+        $jueves =CaptacionesExitosa::where('fecha_agendamiento','=',$diaJueves)->where('rutero','=',$rutero)->get();
+        $viernes =CaptacionesExitosa::where('fecha_agendamiento','=',$diaViernes)->where('rutero','=',$rutero)->get();
+        $sabado =CaptacionesExitosa::where('fecha_agendamiento','=',$diaSabado)->where('rutero','=',$rutero)->get();
+        $domingo =CaptacionesExitosa::where('fecha_agendamiento','=',$diaDomingo)->where('rutero','=',$rutero)->get();
+
+
+                return view('operac.ruta',[
+                  'lunes'=>$lunes,
+                  'martes'=>$martes,
+                  'miercoles'=>$miercoles,
+                  'jueves'=>$jueves,
+                  'viernes'=>$viernes,
+                  'sabado'=>$sabado,
+                  'domingo'=>$domingo,
+                  'diaLunes'=>$diaLunes,
+                  'diaMartes'=>$diaMartes,
+                  'diaMiercoles'=>$diaMiercoles,
+                  'diaJueves'=>$diaJueves,
+                  'diaViernes'=>$diaViernes,
+                  'diaSabado'=>$diaSabado,
+                  'diaDomingo'=>$diaDomingo,
+                  'rutero'=>$rutero,
+                  'semana'=>'pasada',
+                ]);
     }
+
+    public function rutasSemanaSiguiente($rutero){
+
+        $diaLunes = Carbon::now()->startOfWeek()->addWeek()->format('Y-m-d');
+        $diaMartes =Carbon::now()->startOfWeek()->addWeek()->addDay(1)->format('Y-m-d');
+        $diaMiercoles =Carbon::now()->startOfWeek()->addWeek()->addDay(2)->format('Y-m-d');
+        $diaJueves =Carbon::now()->startOfWeek()->addWeek()->addDay(3)->format('Y-m-d');
+        $diaViernes =Carbon::now()->startOfWeek()->addWeek()->addDay(4)->format('Y-m-d');
+        $diaSabado =Carbon::now()->startOfWeek()->addWeek()->addDay(5)->format('Y-m-d');
+        $diaDomingo =Carbon::now()->startOfWeek()->addWeek()->addDay(6)->format('Y-m-d');
+      //dd($diaLunes." ".$diaMartes." ".$diaMiercoles." ".$diaJueves." ".$diaViernes." ".$diaSabado." ".$diaDomingo);
+
+
+        $lunes =CaptacionesExitosa::where('fecha_agendamiento','=',$diaLunes)->get();
+        $martes =CaptacionesExitosa::where('fecha_agendamiento','=',$diaMartes)->where('rutero','=',$rutero)->get();
+        $miercoles =CaptacionesExitosa::where('fecha_agendamiento','=',$diaMiercoles)->where('rutero','=',$rutero)->get();
+        $jueves =CaptacionesExitosa::where('fecha_agendamiento','=',$diaJueves)->where('rutero','=',$rutero)->get();
+        $viernes =CaptacionesExitosa::where('fecha_agendamiento','=',$diaViernes)->where('rutero','=',$rutero)->get();
+        $sabado =CaptacionesExitosa::where('fecha_agendamiento','=',$diaSabado)->where('rutero','=',$rutero)->get();
+        $domingo =CaptacionesExitosa::where('fecha_agendamiento','=',$diaDomingo)->where('rutero','=',$rutero)->get();
+
+
+        return view('operac.ruta',[
+          'lunes'=>$lunes,
+          'martes'=>$martes,
+          'miercoles'=>$miercoles,
+          'jueves'=>$jueves,
+          'viernes'=>$viernes,
+          'sabado'=>$sabado,
+          'domingo'=>$domingo,
+          'diaLunes'=>$diaLunes,
+          'diaMartes'=>$diaMartes,
+          'diaMiercoles'=>$diaMiercoles,
+          'diaJueves'=>$diaJueves,
+          'diaViernes'=>$diaViernes,
+          'diaSabado'=>$diaSabado,
+          'diaDomingo'=>$diaDomingo,
+          'rutero'=>$rutero,
+          'semana'=>'siguiente',
+        ]);
+    }
+
+    public function detalleRutasPorDia($rutero, $dia){
+
+      $ruta= CaptacionesExitosa::where('rutero','=',$rutero)->where('fecha_agendamiento','=',$dia)->get();
+      return view('operac.detalleRutaPorDia',[
+        'rutero'=>$rutero,
+        'dia'=>$dia,
+        'ruta'=>$ruta,
+      ]);
+    }
+
+
 }//fin controlador
 
 /**CONTROLADOR OPERACIONES

@@ -121,11 +121,12 @@
 						<li><a href="{{ url('/ope/sup') }}">Supervisor</a></li>
 
 					@elseif(Auth::user()->perfil==5)
+						<li><a href="{{url('rutas/rutas')}}">Realizar Ruta</a></li>
 
 						<li class="dropdown">
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Rutas<span class="caret"></span></a>
 							<ul class="dropdown-menu">
-								<li><a href="{{url('rutas/rutas')}}">Rutas Diarias</a></li>
+								<li><a href="{{url('/rutas/semana')}}">Rutas Semanales</a></li>
 								<li><a href="{{url('rutas/historialRutas')}}">Historial de Rutas</a></li>
 							</ul>
 						</li>

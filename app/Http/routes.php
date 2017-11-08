@@ -166,8 +166,12 @@ Route::group(['Middleware' => ['auth', 'operaciones'], 'prefix' => 'ope'], funct
     route::post('showDay1', 'OperacionesController@showDay1');
     Route::get('createRutas', 'AdminController@rutas');
     Route::get('mdtWhithEdition/{id}','OperacionesController@mdtWithEdition');
-    Route::get('rutas/semana/actual/{rutero}','OperacionesController@rutasSemanaActual');
     Route::get('rutas','OperacionesController@rutas');
+    Route::get('rutas/semana/actual/{rutero}','OperacionesController@rutasSemanaActual');
+    Route::get('rutas/semana/pasada/{rutero}','OperacionesController@rutasSemanaPasada');
+    Route::get('rutas/semana/siguiente/{rutero}','OperacionesController@rutasSemanaSiguiente');
+    Route::get('rutas/dia/{rutero}/{dia}','OperacionesController@detalleRutasPorDia');
+    Route::Get('detalleRuta/{id}','RutasController@detalleRuta');
 
 
 
@@ -200,6 +204,12 @@ Route::group(['Middleware' => ['auth', 'ruteros'], 'prefix' => 'rutas'], functio
     Route::post('thirdRoute','RutasController@addThirdRoute');
     Route::get('historialRutas','RutasController@historialRutas');
     Route::Post('historialRutasFiltrado','RutasController@historialFiltrado');
+    Route::Get('detalleRuta/{id}','RutasController@detalleRuta');
+    Route::get('semana','OperacionesController@rutas');
+    Route::get('rutas/semana/actual/{rutero}','OperacionesController@rutasSemanaActual');
+    Route::get('rutas/semana/pasada/{rutero}','OperacionesController@rutasSemanaPasada');
+    Route::get('rutas/semana/siguiente/{rutero}','OperacionesController@rutasSemanaSiguiente');
+    Route::get('rutas/dia/{rutero}/{dia}','OperacionesController@detalleRutasPorDia');
     Route::Get('detalleRuta/{id}','RutasController@detalleRuta');
 
 

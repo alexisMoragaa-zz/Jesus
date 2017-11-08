@@ -5,8 +5,8 @@
 
     $("#buscar").click(function(){
       if($("#ruteros").val()==""||$("#semana").val()==""){
-          alert("ingrese Criterios de Busqueda");
-    
+          alert("Ingrese Criterios de Busqueda");
+
       }else{
           window.location ="/ope/rutas/semana/"+$("#semana").val()+"/"+$("#ruteros").val();
       }
@@ -29,9 +29,9 @@
       <label for="semana" class="control-label">Seleccione Semana</label>
       <select name="semana" id="semana" class="form-control">
         <option value="">-Seleccione-</option>
+        <option value="pasada">Semana Pasada</option>
         <option value="actual">Semana Actual</option>
         <option value="siguiente">Semana Siguiente</option>
-        <option value="pasada">Semana Pasada</option>
       </select>
     </div>
     <div class="col-md-4">
