@@ -7,7 +7,7 @@
       if($("#semana").val()==""){
           alert("Ingrese Criterios de Busqueda");
       }else{
-          window.location ="/ope/rutas/semana/"+$("#semana").val()+"/"+$("#rutero").val();
+          window.location ="/rutas/semana/"+$("#semana").val()+"/"+$("#rutero").val();
       }
     });
   });
@@ -24,9 +24,9 @@
           </select>
           <span class="input-group-btn">
             <input type="button" class="btn btn-success btn1" value="Buscar" id="buscar">
+            <input type="hidden" id="rutero" value="{{Auth::User()->name}}">
           </span>
       </div>
-      <input type="hidden" id="rutero" value="{{Auth::User()->name}}">
     </div>
   </div>
 @endsection

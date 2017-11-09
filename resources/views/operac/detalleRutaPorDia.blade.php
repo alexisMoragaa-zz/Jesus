@@ -37,7 +37,12 @@
               <td>{{$ruta->comuna}}</td>
               <td>{{$ruta->horario}}</td>
               <td>{{$ruta->estadoRuta->estado}}</td>
-              <td><a href="{{url('/ope/detalleRuta',$ruta->id)}}">Ver Mas</a></td>
+              @if(Auth::User()->perfil==4)
+                  <td><a href="{{url('/ope/detalleRuta',$ruta->id)}}">Ver Mas</a></td>
+              @elseif(Auth::User()->perfil==5)
+                    <td><a href="{{url('/rutas/detalleRuta',$ruta->id)}}">Ver Mas</a></td>
+              @endif
+
             </tr>
           @endforeach
         </tbody>

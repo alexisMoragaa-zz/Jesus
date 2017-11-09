@@ -3,9 +3,9 @@
 use Closure;
 use Illuminate\Contracts\Auth\Guard;
 use Session;
+
 class operaciones {
 
-	
 protected $auth;
 public function __construct(Guard $auth)
 {
@@ -21,7 +21,7 @@ public function __construct(Guard $auth)
 	 */
 	public function handle($request, Closure $next)
 	{
-		switch ($this->auth->user()->perfil) {
+		switch ($this->auth->User()->perfil) {
 
 			case '1':
 				# code...

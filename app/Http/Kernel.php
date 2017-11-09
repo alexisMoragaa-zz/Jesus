@@ -30,9 +30,9 @@ class Kernel extends HttpKernel {
 
 		'administrador' => 'App\Http\Middleware\administrador',
 		'teleoperador' => 'App\Http\Middleware\teleoperador',
-		'supervisor' => 'App\http\Middleware\supervisor',
-		'operaciones' => 'App\http\Middleware\operaciones',
-		'ruteros' => 'App\http\Middleware\ruteros',
+		'supervisor' => 'App\Http\Middleware\supervisor',
+		'operaciones' => 'App\Http\Middleware\operaciones',
+		'ruteros' => 'App\Http\Middleware\ruteros',
 	];
 
 }

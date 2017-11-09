@@ -21,7 +21,7 @@ public function __construct(Guard $auth)
 	 */
 	public function handle($request, Closure $next)
 	{
-		switch ($this->auth->user()->perfil) {
+		switch ($this->auth->User()->perfil) {
 			case '1':
 				# code...
 				return redirect()->to('admin');

@@ -19,7 +19,7 @@ class RutasController extends Controller {
 		$cap =CaptacionesExitosa::where('rutero','=',Auth::user()->name)->where('estado_captacion','=','OK')
 		->where('estado_mandato','=',"")
 			//->where('fecha_agendamiento','=',$hoy)
-			->get();
+			->orderBy('horario')->get();
 				return view('rutas/rutasDiarias',compact('cap'));
 	}
 

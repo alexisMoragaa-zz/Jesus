@@ -55,7 +55,11 @@
                 @endforeach
               </tbody>
             </table>
-          <a href="{{url('/ope/rutas/dia',$rutero)}}/{{$diaLunes}}" class="link">Detalles</a>
+            @if(Auth::User()->perfil==4)
+              <a href="{{url('/ope/rutas/dia',$rutero)}}/{{$diaLunes}}" class="link">Detalles</a>
+            @elseif(Auth::User()->perfil==5)
+                <a href="{{url('/rutas/dia',$rutero)}}/{{$diaLunes}}" class="link">Detalles</a>
+            @endif
         </div>
       </div>
 
@@ -78,7 +82,11 @@
             @endforeach
           </tbody>
         </table>
+        @if(Auth::User()->perfil==4)
           <a href="{{url('/ope/rutas/dia',$rutero)}}/{{$diaMartes}}" class="link">Detalles</a>
+        @elseif(Auth::User()->perfil==5)
+            <a href="{{url('/rutas/dia',$rutero)}}/{{$diaMartes}}" class="link">Detalles</a>
+        @endif
       </div>
     </div>
     <div class="col-md-4">
@@ -100,7 +108,11 @@
               @endforeach
             </tbody>
           </table>
+          @if(Auth::User()->perfil==4)
             <a href="{{url('/ope/rutas/dia',$rutero)}}/{{$diaMiercoles}}" class="link">Detalles</a>
+          @elseif(Auth::User()->perfil==5)
+              <a href="{{url('/rutas/dia',$rutero)}}/{{$diaMiercoles}}" class="link">Detalles</a>
+          @endif
         </div>
       </div>
 
@@ -126,7 +138,11 @@
                 @endforeach
               </tbody>
             </table>
-            <a href="{{url('/ope/rutas/dia',$rutero)}}/{{$diaJueves}}" class="link">Detalles</a>
+            @if(Auth::User()->perfil==4)
+              <a href="{{url('/ope/rutas/dia',$rutero)}}/{{$diaJueves}}" class="link">Detalles</a>
+            @elseif(Auth::User()->perfil==5)
+                <a href="{{url('/rutas/dia',$rutero)}}/{{$diaJueves}}" class="link">Detalles</a>
+            @endif
           </div>
         </div>
 
@@ -149,7 +165,11 @@
                   @endforeach
                 </tbody>
               </table>
-              <a href="{{url('/ope/rutas/dia',$rutero)}}/{{$diaViernes}}" class="link">Detalles</a>
+              @if(Auth::User()->perfil==4)
+                <a href="{{url('/ope/rutas/dia',$rutero)}}/{{$diaViernes}}" class="link">Detalles</a>
+              @elseif(Auth::User()->perfil==5)
+                  <a href="{{url('/rutas/dia',$rutero)}}/{{$diaViernes}}" class="link">Detalles</a>
+              @endif
             </div>
           </div>
 
@@ -172,7 +192,11 @@
                     @endforeach
                   </tbody>
                 </table>
-                <a href="{{url('/ope/rutas/dia',$rutero)}}/{{$diaSabado}}" class="link">Detalles</a>
+                @if(Auth::User()->perfil==4)
+                  <a href="{{url('/ope/rutas/dia',$rutero)}}/{{$diaSabado}}" class="link">Detalles</a>
+                @elseif(Auth::User()->perfil==5)
+                    <a href="{{url('/rutas/dia',$rutero)}}/{{$diaSabado}}" class="link">Detalles</a>
+                @endif
               </div>
             </div>
 
@@ -198,7 +222,11 @@
                       @endforeach
                     </tbody>
                   </table>
-                  <a href="{{url('/ope/rutas/dia',$rutero)}}/{{$diaDomingo}}" class="link">Detalles</a>
+                  @if(Auth::User()->perfil==4)
+                    <a href="{{url('/ope/rutas/dia',$rutero)}}/{{$diaDomingo}}" class="link">Detalles</a>
+                  @elseif(Auth::User()->perfil==5)
+                      <a href="{{url('/rutas/dia',$rutero)}}/{{$diaDomingo}}" class="link">Detalles</a>
+                  @endif
                 </div>
             </div>
           </div>

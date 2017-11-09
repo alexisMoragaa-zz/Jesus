@@ -125,7 +125,7 @@
             </select>
         </div>
 
-       
+
 
         <div class="col-md-2 mas">
             <label for="" class="control-label">Buscar Por</label>
@@ -208,7 +208,7 @@
                         <td>{{$dato->direccion}}</td>
                         <td class="detalle">{{$dato->comuna}}</td>
                         <td class="detalle">{{$dato->horario}}</td>
-                        <td>{{ str_limit($dato->observaciones,$limit=30,$end="...")}}</td>
+                        <td>{{ str_limit($dato->observaciones,$limit=34,$end="...")}}</td>
                         <td class="detalle">{{$dato->user->name}}</td>
                         <td class="detalle">{{$dato->fundacion}}</td>
                         <td class="detalle">{{$dato->nom_campana}}</td>

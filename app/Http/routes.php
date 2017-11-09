@@ -22,7 +22,7 @@ Route::get('home', 'HomeController@index');
 	el grupo de rutas del administrador tiene acceso a todas las rutas del sistema
 */
 
-Route::group(['Middleware' => ['auth', 'administrador'], 'prefix' => 'admin'], function () {
+Route::group(['middleware' => ['auth', 'administrador'], 'prefix' => 'admin'], function () {
 
 
     Route::Resource('user', 'AdminController');
@@ -89,7 +89,7 @@ Route::group(['Middleware' => ['auth', 'administrador'], 'prefix' => 'admin'], f
 	y adicionalmente tiene acceso a las rutas de el controlador de agendamiento, al cual solo tendra acceso
 	a la funcion show y create
 */
-Route::group(['Middleware' => ['auth', 'teleoperador'], 'prefix' => 'teo'], function () {
+Route::group(['middleware' => ['auth', 'teleoperador'], 'prefix' => 'teo'], function () {
 
     Route::Resource('call', 'TeoController');
     Route::Post('actualizado&{id}', 'TeoController@actualizar');
@@ -120,7 +120,7 @@ Route::group(['Middleware' => ['auth', 'teleoperador'], 'prefix' => 'teo'], func
     });
     Route::get('/', function () {
 
-        return view('teo/home');
+        return redirect('/teo/teoHome');
     });
 
 });
@@ -131,7 +131,7 @@ Route::group(['Middleware' => ['auth', 'teleoperador'], 'prefix' => 'teo'], func
 	(por definir -> tendra acceso a editar los agendamientos en caso de ser necesario, ya que los teleopradores
 	no podran hacerlo)
 */
-Route::group(['Middleware' => ['auth', 'supervisor'], 'prefix' => 'sup'], function () {
+Route::group(['middleware' => ['auth', 'supervisor'], 'prefix' => 'sup'], function () {
 
     Route::Resource('sup', 'supController');
     Route::Resource('call', 'TeoController');
@@ -148,7 +148,7 @@ Route::group(['Middleware' => ['auth', 'supervisor'], 'prefix' => 'sup'], functi
 	El grupo de rutas de Operaciones tendra un acceso casi completo al sistema, salvo algunas funciones especificas de el administrador
 */
 
-Route::group(['Middleware' => ['auth', 'operaciones'], 'prefix' => 'ope'], function () {
+Route::group(['middleware' => ['auth', 'operaciones'], 'prefix' => 'ope'], function () {
 
     Route::Resource('ope', 'OperacionesController');
     Route::Resource('sup', 'supController');
@@ -173,13 +173,10 @@ Route::group(['Middleware' => ['auth', 'operaciones'], 'prefix' => 'ope'], funct
     Route::get('rutas/dia/{rutero}/{dia}','OperacionesController@detalleRutasPorDia');
     Route::Get('detalleRuta/{id}','RutasController@detalleRuta');
 
-
-
-
-    /*Route::get('/', function(){
+    Route::get('/', function(){
 
         return view('operac/ope');
-    });*/
+    });
 });
 
 /*Route::group(['middleware' =>['auth', 'operaciones'], 'prefix'=>'ope'], function(){
@@ -197,7 +194,7 @@ Route::group(['Middleware' => ['auth', 'operaciones'], 'prefix' => 'ope'], funct
 /*
 	El grupo de rutas para rutero tendra acceso al controlador para el agendamiento de rutas
 */
-Route::group(['Middleware' => ['auth', 'ruteros'], 'prefix' => 'rutas'], function () {
+Route::group(['middleware' => ['auth', 'ruteros'], 'prefix' => 'rutas'], function () {
 
     Route::Resource('rutas', 'RutasController');
     Route::post('secondRoute','RutasController@addSecondRoute');
@@ -206,10 +203,10 @@ Route::group(['Middleware' => ['auth', 'ruteros'], 'prefix' => 'rutas'], functio
     Route::Post('historialRutasFiltrado','RutasController@historialFiltrado');
     Route::Get('detalleRuta/{id}','RutasController@detalleRuta');
     Route::get('semana','OperacionesController@rutas');
-    Route::get('rutas/semana/actual/{rutero}','OperacionesController@rutasSemanaActual');
-    Route::get('rutas/semana/pasada/{rutero}','OperacionesController@rutasSemanaPasada');
-    Route::get('rutas/semana/siguiente/{rutero}','OperacionesController@rutasSemanaSiguiente');
-    Route::get('rutas/dia/{rutero}/{dia}','OperacionesController@detalleRutasPorDia');
+    Route::get('semana/actual/{rutero}','OperacionesController@rutasSemanaActual');
+    Route::get('semana/pasada/{rutero}','OperacionesController@rutasSemanaPasada');
+    Route::get('semana/siguiente/{rutero}','OperacionesController@rutasSemanaSiguiente');
+    Route::get('dia/{rutero}/{dia}','OperacionesController@detalleRutasPorDia');
     Route::Get('detalleRuta/{id}','RutasController@detalleRuta');
 
 

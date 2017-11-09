@@ -163,7 +163,7 @@
                                 <td class="center"><span class="glyphicon glyphicon-ok"></span></td>
                             @elseif($cap->estado_mandato =="conReparo")
                                 <td class="center"><span class="glyphicon glyphicon-minus-sign"></span></td>
-                            @elseif($cap->estado_mandato =="rechazado"|| $cap->estado_mandato=="AgendamientoFallido")
+                            @elseif($cap->estado_mandato =="rechazado"|| $cap->estado_mandato=="AgendamientoFallido"|| $cap->estado_mandato=="retracta")
                                 <td center="center"><span class="glyphicon glyphicon-remove"></span></td>
                             @elseif($cap->estado_mandato =="")
                                 <td center="center"><span class="glyphicon "></span></td>

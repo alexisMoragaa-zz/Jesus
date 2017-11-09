@@ -21,7 +21,7 @@ class WelcomeController extends Controller
 	public function index()
 	{
 		$captaciones =CaptacionesExitosa::where('teleoperador','=',Auth::user()->id);
-		
+
 
 		if (Auth::User()->perfil == 1) {
 
@@ -29,13 +29,13 @@ class WelcomeController extends Controller
 
 		} elseif (Auth::User()->perfil == 2) {
 
-			return view('teo/teoHome',compact('captaciones'));
+			return redirect('teo/teoHome');
 
 		} elseif (Auth::User()->perfil == 3) {
 			return view('home');
 
 		} elseif (Auth::User()->perfil == 4) {
-			return view('home');
+			return redirect('/home');
 
 		} elseif (Auth::User()->perfil == 5) {
 			return view('home');

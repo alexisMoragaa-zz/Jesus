@@ -29,7 +29,7 @@ class OperacionesController extends Controller
         $hoy = Carbon::now()->format('d/m/Y');
         $teos = User::where('perfil', '=', 2)->get();
         $ruteros = User::where('perfil', '=', 5)->get();
-        $datos = CaptacionesExitosa::where('fecha_captacion','=',$hoy)->where('reagendar','=',"")->get();
+        $datos = CaptacionesExitosa::where('fecha_captacion','=',$hoy)->where('reagendar','=',"")->get()->sortByDesc('created_at');
         return view('operac/agendamiento', compact('datos', 'teos', 'ruteros'));
 
     }
@@ -80,15 +80,15 @@ class OperacionesController extends Controller
         $last_month = Carbon::now()->startOfMonth()->format('d/m/Y');
         if ($option == 1) {
 
-            $today = DB::table('captaciones_exitosas')->where('fecha_captacion', '=', $hoy)->get();
+            $today = DB::table('captaciones_exitosas')->where('fecha_captacion', '=', $hoy)->get()->sortByDesc('created_at');
             return Response::json($today);
 
         } elseif ($option == 2) {
 
-            $dias = DB::table('captaciones_exitosas')->whereBetween('fecha_captacion', [$last_week, $hoy])->get();
+            $dias = DB::table('captaciones_exitosas')->whereBetween('fecha_captacion', [$last_week, $hoy])->get()->sortByDesc('created_at');
             return Response::json($dias);
         } elseif ($option == 3) {
-            $captacion = DB::table('captaciones_exitosas')->whereBetween('fecha_captacion', [$last_month, $hoy])->get();
+            $captacion = DB::table('captaciones_exitosas')->whereBetween('fecha_captacion', [$last_month, $hoy])->get()->sortByDesc('created_at');
 
             return Response::json($captacion);
 
@@ -98,8 +98,8 @@ class OperacionesController extends Controller
 
     public function showDay1(Request $request)
     {
-        $teos = User::where('perfil', '=', 2)->get();
-        $ruteros = User::where('perfil', '=', 5)->get();
+        $teos = User::where('perfil', '=', 2)->get()->sortByDesc('created_at');
+        $ruteros = User::where('perfil', '=', 5)->get()->sortByDesc('created_at');
         $hoy = Carbon::now()->format('d/m/Y');
         $last_week = Carbon::now()->startOfWeek()->format('d/m/Y');
         $last_month = Carbon::now()->startOfMonth()->format('d/m/Y');
@@ -112,7 +112,7 @@ class OperacionesController extends Controller
 
        if ($dia == 1 and $teo != "" and $rutero != "") {
             $datos=CaptacionesExitosa::where('fecha_captacion', '=', $hoy)->where('teleoperador', '=', $teo)
-                ->where('rutero', '=', $rutero)->get();
+                ->where('rutero', '=', $rutero)->get()->sortByDesc('created_at');
 
 
           return view('operac/agendamiento', compact('datos','teos','ruteros'));
@@ -120,16 +120,17 @@ class OperacionesController extends Controller
         } elseif ($dia == 1 and $teo != "") {
 
             $datos =CaptacionesExitosa::where('fecha_captacion', '=', $hoy)->where('teleoperador', '=', $teo)
-                ->get();
+                ->get()->sortByDesc('created_at');
             return view('operac/agendamiento', compact('datos', 'teos', 'ruteros'));
 
         } elseif ($dia == 1 and $rutero != "") {
 
-            $datos = CaptacionesExitosa::where('fecha_captacion', '=', $hoy)->where('rutero', '=', $rutero)->get();
+            $datos = CaptacionesExitosa::where('fecha_captacion', '=', $hoy)->where('rutero', '=', $rutero)
+            ->get()->sortByDesc('created_at');
             return view('operac/agendamiento', compact('datos','teos','ruteros'));
 
         } elseif ($dia == 1) {
-           $datos=CaptacionesExitosa::where('fecha_captacion', '=', $hoy)->get();
+           $datos=CaptacionesExitosa::where('fecha_captacion', '=', $hoy)->get()->sortByDesc('created_at');
            return view('operac/agendamiento', compact('datos','teos','ruteros'));
         }
 /**Fin filtros dia actual*/
@@ -140,26 +141,26 @@ class OperacionesController extends Controller
 
           $datos = CaptacionesExitosa::whereBetween('fecha_captacion', [$last_week, $hoy])
                 ->where('teleoperador','=',$teo)
-                ->where('rutero','=',$rutero)->get();
+                ->where('rutero','=',$rutero)->get()->sortByDesc('created_at');
 
             return view('operac/agendamiento', compact('datos','teos','ruteros'));
 
         } elseif ($dia == 2 and $teo != "") {
 
             $datos = CaptacionesExitosa::whereBetween('fecha_captacion', [$last_week, $hoy])
-                ->where('teleoperador', '=', $teo)->get();
+                ->where('teleoperador', '=', $teo)->get()->sortByDesc('created_at');
             return view('operac/agendamiento', compact('datos','teos','ruteros'));
 
         } elseif ($dia == 2 and $rutero != "") {
 
             $datos = CaptacionesExitosa::whereBetween('fecha_captacion', [$last_week, $hoy])
-                ->where('rutero', '=', $rutero)->get();
+                ->where('rutero', '=', $rutero)->get()->sortByDesc('created_at');
             return view('operac/agendamiento', compact('datos','teos','ruteros'));
 
         } elseif ($dia == 2) {
 
 
-        $datos = CaptacionesExitosa::whereBetween('fecha_captacion',[$last_week,$hoy])->get();
+        $datos = CaptacionesExitosa::whereBetween('fecha_captacion',[$last_week,$hoy])->get()->sortByDesc('created_at');
 
 
             return view('operac/agendamiento', compact('datos','teos','ruteros'));
@@ -172,26 +173,26 @@ class OperacionesController extends Controller
         if ($dia == 3 and $teo != "" and $rutero != "") {
 
             $datos = CaptacionesExitosa::whereBetween('fecha_captacion', [$last_month, $hoy])
-                ->where('teleoperador', '=', $teo)->where('rutero', '=', $rutero)->get();
+                ->where('teleoperador', '=', $teo)->where('rutero', '=', $rutero)->get()->sortByDesc('created_at');
             return view('operac/agendamiento', compact('datos','teos','ruteros'));
 
         } elseif ($dia == 3 and $teo != "") {
 
             $datos = CaptacionesExitosa::whereBetween('fecha_captacion', [$last_month, $hoy])
-                ->where('teleoperador', '=', $teo)->get();
+                ->where('teleoperador', '=', $teo)->get()->sortByDesc('created_at');
             return view('operac/agendamiento', compact('datos','teos','ruteros'));
 
         } elseif ($dia == 3 and $rutero != "") {
 
             $datos = CaptacionesExitosa::whereBetween('fecha_captacion', [$last_month, $hoy])
-                ->where('rutero', '=', $rutero)->get();
+                ->where('rutero', '=', $rutero)->get()->sortByDesc('created_at');
             return view('operac/agendamiento', compact('datos','teos','ruteros'));
 
 
 
         } elseif ($dia == 3) {
 
-            $datos = CaptacionesExitosa::whereBetween('fecha_captacion', [$last_month, $hoy])->get();
+            $datos = CaptacionesExitosa::whereBetween('fecha_captacion', [$last_month, $hoy])->get()->sortByDesc('created_at');
 
             return view('operac/agendamiento', compact('datos','teos','ruteros'));
 
@@ -209,22 +210,22 @@ class OperacionesController extends Controller
         $dato = isset($_GET['dato']) ? $_GET['dato'] : $_POST['dato'];
 
         if ($opcion == 1) {
-            $data = DB::table('captaciones_exitosas')->where('nombre', '=', $dato)->get();
+            $data = DB::table('captaciones_exitosas')->where('nombre', '=', $dato)->get()->sortByDesc('created_at');
             return Response::json($data);
 
         } elseif ($opcion == 2) {
 
-            $data = DB::table('captaciones_exitosas')->where('apellido', '=', $dato)->get();
+            $data = DB::table('captaciones_exitosas')->where('apellido', '=', $dato)->get()->sortByDesc('created_at');
             return Response::json($data);
 
         } elseif ($opcion == 3) {
 
-            $data = DB::table('captaciones_exitosas')->where('rut', '=', $dato)->get();
+            $data = DB::table('captaciones_exitosas')->where('rut', '=', $dato)->get()->sortByDesc('created_at');
             return Response::json($data);
 
         } elseif ($opcion == 4) {
 
-            $data = DB::table('captaciones_exitosas')->where('fono_1', '=', $dato)->get();
+            $data = DB::table('captaciones_exitosas')->where('fono_1', '=', $dato)->get()->sortByDesc('created_at');
             return Response::json($data);
         }
 
@@ -326,7 +327,7 @@ class OperacionesController extends Controller
         $rutas =DB::table('captaciones_exitosas')->where('fecha_agendamiento','=',$hoy)->get();
         $ruteros = DB::table('users')->where('perfil','=',5)->get();
         $estado=DB::table('estado_rutas')->where('primer_agendamiento','!=','no aplica')->get();
-        $datos = DB::table('captaciones_exitosas')->where('id','=','1')->get();
+       //$datos = DB::table('captaciones_exitosas')->where('id','=','1')->get();
 
 
         return view("rutas/rutas", compact('rutas','ruteros','estado','url'));
@@ -556,7 +557,7 @@ class OperacionesController extends Controller
 
     public function rutasSemanaActual($rutero){
 
-  
+
 
         $diaLunes =Carbon::now()->startOfWeek()->format('Y-m-d');
         $diaMartes =Carbon::now()->startOfWeek()->addDay(1)->format('Y-m-d');
@@ -567,12 +568,12 @@ class OperacionesController extends Controller
         $diaDomingo =Carbon::now()->startOfWeek()->addDay(6)->format('Y-m-d');
 
         $lunes =CaptacionesExitosa::where('fecha_agendamiento','=',$diaLunes)->get();
-        $martes =CaptacionesExitosa::where('fecha_agendamiento','=',$diaMartes)->where('rutero','=',$rutero)->get();
-        $miercoles =CaptacionesExitosa::where('fecha_agendamiento','=',$diaMiercoles)->where('rutero','=',$rutero)->get();
-        $jueves =CaptacionesExitosa::where('fecha_agendamiento','=',$diaJueves)->where('rutero','=',$rutero)->get();
-        $viernes =CaptacionesExitosa::where('fecha_agendamiento','=',$diaViernes)->where('rutero','=',$rutero)->get();
-        $sabado =CaptacionesExitosa::where('fecha_agendamiento','=',$diaSabado)->where('rutero','=',$rutero)->get();
-        $domingo =CaptacionesExitosa::where('fecha_agendamiento','=',$diaDomingo)->where('rutero','=',$rutero)->get();
+        $martes =CaptacionesExitosa::where('fecha_agendamiento','=',$diaMartes)->where('rutero','=',$rutero)->orderBy('horario')->get();
+        $miercoles =CaptacionesExitosa::where('fecha_agendamiento','=',$diaMiercoles)->where('rutero','=',$rutero)->orderBy('horario')->get();
+        $jueves =CaptacionesExitosa::where('fecha_agendamiento','=',$diaJueves)->where('rutero','=',$rutero)->orderBy('horario')->get();
+        $viernes =CaptacionesExitosa::where('fecha_agendamiento','=',$diaViernes)->where('rutero','=',$rutero)->orderBy('horario')->get();
+        $sabado =CaptacionesExitosa::where('fecha_agendamiento','=',$diaSabado)->where('rutero','=',$rutero)->orderBy('horario')->get();
+        $domingo =CaptacionesExitosa::where('fecha_agendamiento','=',$diaDomingo)->where('rutero','=',$rutero)->orderBy('horario')->get();
 
 
         return view('operac.ruta',[
@@ -607,13 +608,13 @@ class OperacionesController extends Controller
       //dd($diaLunes." ".$diaMartes." ".$diaMiercoles." ".$diaJueves." ".$diaViernes." ".$diaSabado." ".$diaDomingo);
 
 
-        $lunes =CaptacionesExitosa::where('fecha_agendamiento','=',$diaLunes)->get();
-        $martes =CaptacionesExitosa::where('fecha_agendamiento','=',$diaMartes)->where('rutero','=',$rutero)->get();
-        $miercoles =CaptacionesExitosa::where('fecha_agendamiento','=',$diaMiercoles)->where('rutero','=',$rutero)->get();
-        $jueves =CaptacionesExitosa::where('fecha_agendamiento','=',$diaJueves)->where('rutero','=',$rutero)->get();
-        $viernes =CaptacionesExitosa::where('fecha_agendamiento','=',$diaViernes)->where('rutero','=',$rutero)->get();
-        $sabado =CaptacionesExitosa::where('fecha_agendamiento','=',$diaSabado)->where('rutero','=',$rutero)->get();
-        $domingo =CaptacionesExitosa::where('fecha_agendamiento','=',$diaDomingo)->where('rutero','=',$rutero)->get();
+        $lunes =CaptacionesExitosa::where('fecha_agendamiento','=',$diaLunes)->where('rutero','=',$rutero)->orderBy('horario')->get();
+        $martes =CaptacionesExitosa::where('fecha_agendamiento','=',$diaMartes)->where('rutero','=',$rutero)->orderBy('horario')->get();
+        $miercoles =CaptacionesExitosa::where('fecha_agendamiento','=',$diaMiercoles)->where('rutero','=',$rutero)->orderBy('horario')->get();
+        $jueves =CaptacionesExitosa::where('fecha_agendamiento','=',$diaJueves)->where('rutero','=',$rutero)->orderBy('horario')->get();
+        $viernes =CaptacionesExitosa::where('fecha_agendamiento','=',$diaViernes)->where('rutero','=',$rutero)->orderBy('horario')->get();
+        $sabado =CaptacionesExitosa::where('fecha_agendamiento','=',$diaSabado)->where('rutero','=',$rutero)->orderBy('horario')->get();
+        $domingo =CaptacionesExitosa::where('fecha_agendamiento','=',$diaDomingo)->where('rutero','=',$rutero)->orderBy('horario')->get();
 
 
                 return view('operac.ruta',[
@@ -648,13 +649,13 @@ class OperacionesController extends Controller
       //dd($diaLunes." ".$diaMartes." ".$diaMiercoles." ".$diaJueves." ".$diaViernes." ".$diaSabado." ".$diaDomingo);
 
 
-        $lunes =CaptacionesExitosa::where('fecha_agendamiento','=',$diaLunes)->get();
-        $martes =CaptacionesExitosa::where('fecha_agendamiento','=',$diaMartes)->where('rutero','=',$rutero)->get();
-        $miercoles =CaptacionesExitosa::where('fecha_agendamiento','=',$diaMiercoles)->where('rutero','=',$rutero)->get();
-        $jueves =CaptacionesExitosa::where('fecha_agendamiento','=',$diaJueves)->where('rutero','=',$rutero)->get();
-        $viernes =CaptacionesExitosa::where('fecha_agendamiento','=',$diaViernes)->where('rutero','=',$rutero)->get();
-        $sabado =CaptacionesExitosa::where('fecha_agendamiento','=',$diaSabado)->where('rutero','=',$rutero)->get();
-        $domingo =CaptacionesExitosa::where('fecha_agendamiento','=',$diaDomingo)->where('rutero','=',$rutero)->get();
+        $lunes =CaptacionesExitosa::where('fecha_agendamiento','=',$diaLunes)->where('rutero','=',$rutero)->orderBy('horario')->get();
+        $martes =CaptacionesExitosa::where('fecha_agendamiento','=',$diaMartes)->where('rutero','=',$rutero)->orderBy('horario')->get();
+        $miercoles =CaptacionesExitosa::where('fecha_agendamiento','=',$diaMiercoles)->where('rutero','=',$rutero)->orderBy('horario')->get();
+        $jueves =CaptacionesExitosa::where('fecha_agendamiento','=',$diaJueves)->where('rutero','=',$rutero)->orderBy('horario')->get();
+        $viernes =CaptacionesExitosa::where('fecha_agendamiento','=',$diaViernes)->where('rutero','=',$rutero)->orderBy('horario')->get();
+        $sabado =CaptacionesExitosa::where('fecha_agendamiento','=',$diaSabado)->where('rutero','=',$rutero)->orderBy('horario')->get();
+        $domingo =CaptacionesExitosa::where('fecha_agendamiento','=',$diaDomingo)->where('rutero','=',$rutero)->orderBy('horario')->get();
 
 
         return view('operac.ruta',[
@@ -679,7 +680,7 @@ class OperacionesController extends Controller
 
     public function detalleRutasPorDia($rutero, $dia){
 
-      $ruta= CaptacionesExitosa::where('rutero','=',$rutero)->where('fecha_agendamiento','=',$dia)->get();
+      $ruta= CaptacionesExitosa::where('rutero','=',$rutero)->where('fecha_agendamiento','=',$dia)->orderBy('horario')->get();
       return view('operac.detalleRutaPorDia',[
         'rutero'=>$rutero,
         'dia'=>$dia,
