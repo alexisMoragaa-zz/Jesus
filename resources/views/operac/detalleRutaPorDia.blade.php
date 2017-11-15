@@ -30,17 +30,17 @@
         <tbody>
           @foreach ($ruta as $ruta)
             <tr>
-              <td>{{$ruta->nombre}} {{$ruta->apellido}}</td>
-              <td>{{$ruta->fono_1}}</td>
-              <td>{{$ruta->rut}}</td>
-              <td>{{$ruta->direccion}}</td>
-              <td>{{$ruta->comuna}}</td>
-              <td>{{$ruta->horario}}</td>
-              <td>{{$ruta->estadoRuta->estado}}</td>
+              <td>{{$ruta->cap->nombre}} {{$ruta->apellido}}</td>
+              <td>{{$ruta->cap->fono_1}}</td>
+              <td>{{$ruta->cap->rut}}</td>
+              <td>{{$ruta->cap->direccion}}</td>
+              <td>{{$ruta->cap->comuna}}</td>
+              <td>{{$ruta->cap->horario}}</td>
+              <td>{{$ruta->Ruta->estado}}</td>
               @if(Auth::User()->perfil==4)
-                  <td><a href="{{url('/ope/detalleRuta',$ruta->id)}}">Ver Mas</a></td>
+                  <td><a href="{{url('/ope/detalleRuta',$ruta->cap->id)}}">Ver Mas</a></td>
               @elseif(Auth::User()->perfil==5)
-                    <td><a href="{{url('/rutas/detalleRuta',$ruta->id)}}">Ver Mas</a></td>
+                    <td><a href="{{url('/rutas/detalleRuta',$ruta->cap->id)}}">Ver Mas</a></td>
               @endif
 
             </tr>

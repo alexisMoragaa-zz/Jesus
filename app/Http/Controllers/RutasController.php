@@ -19,8 +19,13 @@ class RutasController extends Controller {
 		$cap =CaptacionesExitosa::where('rutero','=',Auth::user()->name)->where('estado_captacion','=','OK')
 		->where('estado_mandato','=',"")
 			//->where('fecha_agendamiento','=',$hoy)
-			->orderBy('horario')->get();
+			->orderBy('horario')
+			->get();
 				return view('rutas/rutasDiarias',compact('cap'));
+
+	/**Tomatos los agendamientos correspondiemtes al dia actual, lo filtramos por el rutero logeado
+	*por estado de captacion ok, lo ordenamos pro horario y lo retornamos a la vista
+	*/
 	}
 
 
@@ -30,8 +35,11 @@ class RutasController extends Controller {
 		return view('');
 	}
 
+
+
 	public function store(Request $request)
 	{
+
 		$hoy = Carbon::now()->format('Y-m-d');
 		$estado =$request->Status;
 		$motivo =$request->Motivo;
@@ -50,8 +58,6 @@ class RutasController extends Controller {
 
 			]);
 
-
-
     if($estado=="noRetirado"){
 			if($motivo !="retracta"){
 				$reagendar->reagendar=1;
@@ -62,16 +68,17 @@ class RutasController extends Controller {
 				$reagendar->save();
 			}
 		}
+
 		$ruta =informeRuta::where('id_captacion','=',$request->id)->where('num_retiro','=',1)->get()->first();
 			$ruta->estado =$estado;
 			$ruta->save();
 
 
-	if(Auth::user()->perfil==5){
-		return redirect(route('rutas.rutas.index'));
-	}else if(Auth::user()->perfil==1){
-		return redirect(route('admin.rutas.index'));
-	}
+			if(Auth::user()->perfil==5){
+				return redirect(route('rutas.rutas.index'));
+			}else if(Auth::user()->perfil==1){
+				return redirect(route('admin.rutas.index'));
+			}
 
 	}
 

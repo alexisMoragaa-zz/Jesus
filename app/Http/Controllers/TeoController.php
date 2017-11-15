@@ -297,7 +297,6 @@ $id = $request->id_captacion;
                 'estado' => 'cu+',
                 $name_status=>$t_retiro
 
-
             ]);
     /**Tercera Parte*/
         if ($data['tipo_retiro'] == "Acepta Agendamiento") {
@@ -313,7 +312,10 @@ $id = $request->id_captacion;
               'id_ruta'=>$id,
               'fecha_agendamiento'=>$data['fecha_agendamiento'],
               'estado'=>'visita pendiente',
+              'comuna'=>$data['comuna'],
+              'horario'=>$data['jornada'],
               'num_retiro'=>1,
+              'rutero'=>$data['rutero'],
             ]);
 
 
@@ -435,9 +437,20 @@ $id = $request->id_captacion;
 
                         $visit_capta->fecha_agendamiento=$date;
                         $visit_capta->horario =$time;
-                        $visit_capta->reagendar =2;
+                        $visit_capta->reagendar =3;
                         $visit_capta->estado_captacion="";
                         $visit_capta->save();
+
+                        informeRuta::create([
+                          'id_captacion'=>$request->id_captacion,
+                          'id_ruta'=>$request->id_captacion,
+                          'fecha_agendamiento'=>$date,
+                          'estado'=>'visita pendiente',
+                          'num_retiro'=>2,
+                          'rutero'=>$data['rutero'],
+                          'comuna'=>$data['comuna'],
+                          'horario'=>$data['jornada'],
+                        ]);
 
                     }
                 }elseif($visit->estado_primer_agendamiento=="noRetirado"){
@@ -452,6 +465,17 @@ $id = $request->id_captacion;
                         $visit_capta->reagendar =2;
                         $visit_capta->estado_captacion="";
                        $visit_capta->save();
+
+                       informeRuta::create([
+                         'id_captacion'=>$request->id_captacion,
+                         'id_ruta'=>$request->id_captacion,
+                         'fecha_agendamiento'=>$date,
+                         'estado'=>'visita pendiente',
+                         'num_retiro'=>2,
+                         'rutero'=>$data['rutero'],
+                         'comuna'=>$data['comuna'],
+                         'horario'=>$data['jornada'],
+                       ]);
 
                     }
                 }
@@ -550,6 +574,9 @@ $id = $request->id_captacion;
                   'fecha_agendamiento'=>$date,
                   'estado'=>'visita pendiente',
                   'num_retiro'=>3,
+                  'rutero'=>$data['rutero'],
+                  'comuna'=>$data['comuna'],
+                  'horario'=>$data['jornada'],
                 ]);
 
                 if(Auth::user()->perfil==1){
@@ -577,6 +604,9 @@ $id = $request->id_captacion;
                   'fecha_agendamiento'=>$date,
                   'estado'=>'visita pendiente',
                   'num_retiro'=>2,
+                  'rutero'=>$data['rutero'],
+                  'comuna'=>$data['comuna'],
+                  'horario'=>$data['jornada'],
                 ]);
                 if(Auth::user()->perfil==1){
                     return redirect('/admin/PorReagendar');
@@ -598,6 +628,19 @@ $id = $request->id_captacion;
 
     $fallido = CaptacionesExitosa::find($id);
     return view('teo.detalleAgendamientosFallidos',['reage'=>$fallido]);
+
+  }
+
+  public function validatePassCode(){
+        $passCodeUser= $_GET['password'];
+        $passCodeBd= maxCap::find('1');
+      // #  dd("userPassInsert ".$passCodeUser." BDpasscodeStorage ".$passCodeBd->passcode);
+
+        if($passCodeUser == $passCodeBd->passcode){
+          return Response::json("success");
+        }else{
+          return Response::json("fail");
+        }
 
   }
 

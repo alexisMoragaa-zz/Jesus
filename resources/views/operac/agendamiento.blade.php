@@ -3,7 +3,14 @@
 
     <style>
 
-
+      #code{
+        float:right;
+        margin-top: -7em;
+        margin-bottom: 7em;
+      }
+      .danger{
+        border-color: red;
+      }
 
     </style>
     <script src="http://code.jquery.com/jquery-migrate-1.0.0.js"></script>
@@ -77,23 +84,42 @@
             });
 
 
-
         });
     </script>
+    <div class=" contenedor1" id="con">
+      <div class="row">
+        {!!Form::open(['url'=>['ope/pc'],'method'=>'post'])!!}
+
+        <div class="col-md-4 input-group" id="code">
+          @if($code =="fail")
+            <input type="password" class="form-control danger" placeholder="Las Contraseñas no Conciden" id="pass" name="pass">
+
+          @elseif($code =="")
+              <input type="password" class="form-control" placeholder="Ingrese su password Actual" id="pass" name="pass">
+          @endif
+
+          <span class="input-group-btn">
+            <input type="submit" class="btn btn-warning " value="Genarar Codigo" id="getpass">
+          </span>
+        </div>
+        {!!Form::close()!!}
+
     @if(Auth::user()->perfil==1)
-        {!! Form::open(['url'=>['admin/showDay1'],'method'=>'post']) !!}
+        {!! Form::open(['url'=>['admin/showDay1'],'method'=>'POST']) !!}
     @elseif(Auth::user()->perfil==4)
         {!! Form::open(['url'=>['ope/showDay1'],'method'=>'POST']) !!}
     @endif
-    <div class=" contenedor1" id="con">
 
-        <div class="col-md-2">
-            <label for="" class="control-label">Tipo de Vista</label>
-            <select name="tipo_vista" id="vista" class="form-control">
-                <option value="1">Simple</option>
-                <option value="2">Detallada</option>
-            </select>
-        </div>
+
+  </div>
+  <div class="row">
+      <div class="col-md-2">
+          <label for="" class="control-label">Tipo de Vista</label>
+          <select name="tipo_vista" id="vista" class="form-control">
+              <option value="1">Simple</option>
+              <option value="2">Detallada</option>
+          </select>
+      </div>
 
         <div class="col-md-2 busqueda">
             <label for="" class="control-label">Filtrar Por</label>
@@ -152,7 +178,9 @@
             <input type="button" class="btn btn1 btn-info mas+" value="Mas +" id="mas" >
 
         </div>
+  </div>
 {!! Form::close() !!}
+
         <div class="col-md-12" id="espacio"> </div>
 
 

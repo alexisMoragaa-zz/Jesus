@@ -35,7 +35,7 @@ class WelcomeController extends Controller
 			return view('home');
 
 		} elseif (Auth::User()->perfil == 4) {
-			return redirect('/home');
+			return redirect('ope/ope');
 
 		} elseif (Auth::User()->perfil == 5) {
 			return view('home');

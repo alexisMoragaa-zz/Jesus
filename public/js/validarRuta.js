@@ -7,7 +7,7 @@ $(document).ready(function(){
     $("#comuna").on('change', function (e) {
         console.log(e);
         var rutero_id = e.target.value;
-        $.get('/admin/ajax-rutero?ruteroid=' + rutero_id, function (data) {
+        $.get('/teo/ajax-rutero?ruteroid=' + rutero_id, function (data) {
             console.log(data);
             $.each(data, function (index, obj) {
 
@@ -28,7 +28,7 @@ $(document).ready(function(){
         $("#jornada").val("");
         info={fecha:$("#f_agendamiento").val(),rutero:$("#rutero").val()} //creamos un literal con la informacion que enviaremos al servidor
 
-        $.get('/admin/dispRutas',info,procDatos); //enviamos la informacion del literal y asignam,os la funcion encargada de procesar la ifnormacion con el metodo get
+        $.get('/teo/dispRutas',info,procDatos); //enviamos la informacion del literal y asignam,os la funcion encargada de procesar la ifnormacion con el metodo get
         console.log(info);
         /**limpiamos la tabla que usaremos para mostrar la informacion
          * asignamos la variable fila segun el largo del array que tiene la informacion
@@ -99,4 +99,3 @@ $(document).ready(function(){
         }/**Fin ProcDatos*/
         });
     });/**Fin Funcion Ver  las Rutas*/
-    

@@ -12,7 +12,7 @@
             $(".edition").hide();
             $("#btn-info").click(function(e){
                 var rutero_id =$("#comuna").val();
-                $.get('/admin/ajax-rutero?ruteroid=' + rutero_id, function (data) {
+                $.get('/teo/ajax-rutero?ruteroid=' + rutero_id, function (data) {
                     console.log(data);
                     $.each(data, function (index, obj) {
 

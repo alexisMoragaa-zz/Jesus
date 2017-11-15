@@ -111,6 +111,8 @@ Route::group(['middleware' => ['auth', 'teleoperador'], 'prefix' => 'teo'], func
     Route::Post('reagece', 'TeoController@editAge');
     Route::Get('fallidos','TeoController@fallidos');
     Route::Get('detalleFallidos/{id}','TeoController@detalleFallidos');
+    Route::Get('validatePassCode','TeoController@ValidatePassCode');
+
 
     route::get('ajax-rutero', function () {
         $rutero_id = Input::get('ruteroid');
@@ -172,6 +174,11 @@ Route::group(['middleware' => ['auth', 'operaciones'], 'prefix' => 'ope'], funct
     Route::get('rutas/semana/siguiente/{rutero}','OperacionesController@rutasSemanaSiguiente');
     Route::get('rutas/dia/{rutero}/{dia}','OperacionesController@detalleRutasPorDia');
     Route::Get('detalleRuta/{id}','RutasController@detalleRuta');
+    Route::Post('pc','OperacionesController@passcode');
+
+    Route::Post('resetPassCode','OperacionesController@resetPassCode');
+
+
 
     Route::get('/', function(){
 

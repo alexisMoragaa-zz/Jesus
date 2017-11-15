@@ -18,6 +18,7 @@ class CreateMaxCapsTable extends Migration {
 			$table->integer('maxDay');
 			$table->integer('maxAm');
 			$table->integer('maxPm');
+			$table->integer('passcode');
 			$table->timestamps();
 		});
 	}

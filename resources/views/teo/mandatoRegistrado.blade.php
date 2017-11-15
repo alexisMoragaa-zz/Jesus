@@ -21,6 +21,11 @@
         .btn2{
             margin-top: -60px;
         }
+        #code{
+          float:right;
+          margin-top: -5em;
+          margin-bottom: 7em;
+        }
     </style>
     <script>
         $(document).ready(function () {
@@ -234,15 +239,42 @@
                     }
                 }/**Fin ProcDatos*/
             });/**Fin Funcion para validar Rutas*/
+
+      $("#getpass").click(function(){
+             pass={password:$("#pass").val()}
+
+            $.get('/teo/validatePassCode',pass,prodata);
+            console.log(pass);
+            function prodata(data){
+              console.log(data);
+              if(data == "success"){
+                alert("el codigo es valido");
+              }else{
+                alert("el codigo es no es valido");
+              }
+            }
+
+      });
+
         });/**fin document.ready*/
     </script>
 
     <link href="{{ asset('/css/style.css') }}" rel="stylesheet">
 
     <div class="container">
+
+      <div class="row">
+        <div class="col-md-4 input-group" id="code">
+          <input type="password" class="form-control" placeholder="Ingrese PassCode" id="pass" name="pass">
+          <span class="input-group-btn">
+            <input type="submit" class="btn btn-warning " value="Ingresar PassCode" id="getpass">
+          </span>
+        </div>
+      </row>
+
 @if($function=="nada")
         <div class="col-md-12">
-            <div class="col-md-1" style="padding-right: 80%" >
+            <div class="col-md-1" style="padding-right: 80%">
                 <input type="button" value="Cancelar" class="btn btn1 btn-danger" id="btn-cancel">
             </div>
             <div class="col-md-2">
@@ -262,11 +294,11 @@
             @endif
                 <label for="status" class="control-label">Estado Llamado</label>
                 <select name="call_status" id="status" class="form-control">
-                    
+
                     <option value="">selecione estado</option>
                     @foreach($status as $sta)
                         <option value="{{$sta->Estado}}">{{$sta->Estado}}</option>
-                    @endforeach    
+                    @endforeach
                 </select>
 
                 <label for="observation" class="control-label">Observacion</label>
@@ -351,7 +383,7 @@
                             <option value="">-- Seleccione --</option>
                             @foreach($estado as $est)
                                 <option value="{{$est->Estado}}">{{$est->Estado}}</option>
-                            @endforeach    
+                            @endforeach
                         </select>
                     </div>
                 </div>

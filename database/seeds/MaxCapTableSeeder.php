@@ -13,6 +13,7 @@ class MaxCapTableSeeder extends Seeder
             'maxDay'=>'8',
             'maxAm'=>'4',
             'maxPm'=>'4',
+            'passcode'=>"",
 
         ));
 

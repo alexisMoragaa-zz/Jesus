@@ -48,9 +48,9 @@
               <tbody>
                 @foreach ($lunes as $lun)
                   <tr>
-                    <td>{{$lun->nombre}}</td>
-                    <td>{{$lun->comuna}}</td>
-                    <td>{{$lun->horario}}</td>
+                    <td>{{$lun->cap->nombre}}</td>
+                    <td>{{$lun->cap->comuna}}</td>
+                    <td>{{$lun->cap->horario}}</td>
                   </tr>
                 @endforeach
               </tbody>
@@ -75,9 +75,9 @@
           <tbody>
             @foreach ($martes as $mar)
               <tr>
-                <td>{{$mar->nombre}}</td>
-                <td>{{$mar->comuna}}</td>
-                <td>{{$mar->horario}}</td>
+                <td>{{$mar->cap->nombre}}</td>
+                <td>{{$mar->cap->comuna}}</td>
+                <td>{{$mar->cap->horario}}</td>
               </tr>
             @endforeach
           </tbody>
@@ -101,9 +101,9 @@
             <tbody>
               @foreach ($miercoles as $mier)
                 <tr>
-                  <td>{{$mier->nombre}}</td>
-                  <td>{{$mier->comuna}}</td>
-                  <td>{{$mier->horario}}</td>
+                  <td>{{$mier->cap->nombre}}</td>
+                  <td>{{$mier->cap->comuna}}</td>
+                  <td>{{$mier->cap->horario}}</td>
                 </tr>
               @endforeach
             </tbody>
@@ -158,9 +158,9 @@
                 <tbody>
                   @foreach ($viernes as $vier)
                     <tr>
-                      <td>{{$vier->nombre}}</td>
-                      <td>{{$vier->comuna}}</td>
-                      <td>{{$vier->horario}}</td>
+                      <td>{{$vier->cap->nombre}}</td>
+                      <td>{{$vier->cap->comuna}}</td>
+                      <td>{{$vier->cap->horario}}</td>
                     </tr>
                   @endforeach
                 </tbody>
@@ -185,9 +185,9 @@
                   <tbody>
                     @foreach ($sabado as $sab)
                       <tr>
-                        <td id="sab">{{$sab->nombre}}</td>
-                        <td>{{$sab->comuna}}</td>
-                        <td>{{$sab->horario}}</td>
+                        <td id="sab">{{$sab->cap->nombre}}</td>
+                        <td>{{$sab->cap->comuna}}</td>
+                        <td>{{$sab->cap->horario}}</td>
                       </tr>
                     @endforeach
                   </tbody>
@@ -215,9 +215,9 @@
                     <tbody>
                       @foreach ($domingo as $dom)
                         <tr>
-                          <td id="dom">{{$dom->nombre}}</td>
-                          <td>{{$dom->comuna}}</td>
-                          <td>{{$dom->horario}}</td>
+                          <td id="dom">{{$dom->cap->nombre}}</td>
+                          <td>{{$dom->cap->comuna}}</td>
+                          <td>{{$dom->cap->horario}}</td>
                         </tr>
                       @endforeach
                     </tbody>
