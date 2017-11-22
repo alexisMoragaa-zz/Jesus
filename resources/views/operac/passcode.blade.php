@@ -3,7 +3,7 @@
 
 <script>
   $(document).ready(function(){
-  var cont = 31;
+  var cont = 45;
   timer = setInterval(function(){
     cont--;
     $("#contador").text(cont);

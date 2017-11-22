@@ -22,7 +22,7 @@ class AdminController extends Controller {
 	{
 
 		$usuarios = User::all()->sortByDesc('created_at');
-
+			dd($usuarios);
 		return view('admin/adminUser',compact('usuarios'));
 
 /** 1 */
@@ -33,7 +33,7 @@ class AdminController extends Controller {
 	{
 
 			return view('admin/registrar');
-		
+
 	}
 
 
@@ -106,7 +106,7 @@ class AdminController extends Controller {
 	public function show($id)
 	{
 	}
- 
+
 	public function edit($id)
 	{
 		$user = User::findOrFail($id);
@@ -252,7 +252,7 @@ class AdminController extends Controller {
 			$update->viernes=0;
 		}
 
-		
+
 		$update->rutero=$rutero;
 
 		$update->save();

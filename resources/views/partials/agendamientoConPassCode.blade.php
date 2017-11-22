@@ -29,37 +29,19 @@
 <script src="{{asset('js/validarAgendamiento.js')}}"></script>
 
 <div class="container">
-  {{-- Boton PassCode --}}
-    <div class="row">
-      {!!Form::open(['url'=>['teo/validatePassCode'],'method'=>'Post'])!!}
-        <div class="col-md-4 input-group" id="code">
-            <input type="password" class="form-control" placeholder="Ingrese PassCode" id="pass" name="pass">
-            <span class="input-group-btn">
-              <input type="submit" class="btn btn-warning " value="Ingresar PassCode" id="getpass">
-            </span>
-        </div>
-        <input type="hidden" value="{{$capta->id}}" name="id">
-        {!!Form::close()!!}
-      </div>
-  {{-- /Boton PassCode --}}
 
-
-  {{-- botones cancelar y disponivilidad de ruta --}}
-      @if($function=="nada")
-         {{-- si la variale $function enviada desde el controlador es "nada" muestra
-         los botones cancelar, y disponivbilidad de rutas --}}
         <div class="col-sm-12">
-            <div class="col-md-1" style="padding-right: 80%">
+            <div class="col-md-3" style="float:left">
                 <input type="button" value="Cancelar" class="btn btn1 btn-danger" id="btn-cancel">
             </div>
-            <div class="col-md-2">
+            <div class="col-md-6">
+              <h3>Estas Agendando con Validacion Reducida</h3>
+            </div>
+            <div class="col-md-3" style="float:right">
                 <input type="button" class="btn btn1 btn-info" value="Ver Disponivilidad Rutas" disabled id="btn_rutas">
             </div>
         </div>
-      @else {{-- si la funcion retorna algo diferente a "nada" la captacion esta en edicion   y muestra
-     el estado de captacion anterior, esto ocurre cuando operaciones   rechaza una captacion por x moitivo--}}
-        <h3 style="text-align:center; color:red">{{$capta->motivo_cap}}</h3>
-      @endif
+
   {{-- /botones cancelar y disponivilidad de ruta --}}
 
   {{-- Cancelar Agendamioento --}}
@@ -127,12 +109,10 @@
 <div class="container">
       <div class="panel panel-default">
         <div class="panel-body">
-          <form class="form-horizontal formulario" role="form" id="sendd" method="POST" action="
-           @if($function=="nada")
+          <form class="form-horizontal formularioConPassCode" role="form" id="senddPassCode" method="POST" action="
+
                 @if(Auth::user()->perfil==1){{ url('admin/agregado')}}@elseif(Auth::user()->perfil==2){{ url('teo/agregado')}}@endif ">
-            @elseif($function=="editar")
-                @if(Auth::user()->perfil==1){{ url('admin/editCapPost') }}@elseif(Auth::user()->perfil==2){{ url('teo/editCapPost')}}@endif ">
-            @endif
+
               <div class="">
                 <input type="hidden" name="_token" value="{{ csrf_token() }}">
                 <input type="hidden" class="form-control" name="fundacion" value="{{$capta->nom_fundacion}}" id="fundacion">
@@ -153,10 +133,7 @@
                     <label class=" control-label">Tipo Retiro</label>
                     <div class="">
                       <select name="tipo_retiro" class="form-control" id="tipo_retiro">
-                          @if($function=="editar")
-                              <option value="{{$capta->tipo_retiro}}">{{$capta->tipo_retiro}}</option>
-                          @endif
-                          <option value="">-- Seleccione --</option>
+                        <option value="">-- Seleccione --</option>
                           @foreach($estado as $est)
                               <option value="{{$est->Estado}}">{{$est->Estado}}</option>
                           @endforeach
@@ -167,10 +144,7 @@
                   <div class="col-md-3">
                     <label class=" control-label">Comuna</label>
                       <select name="comuna" id="comuna" class="form-control">
-                          @if($function=="editar")
-                            <option value="{{$capta->comuna}}">{{$capta->comuna}}</option>
-                          @endif
-                            <option value="">-- Seleccione --</option>
+                          <option value="">-- Seleccione --</option>
                           @foreach($comunas as $comuna)
                             <option value="{{$comuna->comuna}}">{{$comuna->comuna}}</option>
                           @endforeach
@@ -187,9 +161,6 @@
                   <div class="col-md-3">
                     <label class="control-label">Horario Retiro</label>
                       <select name="jornada" class="form-control" id="jornada">
-                          @if($function=="editar")
-                            <option value="{{$capta->jornada}}">{{$capta->jornada}}</option>
-                          @endif
                           <option value="">--Seleccione--</option>
                           <option value="AM">AM</option>
                           <option value="PM">PM</option>
@@ -267,9 +238,6 @@
                         <div class="col-md-4">
                           <label class="control-label">Forma Pago</label>
                           <select name="forma_pago" class="form-control" id="f_pago">
-                            @if($function=="editar")
-                              <option value="{{$capta->forma_pago}}">{{$capta->forma_pago}}</option>
-                            @endif
                             <option value="">-- Seleccione --</option>
                             @foreach($f_pago as $pago)
                               <option value="{{$pago->Estado}}">{{$pago->Estado}}</option>
@@ -280,13 +248,9 @@
                     </div>
                     <div class="row">
                       <div class="col-md-12">
-                        @if($function==="nada")
                             <button type="submit" class="btn btn2 btn-success form-control send_data" id="enviar">
                               Ingresar Agendamiento
                             </button>
-                         @elseif($function=="editar")
-                            <input type="submit" class="btn btn2 btn-warning form-control" id="enviar" value=" Editar Agendamiento">
-                         @endif
                       </div>
                     </div>
                 </div>

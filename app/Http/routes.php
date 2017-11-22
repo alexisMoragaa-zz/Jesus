@@ -111,7 +111,7 @@ Route::group(['middleware' => ['auth', 'teleoperador'], 'prefix' => 'teo'], func
     Route::Post('reagece', 'TeoController@editAge');
     Route::Get('fallidos','TeoController@fallidos');
     Route::Get('detalleFallidos/{id}','TeoController@detalleFallidos');
-    Route::Get('validatePassCode','TeoController@ValidatePassCode');
+    Route::Post('validatePassCode','TeoController@ValidatePassCode');
 
 
     route::get('ajax-rutero', function () {

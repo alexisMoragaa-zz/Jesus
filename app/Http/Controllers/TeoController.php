@@ -21,11 +21,8 @@ class TeoController extends Controller
 
     public function home()
     {
-
         $captaciones = CaptacionesExitosa::where('teleoperador','=',Auth::User()->id)->get()->sortByDesc('created_at');
-
         return view('teo/teoHome', compact('captaciones'));
-
     }
 
     public function index()
@@ -38,9 +35,7 @@ class TeoController extends Controller
             ->where('campana', '=', $dato)->where('f_ultimo_llamado', '!=', $date)->where('estado', '!=', 'cu-')->where('estado', '!=', 'cu+')->where('estado_registro', '=', 0)
             ->where('f_ultimo_llamado', '!=', $date)->first();
 
-
         if (empty($cap)) {
-
             return view('teo/teoError');
         }
 
@@ -49,19 +44,13 @@ class TeoController extends Controller
             ->update([
                 'estado_registro' => 1
             ]);
-
         return view('teo/teoin', compact('cap', 'status'));
-
     }
-
 
     public function show($id)
     {
-
         $detalle =CaptacionesExitosa::where('id','=',$id)->get();
-
         return view('teo/detalle', compact('detalle'));
-
     }
 
     public function capFilter(Request $request){
@@ -146,56 +135,46 @@ class TeoController extends Controller
         }elseif (Auth::user()->perfil==2){
             return redirect()->route('teo.call.index');
         }
-
-
-
     }
 
     public function addStatusCapAjax(){
 
         $estado = $_POST['call_status'];
         $id =$_POST['id_captacion'];
-
         $llamado1 = captaciones::where('id', '=', $id)->pluck('primer_llamado');
         $llamado2 = captaciones::where('id', '=', $id)->pluck('segundo_llamado');
 
-        if ($llamado1 == null) {
-
+        if ($llamado1 == null)
+        {
             $name_status = 'estado_llamada1';
 
-
-        } elseif ($llamado2 == null) {
+        } elseif ($llamado2 == null)
+        {
             $llamado = 'segundo_llamado';
             $name_status = 'estado_llamada2';
-
-
-        } else {
+        } else
+        {
             $llamado = 'tercer_llamado';
             $name_status = 'estado_llamada3';
-
         }
 
         DB::table('captaciones')
             ->where('id', '=', $id)
-            ->update([
+            ->update(
+              [
                 'estado_registro' => 0,
                 'estado' => 'cu+',
                 $name_status=>$estado
-
-
-            ]);
+              ]);
 
         return Response::json('exito');
-
     }
+
     public function create($id, $estado)
     {
-
-
         $status = estado::where('modulo', '=', 'llamado')->get();
         $estado = estado::where('modulo','=','agendamiento')->get();
         $f_pago = estado::where('modulo','=','pago')->get();
-
         $capta = captaciones::findOrFail($id);
         $minmax =maxCap::find(1);
 
@@ -205,17 +184,15 @@ class TeoController extends Controller
         return view('teo/mandatoRegistrado', compact('capta', 'comunas','status','function','estado','f_pago','minmax'));
     }
 
-
     public function store(Request $request)
-    {
-        /**Primera parte*/
+    {   /**Primera parte*/
+
         $data = $request->all();
         $date = Carbon::now()->format('d/m/Y');
-
-
         $comunas=comunaRetiro::where('comuna','=',$request->comuna)->get()->first();
         $ciudad =$comunas->ciudad;
         $region =$comunas->region;
+
         if($request->tipo_retiro=="Acepta Grabacion"){
 
             CaptacionesExitosa::create([
@@ -270,12 +247,11 @@ class TeoController extends Controller
                 'observaciones' => $data['observaciones'],
                 'forma_pago' => $data['forma_pago'],
                 'cuenta_movistar' => $data['c_movistar'],
-
             ]);
         }
-
         /**Segunda Parte*/
-$id = $request->id_captacion;
+
+        $id = $request->id_captacion;
         $llamado1 = captaciones::where('id', '=', $id)->pluck('primer_llamado');
         $llamado2 = captaciones::where('id', '=', $id)->pluck('segundo_llamado');
 
@@ -289,15 +265,14 @@ $id = $request->id_captacion;
 
         $t_retiro=$request->tipo_retiro;
 
-
         DB::table('captaciones')
             ->where('id', '=', $id)
-            ->update([
+            ->update(
+              [
                 'estado_registro' => 0,
                 'estado' => 'cu+',
                 $name_status=>$t_retiro
-
-            ]);
+              ]);
     /**Tercera Parte*/
         if ($data['tipo_retiro'] == "Acepta Agendamiento") {
 
@@ -318,7 +293,6 @@ $id = $request->id_captacion;
               'rutero'=>$data['rutero'],
             ]);
 
-
         }else{
 
             $id =DB::table('estado_rutas')->insertGetId([
@@ -327,7 +301,6 @@ $id = $request->id_captacion;
             ]);
         }
 
-
          if(Auth::user()->perfil==1){
             return redirect(url('admin/teoHome'));
          }elseif (Auth::user()->perfil==2){
@@ -335,14 +308,11 @@ $id = $request->id_captacion;
          }
     }
 
-
     public function editar($id)
     {
-
         $capta = captaciones::findOrFail($id);
         return view('teo/modificar', compact('capta'));
     }
-
 
     public function actualizar(Request $request, $id)
     {
@@ -378,10 +348,7 @@ $id = $request->id_captacion;
             return redirect(url('teo/teoHome'));
         }
     }
-    public function destroy($id)
-    {
-        //
-    }
+
     public function editCap($id){
 
         $function="editar";
@@ -394,7 +361,6 @@ $id = $request->id_captacion;
         $capta = captacionesExitosa::findOrFail($id);
 
         return view('teo/mandatoRegistrado', compact('capta', 'comunas','status','function','estado','f_pago','minmax'));
-
     }
 
     public function editCapPost(Request $request){
@@ -427,7 +393,6 @@ $id = $request->id_captacion;
                 $visit = estadoRuta::find($request->id_captacion);
                 $visit_capta=CaptacionesExitosa::find($request->id_captacion);
 
-
                 if($visit->estado_segundo_agendamiento == "noRetirado"){
                     if($visit->estado_tercer_agendamiento==""){
 
@@ -451,7 +416,6 @@ $id = $request->id_captacion;
                           'comuna'=>$data['comuna'],
                           'horario'=>$data['jornada'],
                         ]);
-
                     }
                 }elseif($visit->estado_primer_agendamiento=="noRetirado"){
                     if($visit->estado_segundo_agendamiento==""){
@@ -459,7 +423,6 @@ $id = $request->id_captacion;
                         $visit->segundo_agendamiento = $date;
                         $visit->estado="";
                         $visit->save();
-
                         $visit_capta->fecha_agendamiento=$date;
                         $visit_capta->horario =$time;
                         $visit_capta->reagendar =2;
@@ -489,26 +452,23 @@ $id = $request->id_captacion;
         }elseif (Auth::user()->perfil==2){
             return redirect(url('teo/teoHome'));
         }
-
     }
 
-    public function dispRutas(){
+    public function dispRutas()
+    {
         $rutero= $_GET['rutero'];
         $date =$_GET['fecha'];
-
 
         $info = CaptacionesExitosa::where('fecha_agendamiento','=',$date)
                                     ->where('rutero','=',$rutero)
                                     ->where('estado_captacion','!=','rechazada')->get();
 
         return Response::json($info);
-
     }
 
-    public function PorReagendar(){
-
+    public function PorReagendar()
+    {
         $porReagendar = CaptacionesExitosa::where('reagendar','=',1)->where('teleoperador','=',Auth::User()->id)->get();
-
         return view('teo/porReagendar',['reage'=>$porReagendar]);
     }
 
@@ -552,7 +512,6 @@ $id = $request->id_captacion;
         $time =$request->horario;
 
         $visit = estadoRuta::find($request->id_captacion);
-
         $visit_capta=CaptacionesExitosa::find($request->id_captacion);
 
         if($visit->estado_segundo_agendamiento == "noRetirado"){
@@ -617,32 +576,49 @@ $id = $request->id_captacion;
         }
   }
 
-  public function fallidos(){
-
+  public function fallidos()
+  {
     $fallidos = CaptacionesExitosa::where('estado_mandato','=','AgendamientoFallido')->get();
-
     return view('teo.fallidos',['fallidos'=>$fallidos,]);
   }
 
-  public function detalleFallidos($id){
-
+  public function detalleFallidos($id)
+  {
     $fallido = CaptacionesExitosa::find($id);
     return view('teo.detalleAgendamientosFallidos',['reage'=>$fallido]);
-
   }
 
-  public function validatePassCode(){
-        $passCodeUser= $_GET['password'];
+  public function validatePassCode(Request $request){
+        $passCodeUser= $request->pass;
         $passCodeBd= maxCap::find('1');
-      // #  dd("userPassInsert ".$passCodeUser." BDpasscodeStorage ".$passCodeBd->passcode);
 
-        if($passCodeUser == $passCodeBd->passcode){
-          return Response::json("success");
+
+            $status = estado::where('modulo', '=', 'llamado')->get();
+            $estado = estado::where('modulo','=','agendamiento')->get();
+            $f_pago = estado::where('modulo','=','pago')->get();
+            $capta = captaciones::findOrFail($request->id);
+            $minmax =maxCap::find(1);
+
+            $comunas = comunaRetiro::where('region', '=', 'metropolitana')->where('ciudad', '=', 'santiago')->get();
+            $function="nada";
+
+      if($passCodeUser == $passCodeBd->passcode){
+
+          $code= rand(1000,9999);
+          $minmax->passcode=$code;
+            $minmax->save();
+          return view('partials.agendamientoConPassCode',['capta'=>$capta,
+            'comunas'=>$comunas, 'status'=>$status, 'function'=>$function,
+            'estado'=>$estado,'f_pago'=>$f_pago,'minmax'=>$minmax,
+            ]);
         }else{
-          return Response::json("fail");
-        }
+          return view('teo/mandatoRegistrado', compact('capta', 'comunas','status','function',
+          'estado','f_pago','minmax'));
+      }
 
-  }
+
+
+    }
 
 
     /** comentarios del controlador

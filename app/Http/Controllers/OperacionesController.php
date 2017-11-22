@@ -20,7 +20,6 @@ use Illuminate\Support\Facades\Hash;
 
 class OperacionesController extends Controller
 {
-
     /**
      * Display a listing of the resource.
      *
@@ -42,35 +41,6 @@ class OperacionesController extends Controller
 
       $detalle =CaptacionesExitosa::where('id','=',$id)->get();
         return view('teo/detalle', compact('detalle'));
-    }
-
-    public function create()
-    {
-
-        return 'accion create';
-    }
-
-
-    public function store()
-    {
-        //
-    }
-
-
-    public function edit($id)
-    {
-        //
-    }
-
-    public function update($id)
-    {
-        //
-    }
-
-
-    public function destroy($id)
-    {
-        //
     }
 
 
@@ -231,8 +201,6 @@ class OperacionesController extends Controller
             $data = DB::table('captaciones_exitosas')->where('fono_1', '=', $dato)->get()->sortByDesc('created_at');
             return Response::json($data);
         }
-
-
     }
 
     public function validarSocio()
@@ -243,12 +211,14 @@ class OperacionesController extends Controller
         $consulta = DB::table('captaciones_exitosas')->where('rut', '=', $rut)->where('fundacion', '=', $fundacion)->get();
 
         if ($consulta == null) {
-
             $data = 1;
             return Response::json($data);
-        } else {
-            $data = 2;
+        } else if($rut =="") {
+            $data = 3;
             return Response::json($data);
+        }else{
+          $data = 2;
+          return Response::json($data);
         }
     }
 
@@ -712,14 +682,12 @@ public function passcode(Request $request){
         return view('operac/agendamiento', compact('datos', 'teos', 'ruteros','code'));
       }
 }
-public function validatePassCode(){
 
-}
 
 public function resetPassCode(){
-
+  $code= rand(1000,9999);
     $passcode =maxCap::find('1');
-    $passcode->passcode="";
+    $passcode->passcode=$code;
     $passcode->save();
 
     if(Auth::user()->perfil==4){
