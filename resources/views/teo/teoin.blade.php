@@ -17,12 +17,13 @@
 
 			$("#call_status").change(function(){
 
-				if($("#call_status").val()=='Volver a llamar'){
-
+				if($("#call_status").val()=='Agendar Llamado'){
+					$("#btn_siguiente").val("Agendar Llamado");
 					$("#observ").removeClass('col-md-6');
 					$("#observ").addClass('col-md-3');
 					$("#v_llamar").fadeIn(550);
 				}else{
+						$("#btn_siguiente").val("Next");
 					$("#v_llamar").hide()
 					$("#observ").removeClass('col-md-3');
 					$("#observ").addClass('col-md-6');
@@ -64,7 +65,7 @@
 			<a href="{{url('teo/mandatoExitoso&')}}{{$cap->id}}&{{$cap->n_dues}}" ><h1 class="btn btn-success btn-ajax">Agendar</h1></a>
 		@endif
 	</div>
-	
+
 	<div id="contenedor1" class="form-group">
 
 		<div class="col-md-3">
@@ -186,6 +187,6 @@
 			<input type="text" class="form-control" value="{{$cap->f_ultimo_llamado}}">
 		</div>
 @endif
-</div><!-[fin contenedor 1]->
-</div><!-[fin contentainer]->
+</div>{{--<!-[fin contenedor 1]-> --}}
+</div>{{--<!-[fin contentainer]->--}}
 @endsection

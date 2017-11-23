@@ -43,8 +43,11 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 
     public function captacion()
     {
-
         return $this->hasMany(CaptacionesExitosa::class);
+    }
+
+    public function userCallAgain(){
+      return $this->hasMany(AgendarLlamados::class,'teleoperador','id');
     }
 
 

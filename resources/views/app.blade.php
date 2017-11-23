@@ -97,6 +97,7 @@
 								<li><a href="{{url('teo/PorReagendar')}}">Por Reagendar</a></li>
 								<li><a href="{{url('/teo/fallidos')}}">Agendamientos Fallidos</a></li>
 							</ul>
+							<li><a href="{{url('/teo/llamadas/agendadas')}}">Llamadas Agendadas</a></li>
 						</li>
 
 					@elseif(Auth::user()->perfil==3)

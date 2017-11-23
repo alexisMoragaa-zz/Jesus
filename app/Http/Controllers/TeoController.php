@@ -15,6 +15,8 @@ use Illuminate\Support\Facades\Auth;
 use App\comunaRetiro;
 use App\estadoRuta;
 use App\informeRuta;
+use App\AgendarLlamados;
+use App\User;
 
 class TeoController extends Controller
 {
@@ -32,7 +34,8 @@ class TeoController extends Controller
         $dato = Campana::findOrFail(Auth::user()->campana)->nombre_campana;
 
         $cap = captaciones::where('id', '>=', 1)
-            ->where('campana', '=', $dato)->where('f_ultimo_llamado', '!=', $date)->where('estado', '!=', 'cu-')->where('estado', '!=', 'cu+')->where('estado_registro', '=', 0)
+            ->where('campana', '=', $dato)->where('f_ultimo_llamado', '!=', $date)->where('estado', '!=', 'cu-')
+            ->where('estado', '!=', 'cu+')->where('estado_registro', '=', 0)->where('estado', '!=', 'ca')
             ->where('f_ultimo_llamado', '!=', $date)->first();
 
         if (empty($cap)) {
@@ -92,7 +95,7 @@ class TeoController extends Controller
 
     public function siguiente(Request $request, $id)
     {
-
+        $user = Auth::user()->id;
         $date = Carbon::now()->format('d-m-Y');
         $observation = $request->input('observation1');
         $call_status = $request->input('call_status');
@@ -130,12 +133,20 @@ class TeoController extends Controller
                 'volver_llamar' => $call_again
             ]);
 
-        if(Auth::user()->perfil==1){
-            return redirect()->route('admin.call.index');
-        }elseif (Auth::user()->perfil==2){
-            return redirect()->route('teo.call.index');
-        }
-    }
+      if($call_status == "Agendar Llamado"){
+          $callAgains = new AgendarLlamados;
+          $callAgains->id_llamado =$id;
+          $callAgains->teleoperador=$user;
+          $callAgains->fecha_llamado=$call_again;
+          $callAgains->save();
+      }
+
+      if(Auth::user()->perfil==1){
+          return redirect()->route('admin.call.index');
+      }elseif (Auth::user()->perfil==2){
+          return redirect()->route('teo.call.index');
+      }
+  }
 
     public function addStatusCapAjax(){
 
@@ -591,8 +602,6 @@ class TeoController extends Controller
   public function validatePassCode(Request $request){
         $passCodeUser= $request->pass;
         $passCodeBd= maxCap::find('1');
-
-
             $status = estado::where('modulo', '=', 'llamado')->get();
             $estado = estado::where('modulo','=','agendamiento')->get();
             $f_pago = estado::where('modulo','=','pago')->get();
@@ -603,9 +612,8 @@ class TeoController extends Controller
             $function="nada";
 
       if($passCodeUser == $passCodeBd->passcode){
-
-          $code= rand(1000,9999);
-          $minmax->passcode=$code;
+            $code= rand(1000,9999);
+            $minmax->passcode=$code;
             $minmax->save();
           return view('partials.agendamientoConPassCode',['capta'=>$capta,
             'comunas'=>$comunas, 'status'=>$status, 'function'=>$function,
@@ -615,12 +623,14 @@ class TeoController extends Controller
           return view('teo/mandatoRegistrado', compact('capta', 'comunas','status','function',
           'estado','f_pago','minmax'));
       }
-
-
-
     }
 
+public function llamadasAgendadas(){
 
+    // $usuario = User::findOrFail(Auth::User()->id);
+$callAgain = AgendarLlamados::where('teleoperador','=',Auth::User()->id)->get();
+  return view('teo/VolverALlamar',['callAgain'=>$callAgain]);
+}
     /** comentarios del controlador
      *
      * home: home nos retorna una vista previa antes de la vista de llamados, en la cual adicionalmente podemos ver las captacioens

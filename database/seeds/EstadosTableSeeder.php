@@ -160,9 +160,9 @@ class EstadosTableSeeder extends Seeder
             'tipo' => 'cnu'
         ));
         DB::table('estados')->insert(array(
-            'estado'=>'Volver a llamar',
+            'estado'=>'Agendar Llamado',
             'modulo' =>'llamado',
-            'tipo' => 'cnu'
+            'tipo' => 'ca'
         ));
 
     //----------estados de llamadas---------
