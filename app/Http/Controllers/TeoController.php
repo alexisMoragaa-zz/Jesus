@@ -50,11 +50,13 @@ class TeoController extends Controller
         return view('teo/teoin', compact('cap', 'status'));
     }
 
+
     public function show($id)
     {
         $detalle =CaptacionesExitosa::where('id','=',$id)->get();
         return view('teo/detalle', compact('detalle'));
     }
+
 
     public function capFilter(Request $request){
 
@@ -93,8 +95,16 @@ class TeoController extends Controller
         return($date);
     }
 
+
     public function siguiente(Request $request, $id)
     {
+      $ejem =$request->llamado_agendado;
+        if(isset($ejem)){
+            $llamado = AgendarLlamados::find($request->llamado_agendado_id);
+            $llamado->estado_llamado ="llamado";
+            $llamado->save();
+      }
+
         $user = Auth::user()->id;
         $date = Carbon::now()->format('d-m-Y');
         $observation = $request->input('observation1');
@@ -140,6 +150,8 @@ class TeoController extends Controller
           $callAgains->fecha_llamado=$call_again;
           $callAgains->save();
       }
+
+
 
       if(Auth::user()->perfil==1){
           return redirect()->route('admin.call.index');
@@ -203,6 +215,8 @@ class TeoController extends Controller
         $comunas=comunaRetiro::where('comuna','=',$request->comuna)->get()->first();
         $ciudad =$comunas->ciudad;
         $region =$comunas->region;
+        $direccion = $request->direccion." #".$request->numero." / ".$request->lugarRetiro." #".$request->off_depto." / ".$request->comuna.".";
+        dd($direccion);
 
         if($request->tipo_retiro=="Acepta Grabacion"){
 
@@ -217,7 +231,7 @@ class TeoController extends Controller
                 'fono_1' => $data['fono_1'],
                 'nombre' => $data['nombre'],
                 'apellido' => $data['apellido'],
-                'direccion' => $data['direccion'],
+                'direccion' => $direccion;
                 'comuna' => $data['comuna'],
                 'ciudad' =>$ciudad,
                 'region' =>$region,
@@ -244,7 +258,7 @@ class TeoController extends Controller
                 'fono_1' => $data['fono_1'],
                 'nombre' => $data['nombre'],
                 'apellido' => $data['apellido'],
-                'direccion' => $data['direccion'],
+                'direccion' => $direccion;
                 'comuna' => $data['comuna'],
                 'ciudad' =>$ciudad,
                 'region' =>$region,
@@ -626,11 +640,58 @@ class TeoController extends Controller
     }
 
 public function llamadasAgendadas(){
+  $hoy = Carbon::now()->format('Y-m-d');
 
-    // $usuario = User::findOrFail(Auth::User()->id);
-$callAgain = AgendarLlamados::where('teleoperador','=',Auth::User()->id)->get();
-  return view('teo/VolverALlamar',['callAgain'=>$callAgain]);
+    $callAgain = AgendarLlamados::where('teleoperador','=',Auth::User()->id)
+    ->where('fecha_llamado','>=',$hoy)->where('estado_llamado','=',"")
+    ->orderBy('fecha_llamado')->get();
+
+    $no_llamados= AgendarLlamados::where('teleoperador','=',Auth::User()->id)
+    ->where('fecha_llamado','<',$hoy)->where('estado_llamado','=',"")
+    ->orderBy('fecha_llamado')->get();
+
+    $finalizados = AgendarLlamados::where('teleoperador','=',Auth::User()->id)
+    ->where('estado_llamado','=',"no llamado")->orderBy('fecha_llamado')->get();
+
+    $realizados =AgendarLlamados::where('teleoperador','=',Auth::User()->id)
+    ->where('estado_llamado','=',"llamado")->orderBy('fecha_llamado')->get();
+
+
+  return view('teo/VolverALlamar',[
+    'callAgain'=>$callAgain,
+    'nollamados'=>$no_llamados,
+    'finalizados'=>$finalizados,
+    'realizados'=>$realizados
+    ]);
 }
+
+public function agendamientoLlamadoLlamar($id){
+    $id_registro=AgendarLlamados::find($id);
+    $registro = captaciones::find($id_registro->llamadosAgendados->id);
+    $estado = estado::where('modulo','=','llamado')->get();
+    $function=$id_registro;
+
+    return view('teo.teoin',['cap'=>$registro,'status'=>$estado,'function'=>$function]);
+
+}
+
+public function agendamientoLlamadaLlamadoExitoso($id){
+    $ll =AgendarLlamados::find($id);
+    $ll->estado_llamado="llamado";
+    $ll->save();
+    $cap = captaciones::find($ll->llamadosAgendados->id);
+    $cap->estado= "cu+";
+    $cap->save();
+// "{{url('teo/mandatoExitoso&')}}{{$cap->id}}&{{$cap->n_dues}}"
+    return redirect('teo/mandatoExitoso&'.$ll->llamadosAgendados->id."&".$ll->llamadosAgendados->n_dues);
+
+}
+
+public function agendaminetoLlamadaLlamado($id){
+  return("ladlkjasd");
+}
+
+
     /** comentarios del controlador
      *
      * home: home nos retorna una vista previa antes de la vista de llamados, en la cual adicionalmente podemos ver las captacioens

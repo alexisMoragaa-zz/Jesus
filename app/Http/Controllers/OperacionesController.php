@@ -16,6 +16,8 @@ use App\maxCap;
 use App\estado;
 use App\comunaRetiro;
 use App\informeRuta;
+use App\AgendarLlamados;
+use App\captaciones;
 use Illuminate\Support\Facades\Hash;
 
 class OperacionesController extends Controller
@@ -697,6 +699,43 @@ public function resetPassCode(){
     }
 }
 
+public function agendamientoLlamado(){
+  $hoy = Carbon::now()->format('Y-m-d');
+
+  $llamados_pendientes= AgendarLlamados::where('fecha_llamado','>=',$hoy)
+  ->where('estado_llamado','!=',"no llamado")->get();
+  $atrasados= AgendarLlamados::where('fecha_llamado','<',$hoy)
+  ->where('estado_llamado','!=',"no llamado")->get();
+  $finalizados = AgendarLlamados::where('estado_llamado','=',"no llamado")->get();
+
+  $llamados = AgendarLlamados::where('estado_llamado','=',"llamado")->get();
+  return view('operac.AgendamientoLlamados',[
+    'pendientes'=>$llamados_pendientes,
+    'atrasados'=>$atrasados,
+    'finalizados'=>$finalizados,
+    'llamados'=>$llamados,
+    ]);
+}
+
+public function AgendamientoLlamadoFinalizar($id){
+
+  $reage = AgendarLlamados::find($id);
+  $teos = User::where('perfil','=',2)->get();
+  return view('operac.agendamientoLlamadosFinalizarCambiarTeo',
+  ['reage'=>$reage,'teos'=>$teos]);
+}
+
+public function AgendamientoLlamadosFinalizarRegistro(Request $request){
+    $llamado =AgendarLlamados::find($request->id);
+    $llamado->estado_llamado="no llamado";
+    $llamado->save();
+
+    $registro = captaciones::find($llamado->id_llamado);
+    $registro->estado="cnu";
+    $registro->save();
+
+  return redirect('ope/agendamiento/llamados');
+}
 
 }
 //fin controlador

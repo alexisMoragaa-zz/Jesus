@@ -113,6 +113,10 @@ Route::group(['middleware' => ['auth', 'teleoperador'], 'prefix' => 'teo'], func
     Route::Get('detalleFallidos/{id}','TeoController@detalleFallidos');
     Route::Post('validatePassCode','TeoController@ValidatePassCode');
     Route::get('llamadas/agendadas','TeoController@llamadasAgendadas');
+    Route::Get('agendamiento/llamada/llamar/{id}','TeoController@agendamientoLlamadoLlamar');
+    Route::Get('agendamiento/llamada/llamadoExitoso/{id}','TeoController@agendamientoLlamadaLlamadoExitoso');
+    Route::Get('agendamiento/llamada/llamado/{id}','TeoController@agendamientoLlamadaLamado');
+
 
 
     route::get('ajax-rutero', function () {
@@ -176,9 +180,10 @@ Route::group(['middleware' => ['auth', 'operaciones'], 'prefix' => 'ope'], funct
     Route::get('rutas/dia/{rutero}/{dia}','OperacionesController@detalleRutasPorDia');
     Route::Get('detalleRuta/{id}','RutasController@detalleRuta');
     Route::Post('pc','OperacionesController@passcode');
-
     Route::Post('resetPassCode','OperacionesController@resetPassCode');
-
+    Route::get('agendamiento/llamados','OperacionesController@agendamientoLlamado');
+    Route::get('agendamiento/llamada/finalizar/{id}','OperacionesController@AgendamientoLlamadoFinalizar');
+    Route::Post('agendamiento/llamado/Finalizar',   'OperacionesController@AgendamientoLlamadosFinalizarRegistro');
 
 
     Route::get('/', function(){

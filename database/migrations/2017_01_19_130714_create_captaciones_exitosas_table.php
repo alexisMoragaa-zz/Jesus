@@ -8,7 +8,7 @@ class CreateCaptacionesExitosasTable extends Migration {
 	/**
 *
 	 * en la tabla de captaciones exitosas se guarda la informacion de los "clientes"
-	 * una vez que aceptan la ser socios de la fundacion. es aca donde se registra datos como la direccion entre otros datos 
+	 * una vez que aceptan la ser socios de la fundacion. es aca donde se registra datos como la direccion entre otros datos
 	 * necesarios para la creacion de rutas
 	 */
 	public function up()
@@ -17,11 +17,11 @@ class CreateCaptacionesExitosasTable extends Migration {
 		{
 			$table->increments('id');
 			$table->string('n_dues');
-			$table->string('id_fundacion');
+			// $table->string('id_fundacion');
 			$table->string('fecha_captacion');
 			$table->string('fecha_agendamiento');
 			$table->string('tipo_retiro');
-			$table->string('jornada');
+			// $table->string('jornada');
 			$table->string('horario');
 			$table->string('nombre');
 			$table->string('apellido');

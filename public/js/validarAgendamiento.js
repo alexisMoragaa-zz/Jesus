@@ -83,7 +83,7 @@ $.validator.addMethod(
             if (data == 2)
             {
             response = false;
-            
+
             }else if(data == 1)
             {
            response = true;
@@ -94,23 +94,6 @@ $.validator.addMethod(
   "el usuario ya es socio o tiene una visita pendiente"
 );
 
-
-
-    // funcion que valida el passcode entregado por el supervisor, operaciones, o administrador
-    // $("#getpass").click(function(){
-    //   pass={password:$("#pass").val()}
-    //   $.get('/teo/validatePassCode',pass,prodata);
-    //   console.log(pass);
-    //   function prodata(data){
-    //     console.log(data);
-    //     if(data === "success"){
-    //         alert("el codigo es valido");
-    //         window.location="";
-    //     }else{
-    //       alert("el codigo no es valido");
-    //     }
-    //   }
-    // });
 $("#senddPassCode").validate({
   rules:{
     tipo_retiro:{
@@ -137,9 +120,19 @@ $("#senddPassCode").validate({
       required:true,
     },
 
+    lugarRetiro:{
+      required:true,
+    },
+    off_depto:{
+      required:true,
+    },
     direccion:{
       required:true,
      },
+    numero:{
+      required:true,
+
+    },
     correo_1:{
       required:true,
       email:true,
@@ -185,7 +178,16 @@ $("#senddPassCode").validate({
     apellido:{
       required:"Campo Obligatorio",
     },
+    lugarRetiro:{
+      required:"Campo Obligatorio",
+    },
+    off_depto:{
+      required:"Campo Obligatorio",
+    },
     direccion:{
+      required:"Campo Obligatorio",
+    },
+    numero:{
       required:"Campo Obligatorio",
     },
     correo_1:{
@@ -246,10 +248,22 @@ $("#sendd").validate({
       apellido:{
         required:true,
       },
+      lugarRetiro:{
+        required:true,
+      },
+      off_depto:{
+        required:function(element){
+          return $("#lugarRetiro").val()!="Casa";
+        }
 
+      },
       direccion:{
         required:true,
        },
+      numero:{
+        required:true,
+
+      },
       correo_1:{
         required:true,
         email:true,
@@ -264,7 +278,7 @@ $("#sendd").validate({
         required:true,
         minlength:4,
         number:true,
-        range:[4000,999999]
+        range:[3000,999999]
 
       },
       forma_pago:{
@@ -299,7 +313,16 @@ $("#sendd").validate({
       apellido:{
         required:"Campo Obligatorio",
       },
+      lugarRetiro:{
+        required:"Campo Obligatorio",
+      },
+      off_depto:{
+        required:"Campo Obligatorio para Oficina y departamento",
+      },
       direccion:{
+        required:"Campo Obligatorio",
+      },
+      numero:{
         required:"Campo Obligatorio",
       },
       correo_1:{

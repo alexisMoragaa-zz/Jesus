@@ -222,23 +222,54 @@
               </div>
   {{-- Fin segunda fila --}}
   {{-- Inicio Tercera Fila --}}
+
              <div class="row">
-                 <div class="col-md-3" id="fixedPhone">
+                 <div class="col-md-2" id="fixedPhone">
                     <label for="c_movistar" class="control-label">Telefono Cuenta</label>
                       <input type="text" class="form-control" name="c_movistar"  value="{{$capta->cuenta_movistar}}">
                   </div>
 
-                  <div class="col-md-6">
+                  <div class="col-md-3">
                     <label class="control-label">Direccion</label>
-                      <input type="text" name="direccion" class="form-control" placeholder="Ej: Santa Magdalena #10" value="{{$capta->direccion}}">
+                    <input type="text" name="direccion" class="form-control" placeholder="Ej: Santa Magdalena" value="{{$capta->direccion}}">
                   </div>
+
+                  <div class="col-md-1">
+                    <label for="" class="control-label">N°</label>
+                    <input type="text" name="numero" class="form-control" placeholder="658">
+                  </div>
+
+                  <div class="col-md-2">
+                    <label for="" class="control-label">Tipo Direccion</label>
+                    <select name="lugarRetiro" id="lugarRetiro" class="form-control">
+                      <option value="">Seleccione</option>
+                      <option value="Casa">Casa</option>
+                      <option value="Oficina">Oficina</option>
+                      <option value="Departamento">Departamento</option>
+                    </select>
+                  </div>
+
+
+                  <div class="col-md-1">
+                    <label for="" class="control-label">Off/Depto</label>
+                    <input type="text" name="off_depto" class="form-control" placeholder="302">
+                  </div>
+
+                  {{-- <div class="col-md-2">
+                    <label class="control-label">Direccion es</label>
+                    <select name="lugarRetiro" id="" class="form-control">
+                      <option value="">seleccione</option>
+                      <option value="trabajo">Trabajo</option>
+                      <option value="domicilio">Domicilio</option>
+                    </select>
+                  </div> --}}
 
                   <div class="col-md-3">
                     <label class="control-label">Correo</label>
                       <input type="text" class="form-control" name="correo_1" value="{{$capta->correo_1}}">
                   </div>
 
-                  <div class="col-md-3 grabacion">
+                  <div class="col-md-2 grabacion">
                     <label class="control-label">Voluntario Ruta</label>
                       <input type="text" class="form-control" name="rutero" id="rutero" value="{{$capta->rutero}}" onfocus="this.blur()">
                   </div>

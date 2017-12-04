@@ -23,7 +23,7 @@
 
 
 	<script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.1/js/bootstrap.min.js"></script>
-	<![endif]-->
+	{{-- <![endif]--> --}}
 </head>
 
 
@@ -55,7 +55,7 @@
 					<li><a href="{{ url('/auth/login') }}">Ingresar</a></li>
 
 				@else
-					@if(Auth::user()->perfil==1)
+					@if(Auth::user()->perfil==1){{--Perfil Administrador--}}
 						<li class="dropdown">
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Administrador <span class="caret"></span></a>
 							<ul class="dropdown-menu">
@@ -89,7 +89,7 @@
 						<li><a href="{{ url('/admin/verRutas') }}">Ruteros</a></li>
 						<li><a href="{{ url('/admin/cargas') }}">Cargas</a></li>
 
-					@elseif(Auth::user()->perfil==2)
+					@elseif(Auth::user()->perfil==2){{--Perfil Teleoperadores--}}
 						<li class="dropdown">
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">TeleOperador <span class="caret"></span></a>
 							<ul class="dropdown-menu">
@@ -97,31 +97,31 @@
 								<li><a href="{{url('teo/PorReagendar')}}">Por Reagendar</a></li>
 								<li><a href="{{url('/teo/fallidos')}}">Agendamientos Fallidos</a></li>
 							</ul>
-							<li><a href="{{url('/teo/llamadas/agendadas')}}">Llamadas Agendadas</a></li>
+							<li><a href="{{url('/teo/llamadas/agendadas')}}">Agendamiento Llamados</a></li>
 						</li>
 
-					@elseif(Auth::user()->perfil==3)
+					@elseif(Auth::user()->perfil==3){{--Perfil Supervisor--}}
 						<li><a href="{{ url('/sup/user') }}">Usuarios</a></li>
 						<li><a href="{{ url('/sup/sup') }}">Supervisor</a></li>
 						<li><a href="{{ url('/sup/call') }}">TeleOperador</a></li>
 
-					@elseif(Auth::user()->perfil==4)
+					@elseif(Auth::user()->perfil==4){{--Perfil Operaciones--}}
+						<li><a href="{{ url('/ope/adminconfig') }}">Configuraciones</a></li>
 						<li class="dropdown">
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Operaciones <span class="caret"></span></a>
 							<ul class="dropdown-menu">
 								<li><a href="{{ url('/ope/ope') }}">Captaciones</a></li>
 								<li><a href="{{url('/ope/reAgendamiento')}}">Re-Agendamientos</a></li>
+								<li><a href="{{ url('/ope/agendamiento/llamados')}}">Agendamiento Llamados</a></li>
 								<li><a href="{{ url('/ope/verRutas')}}">Rutas Diarias</a></li>
 								<li><a href="{{ url('/ope/rutas')}}">Rutas Semanales</a></li>
-								<li><a href="{{ url('/ope/adminconfig') }}">Configuraciones</a></li>
+
 								<li><a href="{{url('ope/createRutas')}}">Calendario de Rutas</a></li>
 							</ul>
 						</li>
 
-						<li><a href="{{ url('/ope/call') }}">TeleOperador</a></li>
-						<li><a href="{{ url('/ope/sup') }}">Supervisor</a></li>
 
-					@elseif(Auth::user()->perfil==5)
+					@elseif(Auth::user()->perfil==5){{--Perfil Ruteros--}}
 						<li><a href="{{url('rutas/rutas')}}">Realizar Ruta</a></li>
 
 						<li class="dropdown">
