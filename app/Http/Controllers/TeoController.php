@@ -215,14 +215,14 @@ class TeoController extends Controller
         $comunas=comunaRetiro::where('comuna','=',$request->comuna)->get()->first();
         $ciudad =$comunas->ciudad;
         $region =$comunas->region;
-        $direccion = $request->direccion." #".$request->numero." / ".$request->lugarRetiro." #".$request->off_depto." / ".$request->comuna.".";
-        dd($direccion);
+        $direccion = $request->direccion." #".$request->numero." / ".$request->lugarRetiro." #".$request->off_depto." / ".$request->comuna;
+        // dd($direccion);
 
         if($request->tipo_retiro=="Acepta Grabacion"){
 
             CaptacionesExitosa::create([
                 'n_dues' => $data['n_dues'],
-                'id_fundacion' => $data['id_fundacion'],
+                // 'id_fundacion' => $data['id_fundacion'],
                 'fecha_captacion' => $date,
                 'fecha_agendamiento' => $date,
                 'tipo_retiro' => $data['tipo_retiro'],
@@ -231,7 +231,7 @@ class TeoController extends Controller
                 'fono_1' => $data['fono_1'],
                 'nombre' => $data['nombre'],
                 'apellido' => $data['apellido'],
-                'direccion' => $direccion;
+                'direccion' => $direccion,
                 'comuna' => $data['comuna'],
                 'ciudad' =>$ciudad,
                 'region' =>$region,
@@ -249,7 +249,7 @@ class TeoController extends Controller
         }else{
         $cap= CaptacionesExitosa::create([
                 'n_dues' => $data['n_dues'],
-                'id_fundacion' => $data['id_fundacion'],
+                // 'id_fundacion' => $data['id_fundacion'],
                 'fecha_captacion' => $date,
                 'fecha_agendamiento' => $data['fecha_agendamiento'],
                 'tipo_retiro' => $data['tipo_retiro'],
@@ -258,7 +258,7 @@ class TeoController extends Controller
                 'fono_1' => $data['fono_1'],
                 'nombre' => $data['nombre'],
                 'apellido' => $data['apellido'],
-                'direccion' => $direccion;
+                'direccion' => $direccion,
                 'comuna' => $data['comuna'],
                 'ciudad' =>$ciudad,
                 'region' =>$region,

@@ -11,20 +11,24 @@
 
 
     </style>
-   
+
     <script>
 
         $(document).ready(function(){
             $(".motivo").hide();
+            $(".imagen").hide();
             $("#modal-form").hide();
             $(".modal-alert").hide();
             $(".modal-observacion").hide();
             $("#status").change(function () {
                 if($(this).val()=="noRetirado"){
                     $(".motivo").fadeIn();
+                    $(".imagen").fadeIn();
+
                 }else{
                     $(".motivo").fadeOut().val("");
-
+                    $(".imagen").fadeOut();
+                    $("#file").val("");
                 }
             });
             $("#btn_add_status").click(function(){
@@ -83,11 +87,24 @@
 
 <div class="container ">
 
+  @if (count($errors) > 0)<!--creamos un if para verificar si no hay errores-->
+    <div class="alert alert-danger">
+      <strong>Por Favor </strong>Corrige los siguientes errores.<br><br>
+      <ul>
+        @foreach ($errors->all() as $error)<!--si hay errores lso recorremos con un foreach-->
+          <li>{{ $error }}</li> <!--imprimimos los errores en pantalla-->
+        @endforeach
+      </ul>
+    </div>
+  @endif
+
+
+
     <div class="modal-alert" title="Estado Ruta">
-        <p>El estado de esta Ruta ya fue Registrado</p>
+        <p>El estado de esta Ruta ya fue Registrada</p>
         <p>Esta Seguro que desea <span>Modificarlo</span></p>
     </div>
-    
+
     <div class="modal-observacion">
 
         <textarea class="form-control" rows="19" id="comment" readonly>{{$ruta->observaciones}}</textarea>
@@ -96,29 +113,21 @@
 <div id="modal-form" title="Agregar estado Retiro">
     @if($ruta->fecha_agendamiento == $esta->primer_agendamiento)
 
-        @if(Auth::user()->perfil==5)
-            {!! Form::open(['url'=>['rutas/rutas/'],'method'=>'POST','class'=>'form_status_rout']) !!}
-        @elseif(Auth::user()->perfil==1)
-            {!! Form::open(['url'=>['admin/rutas/'],'method'=>'POST','class'=>'form_status_rout']) !!}
-        @endif
 
+            {{-- {!! Form::open(['url'=>['rutas/rutas/'],'method'=>'POST','class'=>'form_status_rout']) !!} --}}
+<form action="/rutas/rutas" method="Post" enctype="multipart/form-data" class="form_status_rout">
     @elseif($ruta->fecha_agendamiento == $esta->segundo_agendamiento)
 
-        @if(Auth::user()->perfil==5)
+
             {!! Form::open(['url'=>['rutas/secondRoute/'],'method'=>'POST','class'=>'form_status_rout']) !!}
-        @elseif(Auth::user()->perfil==1)
-            {!! Form::open(['url'=>['admin/secondRoute/'],'method'=>'POST','class'=>'form_status_rout']) !!}
-        @endif
 
     @elseif($ruta->fecha_agendamiento == $esta->tercer_agendamiento)
 
-        @if(Auth::user()->perfil==5)
             {!! Form::open(['url'=>['rutas/thirdRoute/'],'method'=>'POST','class'=>'form_status_rout']) !!}
-        @elseif(Auth::user()->perfil==1)
-            {!! Form::open(['url'=>['admin/thirdRoute/'],'method'=>'POST','class'=>'form_status_rout']) !!}
-        @endif
 
      @endif
+     <input type="hidden" name="_token" value="{{ csrf_token() }}">
+
         <label for="Status" class="control-label">Estado</label>
         <select name="Status" id="status" class="form-control">
             <option value="OK">OK</option>
@@ -134,10 +143,20 @@
             <option value="retracta">Persona se arrepiente</option>
             <option value="direccion erro">No encuentro Domicilio</option>
         </select>
+
+
         <label for="detalle" class="control-label">Observacion</label>
         <input type="text" class="form-control" name="observacion">
+
+        <div class="form-group imagen">
+          <label class="control-label">Cargar Imagen</label>
+          <div class="">
+            <input type="file" class="form-control" name="file" id="file">
+          </div>
+        </div>
         <input type="hidden" name="id" value="{{$ruta->id}}">
-    {!! Form::close() !!}
+    {{-- {!! Form::close() !!} --}}
+    </form>
 </div>
 
     <table class="table" style ="max-width: 400px; margin: auto; text-align: center; margin-top: 25px;" >
@@ -201,4 +220,3 @@
      </div>
 </div>
 @endsection
-

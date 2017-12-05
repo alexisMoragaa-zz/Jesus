@@ -131,9 +131,9 @@
               <tbody>
                 @foreach ($jueves as $jue)
                   <tr>
-                    <td>{{$jue->nombre}}</td>
-                    <td>{{$jue->comuna}}</td>
-                    <td>{{$jue->horario}}</td>
+                    <td>{{$jue->cap->nombre}}</td>
+                    <td>{{$jue->cap->comuna}}</td>
+                    <td>{{$jue->cap->horario}}</td>
                   </tr>
                 @endforeach
               </tbody>

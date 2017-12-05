@@ -23,6 +23,7 @@ class CreateInformeRutasTable extends Migration {
 			$table->string('rutero');
 			$table->string('horario');
 			$table->string('comuna');
+			$table->string('imagen');
 			$table->foreign('id_ruta')->references('id')->on('estado_rutas');
 			$table->foreign('id_captacion')->references('id')->on('captaciones_exitosas');
 

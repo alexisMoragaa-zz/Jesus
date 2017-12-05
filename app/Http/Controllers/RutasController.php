@@ -8,7 +8,7 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use DB;
 use App\informeRuta;
-
+use Storage;
 use Illuminate\Http\Request;
 
 class RutasController extends Controller {
@@ -39,6 +39,9 @@ class RutasController extends Controller {
 
 	public function store(Request $request)
 	{
+		$img = $this->validate($request,[
+			'file'=>'required|image'
+		]);
 
 		$hoy = Carbon::now()->format('Y-m-d');
 		$estado =$request->Status;
@@ -46,6 +49,7 @@ class RutasController extends Controller {
 		$observacion =$request->observacion;
 		$id =$request->id;
 		$reagendar =CaptacionesExitosa::find($id);
+
 
 		DB::table('estado_rutas')
 			->where('id','=',$id)
@@ -69,8 +73,16 @@ class RutasController extends Controller {
 			}
 		}
 
-		$ruta =informeRuta::where('id_captacion','=',$request->id)->where('num_retiro','=',1)->get()->first();
+		//obtenemos el campo file definido en el formulario
+			$file = $request->file('file');
+			$nombre=$reagendar->nombre.$reagendar->apellido."visita01.jpg";
+		//indicamos que queremos guardar un nuevo archivo en el disco local
+			$imagen_ruta  = "../storage/app/".$nombre;
+			$ti=Storage::disk('local')->put($nombre, \File::get($file));
+
+			$ruta =informeRuta::where('id_captacion','=',$request->id)->where('num_retiro','=',1)->get()->first();
 			$ruta->estado =$estado;
+			$ruta->imagen=$imagen_ruta;
 			$ruta->save();
 
 
@@ -101,8 +113,16 @@ class RutasController extends Controller {
 
 			]);
 
+				//obtenemos el campo file definido en el formulario
+				$file = $request->file('file');
+				$nombre=$reagendar->nombre.$reagendar->apellido."visita02.jpg";
+				//indicamos que queremos guardar un nuevo archivo en el disco local
+				$imagen_ruta  = "../storage/app/".$nombre;
+				$ti=Storage::disk('local')->put($nombre, \File::get($file));
+
 			$ruta =informeRuta::where('id_captacion','=',$request->id)->where('num_retiro','=',2)->get()->first();
 				$ruta->estado =$estado;
+				$ruta->imagen=$imagen_ruta;
 				$ruta->save();
 
 		if($estado=="noRetirado"){
@@ -141,9 +161,16 @@ class RutasController extends Controller {
 				'updated_at'=>$hoy
 
 			]);
+			//obtenemos el campo file definido en el formulario
+			$file = $request->file('file');
+			$nombre=$reagendar->nombre.$reagendar->apellido."visita03.jpg";
+			//indicamos que queremos guardar un nuevo archivo en el disco local
+			$imagen_ruta  = "../storage/app/".$nombre;
+			$ti=Storage::disk('local')->put($nombre, \File::get($file));
 
 			$ruta =informeRuta::where('id_captacion','=',$request->id)->where('num_retiro','=',3)->get()->first();
 				$ruta->estado =$estado;
+				$ruta->imagen=$imagen_ruta;
 				$ruta->save();
 
 		if($estado=="noRetirado"){
@@ -174,23 +201,6 @@ class RutasController extends Controller {
 		return view('rutas/DetalleRutasDiarias',compact('ruta','est','hoy','esta'));
 	}
 
-
-	public function edit($id)
-	{
-		//
-	}
-
-
-	public function update($id)
-	{
-		//
-	}
-
-
-	public function destroy($id)
-	{
-		//
-	}
 
 	public function historialRutas(){
 		$hoy = Carbon::now()->format('Y-m-d');
@@ -246,9 +256,20 @@ class RutasController extends Controller {
 	public function detalleRuta($id){
 
 		$ruta = CaptacionesExitosa::findOrFail($id);
-
-		return view('rutas.detalleRuta',['reage'=>$ruta]);
+		$img1 = informeRuta::where('id_captacion','=',$id)->where('num_retiro','=',1)->get()->first();
+		$img2 = informeRuta::where('id_captacion','=',$id)->where('num_retiro','=',2)->get()->first();
+		$img3 = informeRuta::where('id_captacion','=',$id)->where('num_retiro','=',3)->get()->first();
+		return view('rutas.detalleRuta',[
+			'reage'=>$ruta,
+			'img1'=>$img1,
+			'img2'=>$img2,
+			'img3'=>$img3,
+		]);
 	}
+
+
+
+
 /**DOCUMENTACION RUTAS CONTROLLER
  *
  *

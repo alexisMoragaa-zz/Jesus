@@ -109,12 +109,12 @@
                         <option value="elOrigenDeLosTiempos">El Origen de los tiempos</option>
                     </select>
                 </div>
-                
+
                 <div class="col-md-3" id="dia">
                     <label for="" class="control-label">Seleccioe Dia</label>
                     <input type="date" class="form-control" name="buscarPorDia">
                 </div>
-        
+
                 <div class="col-md-3">
                     <label for="" class="control-label">Voluntario Ruta</label>
                     <select name="voluntario" id="voluntario" class="form-control">
@@ -124,7 +124,7 @@
                         @endforeach
                     </select>
                 </div>
-              
+
                 <div class="col-md-3">
                     <input type="submit" class="btn btn1 btn-success" value="Buscar">
 
@@ -165,7 +165,7 @@
                              <td>{{$estados->estado_primer_agendamiento}}</td>
                          @endif
                      @endforeach
-                    <td><a >link</a></td>
+                      <td><a href="{{url('/ope/detalleRuta',$ruta->id)}}">Ver Mas</a></td>
                      <td class="ocultar" >{{$ruta->observaciones}}</td>
                  </tr>
             @endforeach

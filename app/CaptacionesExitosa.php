@@ -28,4 +28,8 @@ class CaptacionesExitosa extends Model
 
         return $this->hasOne(estadoRuta::class,'id','id');
     }
+
+    public function info_ruta(){
+        return $this->hasMany(informeRuta::class,'id_captacion');
+    }
 }

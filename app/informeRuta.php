@@ -8,7 +8,7 @@ class informeRuta extends Model {
 protected $table='informe_rutas';
 
 protected $fillable=['id_captacion','id_ruta','fecha_agendamiento','estado','num_retiro',
-                      'comuna','rutero','horario',];
+                      'comuna','rutero','horario','imagen',];
 
 public function cap(){
   return $this->belongsTo(CaptacionesExitosa::class,'id_captacion','id');
