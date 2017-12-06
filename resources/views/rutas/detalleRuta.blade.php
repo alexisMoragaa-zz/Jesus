@@ -44,6 +44,14 @@
             $(".modal-imagen1").dialog({width:"80%"});
           });
 
+          $(".verimagen2").click(function(){
+            $(".modal-imagen2").dialog({width:"80%"});
+          });
+
+          $(".verimagen3").click(function(){
+            $(".modal-imagen3").dialog({width:"80%"});
+          });
+
         });
     </script>
 
@@ -121,6 +129,7 @@
                     <td>{{$reage->estadoRuta->estado_segundo_agendamiento}}</td>
                     <td>{{$reage->estadoRuta->detalle_segundo_agendamiento}}</td>
                     <td>{{$reage->estadoRuta->observacion_segundo_agendamiento}}</td>
+                    <td><a href="#" class="verimagen2">Ver Imagen</a></td>
                 </tr>
             </table>
         </div>{{--Fin del div estado Segunda visita--}}
@@ -134,6 +143,7 @@
                     <td>{{$reage->estadoRuta->estado_tercer_agendamiento}}</td>
                     <td>{{$reage->estadoRuta->detalle_tercer_agendamiento}}</td>
                     <td>{{$reage->estadoRuta->observacion_tercer_agendamiento}}</td>
+                    <td><a href="#" class="verimagen3">Ver Imagen</a></td>
                 </tr>
             </table>
         </div>{{--Fin del div estado tercera  visita--}}

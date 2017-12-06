@@ -53,7 +53,7 @@ class TeoController extends Controller
 
     public function show($id)
     {
-        $detalle =CaptacionesExitosa::where('id','=',$id)->get();
+        $detalle = CaptacionesExitosa::where('id','=',$id)->get();
         return view('teo/detalle', compact('detalle'));
     }
 
@@ -603,14 +603,26 @@ class TeoController extends Controller
 
   public function fallidos()
   {
-    $fallidos = CaptacionesExitosa::where('estado_mandato','=','AgendamientoFallido')->get();
+    $fallidos = CaptacionesExitosa::where('estado_mandato','=','AgendamientoFallido')
+    ->orWhere('estado_mandato','=','retracta')->get();
     return view('teo.fallidos',['fallidos'=>$fallidos,]);
   }
 
   public function detalleFallidos($id)
   {
     $fallido = CaptacionesExitosa::find($id);
-    return view('teo.detalleAgendamientosFallidos',['reage'=>$fallido]);
+    $img1 = informeRuta::where('id_captacion','=',$id)->where('num_retiro','=',1)->get()->first();
+    $img2 = informeRuta::where('id_captacion','=',$id)->where('num_retiro','=',2)->get()->first();
+    $img3 = informeRuta::where('id_captacion','=',$id)->where('num_retiro','=',3)->get()->first();
+
+
+    return view('teo.detalleAgendamientosFallidos',
+      [
+        'reage'=>$fallido,
+        'img1'=>$img1,
+        'img2'=>$img2,
+        'img3'=>$img3,
+      ]);
   }
 
   public function validatePassCode(Request $request){
@@ -687,9 +699,7 @@ public function agendamientoLlamadaLlamadoExitoso($id){
 
 }
 
-public function agendaminetoLlamadaLlamado($id){
-  return("ladlkjasd");
-}
+
 
 
     /** comentarios del controlador

@@ -25,6 +25,8 @@
     }
 </style>
 
+
+
 <div class="col-md-8 colum" id="ancho">
     <div class="col-md-12 bord" >
         <h4 class="titulo">Informacion Captacion</h4>
@@ -62,11 +64,17 @@
             <th>Estado Retiro</th>
             <th>Detalle Retiro</th>
             <th>Observacion</th>
+            @if(isset($img1))
+              <th>Mas</th>
+            @endif
             <tr>
                 <td>{{$reage->estadoRuta->primer_agendamiento}}</td>
                 <td>{{$reage->estadoRuta->estado_primer_agendamiento}}</td>
                 <td>{{$reage->estadoRuta->detalle_primer_agendamiento}}</td>
                 <td>{{$reage->estadoRuta->observacion_primer_agendamiento}}</td>
+                @if(isset($img1))
+                  <td><a href="#" id="verimagen1">Ver Imagen</a></td>
+                @endif
             </tr>
         </table>
     </div>
@@ -83,6 +91,9 @@
                     <td>{{$reage->estadoRuta->estado_segundo_agendamiento}}</td>
                     <td>{{$reage->estadoRuta->detalle_segundo_agendamiento}}</td>
                     <td>{{$reage->estadoRuta->observacion_segundo_agendamiento}}</td>
+                    @if(isset($img2))
+                      <td><a href="#" id="verimagen2">Ver Imagen</a></td>
+                    @endif
                 </tr>
             </table>
         </div>
@@ -99,9 +110,32 @@
                         <td>{{$reage->estadoRuta->estado_tercer_agendamiento}}</td>
                         <td>{{$reage->estadoRuta->detalle_tercer_agendamiento}}</td>
                         <td>{{$reage->estadoRuta->observacion_tercer_agendamiento}}</td>
+                        @if(isset($img3))
+                          <td><a href="#" id="verimagen3">Ver Imagen</a></td>
+                        @endif
                     </tr>
                 </table>
             </div>
         @endif
     @endif
+
+    <div class="modal-imagen1">
+      @if (isset($img1))
+        <div class="">
+            <img src="{{asset($img1->imagen)}}" alt="" style="width:100%">
+        </div>
+      @endif
+    </div>
+    <div class="modal-imagen2">
+      @if (isset($img2))
+        <img src="{{asset($img2->imagen)}}" alt="" style="width:400px">
+      @endif
+    </div>
+    <div class="modal-imagen3">
+      @if (isset($img3))
+        <div class="">
+          <img src="{{asset($img3->imagen)}}" alt="" style="width:400px">
+        </div>
+      @endif
+    </div>
 </div>
