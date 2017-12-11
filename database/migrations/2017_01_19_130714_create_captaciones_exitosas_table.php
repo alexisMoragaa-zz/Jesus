@@ -53,11 +53,6 @@ class CreateCaptacionesExitosasTable extends Migration {
 		});
 	}
 
-	/**
-	 * Reverse the migrations.
-	 *
-	 * @return void
-	 */
 	public function down()
 	{
 		Schema::drop('captaciones_exitosas');

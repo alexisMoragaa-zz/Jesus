@@ -40,6 +40,9 @@ class WelcomeController extends Controller
 		} elseif (Auth::User()->perfil == 5) {
 			return view('home');
 
+		}elseif (Auth::User()->perfil == 6) {
+			return redirect('informes/info');
+
 		}
 
 	}

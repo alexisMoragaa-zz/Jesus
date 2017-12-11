@@ -41,6 +41,10 @@ public function __construct(Guard $auth)
 			case '5':
 				return redirect()->to('rutas');
 				break;
+				case '6':
+					return redirect()->to('informes');
+					break;
+
 			default:
 			return 'Usuario no autorizado';
 				# code...

@@ -33,6 +33,7 @@ class Kernel extends HttpKernel {
 		'supervisor' => 'App\Http\Middleware\supervisor',
 		'operaciones' => 'App\Http\Middleware\operaciones',
 		'ruteros' => 'App\Http\Middleware\ruteros',
+		'informes' =>'App\Http\Middleware\informes',
 	];
 
 }

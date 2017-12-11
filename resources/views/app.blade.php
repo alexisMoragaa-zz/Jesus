@@ -131,6 +131,9 @@
 								<li><a href="{{url('rutas/historialRutas')}}">Historial de Rutas</a></li>
 							</ul>
 						</li>
+
+					@elseif(Auth::user()->perfil==6){{--Perfil Administracion Informes--}}
+						<li><a href="">Home</a></li>
 					@endif
 						<li class="dropdown">
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{ Auth::user()->name }}<span class="caret"></span></a>

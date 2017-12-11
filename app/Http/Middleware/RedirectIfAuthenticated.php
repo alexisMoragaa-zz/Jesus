@@ -49,7 +49,7 @@ class RedirectIfAuthenticated {
 				break;
 			case '3':
 				return redirect()->to('sup');
-				
+
 				break;
 				case '4':
 				return redirect()->to('ope');
@@ -57,6 +57,10 @@ class RedirectIfAuthenticated {
 			case '5':
 				return redirect()->to('rutas');
 				break;
+				case '6':
+					return redirect()->to('informes');
+					break;
+
 			default:
 				# code...
 			return 'Usuario no autorizado';

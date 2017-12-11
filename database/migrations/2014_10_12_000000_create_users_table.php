@@ -7,9 +7,9 @@ class CreateUsersTable extends Migration {
 
 	/**
 	 	 *creacion de la tabla usuarios
-	 	 *en esta tabla solo se guarda informacion de los usuarios que tendran acceso al webside ya sea total o parcial 
+	 	 *en esta tabla solo se guarda informacion de los usuarios que tendran acceso al webside ya sea total o parcial
 	 */
-	
+
 	/**
 	 * el metodo up se utiliza para crear la tabla cuando se ejecuta la migracion desde la consola
 	*/
@@ -22,7 +22,7 @@ class CreateUsersTable extends Migration {
 			$table->string('last_name');
 			$table->integer('rut');
 			$table->integer('dv');
-			$table->enum('perfil',['1','2','3','4','5']);
+			$table->enum('perfil',['1','2','3','4','5','6']);
 			$table->string('email')->unique();
 			$table->string('direccion');
 			$table->integer('telefono');

@@ -15,33 +15,37 @@ class CreateCaptacionesTable extends Migration {
 		Schema::create('captaciones', function(Blueprint $table)
 		{
 			$table->increments('id');
-			$table->string('campana')->nullable();
-			$table->string('estado_registro')->nullable();
-			$table->string('nom_fundacion')->nullable();
-			$table->string('n_dues')->nullable();
-			$table->string('id_fundacion')->nullable();
-			$table->string('fono_1')->nullable();
-			$table->string('fono_2')->nullable();
-			$table->string('fono_3')->nullable();
-			$table->string('fono_4')->nullable();
-			$table->string('nombre')->nullable();
-			$table->string('apellido')->nullable();
-			$table->string('correo_1')->nullable();
-			$table->string('correo_2')->nullable();
-			$table->string('firma_inscripcion')->nullable();
-			$table->string('otro_antecedente')->nullable();
+			$table->string('campana');
+			$table->string('estado_registro');
+			$table->string('n_dues');
+			$table->string('id_fundacion');
+			$table->string('fono_1');
+			$table->string('fono_2');
+			$table->string('fono_3');
+			$table->string('fono_4');
+			$table->string('nombre');
+			$table->string('apellido');
+			$table->string('correo_1');
+			$table->string('correo_2');
+			$table->string('firma_inscripcion');
+			$table->string('otro_antecedente');
 			$table->string('estado')->default(0);
-			$table->string('volver_llamar')->nullable();
-			$table->string('observacion')->nullable();
+			$table->string('volver_llamar');
+			$table->string('observacion');
 			$table->string('estado_llamada1');
-			$table->string('primer_llamado')->nullable();
+			$table->string('primer_llamado');
 			$table->string('estado_llamada2');
-			$table->string('segundo_llamado')->nullable();
+			$table->string('segundo_llamado');
 			$table->string('estado_llamada3');
-			$table->string('tercer_llamado')->nullable();
-			$table->string('n_llamados')->nullable();
-			$table->string('f_ultimo_llamado')->nullable();
+			$table->string('tercer_llamado');
+			$table->string('n_llamados');
+			$table->string('f_ultimo_llamado');
+
+
 			$table->timestamps();
+
+
+
 		});
 	}
 	/**

@@ -15,10 +15,10 @@ class UsersTableSeeder extends Seeder
         // teleoperadores
 
         \DB::table('users')->insert(array(
-            'name' => 'Fabian',
-            'last_name'=>'Gonzalez',
-            'email' => 'Fabian.gonzalez@gmail.com',
-            'perfil' => '2',
+            'name' => 'Informes',
+            'last_name'=>'Informaticos',
+            'email' => 'informes@gmail.com',
+            'perfil' => '6',
             'estado' => 'Activo',
             'password' => \Hash::make('123456'),
             'campana' => '1',
@@ -38,7 +38,7 @@ class UsersTableSeeder extends Seeder
             'turno'  =>  'AM',
             'fecha_ingreso' => '12-03-2017',
             'fecha_termino'  =>  '00-00-0000'
-            
+
 
         ));
         \DB::table('users')->insert(array(

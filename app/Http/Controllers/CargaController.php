@@ -28,7 +28,7 @@ class CargaController extends Controller {
 
 	public function cargar_datos(Request $request)
 	{
-	
+
 		$archivo = $request->file('archivo');
 		$nombre_original=$archivo->getClientOriginalName();
 		$extension=$archivo->getClientOriginalExtension();
@@ -44,8 +44,8 @@ class CargaController extends Controller {
 					$captaciones_dues=captaciones::where("n_dues","=",$fila->n_dues)->first();
 					if(count( $captaciones_dues)==0){
 						$captaciones = new captaciones;
-						$captaciones -> campana           =$fila->campana;
-						$captaciones -> nom_fundacion     =$fila->fundacion;
+						$captaciones -> campana           = $fila->campana;
+						$captaciones -> fundacion     		= $fila->fundacion;
 						$captaciones -> estado_registro   = '0';
 						$captaciones -> n_dues            = $fila -> n_dues;
 						$captaciones -> id_fundacion      = $fila -> id_fundacion;
