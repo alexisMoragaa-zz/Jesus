@@ -287,7 +287,7 @@
 
                         <div class="col-md-4">
                           <label class="control-label">Campaña</label>
-                          <input type="text" class="form-control" name="nom_campana" value="@if($function=="nada"){{$capta->campana}}@elseif($function=="editar"){{$capta->nom_campana}}@endif"onfocus="this.blur()" >
+                          <input type="text" class="form-control" name="nom_campana" value="@if($function=="nada"){{$capta->campanas->nombre_campana}}@elseif($function=="editar"){{$capta->nom_campana}}@endif"onfocus="this.blur()" >
                         </div>
 
                         <div class="col-md-4">

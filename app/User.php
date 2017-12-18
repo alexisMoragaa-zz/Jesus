@@ -50,5 +50,9 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
       return $this->hasMany(AgendarLlamados::class,'teleoperador','id');
     }
 
+    public function misRutas(){
+      return $this->hasMany(informeRuta::class,'rutero_id','id');
+    }
+
 
 }

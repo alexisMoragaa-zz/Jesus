@@ -113,18 +113,16 @@
 <div id="modal-form" title="Agregar estado Retiro">
     @if($ruta->fecha_agendamiento == $esta->primer_agendamiento)
 
-
-            {{-- {!! Form::open(['url'=>['rutas/rutas/'],'method'=>'POST','class'=>'form_status_rout']) !!} --}}
-<form action="/rutas/rutas" method="Post" enctype="multipart/form-data" class="form_status_rout">
+          <form action="/rutas/rutas" method="Post" enctype="multipart/form-data" class="form_status_rout">
     @elseif($ruta->fecha_agendamiento == $esta->segundo_agendamiento)
 
 
-            {!! Form::open(['url'=>['rutas/secondRoute/'],'method'=>'POST','class'=>'form_status_rout']) !!}
-
+            {{-- {!! Form::open(['url'=>['rutas/secondRoute/'],'method'=>'POST','class'=>'form_status_rout']) !!} --}}
+            <form action="/rutas/secondRoute" method="Post" enctype="multipart/form-data" class="form_status_rout">
     @elseif($ruta->fecha_agendamiento == $esta->tercer_agendamiento)
 
-            {!! Form::open(['url'=>['rutas/thirdRoute/'],'method'=>'POST','class'=>'form_status_rout']) !!}
-
+            {{-- {!! Form::open(['url'=>['rutas/thirdRoute/'],'method'=>'POST','class'=>'form_status_rout']) !!} --}}
+            <form action="/rutas/thirdRoute" method="Post" enctype="multipart/form-data" class="form_status_rout">
      @endif
      <input type="hidden" name="_token" value="{{ csrf_token() }}">
 
@@ -141,7 +139,7 @@
             <option value="NoEstaEnDomicilio">No se encuentra en domicilio</option>
             <option value="NoContesta">No contesta</option>
             <option value="retracta">Persona se arrepiente</option>
-            <option value="direccion erro">No encuentro Domicilio</option>
+            <option value="noEncuentroDireccion">No encuentro Domicilio</option>
         </select>
 
 

@@ -39,7 +39,7 @@ Route::group(['middleware' => ['auth', 'administrador'], 'prefix' => 'admin'], f
     Route::post('actualizado&{id}', 'TeoController@actualizar');
     Route::get('detalle{id}', 'supController@detalleUser');
     route::get('updatePivot{user_id}/{pivot_id}', 'supController@updatePivot');
-    route::post('updatepivot2', 'supController@updatepivot2');
+    Route::post('updatepivot2', 'supController@updatepivot2');
     route::post('updatePass/{id}', 'adminController@updatePass');
     route::post('siguiente/{id}', 'teoController@siguiente');
     route::get('adminconfig', 'AdminController@adminConfig');
@@ -140,7 +140,8 @@ Route::group(['middleware' => ['auth', 'supervisor'], 'prefix' => 'sup'], functi
     Route::Resource('sup', 'supController');
     Route::Resource('call', 'TeoController');
     Route::get('detalle{id}', 'supController@detalleUser');
-    route::get('updatePivot{id}', 'supController@updatePivot');
+    Route::get('updatePivot{user_id}/{pivot_id}', 'supController@updatePivot');
+    Route::post('updatepivot2', 'supController@updatepivot2');
     Route::Resource('user', 'AdminController');
 
     /*Route::get('/', function(){
@@ -181,7 +182,12 @@ Route::group(['middleware' => ['auth', 'operaciones'], 'prefix' => 'ope'], funct
     Route::get('agendamiento/llamados','OperacionesController@agendamientoLlamado');
     Route::get('agendamiento/llamada/finalizar/{id}','OperacionesController@AgendamientoLlamadoFinalizar');
     Route::Post('agendamiento/llamado/Finalizar',   'OperacionesController@AgendamientoLlamadosFinalizarRegistro');
-
+    Route::get('mandatos','OperacionesController@mandatos');
+    Route::post('registrar/mandato/captacion','OperacionesController@registrarMandatoCaptacion');
+    Route::post('registrar/mandato/ruta','OperacionesController@registrarMandatoRuta');
+    Route::Post('agregar/mandato/1','OperacionesController@agregarMandato1');
+    Route::Post('agregar/mandato/2','OperacionesController@agregarMandato2');
+    Route::Post('agregar/mandato/3','OperacionesController@agregarMandato3');
 
     Route::get('/', function(){
 
@@ -223,5 +229,8 @@ Route::group(['middleware' => ['auth', 'ruteros'], 'prefix' => 'rutas'], functio
 
 Route::group(['middleware'=>['auth','informes'],'prefix'=>'informes'],function(){
       Route::Resource('info', 'informesController');
-
+      Route::get('campana/{campana}', 'informesController@informeCampana');
+      Route::get('fundacion/{fundacion}', 'informesController@informeFundacion');
+      Route::get('user/{user}', 'informesController@informeUser');
+      Route::get('rutero/{rutero}','informesController@informeRutero');
 });

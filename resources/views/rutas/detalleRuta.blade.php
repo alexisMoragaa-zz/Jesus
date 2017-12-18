@@ -32,6 +32,9 @@
             $(".modal-imagen1").hide();
             $(".modal-imagen2").hide();
             $(".modal-imagen3").hide();
+            $(".modal_mandato_1").hide();
+            $(".modal_mandato_2").hide();
+            $(".modal_mandato_3").hide();
 
             $("#age2").click(function(){
                 $(".bord2").fadeIn();
@@ -50,6 +53,18 @@
 
           $(".verimagen3").click(function(){
             $(".modal-imagen3").dialog({width:"80%"});
+          });
+
+          $(".addMandato_1").click(function(){
+            $(".modal_mandato_1").dialog({width:"30%"});
+          });
+
+          $(".addMandato_2").click(function(){
+            $(".modal_mandato_2").dialog({width:"30%"});
+          });
+
+          $(".addMandato_3").click(function(){
+            $(".modal_mandato_3").dialog({width:"30%"});
           });
 
         });
@@ -113,7 +128,13 @@
                         <td>{{$reage->estadoRuta->estado_primer_agendamiento}}</td>
                         <td>{{$reage->estadoRuta->detalle_primer_agendamiento}}</td>
                         <td>{{$reage->estadoRuta->observacion_primer_agendamiento}}</td>
-                        <td><a href="#" class="verimagen1">Ver Imagen</a></td>
+
+                          @if($reage->estadoRuta->estado_primer_agendamiento=="OK")
+                            <td><a href="#" class="addMandato_1"> Recepcionar Mandato</a></td>
+                          @else
+                            <td><a href="#" class="verimagen1">Ver Imagen</a></td>
+                          @endif
+
                     </tr>
                 </table>
             </div>
@@ -129,7 +150,13 @@
                     <td>{{$reage->estadoRuta->estado_segundo_agendamiento}}</td>
                     <td>{{$reage->estadoRuta->detalle_segundo_agendamiento}}</td>
                     <td>{{$reage->estadoRuta->observacion_segundo_agendamiento}}</td>
-                    <td><a href="#" class="verimagen2">Ver Imagen</a></td>
+
+                    @if($reage->estadoRuta->estado_segundo_agendamiento=="OK")
+                      <td><a href="#" class="addMandato_2"> Recepcionar Mandato</a></td>
+                    @else
+                      <td><a href="#" class="verimagen2">Ver Imagen</a></td>
+                    @endif
+
                 </tr>
             </table>
         </div>{{--Fin del div estado Segunda visita--}}
@@ -143,7 +170,13 @@
                     <td>{{$reage->estadoRuta->estado_tercer_agendamiento}}</td>
                     <td>{{$reage->estadoRuta->detalle_tercer_agendamiento}}</td>
                     <td>{{$reage->estadoRuta->observacion_tercer_agendamiento}}</td>
-                    <td><a href="#" class="verimagen3">Ver Imagen</a></td>
+
+                    @if($reage->estadoRuta->estado_tercer_agendamiento=="OK")
+                      <td><a href="#" class="addMandato_3"> Recepcionar Mandato</a></td>
+                    @else
+                      <td><a href="#" class="verimagen3">Ver Imagen</a></td>
+                    @endif
+
                 </tr>
             </table>
         </div>{{--Fin del div estado tercera  visita--}}
@@ -168,4 +201,67 @@
       @endif
     </div>
 
+    <div class="modal_mandato_1">
+      <form action="/ope/agregar/mandato/1" method="post">
+
+        <input type="hidden" name="_token" value="{{csrf_token()}}">{{--campo token para evitar ataques cruzados--}}
+        <input type="hidden" name="id" value="{{$reage->id}}"> {{--enviamos el id de la captacion que deseamos modificar--}}
+
+        <label for="" class="control-label">Seleccione el estado de Mandato</label>
+        <select name="mandato" id="" class="form-control">
+          <option value="">Seleccione</option>
+          <option value="OK">OK</option>
+          <option value="Rechazado">Rechazado</option>
+          <option value="ConReparo">Con Reparo</option>
+        </select>
+
+        <label for="" class="control-label">Comentario</label>
+        <input type="text" class="form-control" name="comenario">
+
+        <input type="submit" class="btn btn-success btn1" val="Agregar Mandato">
+      </form>
+    </div>
+
+    <div class="modal_mandato_2">
+      <form action="/ope/agregar/mandato/2" method="post">
+
+        <input type="hidden" name="_token" value="{{csrf_token()}}">{{--campo token para evitar ataques cruzados--}}
+        <input type="hidden" name="id" value="{{$reage->id}}"> {{--enviamos el id de la captacion que deseamos modificar--}}
+
+        <label for="" class="control-label">Seleccione el estado de Mandato</label>
+        <select name="mandato" id="" class="form-control">
+          <option value="">Seleccione</option>
+          <option value="OK">OK</option>
+          <option value="Rechazado">Rechazado</option>
+          <option value=""></option>
+        </select>
+
+        <label for="" class="control-label">Comentario</label>
+        <input type="text" class="form-control" name="comentario">
+
+        <input type="submit" class="btn btn-success btn1" val="Agregar Mandato">
+      </form>
+    </div>
+
+
+    <div class="modal_mandato_3">
+      <form action="/ope/agregar/mandato/3" method="post">
+
+        <input type="hidden" name="_token" value="{{csrf_token()}}">{{--campo token para evitar ataques cruzados--}}
+        <input type="hidden" name="id" value="{{$reage->id}}"> {{--enviamos el id de la captacion que deseamos modificar--}}
+
+        <label for="" class="control-label">Seleccione el estado de Mandato</label>
+        <select name="mandato" id="" class="form-control">
+          <option value="">Seleccione</option>
+          <option value="OK">OK</option>
+          <option value="Rechazado">Rechazado</option>
+          <option value=""></option>
+        </select>
+
+        <label for="" class="control-label">Comentario</label>
+        <input type="text" class="form-control" name="comentario">
+
+        <input type="submit" class="btn btn-success btn1" val="Agregar Mandato">
+      </form>
+    </div>
 @endsection

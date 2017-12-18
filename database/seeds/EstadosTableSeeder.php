@@ -229,9 +229,6 @@ class EstadosTableSeeder extends Seeder
 
 
 
-
-
-
     //-----------estados de ruta-----------
 
 

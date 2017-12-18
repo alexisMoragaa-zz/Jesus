@@ -115,10 +115,11 @@
 								<li><a href="{{ url('/ope/agendamiento/llamados')}}">Agendamiento Llamados</a></li>
 								<li><a href="{{ url('/ope/verRutas')}}">Rutas Diarias</a></li>
 								<li><a href="{{ url('/ope/rutas')}}">Rutas Semanales</a></li>
-
 								<li><a href="{{url('ope/createRutas')}}">Calendario de Rutas</a></li>
+								<li><a href="{{ url('/ope/mandatos')}}">Recepcionar Mandatos</a></li>
 							</ul>
 						</li>
+
 
 
 					@elseif(Auth::user()->perfil==5){{--Perfil Ruteros--}}

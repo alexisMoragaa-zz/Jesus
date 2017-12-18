@@ -75,8 +75,13 @@
                              <td>{{$campana->pivot->created_at}}</td>
                              @if($campana->pivot->motivo_termino =="")
                                  <input type="hidden" value="1" id="eje">
-                                 <td style="border:0"><a href="{{url('admin/updatePivot')}}{{$usuarios->id}}/{{$campana->pivot->id}}" >
-                                         Finalizar <span class="error">*</span></a></td>
+                                   @if(Auth::User()->perfil==1)
+                                     <td style="border:0"><a href="{{url('admin/updatePivot')}}{{$usuarios->id}}/{{$campana->pivot->id}}" >
+                                             Finalizar <span class="error">*</span></a></td>
+                                   @elseif (Auth::User()->perfil==3)
+                                     <td style="border:0"><a href="{{url('sup/updatePivot')}}{{$usuarios->id}}/{{$campana->pivot->id}}" >
+                                             Finalizar <span class="error">*</span></a></td>
+                                   @endif
                              @else
                                 <td>Finalizada</td>
                              @endif

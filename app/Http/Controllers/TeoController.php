@@ -31,10 +31,10 @@ class TeoController extends Controller
     {
         $status = estado::where('modulo', '=', 'llamado')->get();
         $date = Carbon::now()->format('d-m-Y');
-        $dato = Campana::findOrFail(Auth::user()->campana)->nombre_campana;
+        $dato = Campana::findOrFail(Auth::user()->campana)->id;
 
         $cap = captaciones::where('id', '>=', 1)
-            ->where('campana', '=', $dato)->where('f_ultimo_llamado', '!=', $date)->where('estado', '!=', 'cu-')
+            ->where('campana_id', '=', $dato)->where('f_ultimo_llamado', '!=', $date)->where('estado', '!=', 'cu-')
             ->where('estado', '!=', 'cu+')->where('estado_registro', '=', 0)->where('estado', '!=', 'ca')
             ->where('f_ultimo_llamado', '!=', $date)->first();
 
@@ -211,6 +211,9 @@ class TeoController extends Controller
     {   /**Primera parte*/
 
         $data = $request->all();
+        $ruteroo = User::where('perfil','=',5)->where('name','=',$data['rutero'])->get()->first();
+        $id_rutero =$ruteroo->id;
+
         $date = Carbon::now()->format('d/m/Y');
         $comunas=comunaRetiro::where('comuna','=',$request->comuna)->get()->first();
         $ciudad =$comunas->ciudad;
@@ -307,9 +310,11 @@ class TeoController extends Controller
                'estado'=>'Esperando Aprobacion ',
             ]);
 
+
             informeRuta::create([
               'id_captacion'=>$cap->id,
               'id_ruta'=>$id,
+              'rutero_id'=>$id_rutero,
               'fecha_agendamiento'=>$data['fecha_agendamiento'],
               'estado'=>'visita pendiente',
               'comuna'=>$data['comuna'],
@@ -390,6 +395,8 @@ class TeoController extends Controller
 
     public function editCapPost(Request $request){
 
+        $ruteroo = User::where('perfil','=',5)->where('name','=',$request->rutero)->get()->first();
+        $id_rutero =$ruteroo->id;
         $id =$request->id_captacion;
         $editCap =CaptacionesExitosa::find($id);
 
@@ -434,6 +441,7 @@ class TeoController extends Controller
                         informeRuta::create([
                           'id_captacion'=>$request->id_captacion,
                           'id_ruta'=>$request->id_captacion,
+                          'rutero_id'=>$id_rutero,
                           'fecha_agendamiento'=>$date,
                           'estado'=>'visita pendiente',
                           'num_retiro'=>2,
@@ -457,6 +465,7 @@ class TeoController extends Controller
                        informeRuta::create([
                          'id_captacion'=>$request->id_captacion,
                          'id_ruta'=>$request->id_captacion,
+                         'rutero_id'=>$id_rutero,
                          'fecha_agendamiento'=>$date,
                          'estado'=>'visita pendiente',
                          'num_retiro'=>2,
@@ -532,7 +541,8 @@ class TeoController extends Controller
                ]);
     }
     public function reagendado(Request $request){
-
+        $ruteroo = User::where('perfil','=',5)->where('name','=',$request->rutero)->get()->first();
+        $id_rutero =$ruteroo->id;
         $date =$request->fecha_reagendamiento;
         $time =$request->horario;
 
@@ -555,12 +565,13 @@ class TeoController extends Controller
                 informeRuta::create([
                   'id_captacion'=>$request->id_captacion,
                   'id_ruta'=>$request->id_captacion,
+                  'rutero_id'=>$id_rutero,
                   'fecha_agendamiento'=>$date,
                   'estado'=>'visita pendiente',
                   'num_retiro'=>3,
-                  'rutero'=>$data['rutero'],
-                  'comuna'=>$data['comuna'],
-                  'horario'=>$data['jornada'],
+                  'rutero'=>$request->rutero,
+                  'comuna'=>$request->comuna,
+                  'horario'=>$time,
                 ]);
 
                 if(Auth::user()->perfil==1){
@@ -585,12 +596,13 @@ class TeoController extends Controller
                 informeRuta::create([
                   'id_captacion'=>$request->id_captacion,
                   'id_ruta'=>$request->id_captacion,
+                  'rutero_id'=>$id_rutero,
                   'fecha_agendamiento'=>$date,
                   'estado'=>'visita pendiente',
                   'num_retiro'=>2,
-                  'rutero'=>$data['rutero'],
-                  'comuna'=>$data['comuna'],
-                  'horario'=>$data['jornada'],
+                  'rutero'=>$request->rutero,
+                  'comuna'=>$request->comuna,
+                  'horario'=>$time,
                 ]);
                 if(Auth::user()->perfil==1){
                     return redirect('/admin/PorReagendar');

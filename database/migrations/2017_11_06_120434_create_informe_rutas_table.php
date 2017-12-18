@@ -17,15 +17,20 @@ class CreateInformeRutasTable extends Migration {
 			$table->increments('id');
 			$table->integer('id_ruta')->unsigned();
 			$table->integer('id_captacion')->unsigned();
+			$table->integer('rutero_id')->unsigned();
 			$table->string('estado');
+			$table->string('motivo');
 			$table->string('fecha_agendamiento');
 			$table->string('num_retiro');
 			$table->string('rutero');
 			$table->string('horario');
 			$table->string('comuna');
 			$table->string('imagen');
+			$table->string('mandato');
+
 			$table->foreign('id_ruta')->references('id')->on('estado_rutas');
 			$table->foreign('id_captacion')->references('id')->on('captaciones_exitosas');
+			$table->foreign('rutero_id')->references('id')->on('users');
 
 			$table->timestamps();
 		});

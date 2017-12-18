@@ -8,9 +8,6 @@ $(document).ready(function () {
       $(".agendamientoConValidacionReducida").hide();
 
 
-
-
-
       /**Si esl estado es Volver a Llamar despliega un input oculto*/
       $("#status").change(function(){
           if($(this).val()=="Volver a llamar"){

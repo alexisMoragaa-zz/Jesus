@@ -39,17 +39,12 @@ class RutasController extends Controller {
 
 	public function store(Request $request)
 	{
-		$img = $this->validate($request,[
-			'file'=>'required|image'
-		]);
-
 		$hoy = Carbon::now()->format('Y-m-d');
 		$estado =$request->Status;
 		$motivo =$request->Motivo;
 		$observacion =$request->observacion;
 		$id =$request->id;
 		$reagendar =CaptacionesExitosa::find($id);
-
 
 		DB::table('estado_rutas')
 			->where('id','=',$id)
@@ -61,9 +56,21 @@ class RutasController extends Controller {
 				'updated_at'=>$hoy
 
 			]);
-
+		$imagen_ruta="";
     if($estado=="noRetirado"){
-			if($motivo !="retracta"){
+
+					$img = $this->validate($request,[
+					'file'=>'required|image'
+				]);
+				//obtenemos el campo file definido en el formulario
+					$file = $request->file('file');
+					$nombre=$reagendar->nombre.$reagendar->apellido."visita01.jpg";
+				//indicamos que queremos guardar un nuevo archivo en el disco local
+					$imagen_ruta  = "../storage/app/".$nombre;
+					$ti=Storage::disk('local')->put($nombre, \File::get($file));
+
+				if($motivo !="retracta"){
+
 				$reagendar->reagendar=1;
 				$reagendar->save();
 			}else{
@@ -73,16 +80,12 @@ class RutasController extends Controller {
 			}
 		}
 
-		//obtenemos el campo file definido en el formulario
-			$file = $request->file('file');
-			$nombre=$reagendar->nombre.$reagendar->apellido."visita01.jpg";
-		//indicamos que queremos guardar un nuevo archivo en el disco local
-			$imagen_ruta  = "../storage/app/".$nombre;
-			$ti=Storage::disk('local')->put($nombre, \File::get($file));
+
 
 			$ruta =informeRuta::where('id_captacion','=',$request->id)->where('num_retiro','=',1)->get()->first();
 			$ruta->estado =$estado;
 			$ruta->imagen=$imagen_ruta;
+			$ruta->motivo=$motivo;
 			$ruta->save();
 
 
@@ -112,20 +115,18 @@ class RutasController extends Controller {
 				'updated_at'=>$hoy
 
 			]);
-
-				//obtenemos el campo file definido en el formulario
-				$file = $request->file('file');
-				$nombre=$reagendar->nombre.$reagendar->apellido."visita02.jpg";
-				//indicamos que queremos guardar un nuevo archivo en el disco local
-				$imagen_ruta  = "../storage/app/".$nombre;
-				$ti=Storage::disk('local')->put($nombre, \File::get($file));
-
-			$ruta =informeRuta::where('id_captacion','=',$request->id)->where('num_retiro','=',2)->get()->first();
-				$ruta->estado =$estado;
-				$ruta->imagen=$imagen_ruta;
-				$ruta->save();
-
+$imagen_ruta="";
 		if($estado=="noRetirado"){
+					$img = $this->validate($request,[
+					'file'=>'required|image'
+					]);
+					//obtenemos el campo file definido en el formulario
+					$file = $request->file('file');
+					$nombre=$reagendar->nombre.$reagendar->apellido."visita02.jpg";
+					//indicamos que queremos guardar un nuevo archivo en el disco local
+					$imagen_ruta  = "../storage/app/".$nombre;
+					$ti=Storage::disk('local')->put($nombre, \File::get($file));
+
 			if($motivo !="retracta"){
 				$reagendar->reagendar=1;
 				$reagendar->save();
@@ -134,8 +135,16 @@ class RutasController extends Controller {
 				$reagendar->estado_mandato="retracta";
 				$reagendar->save();
 			}
-
 		}
+
+
+
+	$ruta =informeRuta::where('id_captacion','=',$request->id)->where('num_retiro','=',2)->get()->first();
+		$ruta->estado =$estado;
+		$ruta->imagen=$imagen_ruta;
+		$ruta->motivo=$motivo;
+		$ruta->save();
+
 		if(Auth::user()->perfil==5){
 			return redirect(route('rutas.rutas.index'));
 		}else if(Auth::user()->perfil==2){
@@ -161,24 +170,31 @@ class RutasController extends Controller {
 				'updated_at'=>$hoy
 
 			]);
-			//obtenemos el campo file definido en el formulario
-			$file = $request->file('file');
-			$nombre=$reagendar->nombre.$reagendar->apellido."visita03.jpg";
-			//indicamos que queremos guardar un nuevo archivo en el disco local
-			$imagen_ruta  = "../storage/app/".$nombre;
-			$ti=Storage::disk('local')->put($nombre, \File::get($file));
-
-			$ruta =informeRuta::where('id_captacion','=',$request->id)->where('num_retiro','=',3)->get()->first();
-				$ruta->estado =$estado;
-				$ruta->imagen=$imagen_ruta;
-				$ruta->save();
-
+			$imagen_ruta="";
 		if($estado=="noRetirado"){
+
+					$img = $this->validate($request,[
+					'file'=>'required|image'
+				]);
+					//obtenemos el campo file definido en el formulario
+					$file = $request->file('file');
+					$nombre=$reagendar->nombre.$reagendar->apellido."visita02.jpg";
+					//indicamos que queremos guardar un nuevo archivo en el disco local
+					$imagen_ruta  = "../storage/app/".$nombre;
+					$ti=Storage::disk('local')->put($nombre, \File::get($file));
+
 			$reagendar =CaptacionesExitosa::find($id);
 			$reagendar->reagendar=5;
 			$reagendar->estado_mandato="AgendamientoFallido";
 			$reagendar->save();
 		}
+
+		$ruta =informeRuta::where('id_captacion','=',$request->id)->where('num_retiro','=',3)->get()->first();
+			$ruta->estado =$estado;
+			$ruta->imagen=$imagen_ruta;
+			$ruta->motivo=$motivo;
+			$ruta->save();
+
 		if(Auth::user()->perfil==5){
 			return redirect(route('rutas.rutas.index'));
 		}else if(Auth::user()->perfil==1){

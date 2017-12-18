@@ -34,4 +34,12 @@ class Campana extends Model
             ->withPivot('motivo_termino')
             ->withTimestamps();
     }
+
+    public function registrosCampana(){
+      return $this->hasMany(captaciones::class,'campana_id','id');
+    }
+
+    public function funda(){
+      return $this->belongsTo(fundacion::class,'fundacion','id');
+    }
 }

@@ -78,7 +78,7 @@ class OperacionesController extends Controller
         $hoy = Carbon::now()->format('d/m/Y');
         $last_week = Carbon::now()->startOfWeek()->format('d/m/Y');
         $last_month = Carbon::now()->startOfMonth()->format('d/m/Y');
-
+        $code ="";
         $dia=$request->dias;
         $teo=$request->teo;
         $rutero=$request->rutero;
@@ -90,23 +90,23 @@ class OperacionesController extends Controller
                 ->where('rutero', '=', $rutero)->get()->sortByDesc('created_at');
 
 
-          return view('operac/agendamiento', compact('datos','teos','ruteros'));
+          return view('operac/agendamiento', compact('datos','teos','ruteros','code'));
 
         } elseif ($dia == 1 and $teo != "") {
 
             $datos =CaptacionesExitosa::where('fecha_captacion', '=', $hoy)->where('teleoperador', '=', $teo)
                 ->get()->sortByDesc('created_at');
-            return view('operac/agendamiento', compact('datos', 'teos', 'ruteros'));
+            return view('operac/agendamiento', compact('datos', 'teos', 'ruteros','code'));
 
         } elseif ($dia == 1 and $rutero != "") {
 
             $datos = CaptacionesExitosa::where('fecha_captacion', '=', $hoy)->where('rutero', '=', $rutero)
             ->get()->sortByDesc('created_at');
-            return view('operac/agendamiento', compact('datos','teos','ruteros'));
+            return view('operac/agendamiento', compact('datos','teos','ruteros','code'));
 
         } elseif ($dia == 1) {
            $datos=CaptacionesExitosa::where('fecha_captacion', '=', $hoy)->get()->sortByDesc('created_at');
-           return view('operac/agendamiento', compact('datos','teos','ruteros'));
+           return view('operac/agendamiento', compact('datos','teos','ruteros','code'));
         }
 /**Fin filtros dia actual*/
 
@@ -118,19 +118,19 @@ class OperacionesController extends Controller
                 ->where('teleoperador','=',$teo)
                 ->where('rutero','=',$rutero)->get()->sortByDesc('created_at');
 
-            return view('operac/agendamiento', compact('datos','teos','ruteros'));
+            return view('operac/agendamiento', compact('datos','teos','ruteros','code'));
 
         } elseif ($dia == 2 and $teo != "") {
 
             $datos = CaptacionesExitosa::whereBetween('fecha_captacion', [$last_week, $hoy])
                 ->where('teleoperador', '=', $teo)->get()->sortByDesc('created_at');
-            return view('operac/agendamiento', compact('datos','teos','ruteros'));
+            return view('operac/agendamiento', compact('datos','teos','ruteros','code'));
 
         } elseif ($dia == 2 and $rutero != "") {
 
             $datos = CaptacionesExitosa::whereBetween('fecha_captacion', [$last_week, $hoy])
                 ->where('rutero', '=', $rutero)->get()->sortByDesc('created_at');
-            return view('operac/agendamiento', compact('datos','teos','ruteros'));
+            return view('operac/agendamiento', compact('datos','teos','ruteros','code'));
 
         } elseif ($dia == 2) {
 
@@ -138,7 +138,7 @@ class OperacionesController extends Controller
         $datos = CaptacionesExitosa::whereBetween('fecha_captacion',[$last_week,$hoy])->get()->sortByDesc('created_at');
 
 
-            return view('operac/agendamiento', compact('datos','teos','ruteros'));
+            return view('operac/agendamiento', compact('datos','teos','ruteros','code'));
 
         }
 /**Fin filtro semana en curso*/
@@ -149,19 +149,19 @@ class OperacionesController extends Controller
 
             $datos = CaptacionesExitosa::whereBetween('fecha_captacion', [$last_month, $hoy])
                 ->where('teleoperador', '=', $teo)->where('rutero', '=', $rutero)->get()->sortByDesc('created_at');
-            return view('operac/agendamiento', compact('datos','teos','ruteros'));
+            return view('operac/agendamiento', compact('datos','teos','ruteros','code'));
 
         } elseif ($dia == 3 and $teo != "") {
 
             $datos = CaptacionesExitosa::whereBetween('fecha_captacion', [$last_month, $hoy])
                 ->where('teleoperador', '=', $teo)->get()->sortByDesc('created_at');
-            return view('operac/agendamiento', compact('datos','teos','ruteros'));
+            return view('operac/agendamiento', compact('datos','teos','ruteros','code'));
 
         } elseif ($dia == 3 and $rutero != "") {
 
             $datos = CaptacionesExitosa::whereBetween('fecha_captacion', [$last_month, $hoy])
                 ->where('rutero', '=', $rutero)->get()->sortByDesc('created_at');
-            return view('operac/agendamiento', compact('datos','teos','ruteros'));
+            return view('operac/agendamiento', compact('datos','teos','ruteros','code'));
 
 
 
@@ -169,7 +169,7 @@ class OperacionesController extends Controller
 
             $datos = CaptacionesExitosa::whereBetween('fecha_captacion', [$last_month, $hoy])->get()->sortByDesc('created_at');
 
-            return view('operac/agendamiento', compact('datos','teos','ruteros'));
+            return view('operac/agendamiento', compact('datos','teos','ruteros','code'));
 
 
         }
@@ -664,18 +664,21 @@ class OperacionesController extends Controller
     }
 
 public function passcode(Request $request){
-     $pass=$request->pass;
+  //passcode es un metodo para generar un codigo numerico dinamico para saltar validaciones
+     $pass=$request->pass;//recibimos el password de operaciones mediante el request
 
-      if (Hash::check($pass, Auth::user()->password))
+      if (Hash::check($pass, Auth::user()->password))//verificamos que el password de operaciones sea valido
+      //si el password de operaciones es valido continuamos con este bloque de codigo
       {
-        $code= rand(1000,9999);
-        $passcode =maxCap::find('1');
-        $passcode->passcode=$code;
-        $passcode->save();
-        return view('operac.passcode',['passcode'=>$code]);
+        $code= rand(1000,9999);//generamos un cofigo aleatorio entre 1000 y 9999
+        $passcode =maxCap::find('1');//buscamos el registro en el cual guardaremos el passcode
+        $passcode->passcode=$code;//asignamos el valor del passcode a el campo en la base de datos
+        $passcode->save();//guardamos los cambios realizados en la base de datos
+        return view('operac.passcode',['passcode'=>$code]);//retornamos la vista con el passcode valido por 60 segundos
 
 
-      }else{
+      }else{//si es password de operaciones no es valido asignamos a la variable code el valor de fail
+          // y retornamos a la vista de la cual veniamos
         $code="fail";
         $hoy = Carbon::now()->format('d/m/Y');
         $teos = User::where('perfil', '=', 2)->get();
@@ -686,30 +689,35 @@ public function passcode(Request $request){
 }
 
 
-public function resetPassCode(){
-  $code= rand(1000,9999);
-    $passcode =maxCap::find('1');
-    $passcode->passcode=$code;
-    $passcode->save();
+public function resetPassCode(){//resetPassCode es una funcion que resetea el passcode generado anteriormente,
+        //de esta forma el passcode anteriormente usado no se puede reutilizar
+    $code= rand(1000,9999);//asignamos a la variable code un valor random entre 1000 y 9999
+    $passcode =maxCap::find('1'); //seleccionamos el registro en el cual guardaremos el passcode
+    $passcode->passcode=$code;//asignamos el valor del passcode al campo de la base de datos
+    $passcode->save();//guardamos loc cambios realizados en la base de datos
 
-    if(Auth::user()->perfil==4){
+    if(Auth::user()->perfil==4){// a diferencia del caso anterior no retornamos la vista con el passcode,
+                //ya que en esta ocacion el passcode es secreto para evitar que se reutilice
       return redirect('ope/ope');
     }elseif (Auth::user()->perfil==2) {
     return redirect('teo/teo');
     }
 }
 
-public function agendamientoLlamado(){
+public function agendamientoLlamado(){//agendamientoLlamado es una funcion que muestra los agendamientos de llamados
+  // realizados por los teleoperadores en sus distintas etapas como pendientes, finalizados y llamados
   $hoy = Carbon::now()->format('Y-m-d');
 
   $llamados_pendientes= AgendarLlamados::where('fecha_llamado','>=',$hoy)
-  ->where('estado_llamado','!=',"no llamado")->get();
-  $atrasados= AgendarLlamados::where('fecha_llamado','<',$hoy)
-  ->where('estado_llamado','!=',"no llamado")->get();
-  $finalizados = AgendarLlamados::where('estado_llamado','=',"no llamado")->get();
+  ->where('estado_llamado','!=',"no llamado")->get();//seleccionamos los llamados pendientes
 
-  $llamados = AgendarLlamados::where('estado_llamado','=',"llamado")->get();
-  return view('operac.AgendamientoLlamados',[
+  $atrasados= AgendarLlamados::where('fecha_llamado','<',$hoy)
+  ->where('estado_llamado','!=',"no llamado")->get();//seleccionamos los llamados atrasados
+
+  $finalizados = AgendarLlamados::where('estado_llamado','=',"no llamado")->get();//seleccionamos los ya finalizados
+
+  $llamados = AgendarLlamados::where('estado_llamado','=',"llamado")->get();//seleccionamos los que fueron llamados
+  return view('operac.AgendamientoLlamados',[//retornamos la vista con la informacion de los agendamientos recopilada
     'pendientes'=>$llamados_pendientes,
     'atrasados'=>$atrasados,
     'finalizados'=>$finalizados,
@@ -718,7 +726,6 @@ public function agendamientoLlamado(){
 }
 
 public function AgendamientoLlamadoFinalizar($id){
-
   $reage = AgendarLlamados::find($id);
   $teos = User::where('perfil','=',2)->get();
   return view('operac.agendamientoLlamadosFinalizarCambiarTeo',
@@ -735,6 +742,130 @@ public function AgendamientoLlamadosFinalizarRegistro(Request $request){
     $registro->save();
 
   return redirect('ope/agendamiento/llamados');
+}
+
+public function mandatos(){//metodo que retorna una vista para seleccionar las captaciones o rutas a las cuales se les agregara un estadp de mandato
+  $ruteros = User::where('perfil','=',5)->get();//seleccionamos los ruteros que mostraremos en la vista
+  $teleoperador = User::where('perfil','=',2)->get();//seleccionamos los teleoperadores que mostraremos en la vista
+  return view('operac.recepcionarMandatos',[//retornamos la vista con la infoemacion seleccionada
+    'ruteros'=>$ruteros,
+    'teleoperador'=>$teleoperador
+  ]);
+}
+public function registrarMandatoCaptacion(Request $request){
+  $ruteros = User::where('perfil','=',5)->get();//seleccionamos los ruteros
+  $teleoperador = User::where('perfil','=',2)->get();//seleccionamos los teleoperadores
+  $nameTeo = User::find($request->teleoperador)->name;//nombre del teleoperador por el cual se realiza la busqueda
+
+  if($request->nombre != ""){//filtro que se activa cuando se selecciona nombre como criterio de busqueda desde la vista
+    $filtro ="Captaciones de ".$nameTeo." con nombre ".$request->nombre;//pequeño breadcrum que nos indica que filtro reallizamoa en la vista
+    $registros  = CaptacionesExitosa::where('teleoperador','=',$request->teleoperador)
+    ->where('nombre','=',$request->nombre)->where('estado_mandato','=',"")->get();//filtro realizado por el id de un teleoperador mas el nombre de una persona en la tabla de captaciones exitosas
+    return view('operac.recepcionarMandatos',[ //retorno de la vista con la informacion recopilada
+      'ruteros'=>$ruteros,
+      'teleoperador'=>$teleoperador,
+      'registros'=>$registros,
+      'filtroPor'=>$filtro,
+    ]);
+
+  }elseif($request->lastName!=""){//filtro que se activa cuando se selecciona apellido como criterio de busqueda en la vista
+    $filtro ="Captaciones de ".$nameTeo." con apellido ".$request->apellido;//pequeño breadcrum que nos indica que filtro reallizamoa en la vista
+    $registros  = CaptacionesExitosa::where('teleoperador','=',$request->teleoperador)
+    ->where('apellido','=',$request->apellido)->where('estado_mandato','=',"")->get();//filtro realizado por el id de un teleoperador mas el apellido de una persona en la tabla de captaciones exitosas
+
+    return view('operac.recepcionarMandatos',[ //retorno de la vista con la informacion recopilada
+      'ruteros'=>$ruteros,
+      'teleoperador'=>$teleoperador,
+      'registros'=>$registros,
+      'filtroPor'=>$filtro,
+      ]);
+  }elseif ($request->rut!="") {//filtro que se activa cuando usamos el rut como criterio de bsuqueda en la vista
+    $filtro ="Captaciones de ".$nameTeo." con rut ".$request->rut;//pequeño breadcrum que nos indica que filtro reallizamoa en la vista
+    $registros  = CaptacionesExitosa::where('teleoperador','=',$request->teleoperador)
+    ->where('rut','=',$request->rut)->where('estado_mandato','=',"")->get();//filtro realizado por el id de un teleoperador mas el rut de una persona en la tabla de captaciones exitosas
+
+    return view('operac.recepcionarMandatos',[ //retorno de la vista con la informacion recopilada
+      'ruteros'=>$ruteros,
+      'teleoperador'=>$teleoperador,
+      'registros'=>$registros,
+      'filtroPor'=>$filtro,
+    ]);
+
+  }elseif ($request->fecha!="") {
+    $filtro ="Captaciones de ".$nameTeo." con fecha ".$request->fecha;//pequeño breadcrum que nos indica que filtro reallizamoa en la vista
+    $registros  = CaptacionesExitosa::where('teleoperador','=',$request->teleoperador)
+    ->where('fecha_agendamiento','=',$request->fecha)->where('estado_mandato','=',"")->get();//filtro realizado por el id de un teleoperador mas la fecha de agendamiento en la tabla de captaciones exitosas
+
+    return view('operac.recepcionarMandatos',[ //retorno de la vista con la informacion recopilada
+      'ruteros'=>$ruteros,
+      'teleoperador'=>$teleoperador,
+      'registros'=>$registros,
+      'filtroPor'=>$filtro,
+    ]);
+  }
+//todos estos filtros son accesados mediante el id de un teleoperador seleccionado mas un segundo campo el cual es obligatorio y no puede faltar
+}
+
+public function registrarMandatoRuta(Request $request){
+  $ruteros = User::where('perfil','=',5)->get();//seleccionamos los ruteros
+  $teleoperador = User::where('perfil','=',2)->get();//seleccionamos los teleoperadores
+  $nameTeo = User::find($request->rutero)->name;//nombre del rutero por el cual se realiza la busqueda
+  $filtro ="Rutas de ".$nameTeo." con fecha ".$request->fecha;//pequeño breadcrum que nos indica que filtro reallizamoa en la vista
+
+  $registros = CaptacionesExitosa::where('rutero','=',$nameTeo)
+  ->where('fecha_agendamiento','=',$request->fecha)->where('estado_mandato','=',"")->get();
+  return view('operac.recepcionarMandatos',[ //retorno de la vista con la informacion recopilada
+    'ruteros'=>$ruteros,
+    'teleoperador'=>$teleoperador,
+    'registros'=>$registros,
+    'filtroPor'=>$filtro,
+  ]);
+}
+
+public function agregarMandato1(Request $request){//agragar estado de mandato para la primera visita
+  $captacion = CaptacionesExitosa::find($request->id);//selecionamos la captacion que deseamos modificar
+  $captacion->estado_mandato = $request->mandato;//asignamos el valor a estado_mandato de datos
+  $captacion ->motivo_mdt = $request->comentario;//asignamos el valor a motivo_mdt
+  $captacion->save();//guardamos los valores en la tabla de captaciones exitosas
+
+  $ruta  = informeRuta::where('id_captacion','=',$request->id)->where('num_retiro','=',1)->get()->first();
+//seleccionamos la ruta que deseamos modificar
+  $ruta->mandato = $request->mandato;//asignamos el valor de madatos
+  $ruta->save();//guardamos los cambios
+
+    return redirect('ope/mandatos');
+}
+
+public function agregarMandato2(Request $request){//agregar estado de mandato para la segunda visita
+
+  $captacion = CaptacionesExitosa::find($request->id);//seleccionamos la captacion que deseamos modificar
+  $captacion->estado_mandato = $request->mandato;//asignamos el valor a estado_mandato de datos
+  $captacion ->motivo_mdt = $request->comentario;//asignamos el valor a motivo_mdt
+  $captacion->save();//guardamos los valores en la tabla de captaciones exitosas
+
+  $ruta  = informeRuta::where('id_captacion','=',$request->id)->where('num_retiro','=',2)->get()->first();
+//seleccionamos la ruta que deseamos modificar
+  $ruta->mandato = $request->mandato;//asignamos el valor de madatos
+  $ruta->save();//guardamos los cambios
+
+    return redirect('ope/mandatos');
+}
+
+public function agregarMandato3(Request $request){//agragar estado de mandato para la tercera visita
+
+  // dd($request->mandato.$request->comentario);
+$captacion = CaptacionesExitosa::find($request->id);//seleccionamos la captacion que deseamos modificar
+$captacion->estado_mandato = $request->mandato;//asignamos el valor a estado_mandato de datos
+$captacion ->motivo_mdt = $request->comentario;//asignamos el valor a motivo_mdt
+$captacion->save();//guardamos los valores en la tabla de captaciones exitosas
+
+$ruta  = informeRuta::where('id_captacion','=',$request->id)->where('num_retiro','=',3)->get()->first();
+//seleccionamos la ruta que deseamos modificar
+$ruta->mandato = $request->mandato;//asignamos el valor de madatos
+$ruta->save();//guardamos los cambios
+
+  return redirect('ope/mandatos');//retornamos el metodo mandatos para regresar la vista de registro mandatos
+
 }
 
 }

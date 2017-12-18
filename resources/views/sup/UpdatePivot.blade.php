@@ -6,9 +6,11 @@
         });
     </script>
     <div class="container">
-
+    @if(Auth::User()->perfil==1)
         {!! Form::open(['url'=>['admin/updatepivot2'],'method'=>'post']) !!}
-
+    @elseif (Auth::user()->perfil==3)
+      {!! Form::open(['url'=>['sup/updatepivot2'],'method'=>'post']) !!}
+    @endif
         <div class="container">
              <input type="hidden" id="pivote" name="pivote" value="{{$pivot_id}}">
              <input type="hidden" name="user_id" value="{{$user_id}}">

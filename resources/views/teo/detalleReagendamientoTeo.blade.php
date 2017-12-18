@@ -109,11 +109,11 @@
                            </table>
                         </div>
 
-                        <input type="hidden" value="{{$reage->rutero}}" id="rutero">
+                        <input type="hidden" value="{{$reage->rutero}}" id="rutero" name="rutero">
                         <input type="hidden" value="{{$minmax->maxDay}}" id="max_day">
                         <input type="hidden" value="{{$minmax->maxAm}}" id="max_am">
                         <input type="hidden" value="{{$minmax->maxPm}}" id="max_pm">
-                        <input type="hidden" value="{{$reage->comuna}}" id="comuna">
+                        <input type="hidden" value="{{$reage->comuna}}" id="comuna" name="comuna">
                         <input type="hidden" value="{{$reage->id}}" name="id_captacion">
 
                         <div class="col-md-12">
