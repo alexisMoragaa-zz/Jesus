@@ -20,7 +20,7 @@ class captaciones extends Model
     protected $hidden = [];
 
     public function campanas(){
-      return $this->belongsTo(campana::class,'campana_id','id');
+      return $this->belongsTo(Campana::class,'campana_id','id');
     }
 
     public function fundation(){

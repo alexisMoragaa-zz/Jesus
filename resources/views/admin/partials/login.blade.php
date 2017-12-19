@@ -39,6 +39,7 @@
             @if(Auth::user()->perfil==1)
                 <option value="1">Administrador</option>
                 <option value="3">Supervisor</option>
+                <option value="6">Administracion</option>
             @endif
                 <option value="2">Teleoperador</option>
                 <option value="4">Operaciones</option>
@@ -134,5 +135,3 @@
 <!--este formulario se encuentra como parcial para poder reutilizarlo tanto en la ventana de login como en la de
 login, registrar, y editar usuarios. ya que estas tres ventanas comparten la misma informacion. por ende tendriamos
 que duplicar el formulario en estas tres vistas-->
-
-

@@ -170,6 +170,7 @@ Route::group(['middleware' => ['auth', 'operaciones'], 'prefix' => 'ope'], funct
     Route::Post('reagendar','OperacionesController@reagendar');
     route::post('showDay1', 'OperacionesController@showDay1');
     Route::get('createRutas', 'AdminController@rutas');
+    route::post('comuna', 'AdminController@addcomuna');
     Route::get('mdtWhithEdition/{id}','OperacionesController@mdtWithEdition');
     Route::get('rutas','OperacionesController@rutas');
     Route::get('rutas/semana/actual/{rutero}','OperacionesController@rutasSemanaActual');
@@ -228,9 +229,9 @@ Route::group(['middleware' => ['auth', 'ruteros'], 'prefix' => 'rutas'], functio
 });
 
 Route::group(['middleware'=>['auth','informes'],'prefix'=>'informes'],function(){
-      Route::Resource('info', 'informesController');
-      Route::get('campana/{campana}', 'informesController@informeCampana');
-      Route::get('fundacion/{fundacion}', 'informesController@informeFundacion');
-      Route::get('user/{user}', 'informesController@informeUser');
-      Route::get('rutero/{rutero}','informesController@informeRutero');
+      Route::Resource('info', 'InformesController');
+      Route::get('campana/{campana}', 'InformesController@informeCampana');
+      Route::get('fundacion/{fundacion}', 'InformesController@informeFundacion');
+      Route::get('user/{user}', 'InformesController@informeUser');
+      Route::get('rutero/{rutero}','InformesController@informeRutero');
 });

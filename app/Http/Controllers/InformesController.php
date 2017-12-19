@@ -19,7 +19,7 @@ class InformesController extends Controller {
 		$campanas =Campana::all();
 		$teos = user::where('perfil','=',2)->get();
 		$ruteros = user::where('perfil','=',5)->get();
-	return view('informes.Dashboard',[
+	return view('Informes.Dashboard',[
 		'fundaciones'=>$fundaciones,
 		'campanas'=>$campanas,
 		'teos'=>$teos,
@@ -29,7 +29,7 @@ class InformesController extends Controller {
 
 
 public function informeCampana($campana){
-	$campana = campana::where('id','=',$campana)->get()->first();
+	$campana = Campana::where('id','=',$campana)->get()->first();
 
 $total =$campana->registrosCampana->count();
 	// $total= captaciones::where('')->count();
@@ -47,7 +47,7 @@ if($contactados != 0){
 	$penetracionTotal = number_format($cumas/$total*100,2,'.','');
 	$contactabilidad = number_format((float)$contactados/$llamados*100, 2, '.', '');
 
-	return view('informes.informeCampana',[
+	return view('Informes.informeCampana',[
 		'total'=>$total,
 		'llamados'=>$llamados,
 		'pendientes'=>$pendientes,
@@ -61,7 +61,7 @@ if($contactados != 0){
 		'call_again'=>$call_again,
 	]);
 }else{
-	return view('informes.informeCampana',[
+	return view('Informes.informeCampana',[
 		'total'=>$total,
 		'llamados'=>$llamados,
 		'pendientes'=>$pendientes,
@@ -80,13 +80,13 @@ if($contactados != 0){
 
 public function informeFundacion($fundacion){
 
-	return view('informes.informeFundacion');
+	return view('Informes.informeFundacion');
 	// return "hola";
 }
 
 public function informeUser($user){
 
-	return view('informes.informeUser');
+	return view('Informes.informeUser');
 }
 
 public function informeRutero($rutero_id){
@@ -108,7 +108,7 @@ $no_encuentro_direccion = informeRuta::where('rutero_id','=',$rutero_id)->where(
 
 
 
-	return view('informes.informeRutero',[
+	return view('Informes.informeRutero',[
 		'rutero'=>$rutero,
 		'rutasRealizadas'=>$rutas_realizadas,
 		'rutasPendientes'=>$rutas_pendientes,

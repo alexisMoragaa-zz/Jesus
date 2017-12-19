@@ -134,7 +134,7 @@
 						</li>
 
 					@elseif(Auth::user()->perfil==6){{--Perfil Administracion Informes--}}
-						<li><a href="">Home</a></li>
+						<li><a href="{{url('/informes/info')}}">Home</a></li>
 					@endif
 						<li class="dropdown">
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{ Auth::user()->name }}<span class="caret"></span></a>
@@ -164,7 +164,8 @@
 
 <footer >
 	<p class="textoFooter">Dues Limitada Todos Los Derechos Reservados</p>
-	<p class="textoFooter">Programador y Desarrollador <strong>Alexis Moraga Gallardo</strong></p>
+	<p class="textoFooter">Programador y Desarrollador <strong> Alexis Moraga Gallardo</strong></p>
+	<p class="textoFooter">Tester y Analista QA <strong> Daniela Cabello</strong></p>
 
 </footer>
 		<!-- Scripts -->

@@ -2,7 +2,7 @@
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-
+use Illuminate\Support\Facades\Auth;
 //use Request;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Session;
@@ -22,7 +22,7 @@ class AdminController extends Controller {
 	{
 
 		$usuarios = User::all()->sortByDesc('created_at');
-			dd($usuarios);
+
 		return view('admin/adminUser',compact('usuarios'));
 
 /** 1 */
@@ -257,8 +257,13 @@ class AdminController extends Controller {
 
 		$update->save();
 
+if(Auth::user()->perfil==4){
+	return redirect()->to('ope/createRutas');
 
-		return redirect()->to('admin/createRutas');
+}elseif (Auth::user()->perfil==1) {
+	# code...
+	return redirect()->to('admin/createRutas');
+}
 
 	}
 /**

@@ -188,9 +188,11 @@
 
     <div class="container wrap">
         <h1 id="titulo">Asignacion de ruteros</h1>
-
+@if(Auth::user()->perfil==1)
         {!! Form::open(['url'=>['admin/comuna'],'method'=>'post','class'=>'formulario']) !!}
-
+@elseif(auth::user()->perfil==4)
+  {!! Form::open(['url'=>['ope/comuna'],'method'=>'post','class'=>'formulario']) !!}
+@endif
         <div class="col-md-6" id="contenedor-izquierdo">
             <div class="col-md-6">
                 <label for="" class="control-label" id="comerror">Seleccione Comuna</label>
