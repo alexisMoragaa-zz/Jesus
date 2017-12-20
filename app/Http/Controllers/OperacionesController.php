@@ -210,8 +210,8 @@ class OperacionesController extends Controller
         $rut = isset($_GET['rut']) ? $_GET['rut'] : $_POST['rut'];
         $fundacion = isset($_GET['fundacion']) ? $_GET['fundacion'] : $_POST['fundacion'];
 
-        $consulta = DB::table('captaciones_exitosas')->where('rut', '=', $rut)->where('fundacion', '=', $fundacion)->get();
-
+        $consulta = DB::table('captaciones_exitosas')->where('rut','=', $rut)->where('fundacion', '=', $fundacion)->get();
+      // $consulta =CaptacionesExitosa::where('rut', '=', $rut)->get();
         if ($consulta == null) {
             $data = 1;
             return Response::json($data);
@@ -809,10 +809,10 @@ public function registrarMandatoCaptacion(Request $request){
 public function registrarMandatoRuta(Request $request){
   $ruteros = User::where('perfil','=',5)->get();//seleccionamos los ruteros
   $teleoperador = User::where('perfil','=',2)->get();//seleccionamos los teleoperadores
-  $nameTeo = User::find($request->rutero)->name;//nombre del rutero por el cual se realiza la busqueda
-  $filtro ="Rutas de ".$nameTeo." con fecha ".$request->fecha;//pequeño breadcrum que nos indica que filtro reallizamoa en la vista
+  $nameRutero = User::find($request->rutero)->name;//nombre del rutero por el cual se realiza la busqueda
+  $filtro ="Rutas de ".$nameRutero." con fecha ".$request->fecha;//pequeño breadcrum que nos indica que filtro reallizamoa en la vista
 
-  $registros = CaptacionesExitosa::where('rutero','=',$nameTeo)
+  $registros = CaptacionesExitosa::where('rutero','=',$nameRutero)
   ->where('fecha_agendamiento','=',$request->fecha)->where('estado_mandato','=',"")->get();
   return view('operac.recepcionarMandatos',[ //retorno de la vista con la informacion recopilada
     'ruteros'=>$ruteros,
@@ -821,6 +821,28 @@ public function registrarMandatoRuta(Request $request){
     'filtroPor'=>$filtro,
   ]);
 }
+
+
+public function registrarMandatoRutaConReparo(Request $request){
+  $ruteros = User::where('perfil','=',5)->get();//seleccionamos los ruteros
+  $teleoperador = User::where('perfil','=',2)->get();//seleccionamos los teleoperadores
+  $nameRutero = User::find($request->rutero)->name;//nombre del rutero por el cual se realiza la busqueda
+  $filtro ="Rutas  con Reparo de ".$nameRutero;//pequeño breadcrum que nos indica que filtro reallizamoa en la vista
+
+   $registros = CaptacionesExitosa::where('rutero','=',$nameRutero)->whereHas('estadoRuta',function($query){
+    $query->where('estado','=','conReparo');
+  })->get(); //creamos una consulta relacional en la cual seleccionamos las captaciones exitosas o agendamientos
+      //con un rutero que pasamos como parametro pero que ademas en la tabla estadoRuta tenga el estado conReparo
+
+   return view('operac.recepcionarMandatos',[ //retorno de la vista con la informacion recopilada
+     'ruteros'=>$ruteros,
+     'teleoperador'=>$teleoperador,
+     'registros'=>$registros,
+     'filtroPor'=>$filtro,
+   ]);
+
+}
+
 
 public function agregarMandato1(Request $request){//agragar estado de mandato para la primera visita
   $captacion = CaptacionesExitosa::find($request->id);//selecionamos la captacion que deseamos modificar
@@ -867,6 +889,25 @@ $ruta->save();//guardamos los cambios
   return redirect('ope/mandatos');//retornamos el metodo mandatos para regresar la vista de registro mandatos
 
 }
+
+public function mandatosConReparo(){//mandatos con reparo es una funcion que nos muestra todos los mandatos que
+  //recepcionamos con el estado de conReparo por falta de ci
+  $registros = CaptacionesExitosa::where('estado_mandato','=','conReparo')->get();//seleccionamos todas las captaciones que tengam en estado de mandato con reparo
+  return view('operac.mandatosConReparo',['registros'=>$registros]);//retornamos la vista con los retiros guardados coo conReparo
+}
+
+public function ConReparoAgregarEstado(Request $request){//ConReparoAgregarEstado es una funcion que nos permite cambiar
+  //el estado de los mandatos de con reparo a ok o rechazado dependiendo del caso
+
+  $registro = CaptacionesExitosa::find($request->id_cap);//identificamos el agendamiento que deseamos modificar
+  $registro->estado_mandato = $request->estado_mandato;//modificamos el estado de mandato
+  $registro->motivo_mdt = $request->comentario;//modificamos el motivo del mandato
+  $registro->save();//guardamos los cambios en la base de datos
+
+  return redirect('ope/mandatos/conReparo');
+  //retornamos a la funcion mandatos con reparo para que esta nos retorne la vista con todos los registros con estado de mandato conReparo
+}
+
 
 }
 //fin controlador

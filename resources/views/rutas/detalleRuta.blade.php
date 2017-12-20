@@ -131,6 +131,8 @@
 
                           @if($reage->estadoRuta->estado_primer_agendamiento=="OK")
                             <td><a href="#" class="addMandato_1"> Recepcionar Mandato</a></td>
+                          @elseif($reage->estadoRuta->estado_primer_agendamiento=="conReparo")
+                            <td><a href="#" class="addMandato_1">Recepcionar sin CI</a></td>
                           @else
                             <td><a href="#" class="verimagen1">Ver Imagen</a></td>
                           @endif
@@ -153,6 +155,8 @@
 
                     @if($reage->estadoRuta->estado_segundo_agendamiento=="OK")
                       <td><a href="#" class="addMandato_2"> Recepcionar Mandato</a></td>
+                    @elseif($reage->estadoRuta->estado_primer_agendamiento=="conReparo")
+                      <td><a href="#" class="addMandato_2">Recepcionar sin CI</a></td>
                     @else
                       <td><a href="#" class="verimagen2">Ver Imagen</a></td>
                     @endif
@@ -173,6 +177,8 @@
 
                     @if($reage->estadoRuta->estado_tercer_agendamiento=="OK")
                       <td><a href="#" class="addMandato_3"> Recepcionar Mandato</a></td>
+                    @elseif($reage->estadoRuta->estado_primer_agendamiento=="conReparo")
+                      <td><a href="#" class="addMandato_3">Recepcionar sin CI</a></td>
                     @else
                       <td><a href="#" class="verimagen3">Ver Imagen</a></td>
                     @endif
@@ -216,7 +222,7 @@
         </select>
 
         <label for="" class="control-label">Comentario</label>
-        <input type="text" class="form-control" name="comenario">
+        <input type="text" class="form-control" name="comentario">
 
         <input type="submit" class="btn btn-success btn1" val="Agregar Mandato">
       </form>
@@ -233,6 +239,7 @@
           <option value="">Seleccione</option>
           <option value="OK">OK</option>
           <option value="Rechazado">Rechazado</option>
+          <option value="conReparo">Con Reparo</option>
           <option value=""></option>
         </select>
 
@@ -255,6 +262,7 @@
           <option value="">Seleccione</option>
           <option value="OK">OK</option>
           <option value="Rechazado">Rechazado</option>
+          <option value="conReparo">Con Reparo</option>
           <option value=""></option>
         </select>
 

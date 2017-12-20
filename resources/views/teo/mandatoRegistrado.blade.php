@@ -135,7 +135,7 @@
             @endif
               <div class="">
                 <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                <input type="hidden" class="form-control" name="fundacion" value="{{$capta->nom_fundacion}}" id="fundacion">
+                <input type="hidden" class="form-control" name="fundacion" value="{{$capta->fundacion}}" id="fundacion">
                 <input type="hidden" value="{{$minmax->maxDay}}" id="max_day">
                 <input type="hidden" value="{{$minmax->maxAm}}" id="max_am">
                 <input type="hidden" value="{{$minmax->maxPm}}" id="max_pm">

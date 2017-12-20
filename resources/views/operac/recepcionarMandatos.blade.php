@@ -7,6 +7,12 @@
     #ruta{
       margin-bottom: 2em;
     }
+    #mtn-1{
+      margin-top: -1em;
+    }
+    .float-right{
+      float: right;
+    }
   </style>
   <script src="{{asset('plugins/jquery-validator/jquery.validate.js')}}"></script>
   <script>
@@ -123,7 +129,7 @@
     <div class="row">
       <div class="col-md-12">
 
-          <h1>Recepcion  de Mandatos</h1>
+          <h1 id="mtn-1">Recepcion  de Mandatos</h1>
           <h3 class="text-muted">Buscar Agendamiento por
             @if(isset($filtroPor))
               <span>{{$filtroPor}}</span>
@@ -193,63 +199,85 @@
           </div>{{--fin row Captacion--}}
 
           <div class="row" id="ruta">
-            <form action="/ope/registrar/mandato/ruta" method="post" id="validateRuta">
-                <input type="hidden" name="_token" value="{{csrf_token()}}">
-                <div class="col-xs-12 col-md-3">
-                  <label for="" class="control-label">Rutero</label>
-                  <select name="rutero" id="" class="form-control">
-                    <option value="">Seleccione Rutero</option>
-                    @foreach ($ruteros as $rutero)
-                      <option value="{{$rutero->id}}">{{$rutero->name}} {{$rutero->last_name}}</option>
-                    @endforeach
-                  </select>
+            <div class="col-md-8">
+              <form action="/ope/registrar/mandato/ruta" method="post" id="validateRuta">
+                  <input type="hidden" name="_token" value="{{csrf_token()}}">
+                  <div class="col-xs-12 col-md-4">
+                    <label for="" class="control-label">Rutero</label>
+                    <select name="rutero" id="" class="form-control">
+                      <option value="">Seleccione Rutero</option>
+                      @foreach ($ruteros as $rutero)
+                        <option value="{{$rutero->id}}">{{$rutero->name}} {{$rutero->last_name}}</option>
+                      @endforeach
+                    </select>
+                  </div>
+
+                <div class="col-md-4">
+                  <label for="" class="control-label">Fecha Ruta</label>
+                  <input type="date" class="form-control" name="fecha">
                 </div>
 
-              <div class="col-md-3">
-                <label for="" class="control-label">Fecha Ruta</label>
-                <input type="date" class="form-control" name="fecha">
-              </div>
-
-              <div class="col-md-3">
-                  <input type="submit" class="btn btn-success md-label" value="Buscar">
-              </div>
-            </form>
-          </div>{{--fin row Ruta--}}
+                <div class="col-md-4">
+                    <input type="submit" class="btn btn-success md-label" value="Buscar">
+                </div>
+              </form>
+            </div>
 
 
-        </div>{{--fin col-md-12--principal--}}
-      </div>{{--fin Row Principal--}}
+            <div class="col-md-4"> {{--inicio filtro de rutas por erstado de rutas mas rutero--}}
+              <form action="/ope/registrar/mandato/ruta/conReparo" method="post">
+                <input type="hidden" name="_token" value="{{csrf_token()}}">
+                  <h3 class="text-muted"></h3>
+                  <div class="col-md-6">
+                    <label for="" class="control-label">Seleccione Rutero</label>
+                    <select name="rutero" id="" class="form-control">
+                      <option value="">Seleccione</option>
+                      @foreach ($ruteros as $rutero)
+                        <option value="{{$rutero->id}}">{{$rutero->name}} {{$rutero->last_name}}</option>
+                      @endforeach
+                    </select>
+                  </div>
 
-      <div class="row">
-        <div class="col-md-12">
-          <div class="table-responsive">
-            <table class="table table-hover">
-              <thead>
-                <th>Nombre</th>
-                <th>Telefono</th>
-                <th>Rut</th>
-                <th>Direccion</th>
-                <th>Comuna</th>
-                <th>Detalle</th>
-              </thead>
-              <tbody>
-                @if(isset($registros))
-                  @foreach ($registros as $registro)
-                    <tr>
-                      <td>{{$registro->nombre}}</td>
-                      <td>{{$registro->fono_1}}</td>
-                      <td>{{$registro->rut}}</td>
-                      <td>{{$registro->direccion}}</td>
-                      <td>{{$registro->comuna}}</td>
-                      <td><a href="{{url('ope/detalleRuta',$registro->id)}}">Detalle</a></td>
-                    </tr>
-                  @endforeach
-                @endif
-              </tbody>
-            </table>
-          </div>
+                <div class="col-md-6 float-right">
+                  <input type="submit" class="btn btn-warning btn1" value="Buscar Por estado de Ruta">
+                </div>
+              </form>
+            </div>
+        </div>{{--fin row Ruta--}}
+
+      </div>{{--fin col-md-12--principal--}}
+    </div>{{--fin Row Principal--}}
+
+    <div class="row">
+      <div class="col-md-12">
+        <div class="table-responsive">
+          <table class="table table-hover">
+            <thead>
+              <th>Nombre</th>
+              <th>Telefono</th>
+              <th>Rut</th>
+              <th>Direccion</th>
+              <th>Comuna</th>
+              <th>Detalle</th>
+            </thead>
+            <tbody>
+              @if(isset($registros))
+                @foreach ($registros as $registro)
+                  <tr>
+                    <td>{{$registro->nombre}}</td>
+                    <td>{{$registro->fono_1}}</td>
+                    <td>{{$registro->rut}}</td>
+                    <td>{{$registro->direccion}}</td>
+                    <td>{{$registro->comuna}}</td>
+                    <td><a href="{{url('ope/detalleRuta',$registro->id)}}">Detalle</a></td>
+                  </tr>
+                @endforeach
+              @endif
+            </tbody>
+          </table>
         </div>
       </div>
-    </div>{{--Fin Cointainer--}}
+    </div>
+  </div>{{--Fin Cointainer--}}
 
 @endsection
