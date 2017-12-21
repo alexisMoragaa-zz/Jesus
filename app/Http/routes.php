@@ -158,15 +158,15 @@ Route::group(['middleware' => ['auth', 'operaciones'], 'prefix' => 'ope'], funct
     Route::Resource('ope', 'OperacionesController');
     Route::Resource('sup', 'supController');
     Route::Resource('call', 'TeoController');
-    Route::get('verRutas','OperacionesController@verRutas');
-    route::post('filtroRutas','OperacionesController@verRutasFiltradas');
-    Route::post('addStatusCap','OperacionesController@addStatusCap');
-    Route::post('addStatusMdt','OperacionesController@addStatusMdt');
-    route::get('adminconfig', 'AdminController@adminConfig');
-    Route::post('addMinMaxCap','OperacionesController@adminMaxMinCap');
-    Route::get('reAgendamiento','OperacionesController@reAgendamiento');
-    Route::get('reAgendamiento','OperacionesController@reAgendamiento');
-    Route::get('detalleReAgendamiento/{id}','OperacionesController@detalleReagendamiento');
+    Route::Get('verRutas','OperacionesController@verRutas');
+    route::Post('filtroRutas','OperacionesController@verRutasFiltradas');
+    Route::Post('addStatusCap','OperacionesController@addStatusCap');
+    Route::Post('addStatusMdt','OperacionesController@addStatusMdt');
+    route::Get('adminconfig', 'AdminController@adminConfig');
+    Route::Post('addMinMaxCap','OperacionesController@adminMaxMinCap');
+    Route::Get('reAgendamiento','OperacionesController@reAgendamiento');
+    Route::Get('reAgendamiento','OperacionesController@reAgendamiento');
+    Route::Get('detalleReAgendamiento/{id}','OperacionesController@detalleReagendamiento');
     Route::Post('reagendar','OperacionesController@reagendar');
     route::post('showDay1', 'OperacionesController@showDay1');
     Route::get('createRutas', 'AdminController@rutas');
@@ -180,15 +180,18 @@ Route::group(['middleware' => ['auth', 'operaciones'], 'prefix' => 'ope'], funct
     Route::Get('detalleRuta/{id}','RutasController@detalleRuta');
     Route::Post('pc','OperacionesController@passcode');
     Route::Post('resetPassCode','OperacionesController@resetPassCode');
-    Route::get('agendamiento/llamados','OperacionesController@agendamientoLlamado');
-    Route::get('agendamiento/llamada/finalizar/{id}','OperacionesController@AgendamientoLlamadoFinalizar');
+    Route::Get('agendamiento/llamados','OperacionesController@agendamientoLlamado');
+    Route::Get('agendamiento/llamada/finalizar/{id}','OperacionesController@AgendamientoLlamadoFinalizar');
     Route::Post('agendamiento/llamado/Finalizar',   'OperacionesController@AgendamientoLlamadosFinalizarRegistro');
-    Route::get('mandatos','OperacionesController@mandatos');
-    Route::post('registrar/mandato/captacion','OperacionesController@registrarMandatoCaptacion');
-    Route::post('registrar/mandato/ruta','OperacionesController@registrarMandatoRuta');
+    Route::Get('mandatos','OperacionesController@mandatos');
+    Route::Post('registrar/mandato/captacion','OperacionesController@registrarMandatoCaptacion');
+    Route::Post('registrar/mandato/ruta','OperacionesController@registrarMandatoRuta');
+    Route::Post('registrar/mandato/ruta/conReparo','OperacionesController@registrarMandatoRutaConReparo');
     Route::Post('agregar/mandato/1','OperacionesController@agregarMandato1');
     Route::Post('agregar/mandato/2','OperacionesController@agregarMandato2');
     Route::Post('agregar/mandato/3','OperacionesController@agregarMandato3');
+    Route::Get('mandatos/conReparo','OperacionesController@mandatosConReparo');
+    Route::Post('conReparo/cambiarEstado','OperacionesController@ConReparoAgregarEstado');
 
     Route::get('/', function(){
 

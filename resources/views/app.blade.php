@@ -120,6 +120,8 @@
 							</ul>
 						</li>
 
+						<li> <a href="{{url('ope/mandatos/conReparo')}}">Mandatos con Reparo</a></li>
+
 
 
 					@elseif(Auth::user()->perfil==5){{--Perfil Ruteros--}}

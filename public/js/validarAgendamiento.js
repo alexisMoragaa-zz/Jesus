@@ -77,6 +77,7 @@ $.validator.addMethod(
         $.get('validarSocio', datos, procesarDatos);
           function procesarDatos(data)
           {
+            
             if (data == 2)
             {
             response = false;
