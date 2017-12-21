@@ -380,32 +380,34 @@ class TeoController extends Controller
     }
 
     public function editCap($id){
-
+      //editCap es una funcion para editar los agendamientos ya sea solicitado por operaciones o no
         $function="editar";
-        $f_pago = estado::where('modulo','=','pago')->get();
-        $status = estado::where('modulo', '=', 'llamado')->get();
-        $estado = estado::where('modulo','=','agendamiento')->get();
+        $f_pago = estado::where('modulo','=','pago')->get();//seleccionamos los medios de pagos que mostraremos en la vista
+        $status = estado::where('modulo', '=', 'llamado')->get();//seleccionamoos los estados de llamados que mostraremos en le vista
+        $estado = estado::where('modulo','=','agendamiento')->get();//seleccionamos los estados de agendamiento que mosraremos en la vista
         $comunas = comunaRetiro::where('region', '=', 'metropolitana')->where('ciudad', '=', 'santiago')->get();
+        //seleccionamos las comunas que mostraremos con sus respectivas rutas en la vista
 
-        $minmax=maxCap::find(1);
-        $capta = captacionesExitosa::findOrFail($id);
+        $minmax=maxCap::find(1);//seleccionamos el maximo de captaciones por dia
+        $reage = captacionesExitosa::findOrFail($id);//seleccionamos el agendamiento y lo guardamos en la variable reage
 
-        return view('teo/mandatoRegistrado', compact('capta', 'comunas','status','function','estado','f_pago','minmax'));
+        return view('teo/editarAgendamiento', compact('reage', 'comunas','status','function','estado','f_pago','minmax'));
+        //retornamos la vista con todas las variables recopiladas
     }
 
     public function editCapPost(Request $request){
+//editar la informacion de los agendamientos
+        $ruteroo = User::where('perfil','=',5)->where('name','=',$request->rutero)->get()->first();//obtenemos el rutero
+        $id_rutero =$ruteroo->id;//seleccionamos su id
+        $id =$request->id_captacion;//seleccionamos el id de la captacion o agendamiento
+        $editCap =CaptacionesExitosa::find($id);//selecionamos la captacion o agendamiento y la guardamos como objeto en la variable $editCap
 
-        $ruteroo = User::where('perfil','=',5)->where('name','=',$request->rutero)->get()->first();
-        $id_rutero =$ruteroo->id;
-        $id =$request->id_captacion;
-        $editCap =CaptacionesExitosa::find($id);
-
-            $editCap->tipo_retiro= $request->tipo_retiro;
+            $editCap->tipo_retiro= $request->tipo_retiro;//asignamos los valores a los campos de la base de datos
             $editCap->comuna=$request->comuna;
             $editCap->fecha_agendamiento =$request->fecha_agendamiento;
             $editCap->horario =$request->horario;
             $editCap->rut = $request->rut;
-            $editCap->jornada = $request->jornada;
+            // $editCap->jornada = $request->jornada;
             $editCap->fono_1 = $request->fono_1;
             $editCap->nombre = $request->nombre;
             $editCap->apellido = $request->apellido;
@@ -416,59 +418,59 @@ class TeoController extends Controller
             $editCap->forma_pago = $request->forma_pago;
             $editCap->observaciones = $request->observaciones;
             $editCap->cuenta_movistar =$request->c_movistar;
-            $editCap->edit ="editado";
+            $editCap->edit ="editado";//añadimos el estado editado para que reconoscamos cuando el teleoperador edite el registro y asi lo pueda ver operaciones
 
-        if($request->reagendamiento ==1){
+        if($request->reagendamiento ==1){//si el campo de la tabla captaciones exitosas reagendamiento es igual a 1 se añaden los datos de reagendamiento
 
-                $date =$request->fecha_reagendamiento;
-                $time =$request->horario;
-                $visit = estadoRuta::find($request->id_captacion);
-                $visit_capta=CaptacionesExitosa::find($request->id_captacion);
+                $date =$request->fecha_reagendamiento;//asignamos la fecha de reagendamiento desde el request
+                $time =$request->horario;//asignamos el horario desde el request
+                $visit = estadoRuta::find($request->id_captacion);//seleccionamos el estado de ruta con el id, y lo guardamos el la variable $visit
+                $visit_capta=CaptacionesExitosa::find($request->id_captacion);//seleccionamos la captacion o agendamiento y lo guardamos en la variable $visit_Capta
 
-                if($visit->estado_segundo_agendamiento == "noRetirado"){
-                    if($visit->estado_tercer_agendamiento==""){
+                if($visit->estado_segundo_agendamiento == "noRetirado"){//si el estao_Segundo agendamientos es igual a no retirado verificamos si el estado_tercer agendamiento es vacio
+                    if($visit->estado_tercer_agendamiento==""){//una vez verificado que es vacio guardamos la informacion en el estado_tercer_agendamiento
 
                         $visit->tercer_agendamiento = $date;
                         $visit->estado="";
-                        $visit->save();
+                        $visit->save();//guardamos la informacion de la captacion o agendamiento
 
                         $visit_capta->fecha_agendamiento=$date;
                         $visit_capta->horario =$time;
                         $visit_capta->reagendar =3;
                         $visit_capta->estado_captacion="";
-                        $visit_capta->save();
+                        $visit_capta->save();//guardamos la informacion de el estado de ruta
 
-                        informeRuta::create([
+                        informeRuta::create([//y creamos una nueva ruta en la tabla informe rutas, la cual trata cada visita de una captacion o agendamiento como una ruta individual
                           'id_captacion'=>$request->id_captacion,
                           'id_ruta'=>$request->id_captacion,
                           'rutero_id'=>$id_rutero,
                           'fecha_agendamiento'=>$date,
                           'estado'=>'visita pendiente',
-                          'num_retiro'=>2,
+                          'num_retiro'=>3,//asignamos el numero de retiro o ruta para nuestra captacion/agendamiento en este caso el numero 3
                           'rutero'=>$data['rutero'],
                           'comuna'=>$data['comuna'],
                           'horario'=>$data['jornada'],
                         ]);
                     }
-                }elseif($visit->estado_primer_agendamiento=="noRetirado"){
-                    if($visit->estado_segundo_agendamiento==""){
+                }elseif($visit->estado_primer_agendamiento=="noRetirado"){//si la sentencia anterior es falsa preguntamos lo mismo para el estado_primer agendamiento y luego consultamos si el estado_segundo agendaiento es vacio
+                    if($visit->estado_segundo_agendamiento==""){//nuevamente si el estado es vacio se guarda la misma informacion, pero esta vez es almacenada en estado_segundo_agendamiento
 
                         $visit->segundo_agendamiento = $date;
                         $visit->estado="";
-                        $visit->save();
+                        $visit->save();//guardamos la informacion de la captacion
                         $visit_capta->fecha_agendamiento=$date;
                         $visit_capta->horario =$time;
                         $visit_capta->reagendar =2;
                         $visit_capta->estado_captacion="";
-                       $visit_capta->save();
+                       $visit_capta->save();//guardamos la informacion del estado de ruta
 
-                       informeRuta::create([
+                       informeRuta::create([//creamos una ruta en el informe de rutas
                          'id_captacion'=>$request->id_captacion,
                          'id_ruta'=>$request->id_captacion,
                          'rutero_id'=>$id_rutero,
                          'fecha_agendamiento'=>$date,
                          'estado'=>'visita pendiente',
-                         'num_retiro'=>2,
+                         'num_retiro'=>2,//guardamos el numero de visita correspondiente a el numero de retiro que se realizo en esta captacion agendamiento, en este caso 2
                          'rutero'=>$data['rutero'],
                          'comuna'=>$data['comuna'],
                          'horario'=>$data['jornada'],
@@ -479,11 +481,11 @@ class TeoController extends Controller
         }elseif ($request->reagendamiento ==2){
 
         }
-        $editCap->save();
+        $editCap->save();//finalmente luego de las sentencias logicas que guardan una utra cosa dependiendo de la ruta guardamos la informacion en la base de datos
 
-        if(Auth::user()->perfil==1){
+        if(Auth::user()->perfil==1){//si el perfil que realizo esta accion es administrador se redirecciona por las rutas de administrador
             return redirect(url('admin/teoHome'));
-        }elseif (Auth::user()->perfil==2){
+        }elseif (Auth::user()->perfil==2){//por el contrario si es teleoperador se redirecciona por las rutas de teleoperador, pero ambos legan a la misma vista
             return redirect(url('teo/teoHome'));
         }
     }
