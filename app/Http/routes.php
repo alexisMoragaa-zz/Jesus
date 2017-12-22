@@ -192,6 +192,9 @@ Route::group(['middleware' => ['auth', 'operaciones'], 'prefix' => 'ope'], funct
     Route::Post('agregar/mandato/3','OperacionesController@agregarMandato3');
     Route::Get('mandatos/conReparo','OperacionesController@mandatosConReparo');
     Route::Post('conReparo/cambiarEstado','OperacionesController@ConReparoAgregarEstado');
+    Route::Get('liberar/registros','OperacionesController@liberarRegistros');
+    Route::Get('liberar/registros/show/{id}','OperacionesController@liberarRegistrosShow');
+    Route::get('liberar/registro/ajax','OperacionesController@liberarAjax');
 
     Route::get('/', function(){
 
