@@ -113,15 +113,30 @@
 								<li><a href="{{ url('/ope/ope') }}">Captaciones</a></li>
 								<li><a href="{{url('/ope/reAgendamiento')}}">Re-Agendamientos</a></li>
 								<li><a href="{{ url('/ope/agendamiento/llamados')}}">Agendamiento Llamados</a></li>
-								<li><a href="{{ url('/ope/verRutas')}}">Rutas Diarias</a></li>
-								<li><a href="{{ url('/ope/rutas')}}">Rutas Semanales</a></li>
-								<li><a href="{{url('ope/createRutas')}}">Calendario de Rutas</a></li>
-								<li><a href="{{ url('/ope/mandatos')}}">Recepcionar Mandatos</a></li>
 								<li><a href="{{url('/ope/liberar/registros')}}">liberar Registros</a></li>
 							</ul>
 						</li>
 
-						<li> <a href="{{url('ope/mandatos/conReparo')}}">Mandatos con Reparo</a></li>
+						<li class="dropdown">
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Rutas <span class="caret"></span></a>
+							<ul class="dropdown-menu">
+								<li><a href="{{ url('/ope/verRutas')}}">Rutas Diarias</a></li>
+								<li><a href="{{ url('/ope/rutas')}}">Rutas Semanales</a></li>
+								<li><a href="{{url('ope/createRutas')}}">Calendario de Rutas</a></li>
+
+							</ul>
+						</li>
+						<li class="dropdown">
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Mandatos<span class="caret"></span></a>
+							<ul class="dropdown-menu">
+								<li><a href="{{ url('/ope/mandatos')}}">Recepcionar Mandatos</a></li>
+								<li> <a href="{{url('ope/mandatos/exitosos')}}">Mandatos Exitosos</a></li>
+								<li> <a href="{{url('ope/mandatos/conReparo')}}">Mandatos con Reparo</a></li>
+							</ul>
+						</li>
+
+
+
 
 
 
