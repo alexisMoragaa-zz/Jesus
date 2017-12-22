@@ -18,6 +18,7 @@ use App\comunaRetiro;
 use App\informeRuta;
 use App\AgendarLlamados;
 use App\captaciones;
+use App\Campana;
 use Illuminate\Support\Facades\Hash;
 
 class OperacionesController extends Controller
@@ -907,6 +908,39 @@ public function ConReparoAgregarEstado(Request $request){//ConReparoAgregarEstad
   return redirect('ope/mandatos/conReparo');
   //retornamos a la funcion mandatos con reparo para que esta nos retorne la vista con todos los registros con estado de mandato conReparo
 }
+
+public function liberarRegistros(){//liberarRegistros nos retorna una vista en la cual podemos buscar los registros que quedan
+  //tomados erroneamente por los teleoperadores
+    $campanas = Campana::all();//seleccionamos las campañas
+  return view('operac.liberarRegistros',[//retornamos la vista con las campañas
+    'campanas'=>$campanas,
+  ]);
+}
+
+public function liberarRegistrosShow($id){
+  $campanas = Campana::all();//seleccionamos las campañas
+  $registros = captaciones::where('campana_id','=',$id)->where('estado_registro','=','1')
+  ->where('estado','=',0)->get();
+  return view('operac.liberarRegistros',[//retornamos la vista con las campañas
+    'campanas'=>$campanas,
+    'registros'=>$registros,
+  ]);
+}
+
+public function liberarAjax(){//liberar ajax libera los registros que quedan tomados por los teleoperadores
+  //esto lo hacemos mediante ajax, para evitar recargar la pagina cada vez que liberamos un registro
+
+  $id = Input::get('id');//seleccionamos el id que enviamos desde la peticion ajax
+    $cap = captaciones::find($id);//seleccionamos la captacion correspondiente al id
+    $cap->estado_registro =0;//agregarmos el estado 0 a los registros seleccionados con los cuales los dejamos libres
+    $cap->save();//guardamos los cambios
+    if($cap->estado_registro==0){//validamos que el registro se libero correctamente
+      return Response::json("success");//si el registro s elibero correctamente retornamos success
+    }else {
+      abort(500);//si el registro no se libero correctamente  retornamos un error 500
+    }
+}
+
 
 
 }

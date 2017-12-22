@@ -117,6 +117,7 @@
 								<li><a href="{{ url('/ope/rutas')}}">Rutas Semanales</a></li>
 								<li><a href="{{url('ope/createRutas')}}">Calendario de Rutas</a></li>
 								<li><a href="{{ url('/ope/mandatos')}}">Recepcionar Mandatos</a></li>
+								<li><a href="{{url('/ope/liberar/registros')}}">liberar Registros</a></li>
 							</ul>
 						</li>
 
