@@ -266,45 +266,46 @@
                      </div>
                 @elseif($d->estadoRuta->estado =="OK")
 
+                        @if($d->estado_mandato =="OK")
+                          <h3>Estado Actual del Mandato</h3>
+                         <h4>{{$d->estadoRuta->estado}}</h4>
+                       @else
+                        <div class="mdt">
+                              @if(Auth::user()->perfil==1)
+                                  {!! Form::open(array('url'=>'admin/addStatusMdt','id'=>'form-mandato'))!!}
+                              @elseif(Auth::user()->perfil==4)
+                                  {!! Form::open(array('url'=>'ope/addStatusMdt','id'=>'form-mandato'))!!}
+                              @endif
+                                  <div class="col-md-2">
+                                       <label for="status-mdt" class="control-label"> Revision Mandato</label>
+                                       <select name="status_mdt" id="status_mdt" class="form-control">
+                                           <option value="1">-- Seleccione --</option>
+                                          <option value="OK">OK</option>
+                                          <option value="conReparo">Con Reparo</option>
+                                          <option value="rechazado">Rechazado</option>
+                                       </select>
+                                  </div>
+                                  <div class="col-md-2">
+                                      <input type="submit" class="btn btn1 btn-success " id="enviarmdt" value="Agregar Estado Mandato">
 
-                     <div class="mdt">
+                                  </div>
+                                  <div class="col-md-4">
+                                      <a href="{{url('ope/mdtWhithEdition',$d->id)}}" class="btn btn-warning btn1"> Agregar Estado Con Edicion</a>
+                                  </div>
 
-                    @if(Auth::user()->perfil==1)
-                        {!! Form::open(array('url'=>'admin/addStatusMdt','id'=>'form-mandato'))!!}
-                    @elseif(Auth::user()->perfil==4)
-                        {!! Form::open(array('url'=>'ope/addStatusMdt','id'=>'form-mandato'))!!}
+                                  <div class="col-md-4" id="statusRecordMdt">
+                                       <label for="reasonmdt" class="control-label">Estado</label>
+                                      <input type="text" class="form-control" id="motivoMdt" name="motivoMdt">
+                                   </div>
+                                  <input type="hidden" name="id_captacion" value="{{$d->id}}">
+                              {!! Form::close() !!}
+                              </div>
+
                     @endif
-                        <div class="col-md-2">
-                             <label for="status-mdt" class="control-label"> Revision Mandato</label>
-                             <select name="status_mdt" id="status_mdt" class="form-control">
-                                 <option value="1">-- Seleccione --</option>
-                                <option value="OK">OK</option>
-                                <option value="conReparo">Con Reparo</option>
-                                <option value="rechazado">Rechazado</option>
-                             </select>
-                        </div>
-                        <div class="col-md-2">
-                            <input type="submit" class="btn btn1 btn-success " id="enviarmdt" value="Agregar Estado Mandato">
-
-                        </div>
-                        <div class="col-md-4">
-                            <a href="{{url('ope/mdtWhithEdition',$d->id)}}" class="btn btn-warning btn1"> Agregar Estado Con Edicion</a>
-                        </div>
-
-                        <div class="col-md-4" id="statusRecordMdt">
-                             <label for="reasonmdt" class="control-label">Estado</label>
-                            <input type="text" class="form-control" id="motivoMdt" name="motivoMdt">
-                         </div>
-                        <input type="hidden" name="id_captacion" value="{{$d->id}}">
-                    {!! Form::close() !!}
-                    </div>
-                 @else
-                         <h3>Estado Actual del Mandato</h3>
-                        <h4>{{$d->estadoRuta->estado}}</h4>
-                 @endif
+                @endif
 
 
-         @else
+           @else
              <h3>Estado Actual de la Visita</h3>
              <h4>{{$d->estadoRuta->estado}}</h4>
              @endif<!--cierre if perfiles-->

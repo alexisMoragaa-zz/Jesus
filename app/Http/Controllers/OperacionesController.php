@@ -19,6 +19,7 @@ use App\informeRuta;
 use App\AgendarLlamados;
 use App\captaciones;
 use App\Campana;
+use App\fundacion;
 use Illuminate\Support\Facades\Hash;
 
 class OperacionesController extends Controller
@@ -532,27 +533,25 @@ class OperacionesController extends Controller
     }
 
     public function rutasSemanaActual($rutero){
+      //ruta semana actual es una funcion que nos retorna todas ls rutas de la semana  actual separada por dias
+        $diaLunes =Carbon::now()->startOfWeek()->format('Y-m-d');//seleccionamos el dia lunes
+        $diaMartes =Carbon::now()->startOfWeek()->addDay(1)->format('Y-m-d');//seleccionamos el dia martes
+        $diaMiercoles =Carbon::now()->startOfWeek()->addDay(2)->format('Y-m-d');//seleccionamos el dia miercoles
+        $diaJueves =Carbon::now()->startOfWeek()->addDay(3)->format('Y-m-d');//seleccionamos el dia jueves
+        $diaViernes =Carbon::now()->startOfWeek()->addDay(4)->format('Y-m-d');//seleccionamos el dia viernes
+        $diaSabado =Carbon::now()->startOfWeek()->addDay(5)->format('Y-m-d');//seleccionamos el dia sabado
+        $diaDomingo =Carbon::now()->startOfWeek()->addDay(6)->format('Y-m-d');//seleccionamos el dia domingo
+
+        $lunes =informeRuta::where('fecha_agendamiento','=',$diaLunes)->where('rutero','=',$rutero)->get();//seleccionamos la ruta del lunes
+        $martes = informeRuta::where('fecha_agendamiento','=',$diaMartes)->where('rutero','=',$rutero)->get();//seleccionamos las rutas del martes
+        $miercoles = informeRuta::where('fecha_agendamiento','=',$diaMiercoles)->where('rutero','=',$rutero)->get();//seleccionamos la ruta del miercoles
+        $jueves = informeRuta::where('fecha_agendamiento','=',$diaJueves)->where('rutero','=',$rutero)->get();//seleccionamos la ruta del jueves
+        $viernes = informeRuta::where('fecha_agendamiento','=',$diaViernes)->where('rutero','=',$rutero)->get();//seleccionamos la ruta del viernes
+        $sabado = informeRuta::where('fecha_agendamiento','=',$diaSabado)->where('rutero','=',$rutero)->get();//seleccionamos la ruta del sabado
+        $domingo = informeRuta::where('fecha_agendamiento','=',$diaDomingo)->where('rutero','=',$rutero)->get();//seleccionamos la ruta del domingo
 
 
-
-        $diaLunes =Carbon::now()->startOfWeek()->format('Y-m-d');
-        $diaMartes =Carbon::now()->startOfWeek()->addDay(1)->format('Y-m-d');
-        $diaMiercoles =Carbon::now()->startOfWeek()->addDay(2)->format('Y-m-d');
-        $diaJueves =Carbon::now()->startOfWeek()->addDay(3)->format('Y-m-d');
-        $diaViernes =Carbon::now()->startOfWeek()->addDay(4)->format('Y-m-d');
-        $diaSabado =Carbon::now()->startOfWeek()->addDay(5)->format('Y-m-d');
-        $diaDomingo =Carbon::now()->startOfWeek()->addDay(6)->format('Y-m-d');
-
-        $lunes =informeRuta::where('fecha_agendamiento','=',$diaLunes)->where('rutero','=',$rutero)->get();
-        $martes = informeRuta::where('fecha_agendamiento','=',$diaMartes)->where('rutero','=',$rutero)->get();
-        $miercoles = informeRuta::where('fecha_agendamiento','=',$diaMiercoles)->where('rutero','=',$rutero)->get();
-        $jueves = informeRuta::where('fecha_agendamiento','=',$diaJueves)->where('rutero','=',$rutero)->get();
-        $viernes = informeRuta::where('fecha_agendamiento','=',$diaViernes)->where('rutero','=',$rutero)->get();
-        $sabado = informeRuta::where('fecha_agendamiento','=',$diaSabado)->where('rutero','=',$rutero)->get();
-        $domingo = informeRuta::where('fecha_agendamiento','=',$diaDomingo)->where('rutero','=',$rutero)->get();
-
-
-        return view('operac.ruta',[
+        return view('operac.ruta',[//retornamos la vista con las rutas correspondiente a la semana en curso separada poor dias
           'lunes'=>$lunes,
           'martes'=>$martes,
           'miercoles'=>$miercoles,
@@ -573,68 +572,68 @@ class OperacionesController extends Controller
     }
 
     public function rutasSemanaPasada($rutero){
-
-        $diaLunes = Carbon::now()->startOfWeek()->subWeek()->format('Y-m-d');
-        $diaMartes =Carbon::now()->startOfWeek()->subWeek()->addDay(1)->format('Y-m-d');
-        $diaMiercoles =Carbon::now()->startOfWeek()->subWeek()->addDay(2)->format('Y-m-d');
-        $diaJueves =Carbon::now()->startOfWeek()->subWeek()->addDay(3)->format('Y-m-d');
-        $diaViernes =Carbon::now()->startOfWeek()->subWeek()->addDay(4)->format('Y-m-d');
-        $diaSabado =Carbon::now()->startOfWeek()->subWeek()->addDay(5)->format('Y-m-d');
-        $diaDomingo =Carbon::now()->startOfWeek()->subWeek()->addDay(6)->format('Y-m-d');
+    //rutasSemanaPasada es una funcion que nos reorna todas las generadas la semana previa a la actual semana en curso
+        $diaLunes = Carbon::now()->startOfWeek()->subWeek()->format('Y-m-d');//seleccionamos el dia lunes
+        $diaMartes =Carbon::now()->startOfWeek()->subWeek()->addDay(1)->format('Y-m-d');//seleccionamos el dia martes
+        $diaMiercoles =Carbon::now()->startOfWeek()->subWeek()->addDay(2)->format('Y-m-d');//seleccionamos el dia miercoles
+        $diaJueves =Carbon::now()->startOfWeek()->subWeek()->addDay(3)->format('Y-m-d');//seleccionamos el dia jueves
+        $diaViernes =Carbon::now()->startOfWeek()->subWeek()->addDay(4)->format('Y-m-d');//seleccionamos el dia viernes
+        $diaSabado =Carbon::now()->startOfWeek()->subWeek()->addDay(5)->format('Y-m-d');//seleccionamos el dia sabado
+        $diaDomingo =Carbon::now()->startOfWeek()->subWeek()->addDay(6)->format('Y-m-d');//seleccionamos el dia domingo
       //dd($diaLunes." ".$diaMartes." ".$diaMiercoles." ".$diaJueves." ".$diaViernes." ".$diaSabado." ".$diaDomingo);
 
 
-              $lunes =informeRuta::where('fecha_agendamiento','=',$diaLunes)->where('rutero','=',$rutero)->orderBy('horario')->get();
-              $martes = informeRuta::where('fecha_agendamiento','=',$diaMartes)->where('rutero','=',$rutero)->orderBy('horario')->get();
-              $miercoles = informeRuta::where('fecha_agendamiento','=',$diaMiercoles)->where('rutero','=',$rutero)->orderBy('horario')->get();
-              $jueves = informeRuta::where('fecha_agendamiento','=',$diaJueves)->where('rutero','=',$rutero)->orderBy('horario')->get();
-              $viernes = informeRuta::where('fecha_agendamiento','=',$diaViernes)->where('rutero','=',$rutero)->orderBy('horario')->get();
-              $sabado = informeRuta::where('fecha_agendamiento','=',$diaSabado)->where('rutero','=',$rutero)->orderBy('horario')->get();
-              $domingo = informeRuta::where('fecha_agendamiento','=',$diaDomingo)->where('rutero','=',$rutero)->orderBy('horario')->get();
+          $lunes =informeRuta::where('fecha_agendamiento','=',$diaLunes)->where('rutero','=',$rutero)->orderBy('horario')->get();//seleccionmos la ruta del lunes
+          $martes = informeRuta::where('fecha_agendamiento','=',$diaMartes)->where('rutero','=',$rutero)->orderBy('horario')->get();//seleccionamos la ruta del martes
+          $miercoles = informeRuta::where('fecha_agendamiento','=',$diaMiercoles)->where('rutero','=',$rutero)->orderBy('horario')->get();//seleccionamos la ruta del dia mircoles
+          $jueves = informeRuta::where('fecha_agendamiento','=',$diaJueves)->where('rutero','=',$rutero)->orderBy('horario')->get();//seleccionamos la ruta del dia jueves
+          $viernes = informeRuta::where('fecha_agendamiento','=',$diaViernes)->where('rutero','=',$rutero)->orderBy('horario')->get();//seleccionamos la ruta del dia viernes
+          $sabado = informeRuta::where('fecha_agendamiento','=',$diaSabado)->where('rutero','=',$rutero)->orderBy('horario')->get();//seleccionamos la ruta del dia sabado
+          $domingo = informeRuta::where('fecha_agendamiento','=',$diaDomingo)->where('rutero','=',$rutero)->orderBy('horario')->get();//seleccionamos la ruta del dia domingo
 
-                return view('operac.ruta',[
-                  'lunes'=>$lunes,
-                  'martes'=>$martes,
-                  'miercoles'=>$miercoles,
-                  'jueves'=>$jueves,
-                  'viernes'=>$viernes,
-                  'sabado'=>$sabado,
-                  'domingo'=>$domingo,
-                  'diaLunes'=>$diaLunes,
-                  'diaMartes'=>$diaMartes,
-                  'diaMiercoles'=>$diaMiercoles,
-                  'diaJueves'=>$diaJueves,
-                  'diaViernes'=>$diaViernes,
-                  'diaSabado'=>$diaSabado,
-                  'diaDomingo'=>$diaDomingo,
-                  'rutero'=>$rutero,
-                  'semana'=>'pasada',
-                ]);
+            return view('operac.ruta',[//retornamos la vista con la ruta de toda la semana separada en variables por dias
+              'lunes'=>$lunes,
+              'martes'=>$martes,
+              'miercoles'=>$miercoles,
+              'jueves'=>$jueves,
+              'viernes'=>$viernes,
+              'sabado'=>$sabado,
+              'domingo'=>$domingo,
+              'diaLunes'=>$diaLunes,
+              'diaMartes'=>$diaMartes,
+              'diaMiercoles'=>$diaMiercoles,
+              'diaJueves'=>$diaJueves,
+              'diaViernes'=>$diaViernes,
+              'diaSabado'=>$diaSabado,
+              'diaDomingo'=>$diaDomingo,
+              'rutero'=>$rutero,
+              'semana'=>'pasada',
+            ]);
     }
 
     public function rutasSemanaSiguiente($rutero){
-
-        $diaLunes = Carbon::now()->startOfWeek()->addWeek()->format('Y-m-d');
-        $diaMartes =Carbon::now()->startOfWeek()->addWeek()->addDay(1)->format('Y-m-d');
-        $diaMiercoles =Carbon::now()->startOfWeek()->addWeek()->addDay(2)->format('Y-m-d');
-        $diaJueves =Carbon::now()->startOfWeek()->addWeek()->addDay(3)->format('Y-m-d');
-        $diaViernes =Carbon::now()->startOfWeek()->addWeek()->addDay(4)->format('Y-m-d');
-        $diaSabado =Carbon::now()->startOfWeek()->addWeek()->addDay(5)->format('Y-m-d');
-        $diaDomingo =Carbon::now()->startOfWeek()->addWeek()->addDay(6)->format('Y-m-d');
+        //rutasSemanaPasada es una funcion que nos reorna todas las generadas la semana previa a la actual semana en curso
+        $diaLunes = Carbon::now()->startOfWeek()->addWeek()->format('Y-m-d');//seleccionamos el dia lunes
+        $diaMartes =Carbon::now()->startOfWeek()->addWeek()->addDay(1)->format('Y-m-d');//seleccionamos el dia martes
+        $diaMiercoles =Carbon::now()->startOfWeek()->addWeek()->addDay(2)->format('Y-m-d');//seleccionamos el dia miercoles
+        $diaJueves =Carbon::now()->startOfWeek()->addWeek()->addDay(3)->format('Y-m-d');//seleccionamos el dia jueves
+        $diaViernes =Carbon::now()->startOfWeek()->addWeek()->addDay(4)->format('Y-m-d');//seleccionamos el dia viernes
+        $diaSabado =Carbon::now()->startOfWeek()->addWeek()->addDay(5)->format('Y-m-d');//seleccionamos el dia sabado
+        $diaDomingo =Carbon::now()->startOfWeek()->addWeek()->addDay(6)->format('Y-m-d');//seleccionamos el dia domingo
       //dd($diaLunes." ".$diaMartes." ".$diaMiercoles." ".$diaJueves." ".$diaViernes." ".$diaSabado." ".$diaDomingo);
 
 
-      $lunes =informeRuta::where('fecha_agendamiento','=',$diaLunes)->where('rutero','=',$rutero)->orderBy('horario')->get();
-      $martes = informeRuta::where('fecha_agendamiento','=',$diaMartes)->where('rutero','=',$rutero)->orderBy('horario')->get();
-      $miercoles = informeRuta::where('fecha_agendamiento','=',$diaMiercoles)->where('rutero','=',$rutero)->orderBy('horario')->get();
-      $jueves = informeRuta::where('fecha_agendamiento','=',$diaJueves)->where('rutero','=',$rutero)->orderBy('horario')->get();
-      $viernes = informeRuta::where('fecha_agendamiento','=',$diaViernes)->where('rutero','=',$rutero)->orderBy('horario')->get();
-      $sabado = informeRuta::where('fecha_agendamiento','=',$diaSabado)->where('rutero','=',$rutero)->orderBy('horario')->get();
-      $domingo = informeRuta::where('fecha_agendamiento','=',$diaDomingo)->where('rutero','=',$rutero)->orderBy('horario')->get();
+      $lunes =informeRuta::where('fecha_agendamiento','=',$diaLunes)->where('rutero','=',$rutero)->orderBy('horario')->get();//seleccionamos la ruta del dia lunes
+      $martes = informeRuta::where('fecha_agendamiento','=',$diaMartes)->where('rutero','=',$rutero)->orderBy('horario')->get();//seleccionamos el dia martes
+      $miercoles = informeRuta::where('fecha_agendamiento','=',$diaMiercoles)->where('rutero','=',$rutero)->orderBy('horario')->get();//seleccionamos el dia miercoles
+      $jueves = informeRuta::where('fecha_agendamiento','=',$diaJueves)->where('rutero','=',$rutero)->orderBy('horario')->get();//seleccionamos el dia jueves
+      $viernes = informeRuta::where('fecha_agendamiento','=',$diaViernes)->where('rutero','=',$rutero)->orderBy('horario')->get();//seleccionamos el dia viernes
+      $sabado = informeRuta::where('fecha_agendamiento','=',$diaSabado)->where('rutero','=',$rutero)->orderBy('horario')->get();//seleccionamos el dia sabado
+      $domingo = informeRuta::where('fecha_agendamiento','=',$diaDomingo)->where('rutero','=',$rutero)->orderBy('horario')->get();//seleccionamos el dia domingo
 
 
-        return view('operac.ruta',[
-          'lunes'=>$lunes,
+        return view('operac.ruta',[//retornamos la vista con la informacion de las rutas correspondientes a la semana siguiente
+          'lunes'=>$lunes,//separada por dias
           'martes'=>$martes,
           'miercoles'=>$miercoles,
           'jueves'=>$jueves,
@@ -656,8 +655,9 @@ class OperacionesController extends Controller
 
 
     public function detalleRutasPorDia($rutero, $dia){
-      $ruta= informeRuta::where('rutero','=',$rutero)->where('fecha_agendamiento','=',$dia)->get();
-      return view('operac.detalleRutaPorDia',[
+      //detalle ruta por dia es una funcion que nos retorna todas las rutas de un rutero y un dia en concreto
+      $ruta= informeRuta::where('rutero','=',$rutero)->where('fecha_agendamiento','=',$dia)->get();//seleccionamos las rutas de un rutero x un dia x
+      return view('operac.detalleRutaPorDia',[//retornamos la vista con la informacion recopilada
         'rutero'=>$rutero,
         'dia'=>$dia,
         'ruta'=>$ruta,
@@ -726,23 +726,25 @@ public function agendamientoLlamado(){//agendamientoLlamado es una funcion que m
     ]);
 }
 
-public function AgendamientoLlamadoFinalizar($id){
-  $reage = AgendarLlamados::find($id);
-  $teos = User::where('perfil','=',2)->get();
+public function AgendamientoLlamadoFinalizar($id){//AgendamientoLlamadoFinalizar es una funcion que nos retorna
+  //los teleoperadores y un agendamiento de llamado en espesifico
+  $reage = AgendarLlamados::find($id);//seleccionamos el agendamiento de llamados
+  $teos = User::where('perfil','=',2)->get();//seleccionamos los teleoperadores
   return view('operac.agendamientoLlamadosFinalizarCambiarTeo',
-  ['reage'=>$reage,'teos'=>$teos]);
+  ['reage'=>$reage,'teos'=>$teos]);//retornamos la vista con la informacion antes recopilada
 }
 
 public function AgendamientoLlamadosFinalizarRegistro(Request $request){
-    $llamado =AgendarLlamados::find($request->id);
-    $llamado->estado_llamado="no llamado";
-    $llamado->save();
+  //AgendamientoLlamadosFinalizarRegistro es una funcion que finaliza un agendamiento de llamados por que el llamado en cuestiomno fue realizado
+    $llamado =AgendarLlamados::find($request->id);//seleccionamos el agendamiento de llamado por su id
+    $llamado->estado_llamado="no llamado";//actualizamos el estado del agendamiento
+    $llamado->save();//gusrdamos los cambios
 
-    $registro = captaciones::find($llamado->id_llamado);
-    $registro->estado="cnu";
-    $registro->save();
+    $registro = captaciones::find($llamado->id_llamado);//seleccionamos el registro desde la tabla
+    $registro->estado="cnu";//cambiamos el estado de ca a cnu, ya que el registro no fue contactado
+    $registro->save();//guardamos los cambios
 
-  return redirect('ope/agendamiento/llamados');
+  return redirect('ope/agendamiento/llamados');//retornamos la vista
 }
 
 public function mandatos(){//metodo que retorna una vista para seleccionar las captaciones o rutas a las cuales se les agregara un estadp de mandato
@@ -905,6 +907,25 @@ public function ConReparoAgregarEstado(Request $request){//ConReparoAgregarEstad
   $registro->motivo_mdt = $request->comentario;//modificamos el motivo del mandato
   $registro->save();//guardamos los cambios en la base de datos
 
+  $retiro= estadoRuta::find($request->id_cap);//seleccionamos el estado de ruta por id
+  $retiro->estado = $request->estado_mandato;//añadimos el estado de mandato
+  if($retiro->estado_primer_agendamiento="conReparo"){
+
+    $retiro->estado_primer_agendamiento=$request->estado_mandato;//añadimos el estado de mandato en el tercer agendamineto
+    $retiro->observacion_primer_agendamiento=$request->comentario;
+
+  }elseif($retiro->estado_segundo_agendamiento="conReparo"){
+
+    $retiro->estado_segundo_agendamiento=$request->estado_mandato;//añadimos el estado de mandato en el tercer agendamineto
+    $retiro->observacion_segundo_agendamiento=$request->comentario;//agragamos la observacion
+
+  }elseif($retiro->estado_tercer_agendamiento="conReparo"){
+
+    $retiro->estado_tercer_agendamiento=$request->estado_mandato;//añadimos el estado de mandato en el tercer agendamineto
+    $retiro->observacion_tercer_agendamiento=$request->comentario;//agragamos la observacion
+  }
+  $retiro->save();//guardamos cambios
+
   return redirect('ope/mandatos/conReparo');
   //retornamos a la funcion mandatos con reparo para que esta nos retorne la vista con todos los registros con estado de mandato conReparo
 }
@@ -939,6 +960,40 @@ public function liberarAjax(){//liberar ajax libera los registros que quedan tom
     }else {
       abort(500);//si el registro no se libero correctamente  retornamos un error 500
     }
+}
+
+public function mandatosExitosos(){
+//funcion que nos retorna los registros correspondientes a los mandatos exitosos
+$registros = CaptacionesExitosa::where('estado_mandato','=','OK')->get();//Seleccionamos los registros
+$breadCrum ="Sin Filtros/ Actualmente se muestran todos los mandatos exitosos";
+//breadcrum que nos muestra el filtro que tenemos aplicado sobre los datos
+$fundaciones = fundacion::all();//seleccionamos las fundaciones
+  return view('operac.mandatosExitosos',[
+     'registros'=>$registros,
+     'breadCrum'=>$breadCrum,
+     'fundaciones'=>$fundaciones,
+   ]);
+
+}
+
+public function byFoundation($id){
+  //funcion que retorna las campañas de una fundacion en espesifico que le pasamos como parametro en el id
+  return Campana::where('fundacion','=',$id)->get();
+  //retornamos la informacion , y en la vista la recepcionamos con AJAX
+}
+
+public function mandatosExitososFiltrados(Request $request){//funcion que retorna los mandatos exitosos filtrados por fundacion y campaña
+$campana = campana::find($request->selectcampana)->nombre_campana;//seleccionamos la campaña y tomamos el nombre
+$fundacion = fundacion::find($request->selectFoundation)->nombre;//seleccionamos la fundacion y tomamos el nombre
+  $registros = CaptacionesExitosa::where('fundacion','=',$request->selectFoundation)//seleccionamos los registros que complan con la fundacion
+    ->where('nom_campana','=',$campana)->where('estado_mandato','=','OK')->get();//la campaña seleccionada y el estado de mandato OK
+    $breadCrum ="Filtrado por Fundacion/".$fundacion." | Campaña/".$campana;//breadCrum en el que mostramos el filtro realizado
+  $fundaciones = fundacion::all();//seleccionamos las fundaciones para retornar a la vista
+    return view('operac.mandatosExitosos',[//retornamos la vista y le enviamos las variables con la informacion prosesada
+       'registros'=>$registros,
+       'breadCrum'=>$breadCrum,
+       'fundaciones'=>$fundaciones,
+     ]);
 }
 
 

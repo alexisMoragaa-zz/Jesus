@@ -251,7 +251,8 @@ $("#sendd").validate({
       },
       off_depto:{
         required:function(element){
-          return $("#lugarRetiro").val()!="Casa";
+          // if($("#lugarRetiro").val()!="Casa"||){}
+          return $("#lugarRetiro").val()=="Of"||$("#lugarRetiro").val()=="Departamento";
         }
 
       },

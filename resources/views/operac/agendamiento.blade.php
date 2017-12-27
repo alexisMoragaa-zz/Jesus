@@ -86,6 +86,7 @@
 
         });
     </script>
+
     <div class=" contenedor1" id="con">
       <div class="row">
         {!!Form::open(['url'=>['ope/pc'],'method'=>'post'])!!}

@@ -246,6 +246,7 @@
                       <option value="Casa">Casa</option>
                       <option value="Oficina">Oficina</option>
                       <option value="Departamento">Departamento</option>
+                      <option value="Trabajo">Trabajo</option>
                     </select>
                   </div>
 
