@@ -123,7 +123,7 @@
 								<li><a href="{{ url('/ope/verRutas')}}">Rutas Diarias</a></li>
 								<li><a href="{{ url('/ope/rutas')}}">Rutas Semanales</a></li>
 								<li><a href="{{url('ope/createRutas')}}">Calendario de Rutas</a></li>
-
+								<li><a href="{{url('/ope/cambiarRutero')}}">Cambiar Ruteros</a></li>								
 							</ul>
 						</li>
 						<li class="dropdown">

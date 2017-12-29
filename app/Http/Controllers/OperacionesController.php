@@ -976,25 +976,93 @@ $fundaciones = fundacion::all();//seleccionamos las fundaciones
 
 }
 
-public function byFoundation($id){
-  //funcion que retorna las campañas de una fundacion en espesifico que le pasamos como parametro en el id
-  return Campana::where('fundacion','=',$id)->get();
-  //retornamos la informacion , y en la vista la recepcionamos con AJAX
-}
-
 public function mandatosExitososFiltrados(Request $request){//funcion que retorna los mandatos exitosos filtrados por fundacion y campaña
 $campana = campana::find($request->selectcampana)->nombre_campana;//seleccionamos la campaña y tomamos el nombre
 $fundacion = fundacion::find($request->selectFoundation)->nombre;//seleccionamos la fundacion y tomamos el nombre
+
   $registros = CaptacionesExitosa::where('fundacion','=',$request->selectFoundation)//seleccionamos los registros que complan con la fundacion
     ->where('nom_campana','=',$campana)->where('estado_mandato','=','OK')->get();//la campaña seleccionada y el estado de mandato OK
-    $breadCrum ="Filtrado por Fundacion/".$fundacion." | Campaña/".$campana;//breadCrum en el que mostramos el filtro realizado
+
+  $breadCrum ="Filtrado por Fundacion/".$fundacion." | Campaña/".$campana;//breadCrum en el que mostramos el filtro realizado
   $fundaciones = fundacion::all();//seleccionamos las fundaciones para retornar a la vista
+
     return view('operac.mandatosExitosos',[//retornamos la vista y le enviamos las variables con la informacion prosesada
        'registros'=>$registros,
        'breadCrum'=>$breadCrum,
        'fundaciones'=>$fundaciones,
      ]);
 }
+
+public function cambiarRutero(){//cambiarRutero es una funcion que nos retorna solo las rutas que estan por retirar desde el dia en curso en adelante para posterior cambiar el rutero
+    $hoy = Carbon::now()->format('Y-m-d');//seleccionamos el dia de hoy y le asignamos el formato dia mes año
+    $ruteros = User::where('perfil','=',5)->get();//seleccionamos los ruteros para enviarlos a la vista
+    $comunas = comunaRetiro::where('ciudad','=','santiago')->get();//seleccionamos todas las comunas de santiago
+    $registros =informeRuta::where('fecha_agendamiento','>=',$hoy)->get();//seleccionamos los registros
+    $breadCrum="Sin filtros/ se muestran todas las rutas a partir de hoy";//breadcrum que nos muestra el iltro realizado
+    return view('operac.cambiarRutero',[
+        'registros'=>$registros,
+        'ruteros'=>$ruteros,
+        'comunas'=>$comunas,
+        'breadCrum'=>$breadCrum,
+        ]);
+}
+
+public function cambiarRuteroPost(Request $request){
+  //esta funcion nos retorna los resultados de la busqueda de rutas filtradas por rutero y por comunas
+  $hoy  = Carbon::now()->format('Y-m-d');//identificamos el dia en curso
+  $rutero = User::find($request->rutero);//seleccionamos el rutero para el breadCrum
+  $comuna = comunaRetiro::find($request->comuna);//selecionamos la comuna enviada desde la vista con el id
+  $ruteros = User::where('perfil','=',5)->get();//seleccionamos los ruteros para enviarlos a la vista
+  $comunas = comunaRetiro::where('ciudad','=','santiago')->get();//seleccionamos todas las comunas de santiago
+
+ $breadCrum="Se muestran las rutas de ".$rutero->name." ".$rutero->last_name. " / En la comuna ".$comuna->comuna;//breadcrum que nos muestra el iltro realizado dd($comuna->comuna);
+  $registros = informeRuta::where('rutero_id','=',$request->rutero)//seleccionamos los registros que tengan como rutero el id que sacamos del request
+    ->where('fecha_agendamiento','>=',$hoy)//culla fecha de agendamiento sea igual o mallor que hoy
+    ->where('estado','=','visita pendiente')//y que el estado de llamado sea igual a visita pendiente, esto para no reasignar rutas a realizadas
+    ->whereHas('cap',function($query) use($comuna){//usamos el where has para adicionalmente consultar que su relacion en la tabla captaciones_exitosas
+    $query->where('comuna','=',$comuna->comuna);//tenga como comuna la comuna que tomamos del request
+    })->get();
+
+  return view('operac.cambiarRutero',[
+      'registros'=>$registros,
+      'ruteros'=>$ruteros,
+      'comunas'=>$comunas,
+      'breadCrum'=>$breadCrum,
+      ]);
+}
+
+public function changeRutero($id,$rutero){
+  //funcion que cambia el rutero correspondiente a una ruta mediante ajax
+  $rutero = User::find($rutero);//seleccionamos el rutero que se nos envia como id desde la peticion ajax
+
+  $registro = informeRuta::find($id);//seleccionamos el registro a modificar desde informe ruta
+    $registro->rutero_id = $rutero->id;//asignamos el id del rutero obtenido con ajax al id de rutero de la tabla informeRutas
+    $registro->save();//guardamos el cambio
+  //
+  // $estado_rutas = estadoRuta::find($registro->id_ruta);//seleccionamos el registro a mofidicar en estado ruta
+  //   $estado_rutas->
+  $agendamiento = CaptacionesExitosa::find($registro->id_captacion);//seleccionamos el registro a modificaz en captaciones
+    $agendamiento->rutero = $rutero->name;//asignamos el nombre del rutero al campo rutero de la tabla captaciones_exitosas
+    $agendamiento->save();//guardamos los cambios
+    return redirect('/ope/cambiarRutero');
+}
+
+public function byFoundation($id){
+  //funcion que retorna las campañas de una fundacion en espesifico que le pasamos como parametro en el id
+  return Campana::where('fundacion','=',$id)->get();
+  //retornamos la informacion , y en la vista la recepcionamos con AJAX
+}
+
+public function byRutero($id){
+  //funcion que retorna las comunas asignadas a un rutero en concreto para ser mostradas de forma dinamica
+  //en un input de tipo select en la vista, de esta forma cuando seleccionen un rutero solo se me mostraran
+  //las comunas asignadas al mismo
+  $rutero = User::find($id);//seleccionamos al rutero correspondiente al id enviado
+  return comunaRetiro::where('rutero','=',$rutero->name)->get();
+  //selecionamos las comunas que le corresponden al rutero y las retornamos en json
+}
+
+
 
 
 

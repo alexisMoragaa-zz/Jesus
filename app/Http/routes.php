@@ -196,9 +196,12 @@ Route::group(['middleware' => ['auth', 'operaciones'], 'prefix' => 'ope'], funct
     Route::Get('liberar/registros/show/{id}','OperacionesController@liberarRegistrosShow');
     Route::Get('liberar/registro/ajax','OperacionesController@liberarAjax');
     Route::Get('mandatos/exitosos','OperacionesController@mandatosExitosos');
-    Route::Get('byFoundation/{id}','OperacionesController@byFoundation');
     Route::Post('mandatos/exitosos/filtrado','OperacionesController@mandatosExitososFiltrados');
-
+    Route::Get('cambiarRutero','OperacionesController@cambiarRutero');
+    Route::Post('cambiarRutero','OperacionesController@cambiarRuteroPost');
+    Route::Get('byFoundation/{id}','OperacionesController@byFoundation');
+    Route::Get('byRutero/{id}','OperacionesController@byRutero');
+    Route::get('change/rutero/{id}/{rutero}','OperacionesController@changeRutero');
     Route::get('/', function(){
 
         return view('operac/ope');
