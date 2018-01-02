@@ -35,7 +35,8 @@
             left: 10px;
             border-radius: 40%;
             background: none;
-            border: 3px solid #AAAAAA; }
+            border: 3px solid #AAAAAA;
+          }
 
 
         .formulario .checkbox label:before {

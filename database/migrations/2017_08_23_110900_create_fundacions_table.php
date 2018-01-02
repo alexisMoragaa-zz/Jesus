@@ -17,9 +17,10 @@ class CreateFundacionsTable extends Migration {
 			$table->increments('id');
 			$table->string('nombre');
 			$table->integer('fono');
-			$table->integer('email');
+			$table->string('email');
 			$table->string('razon_social');
 			$table->string('rut');
+			$table->string('direccion');
 			$table->string('agendamiento');
 			$table->string('upgrade');
 			$table->string('regiones');

@@ -31,50 +31,54 @@ Route::group(['middleware' => ['auth', 'administrador'], 'prefix' => 'admin'], f
     Route::Resource('rutas', 'RutasController');
     Route::Resource('ope', 'OperacionesController');
     Route::Resource('load', 'CargaController');
-    Route::get('cargas', 'CargaController@form_cargar_datos');
-    Route::post('cargar_datos', 'CargaController@cargar_datos');
-    Route::get('edit&{id}', 'TeoController@editar');
-    Route::get('mandatoExitoso&{id}&{id_interno_dues}', 'TeoController@create');
-    Route::post('agregado', 'TeoController@store');
-    Route::post('actualizado&{id}', 'TeoController@actualizar');
-    Route::get('detalle{id}', 'supController@detalleUser');
-    route::get('updatePivot{user_id}/{pivot_id}', 'supController@updatePivot');
-    Route::post('updatepivot2', 'supController@updatepivot2');
-    route::post('updatePass/{id}', 'adminController@updatePass');
-    route::post('siguiente/{id}', 'teoController@siguiente');
-    route::get('adminconfig', 'AdminController@adminConfig');
-    route::post('createstatus', 'AdminController@create_status');
-    route::post('createcallstatus', 'AdminController@create_status_retirement');
-    route::post('createpaymentstatus', 'AdminController@create_status_payment_method');
-    route::get('teoHome', 'TeoController@Home');
-    Route::get('createRutas', 'AdminController@rutas');
-    route::get('admin', 'AdminController@admin');
-    route::post('comuna', 'AdminController@addcomuna');
-    route::get('filtrarpor', 'OperacionesController@filtrarpor');
+    Route::Get('cargas', 'CargaController@form_cargar_datos');
+    Route::Post('cargar_datos', 'CargaController@cargar_datos');
+    Route::Get('edit&{id}', 'TeoController@editar');
+    Route::Get('mandatoExitoso&{id}&{id_interno_dues}', 'TeoController@create');
+    Route::Post('agregado', 'TeoController@store');
+    Route::Post('actualizado&{id}', 'TeoController@actualizar');
+    Route::Get('detalle{id}', 'supController@detalleUser');
+    route::Get('updatePivot{user_id}/{pivot_id}', 'supController@updatePivot');
+    Route::Post('updatepivot2', 'supController@updatepivot2');
+    route::Post('updatePass/{id}', 'adminController@updatePass');
+    route::Post('siguiente/{id}', 'teoController@siguiente');
+    route::Get('adminconfig', 'AdminController@adminConfig');
+    route::Post('createstatus', 'AdminController@create_status');
+    route::Post('createcallstatus', 'AdminController@create_status_retirement');
+    route::Post('createpaymentstatus', 'AdminController@create_status_payment_method');
+    route::Get('teoHome', 'TeoController@Home');
+    Route::Get('createRutas', 'AdminController@rutas');
+    route::Get('admin', 'AdminController@admin');
+    route::Post('comuna', 'AdminController@addcomuna');
+    route::Get('filtrarpor', 'OperacionesController@filtrarpor');
     route::post('showDay1', 'OperacionesController@showDay1');
-    route::get('validarSocio', 'OperacionesController@validarSocio');
-    route::get('verRutas','OperacionesController@verRutas');
-    route::post('filtroRutas','OperacionesController@verRutasFiltradas');
-    route::post('capFilter','TeoController@capFilter');
-    Route::post('addStatusCap','OperacionesController@addStatusCap');
-    route::post('addStatusCapAjax','TeoController@addStatusCapAjax');
-    route::post('homeBack','TeoController@homeBack');
-    Route::post('addStatusMdt','OperacionesController@addStatusMdt');
-    Route::get('editCap/{id}','TeoController@editCap');
-    route::post('editCapPost','TeoController@editCapPost');
-    route::get('dispRutas', 'TeoController@dispRutas');
-    Route::post('addMinMaxCap','OperacionesController@adminMaxMinCap');
-    Route::post('secondRoute','RutasController@addSecondRoute');
-    Route::post('thirdRoute','RutasController@addThirdRoute');
-    Route::get('reAgendamiento','OperacionesController@reAgendamiento');
-    Route::get('detalleReAgendamiento/{id}','OperacionesController@detalleReagendamiento');
+    route::Get('validarSocio', 'OperacionesController@validarSocio');
+    route::Get('verRutas','OperacionesController@verRutas');
+    route::Post('filtroRutas','OperacionesController@verRutasFiltradas');
+    route::Post('capFilter','TeoController@capFilter');
+    Route::Post('addStatusCap','OperacionesController@addStatusCap');
+    route::Post('addStatusCapAjax','TeoController@addStatusCapAjax');
+    route::Post('homeBack','TeoController@homeBack');
+    Route::Post('addStatusMdt','OperacionesController@addStatusMdt');
+    Route::Get('editCap/{id}','TeoController@editCap');
+    route::Post('editCapPost','TeoController@editCapPost');
+    route::Get('dispRutas', 'TeoController@dispRutas');
+    Route::Post('addMinMaxCap','OperacionesController@adminMaxMinCap');
+    Route::Post('secondRoute','RutasController@addSecondRoute');
+    Route::Post('thirdRoute','RutasController@addThirdRoute');
+    Route::Get('reAgendamiento','OperacionesController@reAgendamiento');
+    Route::Get('detalleReAgendamiento/{id}','OperacionesController@detalleReagendamiento');
     Route::Post('reagendar','OperacionesController@reagendar');
-    Route::get('PorReagendar','TeoController@PorReagendar');
-    route::get('detalleReagendamientoTeo/{id}','TeoController@detalleReagendamiento');
-    route::post('reagendado','TeoController@reagendado');
-
-
-     route::get('ajax-rutero', function () {
+    Route::Get('PorReagendar','TeoController@PorReagendar');
+    route::Get('detalleReagendamientoTeo/{id}','TeoController@detalleReagendamiento');
+    route::Post('reagendado','TeoController@reagendado');
+    Route::Get('byfoundation/{id}', 'CargaController@byFoundation');
+    Route::Get('foundations','AdminController@foundations');
+    Route::Post('create/foundation','AdminController@createFoundation');
+    Route::Get('foundation/show/{id}','AdminController@showFoundation');
+    Route::Get('campana/{campana}', 'InformesController@informeCampana');
+    Route::Post('create/campana','AdminController@createCampana');
+     route::Get('ajax-rutero', function () {
 
         $rutero_id = Input::get('ruteroid');
         $nombre_rutero = comunaRetiro::where('comuna', '=', $rutero_id)->get();
@@ -202,6 +206,7 @@ Route::group(['middleware' => ['auth', 'operaciones'], 'prefix' => 'ope'], funct
     Route::Get('byFoundation/{id}','OperacionesController@byFoundation');
     Route::Get('byRutero/{id}','OperacionesController@byRutero');
     Route::get('change/rutero/{id}/{rutero}','OperacionesController@changeRutero');
+
     Route::get('/', function(){
 
         return view('operac/ope');

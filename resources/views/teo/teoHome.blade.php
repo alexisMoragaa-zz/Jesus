@@ -115,6 +115,7 @@
                 <th>Monto</th>
                 <th>Detalles</th>
                 <th id="mdt" ><span id="mdtspan" class=" glyphicon glyphicon-list-alt "></span></th>
+                <th>Editar</th>
             </thead>
             <tbody>
             @foreach($captaciones as $cap)
@@ -168,8 +169,11 @@
                             @elseif($cap->estado_mandato =="")
                                 <td center="center"><span class="glyphicon "></span></td>
                             @endif
-
-
+                        @if($cap->estado_mandato !="OK")
+                          <td><a href="{{url('/teo/editCap',$cap->id)}}">Editar</a></td>
+                        @else
+                          <td>Editar</td>
+                        @endif
                     </tr>
 
                 @endforeach

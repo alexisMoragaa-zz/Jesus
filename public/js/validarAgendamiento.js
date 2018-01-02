@@ -92,6 +92,54 @@ $.validator.addMethod(
   "el usuario ya es socio o tiene una visita pendiente"
 );
 
+$("#fundacion").validate({
+  rules:{
+    name_foundation:{
+      required:true,
+    },
+    fono:{
+      required:true,
+    },
+    adress:{
+      required:true,
+    },
+    number:{
+      required:true,
+    },
+    dni:{
+      required:true,
+    },
+    email:{
+      required:true,
+    },
+    socialReason:{
+      required:true,
+    },
+  },
+  messages:{
+    name_foundation:{
+      required:"Campo Obligatorio",
+    },
+    fono:{
+      required:"Campo Obligatorio",
+    },
+    adress:{
+      required:"Campo Obligatorio",
+    },
+    number:{
+      required:"Campo Obligatorio",
+    },
+    dni:{
+      required:"Campo Obligatorio",
+    },
+    email:{
+      required:"Campo Obligatorio",
+    },
+    socialReason:{
+      required:"Campo Obligatorio",
+    },
+  }
+});
 $("#senddPassCode").validate({
   rules:{
     tipo_retiro:{

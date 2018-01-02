@@ -19,6 +19,26 @@ class CampanaTableSeeder extends Seeder
             'ubicacion'=>'region metropolitana',
             'fundacion'=>'1',
         ));
+        \DB::table('campanas')->insert(array(
+            'nombre_campana'=>'Leones Marinos',
+            'ubicacion'=>'Regiones',
+            'fundacion'=>'1',
+        ));
+        \DB::table('campanas')->insert(array(
+            'nombre_campana'=>'Vida',
+            'ubicacion'=>'region metropolitana',
+            'fundacion'=>'2',
+        ));
+        \DB::table('campanas')->insert(array(
+            'nombre_campana'=>'Hermanos',
+            'ubicacion'=>'region metropolitana',
+            'fundacion'=>'3',
+        ));
+        \DB::table('campanas')->insert(array(
+            'nombre_campana'=>'Somos uno',
+            'ubicacion'=>'region metropolitana',
+            'fundacion'=>'3',
+        ));
 
 
     }

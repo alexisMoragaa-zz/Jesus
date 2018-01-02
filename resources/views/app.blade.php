@@ -59,6 +59,7 @@
 						<li class="dropdown">
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Administrador <span class="caret"></span></a>
 							<ul class="dropdown-menu">
+								<li><a href="{{url('admin/foundations')}}">Fundaciones</a></li>
 								<li><a href="{{ url('/admin/createRutas') }}">Modificar Rutas</a></li>
 								<li><a href="{{ url('/admin/adminconfig') }}">Configuraciones</a></li>
 							</ul>
@@ -123,7 +124,7 @@
 								<li><a href="{{ url('/ope/verRutas')}}">Rutas Diarias</a></li>
 								<li><a href="{{ url('/ope/rutas')}}">Rutas Semanales</a></li>
 								<li><a href="{{url('ope/createRutas')}}">Calendario de Rutas</a></li>
-								<li><a href="{{url('/ope/cambiarRutero')}}">Cambiar Ruteros</a></li>								
+								<li><a href="{{url('/ope/cambiarRutero')}}">Cambiar Ruteros</a></li>
 							</ul>
 						</li>
 						<li class="dropdown">
@@ -134,11 +135,6 @@
 								<li> <a href="{{url('ope/mandatos/conReparo')}}">Mandatos con Reparo</a></li>
 							</ul>
 						</li>
-
-
-
-
-
 
 					@elseif(Auth::user()->perfil==5){{--Perfil Ruteros--}}
 						<li><a href="{{url('rutas/rutas')}}">Realizar Ruta</a></li>
