@@ -133,8 +133,12 @@
 								<li><a href="{{ url('/ope/mandatos')}}">Recepcionar Mandatos</a></li>
 								<li> <a href="{{url('ope/mandatos/exitosos')}}">Mandatos Exitosos</a></li>
 								<li> <a href="{{url('ope/mandatos/conReparo')}}">Mandatos con Reparo</a></li>
+								<li> <a href="{{url('ope/create/letter')}}">Generar Carta Mandatos</a></li>
+
 							</ul>
 						</li>
+
+
 
 					@elseif(Auth::user()->perfil==5){{--Perfil Ruteros--}}
 						<li><a href="{{url('rutas/rutas')}}">Realizar Ruta</a></li>
