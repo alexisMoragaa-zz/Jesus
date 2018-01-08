@@ -1,17 +1,18 @@
 <?php namespace App\Http\Controllers;
 
-use App\CaptacionesExitosa;
-use App\estadoRuta;
-use App\Http\Requests;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Hash;
 use Carbon\Carbon;
+use App\Http\Requests;
 use Illuminate\Http\Request;
-use App\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Response;
 use Monolog\Handler\ElasticSearchHandler;
 use Illuminate\Support\Facades\Auth;
+use App\CaptacionesExitosa;
+use App\User;
+use App\estadoRuta;
 use App\maxCap;
 use App\estado;
 use App\comunaRetiro;
@@ -20,7 +21,7 @@ use App\AgendarLlamados;
 use App\captaciones;
 use App\Campana;
 use App\fundacion;
-use Illuminate\Support\Facades\Hash;
+Use App\Letter;
 
 class OperacionesController extends Controller
 {
@@ -30,21 +31,22 @@ class OperacionesController extends Controller
      * @return Response
      */
     public function index()
-    {
-        $code="";
-        $hoy = Carbon::now()->format('d/m/Y');
-        $teos = User::where('perfil', '=', 2)->get();
-        $ruteros = User::where('perfil', '=', 5)->get();
+    {//funcion que nos retorna una vista con las captaciones del dia en curso
+        $code="";//asignamos el valor de code en ""
+        $hoy = Carbon::now()->format('d/m/Y');//asignamos el dia actual en la variable hoy
+        $teos = User::where('perfil', '=', 2)->get();//seleccionamos los usuarios de tipo teleoperador
+        $ruteros = User::where('perfil', '=', 5)->get();//seleccionamos los usuarios de tipo rutero
         $datos = CaptacionesExitosa::where('fecha_captacion','=',$hoy)->where('reagendar','=',"")->get()->sortByDesc('created_at');
+        //seleccionamos todas las captaciones del dia en curso que no tengan estado de reagendamiento y las ordenamos por orden decendente a su creacion
         return view('operac/agendamiento', compact('datos', 'teos', 'ruteros','code'));
-
+        //retornamos la vista con las variables antes mencionadas
     }
 
-    public function show($id)
-    {
+    public function show($id)//recibimos el id de la capacion como parametro en la url
+    {//funcion que nos retoena una captacion en particular para verla en detalle
 
-      $detalle =CaptacionesExitosa::where('id','=',$id)->get();
-        return view('teo/detalle', compact('detalle'));
+      $detalle =CaptacionesExitosa::where('id','=',$id)->get();//seleccionamos la captacion por el id
+        return view('teo/detalle', compact('detalle'));//retornamos la vista con el detalle de la captacion
     }
 
 
@@ -166,19 +168,15 @@ class OperacionesController extends Controller
             return view('operac/agendamiento', compact('datos','teos','ruteros','code'));
 
 
-
         } elseif ($dia == 3) {
 
             $datos = CaptacionesExitosa::whereBetween('fecha_captacion', [$last_month, $hoy])->get()->sortByDesc('created_at');
 
             return view('operac/agendamiento', compact('datos','teos','ruteros','code'));
 
-
+          }
         }
 
-
-
-    }
 
     public function filtrarpor()
     {
@@ -309,8 +307,6 @@ class OperacionesController extends Controller
 
         return view("rutas/rutas", compact('rutas','ruteros','estado','url'));
     }
-
-
 
 
     public function verRutasFiltradas(Request $request)
@@ -447,20 +443,20 @@ class OperacionesController extends Controller
     }//fin metodo verRutasFiltradas
 
     public function adminMaxMinCap(Request $request){
+  //funcion que nos permite modificar el numero de agendamientos permitidos para las rutas
+        $dia=$request->maxDayCap;//seleccionamos el valor d maxdaycap
+        $am=$request->maxAmCap;//seleccionamos el valor de maxamcap
+        $pm=$request->maxPmCap;//seleccionamos el valor de maxpmcap
 
-        $dia=$request->maxDayCap;
-        $am=$request->maxAmCap;
-        $pm=$request->maxPmCap;
-
-        DB::table('max_caps')
-            ->where('id', 1)
-            ->update(['maxDay' => $dia,'maxAm'=>$am,'maxPm'=>$pm]);
+        DB::table('max_caps')//usamos el metodo update de querybuilder para actualizar el registro
+            ->where('id', 1)//seleccionamos el registro que deseamos actualizar por su id
+            ->update(['maxDay' => $dia,'maxAm'=>$am,'maxPm'=>$pm]);//actualizamos los datos obtenidos del request
 
 
-        if(Auth::user()->perfil==1){
+        if(Auth::user()->perfil==1){//si el perfil de usuario es administrador retornamos por las rutas de administrador
             return redirect('admin/adminconfig');
 
-        }else if(Auth::user()->perfil==4){
+        }else if(Auth::user()->perfil==4){//si el perfil de usuarios es operaciones retornamos por las rutas de operaciones
             return redirect('ope/adminconfig');
         }
 
@@ -468,36 +464,37 @@ class OperacionesController extends Controller
     }
 
     public function reAgendamiento(){
+    //funcion que nos retoena una vista donde podemos ver las captaciones por reagendar, y las ya reagendadas
+        $reagendar = CaptacionesExitosa::where('reagendar','=','1')->get();//seleccionamos las por reagendar
+        $reagendado = CaptacionesExitosa::where('reagendar','=','2')->get();//sekeccionamos las reagendadas
 
-        $reagendar = CaptacionesExitosa::where('reagendar','=','1')->get();
-        $reagendado = CaptacionesExitosa::where('reagendar','=','2')->get();
-
-        return view('operac.reAgendamiento',[
+        return view('operac.reAgendamiento',[//retornamos la vista con las variables antes mencionadas
             'reagendar'=>$reagendar,
             'reagendado'=>$reagendado]);
 
     }
     public function detalleReagendamiento($id){
+      //funcion que nos retorna una captacion espesifica que seleccionamos por un id
+      //enviado como parametro en la url ademas de los usuarios de tipo teleoperador
+        $detalleReagendamiento = CaptacionesExitosa::find($id);//seleccionamos la captacion por su id
+            $teos= User::where('perfil','=',2)->get();//seleccionamos los usuaris de tipo teleoperador
 
-        $detalleReagendamiento = CaptacionesExitosa::find($id);
-            $teos= User::where('perfil','=',2)->get();
-
-        return view('operac/detalleReagendamiento',
+        return view('operac/detalleReagendamiento',//retornamos la vista con la svariables antes mensionadas
             ['reage'=>$detalleReagendamiento, 'teos'=>$teos,
             ]);
 
     }
 
     public function reagendar(Request $request){
+//funcion para asignarle un reagendamiento a otro teleoperador
+        $newTeo= User::find($request->newTeo);//seleccionamos el nuevo teleoperador
+            $cap= CaptacionesExitosa::find($request->id);//seleccionamos la captacion que deseamos reagendar
+            $cap->user()->associate($newTeo);//asocioamos el nuevo usuario al agendamiento
+            $cap->save();//guardamos cambios
 
-        $newTeo= User::find($request->newTeo);
-            $cap= CaptacionesExitosa::find($request->id);
-            $cap->user()->associate($newTeo);
-            $cap->save();
-
-        if(Auth::user()->perfil==1){
+        if(Auth::user()->perfil==1){//si el perfil es administrador retornamos por las rutas de administrador
             return redirect('admin/reAgendamiento');
-        }elseif(Auth::user()->perfil==4){
+        }elseif(Auth::user()->perfil==4){//si el perfil es de teleoperador retornamos por las rutas de teleoperador
             return redirect('ope/reAgendamiento');
         }
 
@@ -523,11 +520,14 @@ class OperacionesController extends Controller
     }
 
     public function rutas(){
-
+    //funcion que nos redirecciona a una vista donde seleccionamos las rutas de deseamos ver
       if(Auth::User()->perfil==5){
+        //si el perfil es rutero lo redireccionamos a una vista donde podra seleccionar la semana que desea ver
         return view('rutas.filtroSemana');
       }else{
-        $ruteros =User::where('perfil','=',5)->get();
+        $ruteros =User::where('perfil','=',5)->get();//seleccionamos los usuarios de tipo rutero
+        //si el perfil es diferente a rutero redirecconamos a una vista donde puede seleccionar
+        //la semana y el rutero sobre el cual se desea ver las rutas
         return view('operac.filtroRutasSemanales',['ruteros'=>$ruteros]);
       }
     }
@@ -1023,7 +1023,7 @@ public function cambiarRuteroPost(Request $request){
     $query->where('comuna','=',$comuna->comuna);//tenga como comuna la comuna que tomamos del request
     })->get();
 
-  return view('operac.cambiarRutero',[
+  return view('operac.cambiarRutero',[//retornamos la vista con los datos
       'registros'=>$registros,
       'ruteros'=>$ruteros,
       'comunas'=>$comunas,
@@ -1038,13 +1038,103 @@ public function changeRutero($id,$rutero){
   $registro = informeRuta::find($id);//seleccionamos el registro a modificar desde informe ruta
     $registro->rutero_id = $rutero->id;//asignamos el id del rutero obtenido con ajax al id de rutero de la tabla informeRutas
     $registro->save();//guardamos el cambio
-  //
-  // $estado_rutas = estadoRuta::find($registro->id_ruta);//seleccionamos el registro a mofidicar en estado ruta
-  //   $estado_rutas->
+
   $agendamiento = CaptacionesExitosa::find($registro->id_captacion);//seleccionamos el registro a modificaz en captaciones
     $agendamiento->rutero = $rutero->name;//asignamos el nombre del rutero al campo rutero de la tabla captaciones_exitosas
     $agendamiento->save();//guardamos los cambios
     return redirect('/ope/cambiarRutero');
+}
+
+public function createLetter(){
+  //funcion que nos retornara una vista en la cual seleccionaremos la fundacion, y las campañas sobre las
+  //cuales generaremos las cartas para enviar los mandatos a las fundaciones
+  $foundations = fundacion::where('id','!=',1)->get();//seleccionamos todas las fundaciones
+  return view('letter.createLetter',[//retornamos la vista con las fundaciones
+    'foundations'=>$foundations,
+  ]);
+}
+
+public function addLetter(Request $request){
+  //funcion con la cual creamos una nueva carta para las deferentes fundaciones
+  $letters = Letter::where('id_fundacion','=',$request->id_foundation)->get()->last();
+  //seleccionamos el la ultima carta creada por una fundacion señalada en el id obtenid del Request
+
+    if($letters){//si la consulta tiene registros ejecutamos este bloque
+      $let = $letters->number+1;//tomamos el numero de la ultimacarta creada y le sumamos uno
+      $letter = new Letter;//creamos un nueva instancia de letter
+      $letter->number = $let;//asignamos el valor de let, el cual corresponde a la ultima carta +1
+      $letter->estado = "En Dues";//asignamos el valor en dues correspondiente a una carta recien creada
+      $letter->id_fundacion = $request->id_foundation;//asignamos el id de fundacion que a su ves es llave foranea esesta tabla
+      $letter->save();//guardams los cambios
+    }else {//si la consulta no arroja registros ejecutamos este bloque
+      $letter = new Letter;//creamos una nueva instancia del objeto letter
+      $letter->number = 1;//como no hay cartas anteriores le asignamos el valor 1
+      $letter->estado = "En Dues";//agregamos en dues correspondiente a una cara recien creada
+      $letter->id_fundacion = $request->id_foundation;//agregamos el id de fundacion que  asu vez es foreign
+      $letter->save();//guardamos los cambios
+      }
+  return redirect('/ope/create/letter');//retornamo a la funcion create letter, la cual nos retorna una
+  //vista con las fundaciones y sus respectivas cartas ya creadas
+}
+
+public function addRecordsCampaing($id_letter){
+  //funcion que nos retoena una vista en la cual podremos agragar mandatos auna carta en concreto
+  $letter = Letter::find($id_letter);//seleccionamos la carta
+  $registros = CaptacionesExitosa::where('fundacion','=',$letter->id_fundacion)
+    ->where('estado_mandato','=','OK')
+    ->whereHas('myLetter',function($query){
+      $query->where('number','=','0');
+    })->get();
+
+  /*seleccionamos los registros que podremos ingresar a la carta mediante mediante los siguientes criterios
+  1. que los rgistros pertenescan a la misma fundacion que la carta
+  2. que los registros tengan el estado de mandato como exitoso, ya que son los mandatos los que se agregana  ala carta
+  3. que los registros pertenescan a la carta 0, esto es para que una vez que se añadan registros a una carta
+  estos no esten disponibles para agregarse a otra cartas*/
+  return view('letter.addRecordsLetter',[//retornamos la vista con las variables
+    'letter'=>$letter,
+    'registros'=>$registros,
+  ]);
+}
+
+public function addRecodsLetterAjax()
+{//funcion que ira realizando updates a los registros para ingresarlos a la carta seleccionada
+  //mediante el uso de la tecologia ajax
+  $cap_id= input::get('cap_id');//seleccionamos el id del mandato
+  $letter_id = input::get('letter_id');//seleccionamos el id de la carta
+
+    $cap = CaptacionesExitosa::find($cap_id);//seleccionamos la captacion
+    $cap->letter = $letter_id;//asignamos el valor de la carta al mandato
+    $cap->save();//guardamos los cambios
+
+  // return("esta vaina funciono".$cap_id." y la letter ".$letter_id);
+}
+
+public function showLetter($id ){
+  //funcion que nos muestra una carta seleccionada por el id que obteneos como parametro de la url
+  $hoy = Carbon::now()->format('d-m-Y');//seleccionamos la fecha de hoy
+  $users = User::all()->sortByDesc('perfil');//seleccionamos
+  $letter = Letter::find($id);//seleccionamos la carta
+  $registros =CaptacionesExitosa::where('letter','=',$letter->id)->get();//Seleccionamos los registros de la carta
+  return view('letter.letter',[//retoenamos la vista con las variables
+    'letter'=>$letter,
+    'registros'=>$registros,
+    'hoy' =>$hoy,
+    'users'=>$users,
+  ]);
+}
+
+public function postMan(Request $request)
+{//funcion con la cual mediante el metodo post agregamos un encargado de enviar la carta a la fundacion entre otras cosas
+  $hoy = Carbon::now()->format('d-m-Y');
+  $let = Letter::find($request->id);
+  $let->entregadaPor = $request->postMan;
+  $let->creadaPor = Auth::user()->id;
+  $let->estado = "Carta Enviada a la Fundacion";
+  $let->mandatos = $let->mandatesByLetter->count();
+  $let->fecha_entrega = $hoy;
+  $let->save();
+  return redirect('/ope/show/letter/'.$let->id);
 }
 
 public function byFoundation($id){

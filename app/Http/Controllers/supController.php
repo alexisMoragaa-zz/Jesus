@@ -17,8 +17,7 @@ class supController extends Controller {
 
 	public function index(Request $request)
 	{
-		$usuarios=User::all();
-		/*guardamos en la variable usuario toda la data correspondiente al modelo usuario*/
+
 
 
 		$User_Campana = DB::table('campanas')
@@ -27,7 +26,7 @@ class supController extends Controller {
 			->get();
 			/*en la variable user_campana guardamos la informacionnresultante de la consulta join realizada con query builder
 			la cual pasamos a la vista con el metodo compact al igual que la variable usuarios*/
-		return view('sup/supervisor',compact('User_Campana','usuarios'));
+		return view('sup/supervisor',compact('User_Campana'));
 
 	}
 	public function detalleUser($id)
@@ -80,7 +79,7 @@ class supController extends Controller {
 
 	public function updatePivot(Request $request,$user_id, $pivot_id){
 
-		/**
+		/*
 		 * $pivote=1;
 			$valor ="yo se";
 			$usuarios =User::findOrFail($user_id);

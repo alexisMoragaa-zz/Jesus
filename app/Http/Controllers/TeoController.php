@@ -17,44 +17,53 @@ use App\estadoRuta;
 use App\informeRuta;
 use App\AgendarLlamados;
 use App\User;
+use App\Letter;
 
 class TeoController extends Controller
 {
 
     public function home()
-    {
+    {//esta funcion nos retorna la vista prinsipal de los usuarios en conjunto de sus captaciones correspondientes al dia en curso
         $captaciones = CaptacionesExitosa::where('teleoperador','=',Auth::User()->id)->get()->sortByDesc('created_at');
-        return view('teo/teoHome', compact('captaciones'));
+//seleccionamos las captaciones en la variable $captaciones
+        return view('teo/teoHome', compact('captaciones'));//retornamos la vista
     }
 
     public function index()
-    {
-        $status = estado::where('modulo', '=', 'llamado')->get();
-        $date = Carbon::now()->format('d-m-Y');
-        $dato = Campana::findOrFail(Auth::user()->campana)->id;
-
-        $cap = captaciones::where('id', '>=', 1)
-            ->where('campana_id', '=', $dato)->where('f_ultimo_llamado', '!=', $date)->where('estado', '!=', 'cu-')
+    {/*en la funcion index le retornamos al usuario un registro para llamar, y para evitar que otros usuarios adquieran el mismo registro mientras
+      este usuario esta hablando con el el registro queda "tomado", y nadie mas lo puede usar*/
+        $status = estado::where('modulo', '=', 'llamado')->get();//seleccionamos los estado de la base de datos
+        $date = Carbon::now()->format('d-m-Y');//seleccionamos la fecha de hoy y la almacenamos en $date
+        $dato = Campana::findOrFail(Auth::user()->campana)->id;//seleccionamos la campaña a la cual este usuario esta asignado
+        $cap = captaciones::where('campana_id', '=', $dato)//seleccionamo el registro que se le entragara mediante una seria de filtros
+            ->where('f_ultimo_llamado', '!=', $date)->where('estado', '!=', 'cu-')
             ->where('estado', '!=', 'cu+')->where('estado_registro', '=', 0)->where('estado', '!=', 'ca')
-            ->where('f_ultimo_llamado', '!=', $date)->first();
+          ->first();
+/*el registro que se le entregara al usuario tiene que pertenecer a la campaña a la cual el esta asignado
+la fecha de ultimo llamado no puede ser mayor al dia anterior respecto del dia en  curso su estado tiene que ser diferente de cnu
+su estado tiene que ser diferente de cu+ y defirente de ca (call_again) */
+        if (empty($cap)) {//evaluamos el resultado de la busqueda y si es nullo retornamos una vista con el error
 
-        if (empty($cap)) {
             return view('teo/teoError');
         }
-
-        DB::table('captaciones')
-            ->where('id', '=', $cap->id)
-            ->update([
+/*si el resultado de la busqueda nos retorna un registro ese registro lo actualizamos con el estadp de registro 1
+lo cual implica que el registro esta reservado y ningun otro teleoperador podra acceder a el.
+cuando el teleoperador determine el estado de la llamada el registro sera liberado,
+pero se atualizara la fecha de ultimo llamado con lo cual es registro no estara disponible durante el dia en que se realizo la llamada*/
+        DB::table('captaciones')//usamos update de queru builder para actuualizar
+            ->where('id', '=', $cap->id)//seleccionamos el registro
+            ->update([//actualizamos el registro y lo dejamos tomado
                 'estado_registro' => 1
             ]);
+            //finalmente retornamos la vista de llamados con el registro ya tomado
         return view('teo/teoin', compact('cap', 'status'));
     }
 
 
     public function show($id)
-    {
-        $detalle = CaptacionesExitosa::where('id','=',$id)->get();
-        return view('teo/detalle', compact('detalle'));
+    {//funcion que nos pemite ver una captacion exitosa o un agendamiento en detalle
+        $detalle = CaptacionesExitosa::where('id','=',$id)->get();//seleccionamos el agendamieto
+        return view('teo/detalle', compact('detalle'));//retornamoa la vista
     }
 
 
@@ -209,21 +218,29 @@ class TeoController extends Controller
 
     public function store(Request $request)
     {   /**Primera parte*/
-
-        $data = $request->all();
+      /*la funcion store se divide en tres partes prinsipales, esta que es la primera se encarga de generar una captacion exitosas
+      pero como la tabla de captaciones exitosas tiene otras relaciones ademas de otras instancias como esa¿tado de ruta que dependen de ella*/
+      //en la funcion store creamos una captacion exitosa
+        $data = $request->all();//seleccionamos todo el request y lo asignamos a data|
         $ruteroo = User::where('perfil','=',5)->where('name','=',$data['rutero'])->get()->first();
-        $id_rutero =$ruteroo->id;
+        //seleccionamos el rutero por el nombre
+        $id_rutero =$ruteroo->id;//tomamos el id del rutero y lo asignamos a la variable id_rutero
 
-        $date = Carbon::now()->format('d/m/Y');
+        $date = Carbon::now()->format('d/m/Y');//seleccionamos la fecha de hoy y la guardamos en la variable hoy
         $comunas=comunaRetiro::where('comuna','=',$request->comuna)->get()->first();
-        $ciudad =$comunas->ciudad;
-        $region =$comunas->region;
+        //seleccionamos la comuna por su nombre
+        $ciudad =$comunas->ciudad;//asignamos el valor de la propiedad ciudad del objeto comuna a la variable ciudad
+        $region =$comunas->region;//asignamos el valor de la propiedad region del objeto comuna a la variable region
         $direccion = $request->direccion." #".$request->numero." / ".$request->lugarRetiro." #".$request->off_depto." / ".$request->comuna;
-        // dd($direccion);
+        // usando el request concatenamos los diferentes campos que conforman la direccion y le damos el formato que guardaremos enb la bd
+
+        $letter = Letter::where('id_fundacion','=',$request->fundacion)->where('number','=',0)->get()->first();
+        $letter_id = $letter->id;
 
         if($request->tipo_retiro=="Acepta Grabacion"){
-
-            CaptacionesExitosa::create([
+  //si el tipo de retiro es grabacion, solo guardamos los campos competentes a las grabaciones
+        $cap = CaptacionesExitosa::create([//creamos una captacion exitosa usando el metodo create de eloquent
+                'letter' => $letter_id,
                 'n_dues' => $data['n_dues'],
                 // 'id_fundacion' => $data['id_fundacion'],
                 'fecha_captacion' => $date,
@@ -250,7 +267,9 @@ class TeoController extends Controller
 
             ]);
         }else{
-        $cap= CaptacionesExitosa::create([
+          //si el registro es diferente de grabacion guardamos los campos respectivos  aun agendamiento
+        $cap= CaptacionesExitosa::create([//creamos una captaion exitosa usando el metodo create de eloquent
+                'letter'=>$letter_id,
                 'n_dues' => $data['n_dues'],
                 // 'id_fundacion' => $data['id_fundacion'],
                 'fecha_captacion' => $date,
@@ -277,61 +296,72 @@ class TeoController extends Controller
                 'cuenta_movistar' => $data['c_movistar'],
             ]);
         }
-        /**Segunda Parte*/
+        /**Segunda Parte
+            en esta parte vemo a que numero de llamado corresponde  y asignamos variables para posteriormente agregar el estado donde corresponda
+        */
 
         $id = $request->id_captacion;
-        $llamado1 = captaciones::where('id', '=', $id)->pluck('primer_llamado');
-        $llamado2 = captaciones::where('id', '=', $id)->pluck('segundo_llamado');
+        //tomamos el id de captacion y con eso luego tomamos el valor del primer y el segundo llamado
+        $llamado1 = captaciones::where('id', '=', $id)->pluck('primer_llamado');//tomamos el valor del primer llamado
+        $llamado2 = captaciones::where('id', '=', $id)->pluck('segundo_llamado');//tomamos el valor del segundo llamado
 
-        if ($llamado1 == null) {
-            $name_status = 'estado_llamada1';
-        } elseif ($llamado2 == null) {
-            $name_status = 'estado_llamada2';
-        } else {
-            $name_status = 'estado_llamada3';
+        if ($llamado1 == null) {//si llamado1 es nulo o vacio
+            $name_status = 'estado_llamada1';//agregamos el estado en el campo promer llamado
+        } elseif ($llamado2 == null) {//si llamado2 es nulo o vacio
+            $name_status = 'estado_llamada2';//agregamos el estado en segundo llamado
+        } else {//si ninguna de las anteriores se cumple
+            $name_status = 'estado_llamada3';//agregamos el estado en el tercer llamado
         }
 
-        $t_retiro=$request->tipo_retiro;
+        $t_retiro=$request->tipo_retiro;//guardamos en la variable t_retiro el tipo de retiro obtenido del request
 
-        DB::table('captaciones')
-            ->where('id', '=', $id)
-            ->update(
+        DB::table('captaciones')//usamos el metodo update de query builder
+            ->where('id', '=', $id)//usamos where para buscar el registro que dseseamos actualizar por id
+            ->update(//usamos el metodo update y le pasamos los datos que deseamos actualizar
               [
-                'estado_registro' => 0,
-                'estado' => 'cu+',
-                $name_status=>$t_retiro
+                'estado_registro' => 0,//ponemos es estado de registro en 0
+                'estado' => 'cu+',//y el estado en cu+
+                $name_status=>$t_retiro// asignamos el nombre de estado como el tipo de retiro
               ]);
-    /**Tercera Parte*/
+      /*Finalmente en el metodo update usamos las variables que fueron asignadas en la primera parte de este metodo*/
+    /**Tercera Parte
+        esta es la parte encargada de crear los nuevos estados de rutas, relacionados con las captaciones mediante una relacion uno a uno
+    */
         if ($data['tipo_retiro'] == "Acepta Agendamiento") {
-
+          //si el tipo de retiro es un agendamiento agregamos la informacion correspondiente a los estados de ruta
            $id =DB::table('estado_rutas')->insertGetId([
-                'primer_agendamiento' => $data['fecha_agendamiento'],
-                'estado_primer_agendamiento' => 'Visita Pendiente',
-               'estado'=>'Esperando Aprobacion ',
+               'id'=>$cap->id,//asignamos e id de la captacion exitosa recien creada al id de el registro, ya que es la foreign key
+                'primer_agendamiento' => $data['fecha_agendamiento'],//en primer agendamiento agregamos la fecha para el primer agendamiento
+                'estado_primer_agendamiento' => 'Visita Pendiente',//como estado_primer_agendamiento agregamos visita pendiente
+               'estado'=>'Esperando Aprobacion ',//como estado agregams esperando aprobacion, ya que falta que operqciones vaoide los datos y libere la ruta
             ]);
 
-
+  /*Usamos el metodo create de eloquent para crear un nuevo registro en l atabla informe ruta.
+  Esta tabla es la encargada de generar las rutas, ya que un mismo agendamiento puede tener hasta tres rutas y cada una de las rutas es una ruta independiente
+   sin importar si es o no la misma captacion, por esta razon creamos esta tabla para gestionarlas y reflejarlas en los informes
+*/
             informeRuta::create([
-              'id_captacion'=>$cap->id,
-              'id_ruta'=>$id,
-              'rutero_id'=>$id_rutero,
-              'fecha_agendamiento'=>$data['fecha_agendamiento'],
-              'estado'=>'visita pendiente',
-              'comuna'=>$data['comuna'],
-              'horario'=>$data['jornada'],
-              'num_retiro'=>1,
-              'rutero'=>$data['rutero'],
+              'id_captacion'=>$cap->id,//asignamos al id de captacion el id de la captacion recien creada
+              'id_ruta'=>$id,//asignamos el id obtenido del estado de ruta recien creqado
+              'rutero_id'=>$id_rutero,//asignamos el id de ruteri
+              'fecha_agendamiento'=>$data['fecha_agendamiento'],//agregamos la feca de agendamiento
+              'estado'=>'visita pendiente',//agregamoc como estado de visita pendiente
+              'comuna'=>$data['comuna'],//agregamos la comuna
+              'horario'=>$data['jornada'],//la jornada
+              'num_retiro'=>1,//el numero de retiro, y como es el primer agendamiento ponemos 1
+              'rutero'=>$data['rutero'],//y agregamos el nombre de rutero
             ]);
 
         }else{
-
+          //por el contrario si el tipo de retiro es grabacion u otro se agrega el campo no aplica  a esta relacion,
             $id =DB::table('estado_rutas')->insertGetId([
+               'id'=>$cap->id,
                 'primer_agendamiento' =>'no aplica',
                 'estado_primer_agendamiento' => 'no aplica',
             ]);
         }
 
-         if(Auth::user()->perfil==1){
+         if(Auth::user()->perfil==1){//verificamos el perfil de el usuario que realiza la accion y redireccionamos segun corresponda
             return redirect(url('admin/teoHome'));
          }elseif (Auth::user()->perfil==2){
             return redirect(url('teo/teoHome'));
@@ -339,39 +369,39 @@ class TeoController extends Controller
     }
 
     public function editar($id)
-    {
+    {//editar nos retorna una vista y nos envia una captacion en base al id que le enviamos como parametro en la url
         $capta = captaciones::findOrFail($id);
         return view('teo/modificar', compact('capta'));
     }
 
     public function actualizar(Request $request, $id)
-    {
-        $capta = captaciones::findOrFail($id);
+    {//funcion que nos permite actualizar una captacion
+        $capta = captaciones::findOrFail($id);//seleccionamos la captacion
+          $capta->nombre = $request->nombre;//seleccionamos los campos que deseamos actualizar
+          $capta->apellido = $request->apellido;//y los valores que deseamos añadir
+          $capta->fono_1 = $request->fono1;
+          $capta->fono_2 = $request->fono2;
+          $capta->fono_3 = $request->fono3;
+          $capta->fono_4 = $request->fono4;
+          $capta->correo_1 = $request->correo1;
+          $capta->correo_2 = $request->correo2;
+        $capta->save();//guardamos los cambios
 
-        $capta->nombre = $request->nombre;
-        $capta->apellido = $request->apellido;
-        $capta->fono_1 = $request->fono1;
-        $capta->fono_2 = $request->fono2;
-        $capta->fono_3 = $request->fono3;
-        $capta->fono_4 = $request->fono4;
-        $capta->correo_1 = $request->correo1;
-        $capta->correo_2 = $request->correo2;
+        return view('teo/actualizado');//retornamos la vista
+      }
 
-        $capta->save();
 
-        return view('teo/actualizado');
-    }
 
     public function homeBack(Request $request){
-
-        $id=$request->id;
-        DB::table('captaciones')
-            ->where('id', '=', $id)
-            ->update([
+//funcion con la cual liberamos el registro de llamadas para que otros teleoperadores puedan llamar a ese numero
+        $id=$request->id;//seleccionamos el id del request
+        DB::table('captaciones')//usamos el metodo update de querybuilder
+            ->where('id', '=', $id)//usamos where para seleccionar la captacion o registro que deseamos liberar
+            ->update([//usamos el metodo update pasandole como parametros los campos y los valores que deseamos actualizar
                 'estado_registro' => 0
+              ]);
 
-            ]);
-
+//verificamos el perfil del usuario que realiza la accion y redireccionamos segun corresponda
         if(Auth::user()->perfil==1){
             return redirect(url('admin/teoHome'));
         }elseif (Auth::user()->perfil==2){
@@ -396,7 +426,7 @@ class TeoController extends Controller
     }
 
     public function editCapPost(Request $request){
-//editar la informacion de los agendamientos
+          //editar la informacion de los agendamientos
         $ruteroo = User::where('perfil','=',5)->where('name','=',$request->rutero)->get()->first();//obtenemos el rutero
         $id_rutero =$ruteroo->id;//seleccionamos su id
         $id =$request->id_captacion;//seleccionamos el id de la captacion o agendamiento

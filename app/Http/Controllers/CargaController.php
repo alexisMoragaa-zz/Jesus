@@ -19,7 +19,7 @@ class CargaController extends Controller {
 
 	public function form_cargar_datos(){
 		//funcion que retorna la vista que suaremos para cargar nuestros archivos excel
-		$fundaciones = fundacion::all();//seleccionamos todas las fundaciones
+		$fundaciones = fundacion::where('id','!=',1)->get();//seleccionamos todas las fundaciones
 		return view('admin/cargaExcel',[//retornamos la vista con las fundaciones
 			'fundaciones'=>$fundaciones,
 		]);

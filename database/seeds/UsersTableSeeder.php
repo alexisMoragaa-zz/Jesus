@@ -34,7 +34,7 @@ class UsersTableSeeder extends Seeder
             'perfil' => '4',
             'estado' => 'Activo',
             'password' => \Hash::make('123456'),
-            'campana'  =>  '2',
+            'campana'  =>  '1',
             'turno'  =>  'AM',
             'fecha_ingreso' => '12-03-2017',
             'fecha_termino'  =>  '00-00-0000'
@@ -51,15 +51,67 @@ class UsersTableSeeder extends Seeder
             'perfil' => '3',
             'estado' => 'Activo',
             'password' => \Hash::make('123456'),
-            'campana'  => '5',
+            'campana'  => '1',
             'turno'  =>  'PM',
             'fecha_ingreso'  =>  '10-02-2017',
             'fecha_termino'  =>  '22-04-2017'
 
         ));
 
-        //ruteros
+      //Teleoperador
+      \DB::table('users')->insert(array(
+          'name' => 'Gabriel',
+          'last_name'=>'Rojas',
+          'email' => 'gabriel@gmail.com',
+          'perfil' => '2',
+          'estado' => 'Activo',
+          'password' => \Hash::make('gaborojas'),
+          'campana'  => '1',
+          'turno'  =>  'PM',
+          'fecha_ingreso'  =>  '10-02-2017',
+          'fecha_termino'  =>  '22-04-2017'
 
-        
+      ));
+
+        //ruteros
+        \DB::table('users')->insert(array(
+            'name' => 'Danko',
+            'last_name'=>'valenzuela',
+            'email' => 'danko@gmail.com',
+            'perfil' => '5',
+            'estado' => 'Activo',
+            'password' => \Hash::make('123456'),
+            'campana'  => '1',
+            'turno'  =>  'PM',
+            'fecha_ingreso'  =>  '10-02-2017',
+            'fecha_termino'  =>  '22-04-2017'
+          ));
+
+          \DB::table('users')->insert(array(
+              'name' => 'Eduardo',
+              'last_name'=>'becerra',
+              'email' => 'eduardo@gmail.com',
+              'perfil' => '5',
+              'estado' => 'Activo',
+              'password' => \Hash::make('eduardobecerra'),
+              'campana'  => '1',
+              'turno'  =>  'PM',
+              'fecha_ingreso'  =>  '10-02-2017',
+              'fecha_termino'  =>  '22-04-2017'
+            ));
+
+            \DB::table('users')->insert(array(
+                'name' => 'Por',
+                'last_name'=>'Definir',
+                'email' => 'definior@gmail.com',
+                'perfil' => '5',
+                'estado' => 'Activo',
+                'password' => \Hash::make('123456'),
+                'campana'  => '1',
+                'turno'  =>  'PM',
+                'fecha_ingreso'  =>  '10-02-2017',
+                'fecha_termino'  =>  '22-04-2017'
+              ));
+
     }
 }

@@ -5,7 +5,7 @@ use Illuminate\Database\Seeder;
 
 class ComunaTableSeeder extends Seeder
 {
-    
+
     public function run()
     {
         \DB::table('comuna_retiros')->insert(array(
@@ -14,7 +14,7 @@ class ComunaTableSeeder extends Seeder
         'ciudad'=>'santiago',
         'comuna'=>'Lo Barnechea',
             'lunes'=>'1',
-            'rutero'=>'Rutero',
+            'rutero'=>'Danko',
             'martes'=>'0',
             'miercoles'=>'0',
             'jueves'=>'0',

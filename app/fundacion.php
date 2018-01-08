@@ -11,4 +11,8 @@ class fundacion extends Model {
     return $this->hasMany(Campana::class,'fundacion','id');
   }
 
+  public function myLetters(){
+    return $this->hasMany(Letter::class,'id_fundacion','id');
+  }
+
 }

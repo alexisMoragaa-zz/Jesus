@@ -271,7 +271,7 @@ if(Auth::user()->perfil==4){
 
 public function foundations(){
 //funcion que retorna una pagina con todas las fundaciones actualmente registradas
-	$fundaciones = fundacion::all()->sortByDesc('created_at');//seleccionamos todas las fundaciones
+	$fundaciones = fundacion::where('id','!=',1)->get()->sortByDesc('created_at');//seleccionamos todas las fundaciones
 	return view('admin.fundaciones',[//retornamos la vista con las fundaciones
 		'fundaciones'=>$fundaciones
 	]);
@@ -314,12 +314,13 @@ public function showFoundation($id){
 public function createCampana(Request $request){//tomamos el request de datos desde el formulario
 	//funcion para crear una nueva campaña asociada a la fundacion desde la cual creamos la campaña
 	$campana = new Campana;//creamos una nueva instancia de la clase campana
-	$campana->fundacion = $request::get('fundacion');
-	$campana->nombre_campana = $request::get('nombre');
-	$campana->ubicacion = $request::get('ubicacion');
-	$campana->save();
+	$campana->fundacion = $request::get('fundacion');//asignamos el id de la fundacion
+	$campana->nombre_campana = $request::get('nombre');//asignamos el nombre d ela campana
+	$campana->ubicacion = $request::get('ubicacion');//asignamos la ubicacion
+	$campana->save();//guardamos los cambios
 
 	return redirect('/admin/foundation/show/'.$request::get('fundacion'));
+	//retornamos la funcion fundaciones la cual nos retornara una vista con todas las fundaciones
 }
 
 /**

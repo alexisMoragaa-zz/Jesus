@@ -188,6 +188,7 @@ Route::group(['middleware' => ['auth', 'operaciones'], 'prefix' => 'ope'], funct
     Route::Get('agendamiento/llamada/finalizar/{id}','OperacionesController@AgendamientoLlamadoFinalizar');
     Route::Post('agendamiento/llamado/Finalizar',   'OperacionesController@AgendamientoLlamadosFinalizarRegistro');
     Route::Get('mandatos','OperacionesController@mandatos');
+    Route::Get('mandatos/pat','OperacionesController@mandatosPat');
     Route::Post('registrar/mandato/captacion','OperacionesController@registrarMandatoCaptacion');
     Route::Post('registrar/mandato/ruta','OperacionesController@registrarMandatoRuta');
     Route::Post('registrar/mandato/ruta/conReparo','OperacionesController@registrarMandatoRutaConReparo');
@@ -205,25 +206,18 @@ Route::group(['middleware' => ['auth', 'operaciones'], 'prefix' => 'ope'], funct
     Route::Post('cambiarRutero','OperacionesController@cambiarRuteroPost');
     Route::Get('byFoundation/{id}','OperacionesController@byFoundation');
     Route::Get('byRutero/{id}','OperacionesController@byRutero');
-    Route::get('change/rutero/{id}/{rutero}','OperacionesController@changeRutero');
-
+    Route::Get('change/rutero/{id}/{rutero}','OperacionesController@changeRutero');
+    Route::Get('create/letter','OperacionesController@createLetter');
+    Route::Post('add/letter','OperacionesController@addLetter');
+    Route::Get('addRecords/campaing/{id_letter}','OperacionesController@addRecordsCampaing');
+    Route::Get('addRecords/letterAjax','OperacionesController@addRecodsLetterAjax');
+    Route::Get('show/letter/{id}','OperacionesController@showLetter');
+    Route::Post('add/PostMan','OperacionesController@postMan');
     Route::get('/', function(){
 
         return view('operac/ope');
     });
 });
-
-/*Route::group(['middleware' =>['auth', 'operaciones'], 'prefix'=>'ope'], function(){
-
-	Route::Resource('sup','supController');
-	Route::Resource('call','TeoController');
-	Route::Resource('ope', 'OperacionesController');
-	Route::get('/', function(){
-
-		return view('operac/ope');
-	});
-
-});*/
 
 /*
 	El grupo de rutas para rutero tendra acceso al controlador para el agendamiento de rutas

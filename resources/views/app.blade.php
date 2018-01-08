@@ -130,10 +130,11 @@
 						<li class="dropdown">
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Mandatos<span class="caret"></span></a>
 							<ul class="dropdown-menu">
-								<li><a href="{{ url('/ope/mandatos')}}">Recepcionar Mandatos</a></li>
+								<li><a href="{{ url('/ope/mandatos')}}">Recepcionar Mandatos Pac</a></li>
+								<li><a href="{{ url('/ope/mandatos/pat')}}">Recepcionar Mandatos Pat</a></li>
 								<li> <a href="{{url('ope/mandatos/exitosos')}}">Mandatos Exitosos</a></li>
 								<li> <a href="{{url('ope/mandatos/conReparo')}}">Mandatos con Reparo</a></li>
-								<li> <a href="{{url('ope/create/letter')}}">Generar Carta Mandatos</a></li>
+								<li> <a href="{{url('ope/create/letter')}}">Ver Cartas</a></li>
 
 							</ul>
 						</li>

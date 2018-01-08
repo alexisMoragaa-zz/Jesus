@@ -18,7 +18,7 @@ class RutasController extends Controller {
 		$hoy = Carbon::now()->format('Y-m-d');
 		$cap =CaptacionesExitosa::where('rutero','=',Auth::user()->name)->where('estado_captacion','=','OK')
 		->where('estado_mandato','=',"")
-			->where('fecha_agendamiento','=',$hoy)
+			// ->where('fecha_agendamiento','=',$hoy)
 			->orderBy('horario')
 			->get();
 				return view('rutas/rutasDiarias',compact('cap'));
