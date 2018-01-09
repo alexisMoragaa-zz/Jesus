@@ -130,7 +130,7 @@
       <div class="col-md-12">
 
           <h1 id="mtn-1">Recepcion  de Mandatos</h1>
-          <h3 class="text-muted">Buscar Agendamiento por
+          <h3 class="text-muted">Buscando Agendamiento por
             @if(isset($filtroPor))
               <span>{{$filtroPor}}</span>
             @endif

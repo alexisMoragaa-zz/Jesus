@@ -189,6 +189,7 @@ Route::group(['middleware' => ['auth', 'operaciones'], 'prefix' => 'ope'], funct
     Route::Post('agendamiento/llamado/Finalizar',   'OperacionesController@AgendamientoLlamadosFinalizarRegistro');
     Route::Get('mandatos','OperacionesController@mandatos');
     Route::Get('mandatos/pat','OperacionesController@mandatosPat');
+    Route::Get('addMdt/status/pat','OperacionesController@addMandatosPat');
     Route::Post('registrar/mandato/captacion','OperacionesController@registrarMandatoCaptacion');
     Route::Post('registrar/mandato/ruta','OperacionesController@registrarMandatoRuta');
     Route::Post('registrar/mandato/ruta/conReparo','OperacionesController@registrarMandatoRutaConReparo');
@@ -213,6 +214,7 @@ Route::group(['middleware' => ['auth', 'operaciones'], 'prefix' => 'ope'], funct
     Route::Get('addRecords/letterAjax','OperacionesController@addRecodsLetterAjax');
     Route::Get('show/letter/{id}','OperacionesController@showLetter');
     Route::Post('add/PostMan','OperacionesController@postMan');
+    Route::Get('export/letter/{id}/excel','CargaController@exportLetter');
     Route::get('/', function(){
 
         return view('operac/ope');

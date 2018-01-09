@@ -2,22 +2,23 @@
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
+use DB;
 use App\captaciones;
 use App\CaptacionesExitosa;
 use App\maxCap;
-use Illuminate\Http\Request;
-use DB;
 use Carbon\Carbon;
 use App\estado;
 use App\Campana;
-use Illuminate\Support\Facades\Response;
-use Illuminate\Support\Facades\Auth;
 use App\comunaRetiro;
 use App\estadoRuta;
 use App\informeRuta;
 use App\AgendarLlamados;
 use App\User;
 use App\Letter;
+use App\fundacion;
 
 class TeoController extends Controller
 {
@@ -62,13 +63,14 @@ pero se atualizara la fecha de ultimo llamado con lo cual es registro no estara 
 
     public function show($id)
     {//funcion que nos pemite ver una captacion exitosa o un agendamiento en detalle
-        $detalle = CaptacionesExitosa::where('id','=',$id)->get();//seleccionamos el agendamieto
-        return view('teo/detalle', compact('detalle'));//retornamoa la vista
+        $detalle = CaptacionesExitosa::find($id);//seleccionamos el agendamieto
+        $foundation = fundacion::find($detalle->fundacion)->nombre;//seleccionamos la funcacion a la que pertenece
+        return view('teo/detalle', compact('detalle','foundation'));//retornamoa la vista
     }
 
 
     public function capFilter(Request $request){
-
+//funcion qe nos permite filtrar nuestras busquedas por una serie de parametros
         $hoy =Carbon::now()->format('d/m/Y');
         $option =$request->input('searchFor');
         $date =$request->input('date');
@@ -107,27 +109,33 @@ pero se atualizara la fecha de ultimo llamado con lo cual es registro no estara 
 
     public function siguiente(Request $request, $id)
     {
-      $ejem =$request->llamado_agendado;
-        if(isset($ejem)){
+/*Esta es una de las funcioes mas importantes de un teleoperador,
+Esta funcion nos permite avanzara l siguiente registro de llamada bloqueando el nuevo registro,
+y desbloqueando el registro inmediatamente anterior al nuevo, de esta forma los teleoperadores
+no vuelven a llamar a los mismos registros que otros lalmaron el mismo dia*/
+      $ejem =$request->llamado_agendado;//tomamos el valor de llamado_agendado del request
+        if(isset($ejem)){//preguntamos si la variable esta vacia
+          //si la variable no esta vacia buscamos el agendamiento con el id del request
             $llamado = AgendarLlamados::find($request->llamado_agendado_id);
-            $llamado->estado_llamado ="llamado";
-            $llamado->save();
+            $llamado->estado_llamado ="llamado";//actualizamos el campo estado_llamado
+            $llamado->save();//guardamos los cambios,
+            /*este bloque se aplica cuando realizamos la llamada de nuestros registros agendados*/
       }
 
-        $user = Auth::user()->id;
-        $date = Carbon::now()->format('d-m-Y');
-        $observation = $request->input('observation1');
-        $call_status = $request->input('call_status');
-        $call_again = $request->input('call_again');
-        $type = estado::where('estado', '=', $call_status)->pluck('tipo');
-        $llamado1 = captaciones::where('id', '=', $id)->pluck('primer_llamado');
-        $llamado2 = captaciones::where('id', '=', $id)->pluck('segundo_llamado');
+        $user = Auth::user()->id;//seleccionamos el id del usuario con session iniciada
+        $date = Carbon::now()->format('d-m-Y');//tomamos la fecha del dia de hoy con carbon
+        $observation = $request->input('observation1');//tomamos el valor de observacion desde el request
+        $call_status = $request->input('call_status');//tomamos el valor de call_status desde el request
+        $call_again = $request->input('call_again');//tomamos el valor de call_again desde el request
+        $type = estado::where('estado', '=', $call_status)->pluck('tipo');//seleccionamos los estados de llamada que retornaremos a la vista
+        $llamado1 = captaciones::where('id', '=', $id)->pluck('primer_llamado');//seleccionamos la captacion y el campo primer llamado en concreto
+        $llamado2 = captaciones::where('id', '=', $id)->pluck('segundo_llamado');//hacsmos lo mismo con el campo segundo llamado, estos son campos de la misma captacion
 
-        if ($llamado1 == null) {
-            $llamado = 'primer_llamado';
-            $name_status = 'estado_llamada1';
-            $n_llamado = '1';
-
+        if ($llamado1 == null) {//si primer llamado en nuestra captacion es null asignamos los  valores
+            $llamado = 'primer_llamado';//llamado lo asignamos como primer llamado
+            $name_status = 'estado_llamada1';//name status lo asignamos conmo estado_llamada1
+            $n_llamado = '1';//y numero de llamado como 1, hacemos los mismo con el llamado 2
+            //y usamos un else para referenciar el llamado 3
         } elseif ($llamado2 == null) {
             $llamado = 'segundo_llamado';
             $name_status = 'estado_llamada2';
@@ -138,36 +146,37 @@ pero se atualizara la fecha de ultimo llamado con lo cual es registro no estara 
             $name_status = 'estado_llamada3';
             $n_llamado = '3';
         }
-
+//actualizamos la tabla captaciones con los datos que asignamos mediante los if,
         DB::table('captaciones')
-            ->where('id', '=', $id)
-            ->update([
-                'estado_registro' => 0,
-                'f_ultimo_llamado' => $date,
-                'observacion' => $observation,
+            ->where('id', '=', $id)//seleccionamos la captacion que deseamos actualizar
+            ->update([//actualizamos los registros
+                'estado_registro' => 0,//dejamos el estado de registro en 0, para liberar el registro que bloqueamos
+                //en la funcion index, cuando recibimos el registro
+                'f_ultimo_llamado' => $date,//asignamos los valores obtenidos del request
+                'observacion' => $observation,//y seleccionamos el campo a actualizar mediante los if
                 $name_status => $call_status,
                 'estado' => $type,
                 $llamado => $date,
                 'n_llamados' => $n_llamado,
                 'volver_llamar' => $call_again
             ]);
-
+//si el call status es igual a agendar llamado creamos una nueva instancia de agendarLlamado
       if($call_status == "Agendar Llamado"){
           $callAgains = new AgendarLlamados;
-          $callAgains->id_llamado =$id;
-          $callAgains->teleoperador=$user;
-          $callAgains->fecha_llamado=$call_again;
-          $callAgains->save();
+          $callAgains->id_llamado =$id;//asignamos el id de llamado con el id de la captacion
+          $callAgains->teleoperador=$user;//asignamos el teleoperador que realiza el agendamiento
+          $callAgains->fecha_llamado=$call_again;//agregamos la fecha de el call_again
+          $callAgains->save();//guardamos los cambios
       }
-
-
-
+/*finalmente seleccionamos el perfil que esta logeado y redireccionamos segun corresponda*/
       if(Auth::user()->perfil==1){
           return redirect()->route('admin.call.index');
       }elseif (Auth::user()->perfil==2){
           return redirect()->route('teo.call.index');
       }
   }
+
+
 
     public function addStatusCapAjax(){
 
@@ -375,19 +384,20 @@ pero se atualizara la fecha de ultimo llamado con lo cual es registro no estara 
     }
 
     public function actualizar(Request $request, $id)
-    {//funcion que nos permite actualizar una captacion
-        $capta = captaciones::findOrFail($id);//seleccionamos la captacion
-          $capta->nombre = $request->nombre;//seleccionamos los campos que deseamos actualizar
-          $capta->apellido = $request->apellido;//y los valores que deseamos añadir
-          $capta->fono_1 = $request->fono1;
-          $capta->fono_2 = $request->fono2;
-          $capta->fono_3 = $request->fono3;
-          $capta->fono_4 = $request->fono4;
-          $capta->correo_1 = $request->correo1;
-          $capta->correo_2 = $request->correo2;
-        $capta->save();//guardamos los cambios
-
-        return view('teo/actualizado');//retornamos la vista
+    {//funcion que nos permite actualizar una captacion, antes de que esta se comvierta en agendamiento
+        $cap = captaciones::findOrFail($id);//seleccionamos la captacion
+          $cap->nombre = $request->nombre;//seleccionamos los campos que deseamos actualizar
+          $cap->apellido = $request->apellido;//y los valores que deseamos añadir
+          $cap->fono_1 = $request->fono1;
+          $cap->fono_2 = $request->fono2;
+          $cap->fono_3 = $request->fono3;
+          $cap->fono_4 = $request->fono4;
+          $cap->correo_1 = $request->correo1;
+          $cap->correo_2 = $request->correo2;
+        $cap->save();//guardamos los cambios
+        $status = estado::where('modulo', '=', 'llamado')->get();//seleccionamos los estado de la base de datos
+        //retornamos la vista de llamados con los datos del registro ya actualizado
+        return view('teo/teoin', compact('cap', 'status'));
       }
 
 

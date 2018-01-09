@@ -77,7 +77,7 @@
         </form>
       </div>
     @else
-      <a href="#" class="btn btn-success right">Exportar a Excel</a>
+      <a href="{{url('/ope/export/letter/'.$letter->id.'/excel')}}" class="btn btn-success right">Exportar a Excel</a>
     @endif
   </div>{{--fin Container2--}}
 

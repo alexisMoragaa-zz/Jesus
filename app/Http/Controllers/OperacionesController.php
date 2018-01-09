@@ -843,9 +843,35 @@ public function registrarMandatoRutaConReparo(Request $request){
      'registros'=>$registros,
      'filtroPor'=>$filtro,
    ]);
+ }
 
+public function mandatosPat(){
+  $filtro ="Captaciones Mediante Grabacion";//añadimos un filtro para mostrar en la vista la busqueda realizada
+  $registros = CaptacionesExitosa::where('tipo_retiro','=','Acepta Grabacion')//seleccionamos los registros correspondientes a las
+  ->where('estado_captacion','=','OK')//captaciones por rabacion que esten validada en operaciones como captaciones ok, para recepcionar sus mandatos
+  ->where('estado_mandato','!=','OK')->get();
+   return view('operac.recepcionarMandatosPat',[//retornamos la vista con la infoemacion seleccionada
+
+    'registros'=>$registros,
+    'filtroPor'=>$filtro,
+  ]);
 }
 
+public function addMandatosPat(){
+//funcion con la cual mediante ajax agregamos un estado de mandato exitoso a las captaciones provenientes de las grabaciones
+  $id = input::get('id');//seleccionamos el id que enviamos desde ajax
+  $cap = CaptacionesExitosa::find($id);
+  $cap->estado_mandato ="OK";
+  $cap->save();
+
+  if($cap->estado_mandato == "OK")
+  {
+    return"El mandato de ".$cap->nombre." ".$cap->apellido." se Recepciono Con Exito";
+  }else{
+    abort(500);
+  }
+
+}
 
 public function agregarMandato1(Request $request){//agragar estado de mandato para la primera visita
   $captacion = CaptacionesExitosa::find($request->id);//selecionamos la captacion que deseamos modificar

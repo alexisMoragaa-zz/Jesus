@@ -60,12 +60,26 @@ class UsersTableSeeder extends Seeder
 
       //Teleoperador
       \DB::table('users')->insert(array(
-          'name' => 'Gabriel',
-          'last_name'=>'Rojas',
-          'email' => 'gabriel@gmail.com',
+          'name' => 'Camila',
+          'last_name'=>'Cabello',
+          'email' => 'fiftharmony@gmail.com',
           'perfil' => '2',
           'estado' => 'Activo',
-          'password' => \Hash::make('gaborojas'),
+          'password' => \Hash::make('ot5'),
+          'campana'  => '1',
+          'turno'  =>  'PM',
+          'fecha_ingreso'  =>  '10-02-2017',
+          'fecha_termino'  =>  '22-04-2017'
+
+      ));
+
+      \DB::table('users')->insert(array(
+          'name' => 'Catalina',
+          'last_name'=>'Toro',
+          'email' => 'cata@gmail.com',
+          'perfil' => '2',
+          'estado' => 'Activo',
+          'password' => \Hash::make('cata'),
           'campana'  => '1',
           'turno'  =>  'PM',
           'fecha_ingreso'  =>  '10-02-2017',
