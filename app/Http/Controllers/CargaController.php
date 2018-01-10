@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Session;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Input;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use Storage;
@@ -29,7 +30,7 @@ class CargaController extends Controller {
 
 	public function cargar_datos(Request $request)
 	{//funcion que inserta los datos de una hoja excel en la base de datos
-
+		$fundaciones = fundacion::all();//seleccionamos todas las fundaciones
 		$archivo = $request->file('archivo');//seleccionamos el archivo de nuestro request
 		$nombre_original=$archivo->getClientOriginalName();//obtenemos el nombre del archivo
 		$extension=$archivo->getClientOriginalExtension();//obtenemos la extencion del archivos
@@ -39,12 +40,14 @@ class CargaController extends Controller {
 		$foundation = $request->foundation;//tomamos la fundacion a la cuel pertenecen estos registros desde el request
 		$campana = $request->campanas;//tomaos la campaña a la cual perteneceran estos registros desde el request
 		if($r1){//si el archivo se guarda correctamente  ejecutamos el siguiente bloque de codigo
-			$ct=0;//establecemos la bariable ct o contador en 0
+			$registros_campana  = Campana::find($campana);
+			if($registros_campana->registrosCampana->count() == 0){
+
 			Excel::selectSheetsByIndex(0)->load($ruta, function($hoja) use($foundation,$campana) {
 
 				$hoja->each(function($fila) use($foundation,$campana) {
-					$captaciones_dues=captaciones::where("n_dues","=",$fila->n_dues)->first();
-					if(count( $captaciones_dues)==0){
+
+					if($fila->n_dues != null){
 						$captaciones = new captaciones;//por cada fila de nuestro archivo excel creamos una instancia de captacion
 
 						$captaciones -> fundacion      		= $foundation;//asignamos los valores para cada instancia
@@ -69,11 +72,19 @@ class CargaController extends Controller {
 					}
 				});
 			});
+		}else{
+				Session::flash('message', 'Error! los registros de la campaña '.' '.$registros_campana->nombre_campana.' '.' Ya fueron agregados previamente');
+				return view('admin/cargaExcel',[
+					'fundaciones'=>$fundaciones,
+				]);
 		}
-		$fundaciones = fundacion::all();//seleccionamos todas las fundaciones
+
+	}
+	Session::flash('success', 'Felicidades! los registros de la campaña '.' '.$registros_campana->nombre_campana.' '.' Fueron agregados Con Exito');
+
 		return view('admin/cargaExcel',[
 			'fundaciones'=>$fundaciones,
-			])->with('campa�a agregada con exito');
+			]);
 
 	}
 
@@ -207,7 +218,113 @@ public function exportLetter($id){
 
 		})->export('xlsx');//finalmente exportamos toda la data con el formato creado a un archivo xsls
 
-	}
+	}/*Fin ExportLetter*/
 
+public function loadCampaing(Request $request){
+
+	$archivo = $request->file('file');//seleccionamos el archivo de nuestro request
+	$nombre_original=$archivo->getClientOriginalName();//obtenemos el nombre del archivo
+	$extension=$archivo->getClientOriginalExtension();//obtenemos la extencion del archivos
+	$r1=Storage::disk('archivos')->put($nombre_original,  \File::get($archivo) );//guardamos el archivo en un disco local
+	$ruta  =  storage_path('archivos') ."/". $nombre_original;//guardamos la ruta en la cual se encuentra guardado nuestro archivo
+
+	$foundation = $request->foundation;//tomamos la fundacion a la cuel pertenecen estos registros desde el request
+	$campana = $request->campanas;//tomaos la campaña a la cual perteneceran estos registros desde el request
+	if($r1){//si el archivo se guarda correctamente  ejecutamos el siguiente bloque de codigo
+		$campana  = Campana::find($campana);
+		if($campana->registrosCampana->count() == 0){
+
+		Excel::selectSheetsByIndex(0)->load($ruta, function($hoja) use($foundation,$campana) {
+
+			$hoja->each(function($fila) use($foundation,$campana) {
+
+
+					$captaciones = new captaciones;//por cada fila de nuestro archivo excel creamos una instancia de captacion
+					$captaciones -> fundacion      		= $foundation;//asignamos los valores para cada instancia
+					$captaciones -> campana_id        =$campana;//ya sean valores provenientes de nuestro archivo excel
+					$captaciones -> estado_registro   = '0';//o como en el caso de fundacion y campana id de el request
+					$captaciones -> n_dues            = $fila -> n_dues;//asi como tambien otros valores como estado o
+					$captaciones -> id_fundacion      = $fila -> id_fundacion;//fecha ultimo llamado los cuales son
+					$captaciones -> fono_1            = $fila -> fono_1;//valores estaticos y no varian en ninguna campaña
+					$captaciones -> fono_2            = $fila -> fono_2;
+					$captaciones -> fono_3            = $fila -> fono_3;
+					$captaciones -> fono_4            = $fila -> fono_4;
+					$captaciones -> nombre            = $fila -> nombre;
+					$captaciones -> apellido          = $fila -> apellido;
+					$captaciones -> correo_1          = $fila -> correo_1;
+					$captaciones -> correo_2          = $fila -> correo_2;
+					$captaciones -> firma_inscripcion = $fila -> firma_inscripcion;
+					$captaciones -> otro_antecedente  = $fila -> otro_antecedente;
+					$captaciones -> volver_llamar     = $fila -> volver_llamar;
+					$captaciones -> observacion       = $fila -> observacion;
+					$captaciones -> f_ultimo_llamado  = '00-00-00';
+					$captaciones -> save();//guardamos el registro
+
+			});
+		});
+	}else{
+		return("ya se agregaron los registros para esta campaña");
+	}
+	}
+	$fundaciones = fundacion::all();//seleccionamos todas las fundaciones
+	return view('admin/cargaExcel',[
+		'fundaciones'=>$fundaciones,
+		])->with('campa�a agregada con exito');
+
+
+
+}
+
+
+
+public function cargar_datos_safe(Request $request)
+{//funcion que inserta los datos de una hoja excel en la base de datos
+
+	$archivo = $request->file('archivo');//seleccionamos el archivo de nuestro request
+	$nombre_original=$archivo->getClientOriginalName();//obtenemos el nombre del archivo
+	$extension=$archivo->getClientOriginalExtension();//obtenemos la extencion del archivos
+	$r1=Storage::disk('archivos')->put($nombre_original,  \File::get($archivo) );//guardamos el archivo en un disco local
+	$ruta  =  storage_path('archivos') ."/". $nombre_original;//guardamos la ruta en la cual se encuentra guardado nuestro archivo
+
+	$foundation = $request->foundation;//tomamos la fundacion a la cuel pertenecen estos registros desde el request
+	$campana = $request->campanas;//tomaos la campaña a la cual perteneceran estos registros desde el request
+	if($r1){//si el archivo se guarda correctamente  ejecutamos el siguiente bloque de codigo
+
+		Excel::selectSheetsByIndex(0)->load($ruta, function($hoja) use($foundation,$campana) {
+
+			$hoja->each(function($fila) use($foundation,$campana) {
+				$captaciones_dues=captaciones::where("n_dues","=",$fila->n_dues)->first();
+				if(count( $captaciones_dues)==0){
+					$captaciones = new captaciones;//por cada fila de nuestro archivo excel creamos una instancia de captacion
+
+					$captaciones -> fundacion      		= $foundation;//asignamos los valores para cada instancia
+					$captaciones -> campana_id        =$campana;//ya sean valores provenientes de nuestro archivo excel
+					$captaciones -> estado_registro   = '0';//o como en el caso de fundacion y campana id de el request
+					$captaciones -> n_dues            = $fila -> n_dues;//asi como tambien otros valores como estado o
+					$captaciones -> id_fundacion      = $fila -> id_fundacion;//fecha ultimo llamado los cuales son
+					$captaciones -> fono_1            = $fila -> fono_1;//valores estaticos y no varian en ninguna campaña
+					$captaciones -> fono_2            = $fila -> fono_2;
+					$captaciones -> fono_3            = $fila -> fono_3;
+					$captaciones -> fono_4            = $fila -> fono_4;
+					$captaciones -> nombre            = $fila -> nombre;
+					$captaciones -> apellido          = $fila -> apellido;
+					$captaciones -> correo_1          = $fila -> correo_1;
+					$captaciones -> correo_2          = $fila -> correo_2;
+					$captaciones -> firma_inscripcion = $fila -> firma_inscripcion;
+					$captaciones -> otro_antecedente  = $fila -> otro_antecedente;
+					$captaciones -> volver_llamar     = $fila -> volver_llamar;
+					$captaciones -> observacion       = $fila -> observacion;
+					$captaciones -> f_ultimo_llamado  = '00-00-00';
+					$captaciones -> save();//guardamos el registro
+				}
+			});
+		});
+	}
+	$fundaciones = fundacion::all();//seleccionamos todas las fundaciones
+	return view('admin/cargaExcel',[
+		'fundaciones'=>$fundaciones,
+		])->with('campa�a agregada con exito');
+
+}
 
 }

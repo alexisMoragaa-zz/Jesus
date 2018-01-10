@@ -78,6 +78,9 @@ Route::group(['middleware' => ['auth', 'administrador'], 'prefix' => 'admin'], f
     Route::Get('foundation/show/{id}','AdminController@showFoundation');
     Route::Get('campana/{campana}', 'InformesController@informeCampana');
     Route::Post('create/campana','AdminController@createCampana');
+
+    Route::Post('loadCampaing','CargaController@loadCampaing');
+
      route::Get('ajax-rutero', function () {
 
         $rutero_id = Input::get('ruteroid');

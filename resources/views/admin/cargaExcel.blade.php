@@ -20,10 +20,25 @@
 <link href="{{ asset('/css/style.css') }}" rel="stylesheet">
 <div class="container">
   <div class="col-md-12">
+
+    <div class="col-md-2">
       <h3 class="box-title text-muted">Cargar Campaña</h3>
+    </div>
+
+      @if(Session::has('message'))
+        <div class="col-md-9 alert alert-danger btn1">
+          {{Session::get('message')}}
+        </div>
+      @endif
+
+      @if(Session::has('success'))
+        <div class="col-md-9 alert alert-success btn1">
+        {{Session::get('success')}}
+      </div>
+      @endif
 
       <form id="form_cargar_datos" name="form_cargar_datos" method="post" action="cargar_datos" class="formarchivo" enctype="multipart/form-data">
-
+      {{-- <form action="/admin/loadCampaing" method="Post" enctype="multipart/form-data"> --}}
         <input type="hidden" name="_token" id="_token" value="{{csrf_token()}}">
 
             <div class="row">
@@ -35,6 +50,7 @@
             <div class="col-md-4">
               <label for="" class="control-label">Seleccione Archivo Excel</label>
               <input name="archivo" id="archivo" type="file" class="archivo form-control"  required/>
+  {{-- <input type="file" name="file"> --}}
             </div>
             <div class="col-md-3">
               <label for="" class="control-label">Seleccione Fundacion</label>
