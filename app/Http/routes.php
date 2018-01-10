@@ -78,6 +78,8 @@ Route::group(['middleware' => ['auth', 'administrador'], 'prefix' => 'admin'], f
     Route::Get('foundation/show/{id}','AdminController@showFoundation');
     Route::Get('campana/{campana}', 'InformesController@informeCampana');
     Route::Post('create/campana','AdminController@createCampana');
+    Route::Get('reporte/{id}','InformesController@reporteCampana');
+    Route::Get('export/report/campana/{id}','CargaController@exportReportCampana');
 
     Route::Post('loadCampaing','CargaController@loadCampaing');
 
@@ -246,8 +248,9 @@ Route::group(['middleware' => ['auth', 'ruteros'], 'prefix' => 'rutas'], functio
 
 Route::group(['middleware'=>['auth','informes'],'prefix'=>'informes'],function(){
       Route::Resource('info', 'InformesController');
-      Route::get('campana/{campana}', 'InformesController@informeCampana');
-      Route::get('fundacion/{fundacion}', 'InformesController@informeFundacion');
-      Route::get('user/{user}', 'InformesController@informeUser');
-      Route::get('rutero/{rutero}','InformesController@informeRutero');
+      Route::Get('campana/{campana}', 'InformesController@informeCampana');
+      Route::Get('fundacion/{fundacion}', 'InformesController@informeFundacion');
+      Route::Get('user/{user}', 'InformesController@informeUser');
+      Route::Get('rutero/{rutero}','InformesController@informeRutero');
+      Route::Get('reporte/{id}','InformesController@reporteCampana');
 });

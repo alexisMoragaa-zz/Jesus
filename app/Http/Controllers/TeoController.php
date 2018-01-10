@@ -316,10 +316,16 @@ no vuelven a llamar a los mismos registros que otros lalmaron el mismo dia*/
 
         if ($llamado1 == null) {//si llamado1 es nulo o vacio
             $name_status = 'estado_llamada1';//agregamos el estado en el campo promer llamado
+            $f_llamado ='primer_llamado';
+            $n_llamado ="1";
         } elseif ($llamado2 == null) {//si llamado2 es nulo o vacio
             $name_status = 'estado_llamada2';//agregamos el estado en segundo llamado
+              $f_llamado ='segundo_llamado';
+              $n_llamado ="2";
         } else {//si ninguna de las anteriores se cumple
             $name_status = 'estado_llamada3';//agregamos el estado en el tercer llamado
+            $f_llamado ='tercer_llamado';
+            $n_llamado ="3";
         }
 
         $t_retiro=$request->tipo_retiro;//guardamos en la variable t_retiro el tipo de retiro obtenido del request
@@ -330,8 +336,11 @@ no vuelven a llamar a los mismos registros que otros lalmaron el mismo dia*/
               [
                 'estado_registro' => 0,//ponemos es estado de registro en 0
                 'estado' => 'cu+',//y el estado en cu+
+                'n_llamados'=> $n_llamado,
+                $f_llamado=>$date,
                 $name_status=>$t_retiro// asignamos el nombre de estado como el tipo de retiro
               ]);
+
       /*Finalmente en el metodo update usamos las variables que fueron asignadas en la primera parte de este metodo*/
     /**Tercera Parte
         esta es la parte encargada de crear los nuevos estados de rutas, relacionados con las captaciones mediante una relacion uno a uno

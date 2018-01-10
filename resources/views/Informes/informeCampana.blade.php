@@ -86,8 +86,14 @@
   </script>
   <div class="row">
     <div class="container">
+      @if(Auth::user()->perfil==6)
+        <a href="{{url('/informes/reporte',$base->id)}}" class="right btn btn-warning">Ver Reporte</a>
+      @elseif(Auth::user()->perfil==1)
+        <a href="{{url('/admin/reporte',$base->id)}}" class="right btn btn-warning">Ver Reporte</a>
+      @endif  
+
       <h2 class="graphic-tittle">
-        Reporte Actual sobre la Base <span class="text-muted">{{$base->nombre_campana}}</span>
+        Informe Rendimiento  <span class="text-muted">{{$base->nombre_campana}}</span>
         de la Fundacion <span class="text-muted">{{$base->funda->nombre}}</span>
       </h2>
     </div>
