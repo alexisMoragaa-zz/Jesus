@@ -8,6 +8,7 @@ class ComunaTableSeeder extends Seeder
 
     public function run()
     {
+      //Comunas Santiago retiro con Agendamientos
         \DB::table('comuna_retiros')->insert(array(
 
         'region'=>'metropolitana',
@@ -605,7 +606,23 @@ class ComunaTableSeeder extends Seeder
             'h_jueves' =>'10:00 - 13:30',
             'h_viernes'=>'14:30 - 18:00',
         ));
+//Comunas de regiones con retiro Recsa
+        \DB::table('comuna_retiros')->insert(array(
 
-
+        'region'=>'metropol',
+        'ciudad'=>'santiago',
+        'comuna'=>'Lo Barnechea',
+            'lunes'=>'1',
+            'rutero'=>'Danko',
+            'martes'=>'0',
+            'miercoles'=>'0',
+            'jueves'=>'0',
+            'viernes'=>'1',
+            'h_lunes'=>'10:00 - 13:30',
+            'h_martes'=>'',
+            'h_miercoles'=>'',
+            'h_jueves' =>'',
+            'h_viernes'=>'14:30 - 17:00',
+        ));
     }
 }

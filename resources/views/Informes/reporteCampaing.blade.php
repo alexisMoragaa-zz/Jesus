@@ -5,28 +5,29 @@
     text-align: center;
   }
   </style>
-  <script>
 
-  </script>
+<script>
+
+</script>
 
 <div class="container">
   <div class="row">
 
     <div class="col-md-12">
       @if(Auth::user()->perfil==1)
-        <a href="{{url('/admin/export/report/campana',$campana->id)}}" class="btn btn-success right">Exportar a Excel</a>
+        <a href="{{url('/admin/export/report/campana',$campana->id)}}" class="btn btn-success right btn1">Exportar a Excel</a>
       @elseif (Auth::user()->perfil==6)
-        <a href="{{url('/informes/export/report/campana',$campana->id)}}" class="btn btn-success right">Exportar a Excel</a>
+        <a href="{{url('/informes/export/report/campana',$campana->id)}}" class="btn btn-success right btn1">Exportar a Excel</a>
       @endif
       <h2 class="text-muted center">Reporte Campaña {{$campana->nombre_campana}}</h2>
       <div class="col-md-4">
-        <h4>Registros llamados <span class="badge">{{$llamados}}</span></h4>
+        <h4 class="btn1">Registros llamados <span class="badge">{{$llamados}}</span></h4>
       </div>
       <div class="col-md-4">
-        <h4>Total Registros <span class="badge">{{$campana->registrosCampana->count()}}</span></h4>
+        <h4 class="btn1">Total Registros <span class="badge">{{$campana->registrosCampana->count()}}</span></h4>
       </div>
       <div class="col-md-4">
-          <h4 class="right">Registros Pendientes <span class="badge">{{$pendientes}}</span></h4>
+          <h4 class="right btn1">Registros Pendientes <span class="badge">{{$pendientes}}</span></h4>
       </div>
     </div>
 

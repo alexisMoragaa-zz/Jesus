@@ -229,7 +229,7 @@ public function exportReportCampana($id){
 			$sheet->row(2,['','id','ID Fundacion','Fono 1','Fono 2','Fono 3','Fono 4','Nombre','Apellidos',
 			'Correo 1','Correo 2','Firma Inscripcion','Otro Antecedente','Estado','Observacion','LLamado 1',
 			'Estado llamado 1','llamado 2','Estado llamado 2','llamado 3','estado llamado 3','Fecha Ultimo Llamado','']);//asignamos los titulos en la fila 7
-
+//establecemos los encabezados para esta hoja de excel
 			$data=[];//creamos un nuevo arreglo vacio al cual le concatenaremos el arreglo row con la data, de esta forma creamos una matriz con la data
 			$i =0;//asignamos un contador para asignar las filas en la data
 			foreach ($campana->registrosCampana as $c){//recorremos la data obtenida atravez de la relacion
@@ -263,7 +263,69 @@ public function exportReportCampana($id){
 			}
 
 		});
-	})->export('xlsx');
+		$excel->sheet('Detalle',function($sheet) use($campana){
+			//creamos una segunda hoja de excel en donde tendremos el detalle de el reporte
+			//Agendamientos en santiago    contamos los registros de agendamiento en los tres instancias de llamadas
+			$s1 = Captaciones::where('campana_id','=',$campana->id)->where('estado_llamada1','=','Acepta Agendamiento')->count();
+			$s2 = Captaciones::where('campana_id','=',$campana->id)->where('estado_llamada2','=','Acepta Agendamiento')->count();
+			$s3 = Captaciones::where('campana_id','=',$campana->id)->where('estado_llamada3','=','Acepta Agendamiento')->count();
+			$santiago = $s1+$s2+$s3;
+			//Grabaciones  contamos los registros de grabacion en los tres instancias de llamadas
+			$g1 = Captaciones::where('campana_id','=',$campana->id)->where('estado_llamada1','=','Acepta Grabacion')->count();
+			$g2 = Captaciones::where('campana_id','=',$campana->id)->where('estado_llamada2','=','Acepta Grabacion')->count();
+			$g3 = Captaciones::where('campana_id','=',$campana->id)->where('estado_llamada3','=','Acepta Grabacion')->count();
+			$grabacion = $g1+$g2+$g3;
+
+			//delivery   contamos los registros de delivery en los tres instancias de llamadas
+			$d1 = Captaciones::where('campana_id','=',$campana->id)->where('estado_llamada1','=','Acepta Delivery')->count();
+			$d2 = Captaciones::where('campana_id','=',$campana->id)->where('estado_llamada2','=','Acepta Delivery')->count();
+			$d3 = Captaciones::where('campana_id','=',$campana->id)->where('estado_llamada3','=','Acepta Delivery')->count();
+			$delivery = $d1+$d2+$d3;
+
+			//CHILEXPRESS    contamos los registros de chilexpress en los tres instancias de llamadas
+			$C1 = Captaciones::where('campana_id','=',$campana->id)->where('estado_llamada1','=','Acepta Chilexpress')->count();
+			$C2 = Captaciones::where('campana_id','=',$campana->id)->where('estado_llamada2','=','Acepta Chilexpress')->count();
+			$C3 = Captaciones::where('campana_id','=',$campana->id)->where('estado_llamada3','=','Acepta Chilexpress')->count();
+			$chilexpress = $C1+$C2+$C3;
+
+		//CU+    establecemos el valor de cu- en base  a la consulta realizada en la BD
+		$cumenos = Captaciones::where('campana_id','=',$campana->id)->where('estado','=','cu-')->count();
+		//CNU    hacemos lo mismo con cnu
+		$cnu = Captaciones::where('campana_id','=',$campana->id)->where('estado','=','cnu')->count();
+			//header
+				//titulo
+					$sheet->mergeCells('B2:j2');
+					$sheet->row(2,['    ','Resumen Campaña']);
+
+				//CU+ CU- CNU
+					$sheet->mergeCells('B4:D4');
+					$sheet->row(4,['','CU+','','','    ','    ','CU-','    ','    ','CNU']);
+					$sheet->row(5,['','Agendamiento','Grabaciones','Regiones','','','Total CU-','','','Total CNU']);
+					$sheet->row(6,['',$santiago,$grabacion,$delivery+$chilexpress,'','',$cumenos,'','',$cnu]);
+				//Estilos para las Celdas
+						$sheet->setBorder('B4:D6', 'thin');//establecemos border
+
+						$sheet->setBorder('G4:G6', 'thin');//establecemos bordes
+
+						$sheet->setBorder('J4:J6', 'thin');//establecemos bordes
+
+						$sheet->cellS('A1:K7',function($cells){
+							$cells->setAlignment('center');//centramos los elementos entre las celdas
+						});
+
+						$sheet->cellS('A1:K4',function($cells){
+							$cells->setFontSize('12'); //establecemos el tamaño del texto para las seldas seleccionadas
+							$cells->setFontWeight('bold');//establecemos texto en negritas para las seldas seleccionadas
+						});
+
+
+						$sheet->cellS('A2:K2',function($cells){
+							$cells->setFontSize('19');//establecemos el tamaño de fuente para las seldas seleccionadas
+						});
+
+
+		});
+	})->export('xlsx');//finalmente exportamos el archivo excel con las dos hojas establecidas
 }
 
 }

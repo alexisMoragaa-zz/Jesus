@@ -101,6 +101,7 @@ Route::group(['middleware' => ['auth', 'administrador'], 'prefix' => 'admin'], f
 Route::group(['middleware' => ['auth', 'teleoperador'], 'prefix' => 'teo'], function () {
 
     Route::Resource('call', 'TeoController');
+    Route::Resource('regiones','RegionesController');
     Route::Post('actualizado&{id}', 'TeoController@actualizar');
     Route::Get('edit&{id}', 'TeoController@editar');
     Route::Get('mandatoExitoso&{id}&{id_interno_dues}', 'TeoController@create');
@@ -253,4 +254,5 @@ Route::group(['middleware'=>['auth','informes'],'prefix'=>'informes'],function()
       Route::Get('user/{user}', 'InformesController@informeUser');
       Route::Get('rutero/{rutero}','InformesController@informeRutero');
       Route::Get('reporte/{id}','InformesController@reporteCampana');
+      Route::Get('export/report/campana/{id}','CargaController@exportReportCampana');
 });

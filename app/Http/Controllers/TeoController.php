@@ -540,15 +540,15 @@ no vuelven a llamar a los mismos registros que otros lalmaron el mismo dia*/
     }
 
     public function dispRutas()
-    {
-        $rutero= $_GET['rutero'];
-        $date =$_GET['fecha'];
+    {//esta es una funcion accesada desde ajax, la cual nos permite ver la disponivilidad de retiro para un rutero un dia seleccionado
+        $rutero= $_GET['rutero'];//obtenemos el valor del rutero
+        $date =$_GET['fecha'];//obtenemos el dia que se revisara
 
-        $info = CaptacionesExitosa::where('fecha_agendamiento','=',$date)
-                                    ->where('rutero','=',$rutero)
-                                    ->where('estado_captacion','!=','rechazada')->get();
+        $info = CaptacionesExitosa::where('fecha_agendamiento','=',$date)//seleccionamos los agendamientos para el dia a revisar
+                                    ->where('rutero','=',$rutero)//ademas seleccionamos solo los que correspondan al rutero deseado
+                                    ->where('estado_captacion','!=','rechazada')->get();//y por ultimo verificamos que el estado de la captacion sea diferente a rechazado
 
-        return Response::json($info);
+        return Response::json($info);//retornamos en formato json la informacion
     }
 
     public function PorReagendar()
@@ -715,22 +715,26 @@ no vuelven a llamar a los mismos registros que otros lalmaron el mismo dia*/
     }
 
 public function llamadasAgendadas(){
-  $hoy = Carbon::now()->format('Y-m-d');
+  //funcion que nos retorna los estados de los agendamientos de llamados
+  $hoy = Carbon::now()->format('Y-m-d');//seleccionamos la fecha de hoy,
 
     $callAgain = AgendarLlamados::where('teleoperador','=',Auth::User()->id)
     ->where('fecha_llamado','>=',$hoy)->where('estado_llamado','=',"")
     ->orderBy('fecha_llamado')->get();
+//seleccionamos los llamados que tienen que realizarse el dia de hoy donde el estado de llamados esta null y la sordenamos por fecha de llamado
 
     $no_llamados= AgendarLlamados::where('teleoperador','=',Auth::User()->id)
     ->where('fecha_llamado','<',$hoy)->where('estado_llamado','=',"")
     ->orderBy('fecha_llamado')->get();
+//seleccionamos los registros no llamados
 
     $finalizados = AgendarLlamados::where('teleoperador','=',Auth::User()->id)
     ->where('estado_llamado','=',"no llamado")->orderBy('fecha_llamado')->get();
+//seleccionamos los registros $finalizados / estos registros ya no pueden ser llamados por el teleoperadores
 
     $realizados =AgendarLlamados::where('teleoperador','=',Auth::User()->id)
     ->where('estado_llamado','=',"llamado")->orderBy('fecha_llamado')->get();
-
+//seleccionamos los registros realmente llamados
 
   return view('teo/VolverALlamar',[
     'callAgain'=>$callAgain,
@@ -741,28 +745,31 @@ public function llamadasAgendadas(){
 }
 
 public function agendamientoLlamadoLlamar($id){
-    $id_registro=AgendarLlamados::find($id);
-    $registro = captaciones::find($id_registro->llamadosAgendados->id);
-    $estado = estado::where('modulo','=','llamado')->get();
-    $function=$id_registro;
-
+  //funcion que nos retorna el registro qu deseamos llamar dentro de los agendamientos a la vista de llamados
+    $id_registro=AgendarLlamados::find($id);//seleccionamos el registro de los agendamientos
+    $registro = captaciones::find($id_registro->llamadosAgendados->id);//seleccionamos la captacion
+    $estado = estado::where('modulo','=','llamado')->get();//seleccionamos los estados de llamado
+    $function=$id_registro;//asignamos a la variable function el valor correspondiente al id registro,
+    //en la vista realizamos una validacion y si esta valor se encuentra presente se redirecciona por otra funcion
+    //retornamos la vsta con las variables
     return view('teo.teoin',['cap'=>$registro,'status'=>$estado,'function'=>$function]);
 
 }
 
 public function agendamientoLlamadaLlamadoExitoso($id){
-    $ll =AgendarLlamados::find($id);
-    $ll->estado_llamado="llamado";
-    $ll->save();
-    $cap = captaciones::find($ll->llamadosAgendados->id);
-    $cap->estado= "cu+";
-    $cap->save();
-// "{{url('teo/mandatoExitoso&')}}{{$cap->id}}&{{$cap->n_dues}}"
+  //funcion para gestionar los registros llamados exitosos  dentro de los agendamientos de llamados creados por el teleoperador
+    $ll =AgendarLlamados::find($id);//seleccionamos el agendamiento en cuestion
+    $ll->estado_llamado="llamado";//le asignamos el valor de llamado
+    $ll->save();//guardamos os cambios
+    $cap = captaciones::find($ll->llamadosAgendados->id);//Seleccionamos la captacion a la cual pertenece el agendamiento
+    $cap->estado= "cu+";//asignamos el valor de cu+
+    $cap->save();//guardamos los cambios y finalmente redireccionamos  al modulo para tomar los datos correspondientes al agendamiento
+
     return redirect('teo/mandatoExitoso&'.$ll->llamadosAgendados->id."&".$ll->llamadosAgendados->n_dues);
+  }
+
 
 }
-
-
 
 
     /** comentarios del controlador
@@ -801,5 +808,3 @@ public function agendamientoLlamadaLlamadoExitoso($id){
      *
      *
      */
-
-}

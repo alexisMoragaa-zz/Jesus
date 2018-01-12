@@ -15,7 +15,7 @@
 	#btn-edit{
 		margin-top: 23px;
 		}
-	#btn_agendar{
+	.btn_agendar{
 		float:left;
 		}
 	.div-name{
@@ -58,7 +58,7 @@
 					$("#observ").addClass('col-md-3');
 					$("#v_llamar").fadeIn(550);
 				}else{
-						$("#btn_siguiente").val("Next");
+						$(".btn_siguiente").val("Next");
 					$("#v_llamar").hide()
 					$("#observ").removeClass('col-md-3');
 					$("#observ").addClass('col-md-6');
@@ -76,7 +76,7 @@
 	<script src="{{asset('js/optimizar.js')}}"></script>
 
 <div class="container " id="contenedor">
-	<div class="cl-md-3" id="btn-back">
+	<div class="col-md-3" id="btn-back">
 
 		{!! Form::open(['url'=>['teo/homeBack'],'method'=>'POST','id'=>'form-back']) !!}
 				<input type="hidden" name="id" value="{{$cap->id}}">
@@ -87,15 +87,19 @@
 
 
 
-	<div class="div-name col-md-10 col-sm-10 col-xs-10">
+	<div class="div-name col-md-7 col-sm-10 col-xs-10">
 		<h1 id="name" class="col-md-10">{{Auth::user()->name}} {{Auth::user()->last_name}}</h1>
 	</div>
 
-	<div id="btn_agendar">
+	<div class="col-md-2 btn_agendar">
+		<a href="{{url('/teo/regiones',$cap->id)}}" class=""><h1 class="btn btn-primary" >Agendar Regiones</h1></a>
+	</div>
+
+	<div id="" class="col-md-2 btn_agendar">
 		@if (isset($function))
-			<a href="{{url('teo/agendamiento/llamada/llamadoExitoso',$function->id)}}" ><h1 class="btn btn-success">Agendar</h1></a>
+			<a href="{{url('teo/agendamiento/llamada/llamadoExitoso',$function->id)}}" ><h1 class="btn btn-success">Agendar Santiago</h1></a>
 		@else
-			<a href="{{url('teo/mandatoExitoso&')}}{{$cap->id}}&{{$cap->n_dues}}" ><h1 class="btn btn-success btn-ajax">Agendar</h1></a>
+			<a href="{{url('teo/mandatoExitoso&')}}{{$cap->id}}&{{$cap->n_dues}}" ><h1 class="btn btn-success btn-ajax">Agendar Santiago</h1></a>
 		@endif
 
 	</div>
