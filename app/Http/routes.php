@@ -14,8 +14,8 @@ Route::controllers([
 ]);
 
 
-Route::get('/', 'WelcomeController@index');
-Route::get('home', 'HomeController@index');
+Route::Get('/', 'WelcomeController@index');
+Route::Get('home', 'HomeController@index');
 
 
 /*
@@ -38,31 +38,31 @@ Route::group(['middleware' => ['auth', 'administrador'], 'prefix' => 'admin'], f
     Route::Post('agregado', 'TeoController@store');
     Route::Post('actualizado&{id}', 'TeoController@actualizar');
     Route::Get('detalle{id}', 'supController@detalleUser');
-    route::Get('updatePivot{user_id}/{pivot_id}', 'supController@updatePivot');
+    Route::Get('updatePivot{user_id}/{pivot_id}', 'supController@updatePivot');
     Route::Post('updatepivot2', 'supController@updatepivot2');
-    route::Post('updatePass/{id}', 'adminController@updatePass');
-    route::Post('siguiente/{id}', 'teoController@siguiente');
-    route::Get('adminconfig', 'AdminController@adminConfig');
-    route::Post('createstatus', 'AdminController@create_status');
-    route::Post('createcallstatus', 'AdminController@create_status_retirement');
-    route::Post('createpaymentstatus', 'AdminController@create_status_payment_method');
-    route::Get('teoHome', 'TeoController@Home');
+    Route::Post('updatePass/{id}', 'adminController@updatePass');
+    Route::Post('siguiente/{id}', 'teoController@siguiente');
+    Route::Get('adminconfig', 'AdminController@adminConfig');
+    Route::Post('createstatus', 'AdminController@create_status');
+    Route::Post('createcallstatus', 'AdminController@create_status_retirement');
+    Route::Post('createpaymentstatus', 'AdminController@create_status_payment_method');
+    Route::Get('teoHome', 'TeoController@Home');
     Route::Get('createRutas', 'AdminController@rutas');
-    route::Get('admin', 'AdminController@admin');
-    route::Post('comuna', 'AdminController@addcomuna');
-    route::Get('filtrarpor', 'OperacionesController@filtrarpor');
-    route::post('showDay1', 'OperacionesController@showDay1');
-    route::Get('validarSocio', 'OperacionesController@validarSocio');
-    route::Get('verRutas','OperacionesController@verRutas');
-    route::Post('filtroRutas','OperacionesController@verRutasFiltradas');
-    route::Post('capFilter','TeoController@capFilter');
+    Route::Get('admin', 'AdminController@admin');
+    Route::Post('comuna', 'AdminController@addcomuna');
+    Route::Get('filtrarpor', 'OperacionesController@filtrarpor');
+    Route::Post('showDay1', 'OperacionesController@showDay1');
+    Route::Get('validarSocio', 'OperacionesController@validarSocio');
+    Route::Get('verRutas','OperacionesController@verRutas');
+    Route::Post('filtroRutas','OperacionesController@verRutasFiltradas');
+    Route::Post('capFilter','TeoController@capFilter');
     Route::Post('addStatusCap','OperacionesController@addStatusCap');
-    route::Post('addStatusCapAjax','TeoController@addStatusCapAjax');
-    route::Post('homeBack','TeoController@homeBack');
+    Route::Post('addStatusCapAjax','TeoController@addStatusCapAjax');
+    Route::Post('homeBack','TeoController@homeBack');
     Route::Post('addStatusMdt','OperacionesController@addStatusMdt');
     Route::Get('editCap/{id}','TeoController@editCap');
-    route::Post('editCapPost','TeoController@editCapPost');
-    route::Get('dispRutas', 'TeoController@dispRutas');
+    Route::Post('editCapPost','TeoController@editCapPost');
+    Route::Get('dispRutas', 'TeoController@dispRutas');
     Route::Post('addMinMaxCap','OperacionesController@adminMaxMinCap');
     Route::Post('secondRoute','RutasController@addSecondRoute');
     Route::Post('thirdRoute','RutasController@addThirdRoute');
@@ -70,23 +70,24 @@ Route::group(['middleware' => ['auth', 'administrador'], 'prefix' => 'admin'], f
     Route::Get('detalleReAgendamiento/{id}','OperacionesController@detalleReagendamiento');
     Route::Post('reagendar','OperacionesController@reagendar');
     Route::Get('PorReagendar','TeoController@PorReagendar');
-    route::Get('detalleReagendamientoTeo/{id}','TeoController@detalleReagendamiento');
-    route::Post('reagendado','TeoController@reagendado');
+    Route::Get('detalleReagendamientoTeo/{id}','TeoController@detalleReagendamiento');
+    Route::Post('reagendado','TeoController@reagendado');
     Route::Get('byfoundation/{id}', 'CargaController@byFoundation');
     Route::Get('foundations','AdminController@foundations');
     Route::Post('create/foundation','AdminController@createFoundation');
     Route::Get('foundation/show/{id}','AdminController@showFoundation');
     Route::Get('campana/{campana}', 'InformesController@informeCampana');
     Route::Post('create/campana','AdminController@createCampana');
-    Route::Get('reporte/{id}','InformesController@reporteCampana');
+    Route::Get('reporte/{id}','InformesController@campanaReport');
     Route::Get('export/report/campana/{id}','CargaController@exportReportCampana');
-
+    Route::Post('load/cobertura','CargaController@loadCobertura');
+    Route::Get('load/cobertura/view','CargaController@loadCoberturaView');
     Route::Post('loadCampaing','CargaController@loadCampaing');
 
-     route::Get('ajax-rutero', function () {
+     Route::Get('ajax-rutero', function () {
 
-        $rutero_id = Input::get('ruteroid');
-        $nombre_rutero = comunaRetiro::where('comuna', '=', $rutero_id)->get();
+        $rutero_id = Input::Get('ruteroid');
+        $nombre_rutero = comunaRetiro::where('comuna', '=', $rutero_id)->Get();
 
         return Response::json($nombre_rutero);
     });
@@ -107,14 +108,14 @@ Route::group(['middleware' => ['auth', 'teleoperador'], 'prefix' => 'teo'], func
     Route::Get('mandatoExitoso&{id}&{id_interno_dues}', 'TeoController@create');
     Route::Post('agregado', 'TeoController@store');
     Route::Post('siguiente/{id}', 'TeoController@siguiente');
-    Route::post('capFilter','TeoController@capFilter');
+    Route::Post('capFilter','TeoController@capFilter');
     Route::Get('teoHome','TeoController@Home');
     Route::Get('validarSocio', 'OperacionesController@validarSocio');
-    route::Post('homeBack','TeoController@homeBack');
+    Route::Post('homeBack','TeoController@homeBack');
     Route::Get('editCap/{id}','TeoController@editCap');
     Route::Post('editCapPost','TeoController@editCapPost');
     Route::Get('PorReagendar','TeoController@PorReagendar');
-    Route::get('detalleReagendamientoTeo/{id}','TeoController@detalleReagendamiento');
+    Route::Get('detalleReagendamientoTeo/{id}','TeoController@detalleReagendamiento');
     Route::Post('reagendado','TeoController@reagendado');
     Route::Get('dispRutas', 'TeoController@dispRutas');
     Route::Get('reageWithEdition/{id}', 'TeoController@reagendarConEdicion');
@@ -122,17 +123,17 @@ Route::group(['middleware' => ['auth', 'teleoperador'], 'prefix' => 'teo'], func
     Route::Get('fallidos','TeoController@fallidos');
     Route::Get('detalleFallidos/{id}','TeoController@detalleFallidos');
     Route::Post('validatePassCode','TeoController@ValidatePassCode');
-    Route::get('llamadas/agendadas','TeoController@llamadasAgendadas');
+    Route::Get('llamadas/agendadas','TeoController@llamadasAgendadas');
     Route::Get('agendamiento/llamada/llamar/{id}','TeoController@agendamientoLlamadoLlamar');
     Route::Get('agendamiento/llamada/llamadoExitoso/{id}','TeoController@agendamientoLlamadaLlamadoExitoso');
-
-    route::get('ajax-rutero', function () {
-        $rutero_id = Input::get('ruteroid');
-        $nombre_rutero = comunaRetiro::where('comuna', '=', $rutero_id)->get();
+    Route::Get('show/cobertura','RegionesController@showCobertura');
+    Route::Get('ajax-rutero', function () {
+        $rutero_id = Input::Get('ruteroid');
+        $nombre_rutero = comunaRetiro::where('comuna', '=', $rutero_id)->Get();
 
         return Response::json($nombre_rutero);
     });
-    Route::get('/', function () {
+    Route::Get('/', function () {
 
         return redirect('/teo/teoHome');
     });
@@ -149,12 +150,12 @@ Route::group(['middleware' => ['auth', 'supervisor'], 'prefix' => 'sup'], functi
 
     Route::Resource('sup', 'supController');
     Route::Resource('call', 'TeoController');
-    Route::get('detalle{id}', 'supController@detalleUser');
-    Route::get('updatePivot{user_id}/{pivot_id}', 'supController@updatePivot');
-    Route::post('updatepivot2', 'supController@updatepivot2');
+    Route::Get('detalle{id}', 'supController@detalleUser');
+    Route::Get('updatePivot{user_id}/{pivot_id}', 'supController@updatePivot');
+    Route::Post('updatepivot2', 'supController@updatepivot2');
     Route::Resource('user', 'AdminController');
 
-    /*Route::get('/', function(){
+    /*Route::Get('/', function(){
 
         return view('sup/supervisor');
     });*/
@@ -168,25 +169,26 @@ Route::group(['middleware' => ['auth', 'operaciones'], 'prefix' => 'ope'], funct
     Route::Resource('ope', 'OperacionesController');
     Route::Resource('sup', 'supController');
     Route::Resource('call', 'TeoController');
+    Route::Resource('dely', 'RegionesController');
     Route::Get('verRutas','OperacionesController@verRutas');
-    route::Post('filtroRutas','OperacionesController@verRutasFiltradas');
+    Route::Post('filtroRutas','OperacionesController@verRutasFiltradas');
     Route::Post('addStatusCap','OperacionesController@addStatusCap');
     Route::Post('addStatusMdt','OperacionesController@addStatusMdt');
-    route::Get('adminconfig', 'AdminController@adminConfig');
+    Route::Get('adminconfig', 'AdminController@adminConfig');
     Route::Post('addMinMaxCap','OperacionesController@adminMaxMinCap');
     Route::Get('reAgendamiento','OperacionesController@reAgendamiento');
     Route::Get('reAgendamiento','OperacionesController@reAgendamiento');
     Route::Get('detalleReAgendamiento/{id}','OperacionesController@detalleReagendamiento');
     Route::Post('reagendar','OperacionesController@reagendar');
-    route::post('showDay1', 'OperacionesController@showDay1');
-    Route::get('createRutas', 'AdminController@rutas');
-    route::post('comuna', 'AdminController@addcomuna');
-    Route::get('mdtWhithEdition/{id}','OperacionesController@mdtWithEdition');
-    Route::get('rutas','OperacionesController@rutas');
-    Route::get('rutas/semana/actual/{rutero}','OperacionesController@rutasSemanaActual');
-    Route::get('rutas/semana/pasada/{rutero}','OperacionesController@rutasSemanaPasada');
-    Route::get('rutas/semana/siguiente/{rutero}','OperacionesController@rutasSemanaSiguiente');
-    Route::get('rutas/dia/{rutero}/{dia}','OperacionesController@detalleRutasPorDia');
+    Route::Post('showDay1', 'OperacionesController@showDay1');
+    Route::Get('createRutas', 'AdminController@rutas');
+    Route::Post('comuna', 'AdminController@addcomuna');
+    Route::Get('mdtWhithEdition/{id}','OperacionesController@mdtWithEdition');
+    Route::Get('rutas','OperacionesController@rutas');
+    Route::Get('rutas/semana/actual/{rutero}','OperacionesController@rutasSemanaActual');
+    Route::Get('rutas/semana/pasada/{rutero}','OperacionesController@rutasSemanaPasada');
+    Route::Get('rutas/semana/siguiente/{rutero}','OperacionesController@rutasSemanaSiguiente');
+    Route::Get('rutas/dia/{rutero}/{dia}','OperacionesController@detalleRutasPorDia');
     Route::Get('detalleRuta/{id}','RutasController@detalleRuta');
     Route::Post('pc','OperacionesController@passcode');
     Route::Post('resetPassCode','OperacionesController@resetPassCode');
@@ -214,14 +216,24 @@ Route::group(['middleware' => ['auth', 'operaciones'], 'prefix' => 'ope'], funct
     Route::Get('byFoundation/{id}','OperacionesController@byFoundation');
     Route::Get('byRutero/{id}','OperacionesController@byRutero');
     Route::Get('change/rutero/{id}/{rutero}','OperacionesController@changeRutero');
+    Route::Get('addRecords/letterAjax','OperacionesController@addRecodsLetterAjax');
+    Route::Get('show/letter/{id}','OperacionesController@showLetter');
+    Route::Post('add/PostMan','OperacionesController@PostMan');
+
+    Route::Get('add/mandate/delivery/{id}','RegionesController@addMdtDely');
+    Route::Get('delivery/history','RegionesController@deliveryHistory');
+    Route::Get('delivery/daily','RegionesController@deliveryDaily');
+    Route::Get('export/delivery/daily','CargaController@exportDeliveryDaily');
+    Route::Get('export/delivery/history','CargaController@exportDeliveryHistory');
+    Route::Get('edit/cobertura','RegionesController@editCobertura');
+    Route::Post('edit/cobertura','RegionesController@editCoberturaPost');
+
+
     Route::Get('create/letter','OperacionesController@createLetter');
     Route::Post('add/letter','OperacionesController@addLetter');
     Route::Get('addRecords/campaing/{id_letter}','OperacionesController@addRecordsCampaing');
-    Route::Get('addRecords/letterAjax','OperacionesController@addRecodsLetterAjax');
-    Route::Get('show/letter/{id}','OperacionesController@showLetter');
-    Route::Post('add/PostMan','OperacionesController@postMan');
     Route::Get('export/letter/{id}/excel','CargaController@exportLetter');
-    Route::get('/', function(){
+    Route::Get('/', function(){
 
         return view('operac/ope');
     });
@@ -233,16 +245,16 @@ Route::group(['middleware' => ['auth', 'operaciones'], 'prefix' => 'ope'], funct
 Route::group(['middleware' => ['auth', 'ruteros'], 'prefix' => 'rutas'], function () {
 
     Route::Resource('rutas', 'RutasController');
-    Route::post('secondRoute','RutasController@addSecondRoute');
-    Route::post('thirdRoute','RutasController@addThirdRoute');
-    Route::get('historialRutas','RutasController@historialRutas');
+    Route::Post('secondRoute','RutasController@addSecondRoute');
+    Route::Post('thirdRoute','RutasController@addThirdRoute');
+    Route::Get('historialRutas','RutasController@historialRutas');
     Route::Post('historialRutasFiltrado','RutasController@historialFiltrado');
     Route::Get('detalleRuta/{id}','RutasController@detalleRuta');
-    Route::get('semana','OperacionesController@rutas');
-    Route::get('semana/actual/{rutero}','OperacionesController@rutasSemanaActual');
-    Route::get('semana/pasada/{rutero}','OperacionesController@rutasSemanaPasada');
-    Route::get('semana/siguiente/{rutero}','OperacionesController@rutasSemanaSiguiente');
-    Route::get('dia/{rutero}/{dia}','OperacionesController@detalleRutasPorDia');
+    Route::Get('semana','OperacionesController@rutas');
+    Route::Get('semana/actual/{rutero}','OperacionesController@rutasSemanaActual');
+    Route::Get('semana/pasada/{rutero}','OperacionesController@rutasSemanaPasada');
+    Route::Get('semana/siguiente/{rutero}','OperacionesController@rutasSemanaSiguiente');
+    Route::Get('dia/{rutero}/{dia}','OperacionesController@detalleRutasPorDia');
     Route::Get('detalleRuta/{id}','RutasController@detalleRuta');
 
 });
@@ -253,6 +265,6 @@ Route::group(['middleware'=>['auth','informes'],'prefix'=>'informes'],function()
       Route::Get('fundacion/{fundacion}', 'InformesController@informeFundacion');
       Route::Get('user/{user}', 'InformesController@informeUser');
       Route::Get('rutero/{rutero}','InformesController@informeRutero');
-      Route::Get('reporte/{id}','InformesController@reporteCampana');
+      Route::Get('reporte/{id}','InformesController@campanaReport');
       Route::Get('export/report/campana/{id}','CargaController@exportReportCampana');
 });

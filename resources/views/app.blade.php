@@ -127,6 +127,16 @@
 								<li><a href="{{url('/ope/cambiarRutero')}}">Cambiar Ruteros</a></li>
 							</ul>
 						</li>
+
+						<li class="dropdown">
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Delivery<span class="caret"></span></a>
+							<ul class="dropdown-menu">
+								<li><a href="{{url('/ope/delivery/daily')}}">Delivery Diario</a></li>
+								<li><a href="{{url('/ope/delivery/history')}}">Delivery Historial</a></li>
+								<li><a href="{{url('/ope/edit/cobertura')}}">Editar Cobertura Recsa</a></li>
+							</ul>
+						</li>
+
 						<li class="dropdown">
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Mandatos<span class="caret"></span></a>
 							<ul class="dropdown-menu">

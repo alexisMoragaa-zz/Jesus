@@ -66,7 +66,7 @@
                 <td>{{$c->segundo_llamado}}</td>
                 <td>{{$c->estado_llamada2}}</td>
                 <td>{{$c->tercer_llamado}}</td>
-                <td>{{$c->estado_llamado3}}</td>
+                <td>{{$c->estado_llamada3}}</td>
                 <td>{{$c->n_llamados}}</td>
               </tr>
             @endforeach

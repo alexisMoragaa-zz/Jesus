@@ -966,8 +966,8 @@ public function liberarRegistros(){//liberarRegistros nos retorna una vista en l
 
 public function liberarRegistrosShow($id){
   $campanas = Campana::all();//seleccionamos las campañas
-  $registros = captaciones::where('campana_id','=',$id)->where('estado_registro','=','1')
-  ->where('estado','=',0)->get();
+  $registros = captaciones::where('campana_id','=',$id)->where('estado_registro','=','1')->get();
+
   return view('operac.liberarRegistros',[//retornamos la vista con las campañas
     'campanas'=>$campanas,
     'registros'=>$registros,

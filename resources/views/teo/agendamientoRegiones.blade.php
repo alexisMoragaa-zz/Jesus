@@ -21,25 +21,97 @@
       margin-top: -5em;
       margin-bottom: 5em;
       }
+      .center{
+        text-align: center;
+      }
 </style>
 
 <link href="{{ asset('/css/style.css') }}" rel="stylesheet">
 <script>
   $(document).ready(function(){
-  $(".modal-form").hide();
-  $("#btn-cancel").click(function(){
-      $( ".modal-form" ).dialog({
-          buttons: [{
-             text: "Cancelar","class":'btn btn-danger space',"id":'space',click: function () {
+    $(".modal-form").hide();//ocultamos la ventana modal para cancelar el agendamiento
+    $("#btn-cancel").click(function(){//al ejecutatar la funcion click en el boton cancel mostramos la ventana modal con el formaulario para cancelar el agendamiento
+        $( ".modal-form" ).dialog({
+            buttons: [{
+               text: "Cancelar","class":'btn btn-danger space',"id":'space',click: function () {
 
-                  $(this).dialog("close");
-              }},{
-              text:"Aceptar","class":'btn btn-success',"id":'space2',click : function(){
-                  $("#form-cap").submit();
-              }
-          }]
+                    $(this).dialog("close");
+                }},{
+                text:"Aceptar","class":'btn btn-success',"id":'space2',click : function(){
+                    $("#form-cap").submit();
+                }
+            }]
+        });
+    });
+
+    $("#cobertura").hide();//ocultamos las cuatro tablas que componen la cobertura
+
+    $("#comuna").change(function(){
+      var comuna = $(this).val();
+      $.get('/teo/show/cobertura',{ comuna }, function(data){
+        console.log(data);
+        $("#comunacobertura").text(data.comuna);
+        $("#showCobertura").text(data.cobertura);
+
+          $("#semana1").empty();
+          var semana1 ="<tr><td>"+
+          data.semana_1_lunes+"</td><td>"+
+          data.semana_1_martes+"</td><td>"+
+          data.semana_1_miercoles+"</td><td>"+
+          data.semana_1_jueves+"</td><td>"+
+          data.semana_1_viernes+"</td><tr>"
+          $("#semana1").append(semana1);
+
+          $("#semana2").empty();
+          var semana2 ="<tr><td>"+
+          data.semana_2_lunes+"</td><td>"+
+          data.semana_2_martes+"</td><td>"+
+          data.semana_2_miercoles+"</td><td>"+
+          data.semana_2_jueves+"</td><td>"+
+          data.semana_2_viernes+"</td><tr>"
+          $("#semana2").append(semana2);
+
+          $("#semana3").empty();
+          var semana3 ="<tr><td>"+
+          data.semana_3_lunes+"</td><td>"+
+          data.semana_3_martes+"</td><td>"+
+          data.semana_3_miercoles+"</td><td>"+
+          data.semana_3_jueves+"</td><td>"+
+          data.semana_3_viernes+"</td><tr>"
+          $("#semana3").append(semana3);
+
+          $("#semana4").empty();
+          var semana4 ="<tr><td>"+
+          data.semana_4_lunes+"</td><td>"+
+          data.semana_4_martes+"</td><td>"+
+          data.semana_4_miercoles+"</td><td>"+
+          data.semana_4_jueves+"</td><td>"+
+          data.semana_4_viernes+"</td><tr>"
+          $("#semana4").append(semana4);
+
+
       });
-  });
+    });
+
+    $("#btn-cobertura").click(function(){
+      if($("#comuna").val()!=""){
+        $("#cobertura").dialog({width:"auto", height:"auto",
+          buttons: [{
+             text: "Cerrar","class":'btn btn-danger space',"id":'space',click: function () {
+               $(this).dialog("close");
+
+               // var semana1 ="<tr><td>"+
+               // data.
+             }
+           }]
+         });
+      }else{
+        alert("Seleccione Comuna");
+      }
+
+     });
+
+
   });
 </script>
 {{-- <script src="{{asset('plugins/jquery-validator/jquery.validate.js')}}"></script>
@@ -49,8 +121,12 @@
 <div class="container">
   {{-- botones cancelar y disponivilidad de ruta --}}
   <div class="col-sm-12">
-    <div class="col-md-1" style="padding-right: 80%">
+    <div class="col-md-1" style="padding-right: 90%">
       <input type="button" value="Cancelar" class="btn btn1 btn-danger" id="btn-cancel">
+    </div>
+    <div class="col-md-1">
+      <input type="button" value="Cobertura" class="btn btn1 btn-primary " id="btn-cobertura">
+
     </div>
   </div>
   {{-- /botones cancelar y disponivilidad de ruta --}}
@@ -87,37 +163,29 @@
                 <div class="">
                   <input type="hidden" name="_token" value="{{ csrf_token() }}">
                   <input type="hidden" class="form-control" name="fundacion" value="{{$capta->fundacion}}" id="fundacion">
-                  <input type="hidden" value="{{$minmax->maxDay}}" id="max_day">
-                  <input type="hidden" value="{{$minmax->maxAm}}" id="max_am">
-                  <input type="hidden" value="{{$minmax->maxPm}}" id="max_pm">
                   <input type="hidden" class="form-control" name="n_dues" value="{{$capta->n_dues}}">
                   <input type="hidden" class="form-control" name="id_fundacion" value="{{$capta->id_fundacion}}">
                   <input type="hidden" class="form-control" name="teleoperador" value="{{Auth::user()->id}}">
                   <input type="hidden" name="id_captacion" value="{{$capta->id}}">
-                  <input type="hidden" name="checkPass">
                 </div>
 
 {{-- Inicio primera fila --}}
-
               <div class="row">
-                  <div class="col-md-3">
-                    <label class=" control-label">Tipo Retiro</label>
-                    <div class="">
-                      <select name="tipo_retiro" class="form-control" id="tipo_retiro">
-                          <option value="">-- Seleccione --</option>
-                          @foreach($estado as $est)
-                              <option value="{{$est->Estado}}">{{$est->Estado}}</option>
-                          @endforeach
+                <div class="col-md-3">
+                  <label class=" control-label">Tipo Retiro</label>
+                  <div class="">
+                    <select name="tipo_retiro" class="form-control" id="tipo_retiro" required>
+                        <option value="Acepta Delivery">Acepta Delivery</option>
                       </select>
                     </div>
                   </div>
 
                   <div class="col-md-3">
                     <label class=" control-label">Comuna</label>
-                      <select name="comuna" id="comuna" class="form-control">
+                      <select name="comuna" id="comuna" class="form-control" required>
                           <option value="">-- Seleccione --</option>
                           @foreach($comunas as $comuna)
-                            <option value="{{$comuna->comuna}}">{{$comuna->comuna}}</option>
+                            <option value="{{$comuna->id}}">{{$comuna->comuna}}</option>
                           @endforeach
                       </select>
                   </div>
@@ -125,59 +193,50 @@
                   <div class="col-md-3 grabacion">
                     <label class=" control-label">Fecha Agendamiento</label>
                       <div class="">
-                        <input type="date" id="f_agendamiento" class="form-control" name="fecha_agendamiento" value="{{$capta->fecha_agendamiento}}">
+                        <input type="date" id="f_agendamiento" class="form-control" name="fecha_agendamiento" required value="{{$capta->fecha_agendamiento}}">
                       </div>
                   </div>
 
                   <div class="col-md-3">
-                    <div class="col-md-6">
-                      <label class="control-label">Horario</label>
-                      <input type="time" class="form-control">
-                    </div>
-
-                    <div class="col-md-6">
-                      <label class="control-label">Retiro</label>
-                      <input type="time" class="form-control">
-                    </div>
-
+                    <label for="" class="control-label">Horario</label>
+                    <select name="jornada" id="" class="form-control" required>
+                      <option value="">--Seleccione--</option>
+                      <option value="AM">AM</option>
+                      <option value="PM">PM</option>
+                    </select>
                   </div>
               </div>
-  {{-- Fin primera fila --}}
-  {{-- Inicio segunda fila --}}
+{{-- Fin primera fila --}}
+{{-- Inicio segunda fila --}}
               <div class="row">
                   <div class="col-md-3">
                     <label class=" control-label">Rut</label>
-                      <input type="text" class="form-control" id="rut" name="rut"
+                      <input type="text" class="form-control" id="rut" name="rut" required
                         placeholder="Ingrese Rut Sin Puntos ni Guion" value="{{$capta->rut}}">
                   </div>
 
                   <div class="col-md-3">
                     <label class=" control-label">Fono</label>
-                      <input type="text" class="form-control" name="fono_1" value="{{$capta->fono_1}}">
+                      <input type="text" class="form-control" name="fono_1" required value="{{$capta->fono_1}}">
                   </div>
 
                   <div class="col-md-3">
                     <label class=" control-label">Nombre</label>
-                      <input type="text" class="form-control" name="nombre" value="{{$capta->nombre}}">
+                      <input type="text" class="form-control" name="nombre" required value="{{$capta->nombre}}">
                   </div>
 
                   <div class="col-md-3">
                     <label class=" control-label">Apellido</label>
-                      <input type="text" class="form-control" name="apellido" value="{{$capta->apellido}}">
+                      <input type="text" class="form-control" name="apellido" required value="{{$capta->apellido}}">
                   </div>
               </div>
-  {{-- Fin segunda fila --}}
-  {{-- Inicio Tercera Fila --}}
-
+{{-- Fin segunda fila --}}
+{{-- Inicio Tercera Fila --}}
              <div class="row">
-                 <div class="col-md-2" id="fixedPhone">
-                    <label for="c_movistar" class="control-label">Telefono Cuenta</label>
-                      <input type="text" class="form-control" name="c_movistar"  value="{{$capta->cuenta_movistar}}">
-                  </div>
 
                   <div class="col-md-3">
                     <label class="control-label">Direccion</label>
-                    <input type="text" name="direccion" class="form-control" placeholder="Ej: Santa Magdalena" value="{{$capta->direccion}}">
+                    <input type="text" name="direccion" class="form-control" required placeholder="Ej: Santa Magdalena" value="{{$capta->direccion}}">
                   </div>
 
                   <div class="col-md-1">
@@ -231,9 +290,9 @@
                           <label class="control-label">Forma Pago</label>
                           <select name="forma_pago" class="form-control" id="f_pago">
                             <option value="">-- Seleccione --</option>
-                            @foreach($f_pago as $pago)
-                              <option value="{{$pago->Estado}}">{{$pago->Estado}}</option>
-                            @endforeach
+                            <option value="Cuenta Corriente"> Cuenta Corriente</option>
+                            <option value="Cuenta Vista"> Cuenta Vista</option>
+                            <option value="Cuenta Rut">Cuenta Rut</option>
                           </select>
                         </div>
 
@@ -251,6 +310,82 @@
           </form>
         </div>{{--fin Panmel Body--}}
     </div>{{--Fin Panel Default--}}
+
+    <div class="" id="cobertura">
+      <div class="col-md-6">
+        <h4 class="center" >Comuna </h4>
+        <h5 class="center" id="comunacobertura"></h5>
+      </div>
+      <div class="col-md-6">
+        <h4 class="center">Cobertura</h4>
+        <h5 class="center" id="showCobertura"></h5>
+      </div>
+<div></div>
+
+      <div class="">
+        <table class="table table-hover" >
+          <h4 class="text-muted center">Semana 1</h4>
+          <thead>
+            <th>Lunes</th>
+            <th>Martes</th>
+            <th>Miercoles</th>
+            <th>Jueves</th>
+            <th>Viernes</th>
+          </thead>
+          <tbody id="semana1">
+
+          </tbody>
+        </table>
+      </div>{{--FIN TABLA--}}
+
+      <div class="">
+        <table class="table table-hover" >
+        <h4 class="text-muted center">Semana 2</h4>
+          <thead>
+            <th>Lunes</th>
+            <th>Martes</th>
+            <th>Miercoles</th>
+            <th>Jueves</th>
+            <th>Viernes</th>
+          </thead>
+          <tbody id="semana2">
+
+          </tbody>
+        </table>
+      </div>{{--FIN TABLA--}}
+
+      <div class=" ">
+        <table class="table table-hover" >
+          <h4 class="text-muted center">Semana 3</h4>
+          <thead>
+            <th>Lunes</th>
+            <th>Martes</th>
+            <th>Miercoles</th>
+            <th>Jueves</th>
+            <th>Viernes</th>
+          </thead>
+          <tbody id="semana3">
+
+          </tbody>
+        </table>
+      </div>{{--FIN TABLA--}}
+
+      <div class=" ">
+        <table class="table table-hover" >
+          <h4 class="text-muted center">Semana 4</h4>
+          <thead>
+            <th>Lunes</th>
+            <th>Martes</th>
+            <th>Miercoles</th>
+            <th>Jueves</th>
+            <th>Viernes</th>
+          </thead>
+          <tbody id="semana4">
+
+          </tbody>
+        </table>
+      </div>{{--FIN TABLA--}}
+    </div>
   </div>{{--fin container interno--}}
 </div>
 @endsection

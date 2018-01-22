@@ -90,7 +90,7 @@
         <a href="{{url('/informes/reporte',$base->id)}}" class="right btn btn-warning">Ver Reporte</a>
       @elseif(Auth::user()->perfil==1)
         <a href="{{url('/admin/reporte',$base->id)}}" class="right btn btn-warning">Ver Reporte</a>
-      @endif  
+      @endif
 
       <h2 class="graphic-tittle">
         Informe Rendimiento  <span class="text-muted">{{$base->nombre_campana}}</span>
