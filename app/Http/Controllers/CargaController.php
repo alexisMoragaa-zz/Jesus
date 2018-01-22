@@ -5,8 +5,11 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Http\Request;
 use App\Http\Requests;
+use Carbon\Carbon;
 use Storage;
 use Excel;
+use App\CaptacionesExitosa;
+use App\CoberturaRegiones;
 use App\captaciones;
 use App\fundacion;
 use App\Campana;
@@ -87,6 +90,8 @@ class CargaController extends Controller {
 			]);
 
 	}
+
+
 
 public function byFoundation($id){
 	//esta funcion nos retorna las campañas que pertenecena una fundacion para cargar_datos
@@ -234,16 +239,16 @@ public function exportReportCampana($id){
 			$i =0;//asignamos un contador para asignar las filas en la data
 			foreach ($campana->registrosCampana as $c){//recorremos la data obtenida atravez de la relacion
 				$row=[];//creamos el arregklo row para obtener los valores de la data
-				$row[0] = "     ";//dejamos el primer campo en blanco para darnos espacio al borde izquierdo
-				$row[1] = $c->id;//agregamos los campos a una posicion del arreglo
-				$row[2] = $c->id_fundacion;
-				$row[3] = $c->fono_1;
-				$row[4] = $c->fono_2;
-				$row[5] = $c->fono_3;
-				$row[6] = $c->fono_4;
-				$row[7] = $c->nombre;
-				$row[8] = $c->apellido;
-				$row[9] = $c->correo_1;
+				$row[0]  = "     ";//dejamos el primer campo en blanco para darnos espacio al borde izquierdo
+				$row[1]  = $c->id;//agregamos los campos a una posicion del arreglo
+				$row[2]  = $c->id_fundacion;
+				$row[3]  = $c->fono_1;
+				$row[4]  = $c->fono_2;
+				$row[5]  = $c->fono_3;
+				$row[6]  = $c->fono_4;
+				$row[7]  = $c->nombre;
+				$row[8]  = $c->apellido;
+				$row[9]  = $c->correo_1;
 				$row[10] = $c->correo_2;
 				$row[11] = $c->firma_inscripcion;
 				$row[12] = $c->otro_antecedente;
@@ -254,7 +259,7 @@ public function exportReportCampana($id){
 				$row[17] = $c->segundo_llamado;
 				$row[18] = $c->estado_llamada2;
 				$row[19] = $c->tercer_llamado;
-				$row[20] = $c->estado_llamado3;
+				$row[20] = $c->estado_llamada3;
 				$row[21] = $c->f_ultimo_llamado;
 				$data[] = $row;//una vez recorrido el primer ciclo concatenamos con append el valor de row a nuestro arreglo Data
 				//de  esta forma montamos la matriz con cada iteracio del ciclo
@@ -327,5 +332,270 @@ public function exportReportCampana($id){
 		});
 	})->export('xlsx');//finalmente exportamos el archivo excel con las dos hojas establecidas
 }
+
+public function loadCoberturaView(){
+	return view('Delivery.loadCobertura');
+}
+
+public function loadCobertura(Request $request)
+{
+	$archivo = $request->file('archivo');//seleccionamos el archivo de nuestro request
+	$nombre_original=$archivo->getClientOriginalName();//obtenemos el nombre del archivo
+	$extension=$archivo->getClientOriginalExtension();//obtenemos la extencion del archivos
+	$r1=Storage::disk('archivos')->put($nombre_original,  \File::get($archivo) );//guardamos el archivo en un disco local
+	$ruta  =  storage_path('archivos') ."/". $nombre_original;//guardamos la ruta en la cual se encuentra guardado nuestro archivo
+
+	if($r1){//si el archivo se guarda correctamente  ejecutamos el siguiente bloque de codigo
+		Excel::selectSheetsByIndex(0)->load($ruta, function($hoja)  {
+			$hoja->each(function($fila) {
+
+				if($fila->sucursal != null){
+					$Cobertura = new CoberturaRegiones;//por cada fila de nuestro archivo excel creamos una instancia de captacion
+
+					$Cobertura-> sucursal      = $fila -> sucursal;//asignamos los valores para cada instancia
+					$Cobertura-> region        =$fila-> region;
+					$Cobertura-> comuna        =$fila -> comuna;//ya sean valores provenientes de nuestro archivo excel
+					$Cobertura-> cobertura  	 = $fila -> cobertura;
+
+					$Cobertura-> semana_1_lunes  = $fila -> semana_1_lunes;
+					$Cobertura-> semana_1_martes  = $fila -> semana_1_martes;
+					$Cobertura-> semana_1_miercoles  = $fila -> semana_1_miercoles;
+					$Cobertura-> semana_1_jueves  = $fila -> semana_1_jueves;
+					$Cobertura-> semana_1_viernes  = $fila -> semana_1_viernes;
+
+					$Cobertura-> semana_2_lunes  = $fila -> semana_2_lunes;
+					$Cobertura-> semana_2_martes  = $fila -> semana_2_martes;
+					$Cobertura-> semana_2_miercoles  = $fila -> semana_2_miercoles;
+					$Cobertura-> semana_2_jueves  = $fila -> semana_2_jueves;
+					$Cobertura-> semana_2_viernes  = $fila -> semana_2_viernes;
+
+					$Cobertura-> semana_3_lunes  = $fila -> semana_3_lunes;
+					$Cobertura-> semana_3_martes  = $fila -> semana_3_martes;
+					$Cobertura-> semana_3_miercoles  = $fila -> semana_3_miercoles;
+					$Cobertura-> semana_3_jueves  = $fila -> semana_3_jueves;
+					$Cobertura-> semana_3_viernes  = $fila -> semana_3_viernes;
+
+					$Cobertura-> semana_4_lunes  = $fila -> semana_4_lunes;
+					$Cobertura-> semana_4_martes  = $fila -> semana_4_martes;
+					$Cobertura-> semana_4_miercoles  = $fila -> semana_4_miercoles;
+					$Cobertura-> semana_4_jueves  = $fila -> semana_4_jueves;
+					$Cobertura-> semana_4_viernes  = $fila -> semana_4_viernes;
+
+					$Cobertura-> save();//guardamos el registro
+				}
+			});
+		});
+
+	}
+	Session::flash('success', 'Felicidades! los registros de la Cobertura Fueron agregados Con Exito');
+	return view('admin/loadCobertura');
+}
+
+public function exportDeliveryDaily(){
+$date = Carbon::now()->subDay()->format('d/m/Y');//seleccionamos el dia anterior al actual
+
+	$delivery = CaptacionesExitosa::where('tipo_retiro','=','Acepta Delivery')//seleccionamos los deliverys
+	->where('estado_captacion','=','OK')//que esten aprobados por operaciones
+	->where('fecha_Captacion','=',$date)->get();//que correspondan al dia anterior al actual
+
+	Excel::create('Fundacion ', function($excel) use($delivery){
+		//creamos el archivo de excel y le asignamos el nombre, en este caso suamos el nombre de la fundacion mas el numero de carta para nombrar el archivo
+		$excel->sheet('carta ', function($sheet) use($delivery){
+			//creamos la hoja de excel y le asignamos el nombre, en este caso usamos el numero de la carta como nombre para la hoja
+			//header
+				/*en el header le damos estilos a las celdas que componen la cabecera de nuestr archivo excel*/
+				$sheet->row(1,['RUT','DV','SEGMENTO','CUPO_ACTUAL','CUPO_FINAL','ESTADO_CUPO','NOMBRE_TARJETA'
+				,'NUMERO_TARJETA_FINAL','NOMBRE_BANDA_MAGNETICA','TARJETA','PUNTOS A REBAJAR','ESTADO_CANJE','GENERO','DIRECCION_PARTICULAR',
+				'REGION_PARTICULAR','COMUNA_PARTICULAR','DIRECCION_COMERCIAL','REGION_COMERCIAL'
+				,'CODIGO_SUCURSAL_OPERACION','COD_SUCURSAL_DESPAHO','TELEFONO_PARTICULAR2','TELEFONO_COMERCIAL2'
+				,'TELEFONO_CELULAR2','TELEFONO_PARTICULAR1','TELEFONO_COMERCIAL2','TELEFONO_CELULAR1','OBSERVACIONES'
+				,'FECHA VISITA','HORARIO','DEALER','FECHA VENTA','FECHA CALIDAD','AUX 4','AUX 5']);//textos que componen el header del documento
+				//creamos los textos del encabezados hubicados en la fila 1
+				$sheet->cells('A1:AH1',function($cells){
+					$cells->setFontSize('9');
+					$cells->setFontWeight('bold');
+					$cells->setFontColor('#004c8c');
+					$cells->setFontFamily('Arial');
+				});
+				//damos los estilos generales a los encabezados
+				$sheet->cells('A1:B1',function($cells){
+						$cells->setBackground('#9ccc65');
+				});
+				$sheet->cell('G1',function($cell){
+						$cell->setBackground('#9ccc65');
+				});
+				$sheet->cell('N1',function($cell){
+						$cell->setBackground('#9ccc65');
+				});
+				$sheet->cell('P1',function($cell){
+						$cell->setBackground('#9ccc65');
+				});
+				$sheet->cell('U1',function($cell){
+						$cell->setBackground('#9ccc65');
+				});
+				$sheet->cells('AA1:AG1',function($cells){
+						$cells->setBackground('#9ccc65');
+				});
+					//AGREGAMOS LOS BACKGROUNDS A LOS ENCABEZADOS
+				//fin Header
+
+			//data
+
+			/* en la data agregamos la informacion de obtenida mediante las consultas sql realizadas a la base de datos con eloquent*/
+			$data=[];//creamos un nuevo arreglo vacio al cual le concatenaremos el arreglo row con la data, de esta forma creamos una matriz con la data
+			$i =0;//asignamos un contador para asignar las filas en la data
+			foreach ($delivery as $d){
+
+				$dv = substr($d->rut,-1);//tomamos del rut el ultimo numero (dv)
+				$ru=strlen($d->rut)-1;//establecemos el largo del rut
+				$rut = substr($d->rut,0,$ru);//tomamos del rut todos los numeros anteriores al dv
+				//la fecha de agendamiento tiene un fotmato diferente al requerido por el formato excel, es por esto que la descomponemos y rearmamos con el formato indicado
+				$day =substr($d->fecha_agendamiento,8,2);//tomamos el dias
+				$month =substr($d->fecha_agendamiento,5,2);//tomamos el mes
+				$year =substr($d->fecha_agendamiento,0,4);//tomamos el año
+				$fecha_agendamiento=$day."/".$month."/".$year;
+				//concatenamos las variables y cambiamos el formato de fecha de año-mes-dia por el formato dia/mes/año
+
+				$row=[];
+				$row[0] = $rut;
+				$row[1] = $dv;
+				$row[2] = "";$row[3] = "";$row[4] = "";$row[5] = "";
+				$row[6] = $d->nombre." ".$d->apellido;
+				$row[7] = "";$row[8] = "";$row[9] = "";$row[10] = "";$row[11] = "";$row[12] = "";
+				$row[13] = $d->direccion;
+				$row[14] = $d->region;
+				$row[15] = $d->comuna;
+				$row[16] = "";$row[17] = "";$row[18] = "";$row[19] = "";
+				$row[20] = $d->fono_1;
+				$row[21] = "";$row[22] = "";$row[23] = "";$row[24] = "";$row[25] = "";
+				$row[26] = $d->observaciones;
+				$row[27] = $fecha_agendamiento;
+				$row[28] = $d->horario;
+				$row[29] = "Dues-".$d->nom_campana;
+				$row[30] = $d->fecha_captacion;
+				$row[31] = "";
+				$row[32] = $d->correo_1;
+				$row[33] = $d->monto;
+
+				$data[] = $row;//una vez recorrido el primer ciclo concatenamos con append el valor de row a nuestro arreglo Data
+				//de  esta forma montamos la matriz con cada iteracio del ciclo
+				$sheet->appendRow($row);
+				$i++;//sumamos uno al contador por cada fila que tenga la data
+			}
+			$i = $i+1;
+			$sheet->setBorder('A1:AH'.$i,'thin');//le damos bordes a todo el area con datos en el documento
+
+
+		});
+
+	})->export('xlsx');//finalmente exportamos el archivo en formato xlsx
+
+}
+
+
+
+
+public function exportDeliveryHistory(){
+$date = Carbon::now()->subDay()->format('d/m/Y');//seleccionamos el dia anterior al actual
+
+	$delivery = CaptacionesExitosa::where('tipo_retiro','=','Acepta Delivery')//seleccionamos los deliverys
+	->where('estado_captacion','=','OK')//que esten aprobados por operaciones
+	->get();
+
+	Excel::create('Fundacion ', function($excel) use($delivery){
+		//creamos el archivo de excel y le asignamos el nombre, en este caso suamos el nombre de la fundacion mas el numero de carta para nombrar el archivo
+		$excel->sheet('carta ', function($sheet) use($delivery){
+			//creamos la hoja de excel y le asignamos el nombre, en este caso usamos el numero de la carta como nombre para la hoja
+			//header
+				/*en el header le damos estilos a las celdas que componen la cabecera de nuestr archivo excel*/
+				$sheet->row(1,['RUT','DV','SEGMENTO','CUPO_ACTUAL','CUPO_FINAL','ESTADO_CUPO','NOMBRE_TARJETA'
+				,'NUMERO_TARJETA_FINAL','NOMBRE_BANDA_MAGNETICA','TARJETA','PUNTOS A REBAJAR','ESTADO_CANJE','GENERO','DIRECCION_PARTICULAR',
+				'REGION_PARTICULAR','COMUNA_PARTICULAR','DIRECCION_COMERCIAL','REGION_COMERCIAL'
+				,'CODIGO_SUCURSAL_OPERACION','COD_SUCURSAL_DESPAHO','TELEFONO_PARTICULAR2','TELEFONO_COMERCIAL2'
+				,'TELEFONO_CELULAR2','TELEFONO_PARTICULAR1','TELEFONO_COMERCIAL2','TELEFONO_CELULAR1','OBSERVACIONES'
+				,'FECHA VISITA','HORARIO','DEALER','FECHA VENTA','FECHA CALIDAD','AUX 4','AUX 5']);//textos que componen el header del documento
+				//creamos los textos del encabezados hubicados en la fila 1
+				$sheet->cells('A1:AH1',function($cells){
+					$cells->setFontSize('9');
+					$cells->setFontWeight('bold');
+					$cells->setFontColor('#004c8c');
+					$cells->setFontFamily('Arial');
+				});
+				//damos los estilos generales a los encabezados
+				$sheet->cells('A1:B1',function($cells){
+						$cells->setBackground('#9ccc65');
+				});
+				$sheet->cell('G1',function($cell){
+						$cell->setBackground('#9ccc65');
+				});
+				$sheet->cell('N1',function($cell){
+						$cell->setBackground('#9ccc65');
+				});
+				$sheet->cell('P1',function($cell){
+						$cell->setBackground('#9ccc65');
+				});
+				$sheet->cell('U1',function($cell){
+						$cell->setBackground('#9ccc65');
+				});
+				$sheet->cells('AA1:AG1',function($cells){
+						$cells->setBackground('#9ccc65');
+				});
+					//AGREGAMOS LOS BACKGROUNDS A LOS ENCABEZADOS
+				//fin Header
+
+			//data
+
+			/* en la data agregamos la informacion de obtenida mediante las consultas sql realizadas a la base de datos con eloquent*/
+			$data=[];//creamos un nuevo arreglo vacio al cual le concatenaremos el arreglo row con la data, de esta forma creamos una matriz con la data
+			$i =0;//asignamos un contador para asignar las filas en la data
+			foreach ($delivery as $d){
+
+				$dv = substr($d->rut,-1);//tomamos del rut el ultimo numero (dv)
+				$ru=strlen($d->rut)-1;//establecemos el largo del rut
+				$rut = substr($d->rut,0,$ru);//tomamos del rut todos los numeros anteriores al dv
+				//la fecha de agendamiento tiene un fotmato diferente al requerido por el formato excel, es por esto que la descomponemos y rearmamos con el formato indicado
+				$day =substr($d->fecha_agendamiento,8,2);//tomamos el dias
+				$month =substr($d->fecha_agendamiento,5,2);//tomamos el mes
+				$year =substr($d->fecha_agendamiento,0,4);//tomamos el año
+				$fecha_agendamiento=$day."/".$month."/".$year;
+				//concatenamos las variables y cambiamos el formato de fecha de año-mes-dia por el formato dia/mes/año
+
+				$row=[];
+				$row[0] = $rut;
+				$row[1] = $dv;
+				$row[2] = "";$row[3] = "";$row[4] = "";$row[5] = "";
+				$row[6] = $d->nombre." ".$d->apellido;
+				$row[7] = "";$row[8] = "";$row[9] = "";$row[10] = "";$row[11] = "";$row[12] = "";
+				$row[13] = $d->direccion;
+				$row[14] = $d->region;
+				$row[15] = $d->comuna;
+				$row[16] = "";$row[17] = "";$row[18] = "";$row[19] = "";
+				$row[20] = $d->fono_1;
+				$row[21] = "";$row[22] = "";$row[23] = "";$row[24] = "";$row[25] = "";
+				$row[26] = $d->observaciones;
+				$row[27] = $fecha_agendamiento;
+				$row[28] = $d->horario;
+				$row[29] = "Dues-".$d->nom_campana;
+				$row[30] = $d->fecha_captacion;
+				$row[31] = "";
+				$row[32] = $d->correo_1;
+				$row[33] = $d->monto;
+
+				$data[] = $row;//una vez recorrido el primer ciclo concatenamos con append el valor de row a nuestro arreglo Data
+				//de  esta forma montamos la matriz con cada iteracio del ciclo
+				$sheet->appendRow($row);
+				$i++;//sumamos uno al contador por cada fila que tenga la data
+			}
+			$i = $i+1;
+			$sheet->setBorder('A1:AH'.$i,'thin');//le damos bordes a todo el area con datos en el documento
+
+
+		});
+
+	})->export('xlsx');//finalmente exportamos el archivo en formato xlsx
+
+}
+
+
 
 }

@@ -6,19 +6,19 @@ use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use DB;
-use App\captaciones;
 use App\CaptacionesExitosa;
-use App\maxCap;
-use Carbon\Carbon;
-use App\estado;
-use App\Campana;
-use App\comunaRetiro;
-use App\estadoRuta;
-use App\informeRuta;
 use App\AgendarLlamados;
-use App\User;
-use App\Letter;
+use App\comunaRetiro;
+use App\informeRuta;
+use App\captaciones;
+use App\estadoRuta;
 use App\fundacion;
+use Carbon\Carbon;
+use App\Campana;
+use App\Letter;
+use App\estado;
+use App\maxCap;
+use App\User;
 
 class TeoController extends Controller
 {
@@ -39,7 +39,8 @@ class TeoController extends Controller
         $cap = captaciones::where('campana_id', '=', $dato)//seleccionamo el registro que se le entragara mediante una seria de filtros
             ->where('f_ultimo_llamado', '!=', $date)->where('estado', '!=', 'cu-')
             ->where('estado', '!=', 'cu+')->where('estado_registro', '=', 0)->where('estado', '!=', 'ca')
-          ->first();
+            ->where('tercer_llamado','=',null)
+            ->first();
 /*el registro que se le entregara al usuario tiene que pertenecer a la campaña a la cual el esta asignado
 la fecha de ultimo llamado no puede ser mayor al dia anterior respecto del dia en  curso su estado tiene que ser diferente de cnu
 su estado tiene que ser diferente de cu+ y defirente de ca (call_again) */
@@ -135,16 +136,19 @@ no vuelven a llamar a los mismos registros que otros lalmaron el mismo dia*/
             $llamado = 'primer_llamado';//llamado lo asignamos como primer llamado
             $name_status = 'estado_llamada1';//name status lo asignamos conmo estado_llamada1
             $n_llamado = '1';//y numero de llamado como 1, hacemos los mismo con el llamado 2
+
             //y usamos un else para referenciar el llamado 3
         } elseif ($llamado2 == null) {
             $llamado = 'segundo_llamado';
             $name_status = 'estado_llamada2';
             $n_llamado = '2';
 
+
         } else {
             $llamado = 'tercer_llamado';
             $name_status = 'estado_llamada3';
             $n_llamado = '3';
+
         }
 //actualizamos la tabla captaciones con los datos que asignamos mediante los if,
         DB::table('captaciones')

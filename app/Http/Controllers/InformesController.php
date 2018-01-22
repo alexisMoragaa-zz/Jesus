@@ -1,14 +1,14 @@
 <?php namespace App\Http\Controllers;
 
-use App\Http\Requests;
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use App\Http\Requests;
+use App\informeRuta;
 use App\captaciones;
+use Carbon\Carbon;
 use App\fundacion;
 use App\Campana;
 use App\user;
-use App\informeRuta;
-use Illuminate\Http\Request;
-use Carbon\Carbon;
 
 class InformesController extends Controller {
 
@@ -123,15 +123,18 @@ $no_encuentro_direccion = informeRuta::where('rutero_id','=',$rutero_id)->where(
 	]);
 }
 
-public function reporteCampana($id){
+public function campanaReport($id){
 	$campana = Campana::find($id);
 	$llamados = captaciones::where('estado','!=',0)->where('campana_id','=',$campana->id)->count();
 	$pendientes = captaciones::where('estado','=',0)->where('campana_id','=',$campana->id)->count();
-	return view('informes.reporteCampaing',[
+
+	return view('Informes/reportCampaing',[
 		'campana'=>$campana,
 		'llamados'=>$llamados,
 		'pendientes'=>$pendientes,]);
 }
+
+
 
 
 }

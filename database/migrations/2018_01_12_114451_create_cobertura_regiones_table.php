@@ -15,34 +15,34 @@ class CreateCoberturaRegionesTable extends Migration {
 		Schema::create('cobertura_regiones', function(Blueprint $table)
 		{
 			$table->increments('id');
-			$table->string('sucursal');
-			$table->string('region');
-			$table->string('comuna');
-			$table->string('cobertura');
+			$table->string('sucursal')->nullable();
+			$table->string('region')->nullable();
+			$table->string('comuna')->nullable();
+			$table->string('cobertura')->nullable();
 
-			$table->string('semana_1_lunes');
-			$table->string('semana_1_martes');
-			$table->string('semana_1_miercoles');
-			$table->string('semana_1_jueves');
-			$table->string('semana_1_viernes');
+			$table->string('semana_1_lunes')->nullable();
+			$table->string('semana_1_martes')->nullable();
+			$table->string('semana_1_miercoles')->nullable();
+			$table->string('semana_1_jueves')->nullable();
+			$table->string('semana_1_viernes')->nullable();
 
-			$table->string('semana_2_lunes');
-			$table->string('semana_2_martes');
-			$table->string('semana_2_miercoles');
-			$table->string('semana_2_jueves');
-			$table->string('semana_2_viernes');
+			$table->string('semana_2_lunes')->nullable();
+			$table->string('semana_2_martes')->nullable();
+			$table->string('semana_2_miercoles')->nullable();
+			$table->string('semana_2_jueves')->nullable();
+			$table->string('semana_2_viernes')->nullable();
 
-			$table->string('semana_3_lunes');
-			$table->string('semana_3_martes');
-			$table->string('semana_3_miercoles');
-			$table->string('semana_3_jueves');
-			$table->string('semana_3_viernes');
+			$table->string('semana_3_lunes')->nullable();
+			$table->string('semana_3_martes')->nullable();
+			$table->string('semana_3_miercoles')->nullable();
+			$table->string('semana_3_jueves')->nullable();
+			$table->string('semana_3_viernes')->nullable();
 
-			$table->string('semana_4_lunes');
-			$table->string('semana_4_martes');
-			$table->string('semana_4_miercoles');
-			$table->string('semana_4_jueves');
-			$table->string('semana_4_viernes');
+			$table->string('semana_4_lunes')->nullable();
+			$table->string('semana_4_martes')->nullable();
+			$table->string('semana_4_miercoles')->nullable();
+			$table->string('semana_4_jueves')->nullable();
+			$table->string('semana_4_viernes')->nullable();
 
 			$table->timestamps();
 
