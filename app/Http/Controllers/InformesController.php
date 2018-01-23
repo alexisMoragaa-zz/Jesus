@@ -85,8 +85,12 @@ public function informeFundacion($fundacion){
 }
 
 public function informeUser($user){
+	$user = user::find($user);
 
-	return view('Informes.informeUser');
+	return view('Informes.informeUser',
+	[
+		'user'=>$user,
+	]);
 }
 
 public function informeRutero($rutero_id){

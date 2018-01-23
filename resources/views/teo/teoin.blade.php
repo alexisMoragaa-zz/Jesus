@@ -87,12 +87,16 @@
 
 
 
-	<div class="div-name col-md-7 col-sm-10 col-xs-10">
+	<div class="div-name col-md-5 col-sm-10 col-xs-10">
 		<h1 id="name" class="col-md-10">{{Auth::user()->name}} {{Auth::user()->last_name}}</h1>
 	</div>
 
-	<div class="col-md-2 btn_agendar">
+	<div class="col-md-2">
 		<a href="{{url('/teo/regiones',$cap->id)}}" class=""><h1 class="btn btn-primary" >Agendar Regiones</h1></a>
+	</div>
+
+	<div class="col-md-2 btn_agendar">
+		<a href="{{url('teo/agendar/grabacion',$cap->id)}}" ><h1 class="btn btn-warning ">Agendar Grabacion</h1></a>
 	</div>
 
 	<div id="" class="col-md-2 btn_agendar">
@@ -101,8 +105,8 @@
 		@else
 			<a href="{{url('teo/mandatoExitoso&')}}{{$cap->id}}&{{$cap->n_dues}}" ><h1 class="btn btn-success btn-ajax">Agendar Santiago</h1></a>
 		@endif
-
 	</div>
+
 
 	<div id="contenedor1" class="form-group">
 

@@ -17,9 +17,6 @@ class supController extends Controller {
 
 	public function index(Request $request)
 	{
-
-
-
 		$User_Campana = DB::table('campanas')
 			->join('users','campanas.id','=','users.campana')
 			->select('campanas.*','users.*')

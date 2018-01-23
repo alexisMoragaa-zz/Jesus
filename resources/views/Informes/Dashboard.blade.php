@@ -19,7 +19,7 @@
       </a>
       <div class="collapse" id="teleoperadores">
         @foreach ($teos as $teo)
-          <a href="#" class="list-group-item">{{$teo->name}}</a>
+          <a href="{{url('/informes/user',$teo->id)}}" class="list-group-item">{{$teo->name}} {{$teo->last_name}}</a>
         @endforeach
       </div>
     </div>
@@ -63,7 +63,7 @@
       </a>
       <div class="collapse" id="ruteros">
         @foreach ($ruteros as $rutero)
-          <a href="{{url('/informes/rutero',$rutero->id)}}" class="list-group-item">{{$rutero->name}}</a>
+          <a href="{{url('/informes/rutero',$rutero->id)}}" class="list-group-item">{{$rutero->name}} {{$rutero->last_name}}</a>
         @endforeach
       </div>
     </div>

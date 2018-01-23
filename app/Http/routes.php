@@ -127,6 +127,8 @@ Route::group(['middleware' => ['auth', 'teleoperador'], 'prefix' => 'teo'], func
     Route::Get('agendamiento/llamada/llamar/{id}','TeoController@agendamientoLlamadoLlamar');
     Route::Get('agendamiento/llamada/llamadoExitoso/{id}','TeoController@agendamientoLlamadaLlamadoExitoso');
     Route::Get('show/cobertura','RegionesController@showCobertura');
+
+    Route::Get('agendar/grabacion/{id}','TeoController@agendarGrabacion');
     Route::Get('ajax-rutero', function () {
         $rutero_id = Input::Get('ruteroid');
         $nombre_rutero = comunaRetiro::where('comuna', '=', $rutero_id)->Get();

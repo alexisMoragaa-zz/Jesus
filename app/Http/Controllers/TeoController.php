@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use DB;
 use App\CaptacionesExitosa;
+use App\CoberturaRegiones;
 use App\AgendarLlamados;
 use App\comunaRetiro;
 use App\informeRuta;
@@ -218,7 +219,10 @@ no vuelven a llamar a los mismos registros que otros lalmaron el mismo dia*/
     public function create($id, $estado)
     {
         $status = estado::where('modulo', '=', 'llamado')->get();
-        $estado = estado::where('modulo','=','agendamiento')->get();
+        $estado = estado::where('modulo','=','agendamiento')
+        ->where('Estado','!=','Acepta Delivery')
+        ->where('Estado','!=','Acepta Chilexpress')
+        ->where('Estado','!=','Acepta Upgrade')->get();
         $f_pago = estado::where('modulo','=','pago')->get();
         $capta = captaciones::findOrFail($id);
         $minmax =maxCap::find(1);
@@ -240,10 +244,6 @@ no vuelven a llamar a los mismos registros que otros lalmaron el mismo dia*/
         $id_rutero =$ruteroo->id;//tomamos el id del rutero y lo asignamos a la variable id_rutero
 
         $date = Carbon::now()->format('d/m/Y');//seleccionamos la fecha de hoy y la guardamos en la variable hoy
-        $comunas=comunaRetiro::where('comuna','=',$request->comuna)->get()->first();
-        //seleccionamos la comuna por su nombre
-        $ciudad =$comunas->ciudad;//asignamos el valor de la propiedad ciudad del objeto comuna a la variable ciudad
-        $region =$comunas->region;//asignamos el valor de la propiedad region del objeto comuna a la variable region
         $direccion = $request->direccion." #".$request->numero." / ".$request->lugarRetiro." #".$request->off_depto." / ".$request->comuna;
         // usando el request concatenamos los diferentes campos que conforman la direccion y le damos el formato que guardaremos enb la bd
 
@@ -255,7 +255,6 @@ no vuelven a llamar a los mismos registros que otros lalmaron el mismo dia*/
         $cap = CaptacionesExitosa::create([//creamos una captacion exitosa usando el metodo create de eloquent
                 'letter' => $letter_id,
                 'n_dues' => $data['n_dues'],
-                // 'id_fundacion' => $data['id_fundacion'],
                 'fecha_captacion' => $date,
                 'fecha_agendamiento' => $date,
                 'tipo_retiro' => $data['tipo_retiro'],
@@ -266,8 +265,7 @@ no vuelven a llamar a los mismos registros que otros lalmaron el mismo dia*/
                 'apellido' => $data['apellido'],
                 'direccion' => $direccion,
                 'comuna' => $data['comuna'],
-                'ciudad' =>$ciudad,
-                'region' =>$region,
+                'region' =>$data['region'],
                 'correo_1' => $data['correo_1'],
                 'monto' => $data['monto'],
                 'teleoperador' => $data['teleoperador'],
@@ -280,11 +278,14 @@ no vuelven a llamar a los mismos registros que otros lalmaron el mismo dia*/
 
             ]);
         }else{
+          $comunas=comunaRetiro::where('comuna','=',$request->comuna)->get()->first();
+          //seleccionamos la comuna por su nombre
+          $ciudad =$comunas->ciudad;//asignamos el valor de la propiedad ciudad del objeto comuna a la variable ciudad
+          $region =$comunas->region;//asignamos el valor de la propiedad region del objeto comuna a la variable region
           //si el registro es diferente de grabacion guardamos los campos respectivos  aun agendamiento
         $cap= CaptacionesExitosa::create([//creamos una captaion exitosa usando el metodo create de eloquent
                 'letter'=>$letter_id,
                 'n_dues' => $data['n_dues'],
-                // 'id_fundacion' => $data['id_fundacion'],
                 'fecha_captacion' => $date,
                 'fecha_agendamiento' => $data['fecha_agendamiento'],
                 'tipo_retiro' => $data['tipo_retiro'],
@@ -770,6 +771,21 @@ public function agendamientoLlamadaLlamadoExitoso($id){
     $cap->save();//guardamos los cambios y finalmente redireccionamos  al modulo para tomar los datos correspondientes al agendamiento
 
     return redirect('teo/mandatoExitoso&'.$ll->llamadosAgendados->id."&".$ll->llamadosAgendados->n_dues);
+  }
+
+  public function agendarGrabacion($id){
+    $status = estado::where('modulo', '=', 'llamado')->get();
+    $f_pago = estado::where('modulo','=','pago')->get();
+    $capta = captaciones::findOrFail($id);
+    $minmax =maxCap::find(1);
+    $comunas = CoberturaRegiones::all();
+
+    return view('teo/agendamientoGrabacion',
+    ['capta'=>$capta,
+    'comunas'=>$comunas,
+    'status'=>$status,
+    'f_pago'=>$f_pago,
+    'minmax'=>$minmax]);
   }
 
 

@@ -4,10 +4,6 @@
 	<script>
 		$(document).ready(function(){
 
-
-
-
-
 		});
 	</script>
 
@@ -29,7 +25,7 @@
 							<label class="control-label">Apellido</label>
 							<input type="text" class="form-control" name="apellido"  value="{{$capta->apellido}}">
 						</div>
-						
+
                         <div class="col-md-4">
 							<label class=" control-label">Fono 1</label>
 							<input type="text" class="form-control" name="fono1"  value="{{$capta->fono_1}}">
@@ -71,5 +67,5 @@
 					</div>
 
 
-  
+
 @endsection

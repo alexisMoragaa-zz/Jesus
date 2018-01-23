@@ -53,7 +53,7 @@
                 <input type="button" value="Cancelar" class="btn btn1 btn-danger" id="btn-cancel">
             </div>
             <div class="col-md-2">
-                <input type="button" class="btn btn1 btn-info" value="Ver Disponivilidad Rutas" disabled id="btn_rutas">
+                <input type="button" class="btn btn1 btn-info" value="Ver Disponibilidad Rutas" disabled id="btn_rutas">
             </div>
         </div>
       @else {{-- si la funcion retorna algo diferente a "nada" la captacion esta en edicion   y muestra
