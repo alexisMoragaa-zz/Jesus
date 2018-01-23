@@ -222,6 +222,7 @@ Route::group(['middleware' => ['auth', 'operaciones'], 'prefix' => 'ope'], funct
     Route::Get('show/letter/{id}','OperacionesController@showLetter');
     Route::Post('add/PostMan','OperacionesController@PostMan');
 
+    Route::Get('delivery/history/filter/{id}/{date}','RegionesController@filtroDeliveryHistory');
     Route::Get('add/mandate/delivery/{id}','RegionesController@addMdtDely');
     Route::Get('delivery/history','RegionesController@deliveryHistory');
     Route::Get('delivery/daily','RegionesController@deliveryDaily');

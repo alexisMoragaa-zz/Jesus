@@ -14,6 +14,7 @@ use Carbon\Carbon;
 use App\estado;
 use App\Letter;
 use App\maxCap;
+use App\User;
 
 class RegionesController extends Controller {
 
@@ -136,10 +137,12 @@ public function deliveryHistory(){
 	$registros =CaptacionesExitosa::where('tipo_retiro','=','Acepta Delivery')
 	->where('estado_Captacion','=','OK')->get();
 	//seleccionamos todos los deliverys en la historia que esten validados por operaciones
-		$breadcrum ="Historial completo Delivery";
+	$breadcrum ="Historial completo Delivery";
+	$teos = user::where('perfil','=','2')->get();
 	return view('Delivery.deliveryHistorie',[
 		'breadcrum'=> $breadcrum,
-		'data'=> $registros,
+		'data' => $registros,
+		'teos' => $teos,
 	]);
 }
 
@@ -311,25 +314,25 @@ if(Input::Get('checkbox20')){
 		return redirect('ope/dely/'.$id.'/edit');
 	}
 
-	public function update($id)
-	{
 
-	}
+public function filtroDeliveryHistory($id, $date){
+	$user = user::find($id);
+	$breadcrum ="Historial Delivery Filtrado por ".$user->name." ".$user->last_name." Con Fecha de Retiro ".$date;
+
+	$registros =CaptacionesExitosa::where('tipo_retiro','=','Acepta Delivery')
+	->where('estado_Captacion','=','OK')
+	->where('teleoperador','=',$id)
+	->where('fecha_agendamiento','=',$date)->get();
+	//seleccionamos todos los deliverys en la historia que esten validados por operaciones
+
+	$teos = user::where('perfil','=','2')->get();
+	return view('Delivery.deliveryHistorie',[
+		'breadcrum'=> $breadcrum,
+		'data' => $registros,
+		'teos' => $teos,
+	]);
+}
 
 
-	public function destroy($id)
-	{
-		//
-	}
-
-	public function index()
-	{
-		//
-	}
-
-	public function create()
-	{
-
-	}
 
 }
