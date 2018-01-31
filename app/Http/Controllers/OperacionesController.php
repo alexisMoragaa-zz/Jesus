@@ -1,27 +1,28 @@
 <?php namespace App\Http\Controllers;
 
+use Monolog\Handler\ElasticSearchHandler;
+use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
-use Carbon\Carbon;
-use App\Http\Requests;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Input;
-use Illuminate\Support\Facades\Response;
-use Monolog\Handler\ElasticSearchHandler;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
+use App\Http\Requests;
+use Carbon\Carbon;
+
 use App\CaptacionesExitosa;
-use App\User;
+use App\AgendarLlamados;
+use App\comunaRetiro;
 use App\estadoRuta;
+use App\informeRuta;
+use App\captaciones;
+use App\fundacion;
+use App\Campana;
 use App\maxCap;
 use App\estado;
-use App\comunaRetiro;
-use App\informeRuta;
-use App\AgendarLlamados;
-use App\captaciones;
-use App\Campana;
-use App\fundacion;
 Use App\Letter;
+use App\User;
 
 class OperacionesController extends Controller
 {
@@ -978,8 +979,19 @@ public function liberarAjax(){//liberar ajax libera los registros que quedan tom
   //esto lo hacemos mediante ajax, para evitar recargar la pagina cada vez que liberamos un registro
 
   $id = Input::get('id');//seleccionamos el id que enviamos desde la peticion ajax
-    $cap = captaciones::find($id);//seleccionamos la captacion correspondiente al id
+  $cap = captaciones::find($id);//seleccionamos la captacion correspondiente al id
     $cap->estado_registro =0;//agregarmos el estado 0 a los registros seleccionados con los cuales los dejamos libres
+      if($cap->teo1 != ""){
+        if($cap->teo2 == ""){
+          $cap->teo1 = "";
+        }elseif($cap->teo2!=""){
+          if($cap->teo3 == ""){
+            $cap->teo2 = "";
+          }else{
+            $cap->teo3 = "";
+          }
+        }
+      }
     $cap->save();//guardamos los cambios
     if($cap->estado_registro==0){//validamos que el registro se libero correctamente
       return Response::json("success");//si el registro s elibero correctamente retornamos success

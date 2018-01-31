@@ -101,7 +101,7 @@ class EstadosTableSeeder extends Seeder
             'modulo' =>'llamado',
             'tipo' => 'cu-'
         ));
-        
+
         DB::table('estados')->insert(array(
             'estado'=>'Quiere Renunciar',
             'modulo' =>'llamado',

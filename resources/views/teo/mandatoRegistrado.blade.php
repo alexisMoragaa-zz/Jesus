@@ -157,9 +157,8 @@
                               <option value="{{$capta->tipo_retiro}}">{{$capta->tipo_retiro}}</option>
                           @endif
                           <option value="">-- Seleccione --</option>
-                          @foreach($estado as $est)
-                              <option value="{{$est->Estado}}">{{$est->Estado}}</option>
-                          @endforeach
+                          <option value="Acepta Agendamiento">Acepta Agendamiento</option>
+                          <option value="Acepta ir a Dues">Acepta ir a Dues</option>
                       </select>
                     </div>
                   </div>
@@ -224,10 +223,7 @@
   {{-- Inicio Tercera Fila --}}
 
              <div class="row">
-                 <div class="col-md-2" id="fixedPhone">
-                    <label for="c_movistar" class="control-label">Telefono Cuenta</label>
-                      <input type="text" class="form-control" name="c_movistar"  value="{{$capta->cuenta_movistar}}">
-                  </div>
+
 
                   <div class="col-md-3">
                     <label class="control-label">Direccion</label>
@@ -303,9 +299,9 @@
                               <option value="{{$capta->forma_pago}}">{{$capta->forma_pago}}</option>
                             @endif
                             <option value="">-- Seleccione --</option>
-                            @foreach($f_pago as $pago)
-                              <option value="{{$pago->Estado}}">{{$pago->Estado}}</option>
-                            @endforeach
+                            <option value="Cuenta Corriente">Cuenta Corriente</option>
+                            <option value="Cuenta Vista">Cuenta Vista</option>
+                            <option value="Cuenta Rut">Cuenta Rut</option>
                           </select>
                         </div>
 

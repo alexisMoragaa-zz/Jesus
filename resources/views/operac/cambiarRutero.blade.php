@@ -1,4 +1,4 @@
-extends('app')
+@extends('app')
 @section('content')
 <style type="text/css">
 	.modal-tittle{
@@ -131,4 +131,4 @@ $(document).ready(function(){
 <a href="#" class="btn btn1 btn-success col-md-12" id="btn-change">Cambiar Rutero</a>
 	{{-- <input type="button" class="btn btn1 btn-success col-md-12" value="Cambiar Rutero" id="change_rutero"> --}}
 </div>
-@endsection()
+@endsection

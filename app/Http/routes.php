@@ -266,8 +266,12 @@ Route::group(['middleware'=>['auth','informes'],'prefix'=>'informes'],function()
       Route::Resource('info', 'InformesController');
       Route::Get('campana/{campana}', 'InformesController@informeCampana');
       Route::Get('fundacion/{fundacion}', 'InformesController@informeFundacion');
-      Route::Get('user/{user}', 'InformesController@informeUser');
       Route::Get('rutero/{rutero}','InformesController@informeRutero');
       Route::Get('reporte/{id}','InformesController@campanaReport');
       Route::Get('export/report/campana/{id}','CargaController@exportReportCampana');
+
+      Route::Get('user/{user}', 'InformesController@informeUser');
+      Route::Get('user/{user}/campaing/{campaing}','InformesController@informeUserCampaing');
+
+      Route::Get('campana/{id}/recorrido/{recorrido}','InformesController@informeCampanaRecorridos');
 });

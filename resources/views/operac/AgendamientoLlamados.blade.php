@@ -154,14 +154,14 @@
                   <tbody>
                     @foreach ($atrasados as $atrasado)
                       <tr>
-                          <td>{{$atrasados->llamadosAgendados->nombre}}</td>
-                          <td>{{$atrasados->llamadosAgendados->fono_1}}</td>
-                          <td>{{$atrasados->llamadosAgendados->correo_1}}</td>
-                          <td>{{$atrasados->fecha_llamado}}</td>
-                          <td>{{$atrasados->llamadosAgendados->observacion}}</td>
-                          <td>{{$atrasados->teo_agenda->name}}</td>
+                          <td>{{$atrasado->llamadosAgendados->nombre}}</td>
+                          <td>{{$atrasado->llamadosAgendados->fono_1}}</td>
+                          <td>{{$atrasado->llamadosAgendados->correo_1}}</td>
+                          <td>{{$atrasado->fecha_llamado}}</td>
+                          <td>{{$atrasado->llamadosAgendados->observacion}}</td>
+                          <td>{{$atrasado->teo_agenda->name}}</td>
                           <td>
-                            <a href="{{url('ope/agendamiento/llamada/finalizar',$no->id)}}">Finalizar </a>
+                            <a href="{{url('ope/agendamiento/llamada/finalizar',$atrasado->id)}}">Finalizar </a>
                           </td>
                       </tr>
                     @endforeach

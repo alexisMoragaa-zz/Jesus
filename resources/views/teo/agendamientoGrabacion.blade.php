@@ -106,7 +106,8 @@
 
               <div class="col-md-3">
                 <label class=" control-label">Region</label>
-                <select name="region" id="" class="form-control">
+                <select name="region" id="" class="form-control" required>
+                  <option value="">Seleccione</option>
                   <option value="XV">Arica y Parinacota</option>
                   <option value="I">Tarapaca</option>
                   <option value="II">Antofagasta</option>
@@ -128,19 +129,19 @@
 
               <div class="col-md-2">
                 <label class=" control-label">Comuna</label>
-                <input type="text" class="form-control" name="comuna">
+                <input type="text" class="form-control" name="comuna" required>
               </div>
 
               <div class="col-md-2 grabacion">
                 <label class=" control-label">Fecha Agendamiento</label>
                   <div class="">
-                    <input type="date" id="f_agendamiento" class="form-control" name="fecha_agendamiento" value="{{$capta->fecha_agendamiento}}">
+                    <input type="date" id="f_agendamiento" class="form-control" name="fecha_agendamiento" value="{{$capta->fecha_agendamiento}}" required>
                   </div>
               </div>
 
               <div class="col-md-2">
                 <label class="control-label">Horario</label>
-                  <select name="jornada" class="form-control" id="jornada">
+                  <select name="jornada" class="form-control" id="jornada" required>
                     <option value="">--Seleccione--</option>
                     <option value="AM">AM</option>
                     <option value="PM">PM</option>
@@ -154,22 +155,22 @@
               <div class="col-md-3">
                 <label class=" control-label">Rut</label>
                   <input type="text" class="form-control" id="rut" name="rut"
-                    placeholder="Ingrese Rut Sin Puntos ni Guion" value="{{$capta->rut}}">
+                    placeholder="Ingrese Rut Sin Puntos ni Guion" value="{{$capta->rut}}" required>
               </div>
 
               <div class="col-md-3">
                 <label class=" control-label">Fono</label>
-                  <input type="text" class="form-control" name="fono_1" value="{{$capta->fono_1}}">
+                  <input type="text" class="form-control" name="fono_1" value="{{$capta->fono_1}}" required>
               </div>
 
               <div class="col-md-3">
                 <label class=" control-label">Nombre</label>
-                  <input type="text" class="form-control" name="nombre" value="{{$capta->nombre}}">
+                  <input type="text" class="form-control" name="nombre" value="{{$capta->nombre}}" required>
               </div>
 
               <div class="col-md-3">
                 <label class=" control-label">Apellido</label>
-                  <input type="text" class="form-control" name="apellido" value="{{$capta->apellido}}">
+                  <input type="text" class="form-control" name="apellido" value="{{$capta->apellido}}" required>
               </div>
             </div>
 {{-- Fin segunda fila --}}
@@ -183,17 +184,17 @@
 
               <div class="col-md-3">
                 <label class="control-label">Direccion</label>
-                <input type="text" name="direccion" class="form-control" placeholder="Ej: Santa Magdalena" value="{{$capta->direccion}}">
+                <input type="text" name="direccion" class="form-control" placeholder="Ej: Santa Magdalena" value="{{$capta->direccion}}" required>
               </div>
 
               <div class="col-md-1">
                 <label for="" class="control-label">N°</label>
-                <input type="text" name="numero" class="form-control" placeholder="658">
+                <input type="text" name="numero" class="form-control" placeholder="658" required>
               </div>
 
               <div class="col-md-2">
                 <label for="" class="control-label">Tipo Direccion</label>
-                <select name="lugarRetiro" id="lugarRetiro" class="form-control">
+                <select name="lugarRetiro" id="lugarRetiro" class="form-control" required>
                   <option value="">Seleccione</option>
                   <option value="Casa">Casa</option>
                   <option value="Oficina">Oficina</option>
@@ -209,7 +210,7 @@
 
               <div class="col-md-3">
                 <label class="control-label">Correo</label>
-                <input type="text" class="form-control" name="correo_1" value="{{$capta->correo_1}}">
+                <input type="text" class="form-control" name="correo_1" value="{{$capta->correo_1}}" required>
               </div>
             </div>
 {{-- Fin tercera fila --}}
@@ -217,24 +218,24 @@
           <div class="row">
             <div class="col-md-6">
               <label class=" control-label">Observaciones</label>
-              <textarea name="observaciones" rows="5" cols="30" class="form-control">{{$capta->observaciones}}</textarea>
+              <textarea name="observaciones" rows="5" cols="30" class="form-control" required>{{$capta->observaciones}}</textarea>
             </div>
 
             <div class="col-md-6">
               <div class="row">
                 <div class="col-md-4">
                   <label class="control-label">Campaña</label>
-                  <input type="text" class="form-control" name="nom_campana" value="{{$capta->campanas->nombre_campana}}"onfocus="this.blur()" >
+                  <input type="text" class="form-control" name="nom_campana" value="{{$capta->campanas->nombre_campana}}"onfocus="this.blur()" required>
                 </div>
 
                 <div class="col-md-4">
                   <label class="control-label" for="monto">Monto</label>
-                  <input type="text" class="form-control" name="monto"  id="monto" value="{{$capta->monto}}">
+                  <input type="text" class="form-control" name="monto"  id="monto" value="{{$capta->monto}}" required>
                 </div>
 
                 <div class="col-md-4">
                   <label class="control-label">Forma Pago</label>
-                  <select name="forma_pago" class="form-control" id="f_pago">
+                  <select name="forma_pago" class="form-control" id="f_pago" required>
                     <option value="">-- Seleccione --</option>
                     <option value="Tarjeta de Credito">Tarjeta de Credito</option>
                     <option value="Movistar">Cuenta Movistar</option>

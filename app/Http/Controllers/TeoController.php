@@ -1,5 +1,4 @@
 <?php namespace App\Http\Controllers;
-
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Response;
@@ -46,8 +45,18 @@ class TeoController extends Controller
 la fecha de ultimo llamado no puede ser mayor al dia anterior respecto del dia en  curso su estado tiene que ser diferente de cnu
 su estado tiene que ser diferente de cu+ y defirente de ca (call_again) */
         if (empty($cap)) {//evaluamos el resultado de la busqueda y si es nullo retornamos una vista con el error
+          return view('teo/teoError');
+        }
 
-            return view('teo/teoError');
+        //verificamos si fueron realizados los llamados 1 2 o 3 en base a las llamadas de los teleoperadores
+        if($cap->teo1 == null){
+          $teo ="teo1";//si el campo teo1, que almacena el id del teleoperador que realiza la primera llamada es null asigna teo1 a la variable para luego insertar el id del teleoperador en ese campo
+        }elseif ($cap->teo2 == null) {
+          $teo ="teo2";//repetimos el mismo proceso para los casos 2 y 3
+        }elseif($cap->teo3 == null){
+          $teo="teo3";
+        }else{
+        $teo="teo3";
         }
 /*si el resultado de la busqueda nos retorna un registro ese registro lo actualizamos con el estadp de registro 1
 lo cual implica que el registro esta reservado y ningun otro teleoperador podra acceder a el.
@@ -56,7 +65,9 @@ pero se atualizara la fecha de ultimo llamado con lo cual es registro no estara 
         DB::table('captaciones')//usamos update de queru builder para actuualizar
             ->where('id', '=', $cap->id)//seleccionamos el registro
             ->update([//actualizamos el registro y lo dejamos tomado
-                'estado_registro' => 1
+                'estado_registro' => 1,
+                $teo => Auth::user()->id,
+
             ]);
             //finalmente retornamos la vista de llamados con el registro ya tomado
         return view('teo/teoin', compact('cap', 'status'));

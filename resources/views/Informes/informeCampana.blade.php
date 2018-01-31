@@ -86,16 +86,18 @@
   </script>
   <div class="row">
     <div class="container">
-      @if(Auth::user()->perfil==6)
-        <a href="{{url('/informes/reporte',$base->id)}}" class="right btn btn-warning">Ver Reporte</a>
-      @elseif(Auth::user()->perfil==1)
-        <a href="{{url('/admin/reporte',$base->id)}}" class="right btn btn-warning">Ver Reporte</a>
-      @endif
 
       <h2 class="graphic-tittle">
         Informe Rendimiento  <span class="text-muted">{{$base->nombre_campana}}</span>
         de la Fundacion <span class="text-muted">{{$base->funda->nombre}}</span>
       </h2>
+      <div class="text-center">
+        @if(Auth::user()->perfil==6)
+          <a href="{{url('/informes/reporte',$base->id)}}" class=" btn btn-warning">Ver Reporte</a>
+        @elseif(Auth::user()->perfil==1)
+          <a href="{{url('/admin/reporte',$base->id)}}" class=" btn btn-warning">Ver Reporte</a>
+        @endif
+      </div>
     </div>
 
     <div class="col xs-12 col-md-6">
@@ -112,6 +114,18 @@
     <div class="container">
 
     <div class=" col-xs-12 col-md-6" id="informacion">
+
+        <div class="col-md-10 text-center mb-2">
+
+            <div class="alert alert-success">{{$recorrido}}</div>
+
+            <div class="btn-group">
+              <a href="{{url('/informes/campana',$base->id)}}" class="btn btn-primary"> General</a>
+              <a href="{{url('/informes/campana/'.$base->id.'/recorrido',1)}}" class="btn btn-success">Recorrido 1</a>
+              <a href="{{url('/informes/campana/'.$base->id.'/recorrido',2)}}" class="btn btn-warning">Recorrido 2</a>
+              <a href="{{url('/informes/campana/'.$base->id.'/recorrido',3)}}" class="btn btn-danger">Recorrido 3</a>
+            </div>
+        </div>
 
         <div class="col-md-10">
           <div class="panel panel-default">

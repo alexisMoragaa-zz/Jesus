@@ -388,8 +388,10 @@ public function loadCobertura(Request $request)
 
 	}
 	Session::flash('success', 'Felicidades! los registros de la Cobertura Fueron agregados Con Exito');
-	return view('admin/loadCobertura');
+	return view('Delivery/loadCobertura');
 }
+
+
 
 public function exportDeliveryDaily(){
 $date = Carbon::now()->subDay()->format('d/m/Y');//seleccionamos el dia anterior al actual

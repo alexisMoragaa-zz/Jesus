@@ -88,7 +88,14 @@
 						</li>
 
 						<li><a href="{{ url('/admin/verRutas') }}">Ruteros</a></li>
-						<li><a href="{{ url('/admin/cargas') }}">Cargas</a></li>
+
+						<li class="dropdown">
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Cargas Excel<span class="caret"></span></a>
+							<ul class="dropdown-menu">
+								<li><a href="{{ url('/admin/cargas') }}">Cargar Bases</a></li>
+								<li><a href="{{ url('/admin/load/cobertura/view') }}">Cargar Cobertura</a></li>
+							</ul>
+						</li>
 
 					@elseif(Auth::user()->perfil==2){{--Perfil Teleoperadores--}}
 						<li class="dropdown">
@@ -179,11 +186,11 @@
 </nav>
 <div >
 	@if (Auth::guest())
-		<img class="logo" src="/imagenes/imgdues1.png"> </img>
+		<img class="logo" src="/imagenes/logo.png"> </img>
 	@elseif(Auth::user()->perfil==5)
 
 	@else
-		<img class="logo" src="/imagenes/imgdues1.png"> </img>
+		<img class="logo" src="/imagenes/logo.png"> </img>
 	@endif
 
 
@@ -193,8 +200,7 @@
 
 <footer >
 	<p class="textoFooter">Dues Limitada Todos Los Derechos Reservados</p>
-	<p class="textoFooter">Programador y Desarrollador <strong> Alexis Moraga Gallardo</strong></p>
-	<p class="textoFooter">Tester y Analista QA <strong> Daniela Cabello</strong></p>
+	<p class="textoFooter">Desarrollador <strong> Alexis Antonio Moraga Gallardo</strong></p>
 
 </footer>
 		<!-- Scripts -->

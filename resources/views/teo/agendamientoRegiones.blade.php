@@ -241,12 +241,12 @@
 
                   <div class="col-md-1">
                     <label for="" class="control-label">N°</label>
-                    <input type="text" name="numero" class="form-control" placeholder="658">
+                    <input type="text" name="numero" class="form-control" placeholder="658" required>
                   </div>
 
                   <div class="col-md-2">
                     <label for="" class="control-label">Tipo Direccion</label>
-                    <select name="lugarRetiro" id="lugarRetiro" class="form-control">
+                    <select name="lugarRetiro" id="lugarRetiro" class="form-control" required>
                       <option value="">Seleccione</option>
                       <option value="Casa">Casa</option>
                       <option value="Oficina">Oficina</option>
@@ -262,7 +262,7 @@
 
                   <div class="col-md-3">
                     <label class="control-label">Correo</label>
-                      <input type="text" class="form-control" name="correo_1" value="{{$capta->correo_1}}">
+                      <input type="text" class="form-control" name="correo_1" value="{{$capta->correo_1}}" required>
                   </div>
               </div>
     {{-- Fin tercera fila --}}
@@ -270,7 +270,7 @@
               <div class="row">
                 <div class="col-md-6">
                   <label class=" control-label">Observaciones</label>
-                  <textarea name="observaciones" rows="5" cols="30" class="form-control">{{$capta->observaciones}}</textarea>
+                  <textarea name="observaciones" rows="5" cols="30" class="form-control" required>{{$capta->observaciones}}</textarea>
                 </div>
 
                 <div class="col-md-6">
@@ -278,17 +278,17 @@
 
                         <div class="col-md-4">
                           <label class="control-label">Campaña</label>
-                          <input type="text" class="form-control" name="nom_campana" value="{{$capta->campanas->nombre_campana}}"onfocus="this.blur()" >
+                          <input type="text" class="form-control" name="nom_campana" value="{{$capta->campanas->nombre_campana}}"onfocus="this.blur()" required>
                         </div>
 
                         <div class="col-md-4">
                           <label class="control-label" for="monto">Monto</label>
-                          <input type="text" class="form-control" name="monto"  id="monto" value="{{$capta->monto}}">
+                          <input type="text" class="form-control" name="monto"  id="monto" value="{{$capta->monto}}" required>
                         </div>
 
                         <div class="col-md-4">
                           <label class="control-label">Forma Pago</label>
-                          <select name="forma_pago" class="form-control" id="f_pago">
+                          <select name="forma_pago" class="form-control" id="f_pago" required>
                             <option value="">-- Seleccione --</option>
                             <option value="Cuenta Corriente"> Cuenta Corriente</option>
                             <option value="Cuenta Vista"> Cuenta Vista</option>
