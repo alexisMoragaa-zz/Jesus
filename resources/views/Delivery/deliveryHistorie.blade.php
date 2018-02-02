@@ -81,7 +81,7 @@
                   <td>{{$d->direccion}}</td>
                   <td>{{$d->comuna}}</td>
                   <td><a href="{{url('/ope/dely/'.$d->id.'/edit')}}">Detalle</a></td>
-                  <td>{{$d->user->name}}</td>
+                  <td>{{$d->user->name}} {{$d->user->last_name}}</td>
                   @if($d->estado_mandato == "OK")
                     <td class="center"><span class="glyphicon glyphicon-ok"></span></td>
                   @endif

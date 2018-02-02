@@ -18,73 +18,56 @@
         $(document).ready(function () {
 
             $(".detalle").hide();
-            $(".ocultar").css('color', 'white');
-            $(".mas").hide();
+            $(".busqueda").hide();
+            // $(".ocultar").css('color', 'white');
+            // $(".mas").hide();
 
-            $("#opcion").change(function(){
+            $("#filtterBy").change(function(){
 
-                if($(this).val()==1){
-
-                    $("#buscar").text("Nombre");
-                    $("#datos").attr("type","text");
-                    $("#datos").val("");
+                if($(this).val() == 1){
+                  $(".busqueda").hide();
+                  $("#teleoperador").fadeIn();
 
                 }else if($(this).val()==2){
-
-                    $("#buscar").text("Apellido");
-                    $("#datos").attr("type","text");
-                    $("#datos").val("");
+                  $(".busqueda").hide();
+                  $("#ruteros").fadeIn();
 
                 }else if($(this).val()==3){
-
-                    $("#buscar").text("Rut");
-                    $("#datos").attr("type","number");
-                    $("#datos").val("");
+                  $(".busqueda").hide();
+                  $("#catchDate").fadeIn();
 
                 }else if($(this).val()==4){
+                  $(".busqueda").hide();
+                  $("#dateBook").fadeIn();
 
-                    $("#buscar").text("Fono");
-                    $("#datos").attr("type","number");
-                    $("#datos").val("");
+                }else if($(this).val()==5){
+                  $(".busqueda").hide();
+                  $("#name").fadeIn();
+
+                }  else if($(this).val()==6){
+                    $(".busqueda").hide();
+                    $("#dni").fadeIn();
+
+                }else if($(this).val()==7){
+                  $(".busqueda").hide();
+                  $("#phon").fadeIn();
                 }
 
-                else
-                {
-                    $("#buscar").text("Buscar");
-                    $("#datos").attr("type","text");
-                    $("#datos").val("");
-                }
-            });
-
-            $("#mas").toggle(function(){
-
-                $(".busqueda").hide();
-                $(".mas").fadeIn();
-                $(this).val("Menos -");
-            },function(){
-
-                $(".busqueda").fadeIn();
-                $(".mas").hide();
-                $(this).val("Mas +");
             });
 
             $("#vista").change(function () {
-
-                if ($("#vista").val() == 2) {
-
-                    $(".detalle").fadeIn(1000);
-                    $("#con").removeClass('contenedor1');
-                    $("#con").addClass('contenedor2');
-
-                } else {
-                    $(".detalle").fadeOut(800);
-                    $("#con").removeClass('contenedor2');
-                    $("#con").addClass('contenedor1');
-                }
+              if ($("#vista").val() == 2) {
+                $(".detalle").fadeIn(1000);
+                $("#con").removeClass('contenedor1');
+                $("#con").addClass('contenedor2');
+              } else {
+                $(".detalle").fadeOut(800);
+                $("#con").removeClass('contenedor2');
+                $("#con").addClass('contenedor1');
+              }
             });
 
-
-        });
+      });
     </script>
 
     <div class=" contenedor1" id="con">
@@ -122,62 +105,73 @@
           </select>
       </div>
 
-        <div class="col-md-2 busqueda">
-            <label for="" class="control-label">Filtrar Por</label>
-            <select name="dias" id="dias" class="form-control">
-                <option value="">--seleccione --</option>
-                <option value="1">Hoy</option>
-                <option value="2">La Semana</option>
-                <option value="3">El Mes</option>
-            </select>
+        <div class="col-md-2 ">
+          <label for="" class="control-label">Filtrar Por</label>
+          <select name="filtterBy" id="filtterBy" class="form-control" required>
+              <option value="">--seleccione --</option>
+              <option value="1">TeleOperador</option>
+              <option value="2">Rutero</option>
+              <option value="3">Fecha Captacion</option>
+              <option value="4">Fecha Agendamiento</option>
+              <option value="5">Nombre Socio</option>
+              <option value="6">Rut Socio</option>
+              <option value="7">Fono Socio</option>
+              <option value="8">Captaciones de Ayer</option>
+              <option value="9">Captaciones de la Semana</option>
+              <option value="10">Captaciones del Mes</option>
+          </select>
         </div>
 
-        <div class="col-md-2 busqueda">
+        <div class="col-md-2 busqueda" id="teleoperador">
             <label for="" class="control-label">Teleoperador</label>
             <select name="teo" id="teo" class="form-control">
-                <option value="">Todos</option>
+                <option value="">Seleccione</option>
                 @foreach($teos as $teo)
                     <option value="{{$teo->id}}">{{$teo->name}}</option>
                 @endforeach
             </select>
         </div>
 
-        <div class="col-md-2 busqueda">
+        <div class="col-md-2 busqueda" id="ruteros">
             <label for="" class="control-label">Rutero</label>
             <select name="rutero" id="rutero" class="form-control">
-                <option value="">Todos</option>
+                <option value="">Seleccione</option>
                 @foreach($ruteros as $rutero)
                     <option value="{{$rutero->name}}">{{$rutero->name}}</option>
                 @endforeach
             </select>
         </div>
 
-
-
-        <div class="col-md-2 mas">
-            <label for="" class="control-label">Buscar Por</label>
-            <select name="op" id="opcion" class="form-control">
-                <option value="">-- Seleccione --</option>
-                <option value="1">Nombre</option>
-                <option value="2">Apellido</option>
-                <option value="3">Rut</option>
-                <option value="4">Fono</option>
-
-            </select>
+        <div class="col-md-2 busqueda" id="catchDate">
+            <label for="" class="control-label">Fecha Captacion</label>
+          <input type="date" class="form-control"  name="catchDate">
         </div>
-        <div class="col-md-2 mas">
 
-            <label for="" class="control-label" id="buscar">Buscar</label>
-            <input type="text" class="form-control " id="datos" name="dato">
+        <div class="col-md-2 busqueda" id="dateBook">
+            <label for="" class="control-label">Fecha Agendamiento</label>
+          <input type="date" class="form-control"  name="dateBook">
+        </div>
 
+        <div class="col-md-2 busqueda" id="name">
+            <label for="" class="control-label">Nombre Socio</label>
+          <input type="text" class="form-control"  name="memberName">
+        </div>
+
+        <div class="col-md-2 busqueda" id="dni">
+            <label for="" class="control-label">Rut Socio</label>
+          <input type="text" class="form-control"  name="memberDni">
+        </div>
+
+        <div class="col-md-2 busqueda"  id="phon">
+            <label for="" class="control-label">Fono Socio</label>
+          <input type="text" class="form-control" name="memberPhone">
         </div>
 
         <div class="col-md-2">
-
-            <input type="submit" class="btn btn1 btn-success busqueda" value="Buscar" id="btn_search" >
-            <input type="button" class="btn btn1 btn-success mas" value="Buscar" id="btn_search_mas" >
-            <input type="button" class="btn btn1 btn-info mas+" value="Mas +" id="mas" >
-
+          <input type="submit" class="btn btn1 btn-success" value="Buscar" id="btn_search" >
+        </div>
+        <div class="col-md-4">
+          <h3 class="text-center text-muted">@if(isset($breadCrum)){{$breadCrum}}@endif</h3>
         </div>
   </div>
 {!! Form::close() !!}

@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use Carbon\Carbon;
 
+
 use App\CaptacionesExitosa;
 use App\AgendarLlamados;
 use App\comunaRetiro;
@@ -68,115 +69,83 @@ class OperacionesController extends Controller
             $dias = DB::table('captaciones_exitosas')->whereBetween('fecha_captacion', [$last_week, $hoy])->get()->sortByDesc('created_at');
             return Response::json($dias);
         } elseif ($option == 3) {
-            $captacion = DB::table('captaciones_exitosas')->whereBetween('fecha_captacion', [$last_month, $hoy])->get()->sortByDesc('created_at');
-
-            return Response::json($captacion);
-
+          $captacion = DB::table('captaciones_exitosas')->whereBetween('fecha_captacion', [$last_month, $hoy])->get()->sortByDesc('created_at');
+          return Response::json($captacion);
         } else {
         }
     }
 
-    public function showDay1(Request $request)
+
+
+  public function showDay1(Request $request)
     {
-        $teos = User::where('perfil', '=', 2)->get()->sortByDesc('created_at');
-        $ruteros = User::where('perfil', '=', 5)->get()->sortByDesc('created_at');
-        $hoy = Carbon::now()->format('d/m/Y');
-        $last_week = Carbon::now()->startOfWeek()->format('d/m/Y');
-        $last_month = Carbon::now()->startOfMonth()->format('d/m/Y');
-        $code ="";
-        $dia=$request->dias;
-        $teo=$request->teo;
-        $rutero=$request->rutero;
+      $teos = User::where('perfil', '=', 2)->get()->sortByDesc('created_at');
+      $ruteros = User::where('perfil', '=', 5)->get()->sortByDesc('created_at');
+      $hoy = Carbon::now()->format('d/m/Y');
+      $ayer = Carbon::now()->subDay()->format('d/m/Y');
+      $last_week = Carbon::now()->startOfWeek()->format('d/m/Y');
+      $last_month = Carbon::now()->startOfMonth()->format('d/m/Y');
 
 
+      if($request->filtterBy == 1){
+        $data = CaptacionesExitosa::where('teleoperador',$request->teo)->get()->sortByDesc('created_at');
+          $teo = User::find($request->teo);
+          $breadCrum="Filtro / Teleoperador: ".$teo->name." ".$teo->last_name;
 
-       if ($dia == 1 and $teo != "" and $rutero != "") {
-            $datos=CaptacionesExitosa::where('fecha_captacion', '=', $hoy)->where('teleoperador', '=', $teo)
-                ->where('rutero', '=', $rutero)->get()->sortByDesc('created_at');
+      }elseif($request->filtterBy == 2){
+        $data = CaptacionesExitosa::where('rutero',$request->rutero)->get()->sortByDesc('created_at');
+          $breadCrum="Filtro / Rutero: ".$request->rutero;
 
+      }elseif($request->filtterBy == 3){
+        //la fecha decaptacion tiene un fotmato diferente al requerido por el formato excel, es por esto que la descomponemos y rearmamos con el formato indicado
+        $day   = substr($request->catchDate,8,2);//tomamos el dias
+        $month = substr($request->catchDate,5,2);//tomamos el mes
+        $year  = substr($request->catchDate,0,4);//tomamos el año
+        $catchDate = $day."/".$month."/".$year;
 
-          return view('operac/agendamiento', compact('datos','teos','ruteros','code'));
+        $data = CaptacionesExitosa::where('fecha_captacion',$catchDate)->get()->sortByDesc('created_at');
+          $breadCrum="Filtro / Fecha Captacion: ".$catchDate;
 
-        } elseif ($dia == 1 and $teo != "") {
+      }elseif($request->filtterBy == 4){
+        $data = CaptacionesExitosa::where('fecha_agendamiento',$request->dateBook)->get()->sortByDesc('created_at');
+          $breadCrum="Filtro / Fecha Agendamiento: ".$request->dateBook;
+      }elseif($request->filtterBy == 5){
+        $data = CaptacionesExitosa::where('nombre','LIKE','%'.$request->memberName.'%')
+        ->orWhere('apellido','LIKE','%'.$request->memberName.'%')->get()->sortByDesc('created_at');
+          $breadCrum="Filtro / Nombre\Apellido: ".$request->memberName;
 
-            $datos =CaptacionesExitosa::where('fecha_captacion', '=', $hoy)->where('teleoperador', '=', $teo)
-                ->get()->sortByDesc('created_at');
-            return view('operac/agendamiento', compact('datos', 'teos', 'ruteros','code'));
+      }elseif($request->filtterBy == 6){
+        $data = CaptacionesExitosa::where('rut',$request->memberDni)->get()->sortByDesc('created_at');
+          $breadCrum="Filtro / Rut : ".$request->memberDni;
 
-        } elseif ($dia == 1 and $rutero != "") {
+      }elseif($request->filtterBy == 7){
+        $data = CaptacionesExitosa::where('fono_1',$request->memberPhone)->get()->sortByDesc('created_at');
+          $breadCrum="Filtro / Telefono : ".$request->memberPhone;
 
-            $datos = CaptacionesExitosa::where('fecha_captacion', '=', $hoy)->where('rutero', '=', $rutero)
-            ->get()->sortByDesc('created_at');
-            return view('operac/agendamiento', compact('datos','teos','ruteros','code'));
+      }elseif($request->filtterBy == 8){
+        $data = CaptacionesExitosa::where('fecha_captacion',$ayer)->get()->sortByDesc('created_at');
+          $breadCrum="Filtro / Captaciones de Ayer";
 
-        } elseif ($dia == 1) {
-           $datos=CaptacionesExitosa::where('fecha_captacion', '=', $hoy)->get()->sortByDesc('created_at');
-           return view('operac/agendamiento', compact('datos','teos','ruteros','code'));
-        }
-/**Fin filtros dia actual*/
+      }  elseif($request->filtterBy == 9){
+        $data = CaptacionesExitosa::whereBetween('fecha_captacion', [$last_week, $hoy])->get()->sortByDesc('created_at');
+        $breadCrum="Filtro / Captaciones de la Semana";
 
-/**Comienzo filñtros semana en curso*/
-
-        if ($dia == 2 and $teo != "" and $rutero != "") {
-
-          $datos = CaptacionesExitosa::whereBetween('fecha_captacion', [$last_week, $hoy])
-                ->where('teleoperador','=',$teo)
-                ->where('rutero','=',$rutero)->get()->sortByDesc('created_at');
-
-            return view('operac/agendamiento', compact('datos','teos','ruteros','code'));
-
-        } elseif ($dia == 2 and $teo != "") {
-
-            $datos = CaptacionesExitosa::whereBetween('fecha_captacion', [$last_week, $hoy])
-                ->where('teleoperador', '=', $teo)->get()->sortByDesc('created_at');
-            return view('operac/agendamiento', compact('datos','teos','ruteros','code'));
-
-        } elseif ($dia == 2 and $rutero != "") {
-
-            $datos = CaptacionesExitosa::whereBetween('fecha_captacion', [$last_week, $hoy])
-                ->where('rutero', '=', $rutero)->get()->sortByDesc('created_at');
-            return view('operac/agendamiento', compact('datos','teos','ruteros','code'));
-
-        } elseif ($dia == 2) {
-
-
-        $datos = CaptacionesExitosa::whereBetween('fecha_captacion',[$last_week,$hoy])->get()->sortByDesc('created_at');
-
-
-            return view('operac/agendamiento', compact('datos','teos','ruteros','code'));
+        }elseif($request->filtterBy == 10){
+          $data = CaptacionesExitosa::whereBetween('fecha_captacion', [$last_month, $hoy])->get()->sortByDesc('created_at');
+            $breadCrum="Filtro / Captaciones del mes";
 
         }
-/**Fin filtro semana en curso*/
 
-/**Inicio filtro mes en curso*/
+      return view('operac/agendamiento',[
+        'datos'=>$data,
+        'teos'=>$teos,
+        'ruteros'=>$ruteros,
+        'code'=>'',
+        'breadCrum'=>$breadCrum,
 
-        if ($dia == 3 and $teo != "" and $rutero != "") {
+      ]);
 
-            $datos = CaptacionesExitosa::whereBetween('fecha_captacion', [$last_month, $hoy])
-                ->where('teleoperador', '=', $teo)->where('rutero', '=', $rutero)->get()->sortByDesc('created_at');
-            return view('operac/agendamiento', compact('datos','teos','ruteros','code'));
-
-        } elseif ($dia == 3 and $teo != "") {
-
-            $datos = CaptacionesExitosa::whereBetween('fecha_captacion', [$last_month, $hoy])
-                ->where('teleoperador', '=', $teo)->get()->sortByDesc('created_at');
-            return view('operac/agendamiento', compact('datos','teos','ruteros','code'));
-
-        } elseif ($dia == 3 and $rutero != "") {
-
-            $datos = CaptacionesExitosa::whereBetween('fecha_captacion', [$last_month, $hoy])
-                ->where('rutero', '=', $rutero)->get()->sortByDesc('created_at');
-            return view('operac/agendamiento', compact('datos','teos','ruteros','code'));
-
-
-        } elseif ($dia == 3) {
-
-            $datos = CaptacionesExitosa::whereBetween('fecha_captacion', [$last_month, $hoy])->get()->sortByDesc('created_at');
-
-            return view('operac/agendamiento', compact('datos','teos','ruteros','code'));
-
-          }
-        }
+    }
 
 
     public function filtrarpor()

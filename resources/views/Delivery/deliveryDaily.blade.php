@@ -40,6 +40,7 @@
               <th>Direccion</th>
               <th>Comuna</th>
               <th>Oberservaciones</th>
+              <th>To</th>
             </thead>
             <tbody>
               @if(isset($data))
@@ -55,6 +56,7 @@
                   <td>{{$d->direccion}}</td>
                   <td>{{$d->comuna}}</td>
                   <td>{{str_limit($d->observaciones,115)}}</td>
+                  <td>{{$d->user->name}} {{$d->user->last_name}}</td>
 
                 </tr>
               @endforeach
