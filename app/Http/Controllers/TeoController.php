@@ -133,7 +133,7 @@ no vuelven a llamar a los mismos registros que otros lalmaron el mismo dia*/
             $llamado->estado_llamado ="llamado";//actualizamos el campo estado_llamado
             $llamado->save();//guardamos los cambios,
             /*este bloque se aplica cuando realizamos la llamada de nuestros registros agendados*/
-      }
+        }
 
         $user = Auth::user()->id;//seleccionamos el id del usuario con session iniciada
         $date = Carbon::now()->format('d-m-Y');//tomamos la fecha del dia de hoy con carbon
@@ -318,7 +318,7 @@ no vuelven a llamar a los mismos registros que otros lalmaron el mismo dia*/
                 'fundacion' => $data ['fundacion'],
                 'observaciones' => $data['observaciones'],
                 'forma_pago' => $data['forma_pago'],
-                'cuenta_movistar' => $data['c_movistar'],
+                // 'cuenta_movistar' => $data['c_movistar'],
             ]);
         }
         /**Segunda Parte
@@ -461,9 +461,12 @@ no vuelven a llamar a los mismos registros que otros lalmaron el mismo dia*/
     }
 
     public function editCapPost(Request $request){
-          //editar la informacion de los agendamientos
-        $ruteroo = User::where('perfil','=',5)->where('name','=',$request->rutero)->get()->first();//obtenemos el rutero
-        $id_rutero =$ruteroo->id;//seleccionamos su id
+      //editar la informacion de los agendamientos
+        if($request->tipo_retiro == "Acepta Agendamiento"){
+          $ruteroo = User::where('perfil','=',5)->where('name','=',$request->rutero)->get()->first();//obtenemos el rutero
+          $id_rutero =$ruteroo->id;//seleccionamos su id
+        }
+        
         $id =$request->id_captacion;//seleccionamos el id de la captacion o agendamiento
         $editCap =CaptacionesExitosa::find($id);//selecionamos la captacion o agendamiento y la guardamos como objeto en la variable $editCap
 

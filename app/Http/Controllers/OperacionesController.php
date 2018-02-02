@@ -43,7 +43,7 @@ class OperacionesController extends Controller
         //retornamos la vista con las variables antes mencionadas
     }
 
-    public function show($id)//recibimos el id de la capacion como parametro en la url
+    public function show($id)//recibimos el id de la captacion como parametro en la url
     {//funcion que nos retoena una captacion en particular para verla en detalle
 
       $detalle =CaptacionesExitosa::where('id','=',$id)->get();//seleccionamos la captacion por el id
@@ -714,7 +714,7 @@ public function agendamientoLlamado(){//agendamientoLlamado es una funcion que m
   ->where('estado_llamado','!=',"no llamado")->get();//seleccionamos los llamados pendientes
 
   $atrasados= AgendarLlamados::where('fecha_llamado','<',$hoy)
-  ->where('estado_llamado','!=',"no llamado")->get();//seleccionamos los llamados atrasados
+  ->where('estado_llamado','!=',"no llamado")->where('estado_llamado','!=','llamado')->get();//seleccionamos los llamados atrasados
 
   $finalizados = AgendarLlamados::where('estado_llamado','=',"no llamado")->get();//seleccionamos los ya finalizados
 
@@ -983,12 +983,12 @@ public function liberarAjax(){//liberar ajax libera los registros que quedan tom
     $cap->estado_registro =0;//agregarmos el estado 0 a los registros seleccionados con los cuales los dejamos libres
       if($cap->teo1 != ""){
         if($cap->teo2 == ""){
-          $cap->teo1 = "";
+          $cap->teo1 = null;
         }elseif($cap->teo2!=""){
           if($cap->teo3 == ""){
-            $cap->teo2 = "";
+            $cap->teo2 = null;
           }else{
-            $cap->teo3 = "";
+            $cap->teo3 = null;
           }
         }
       }

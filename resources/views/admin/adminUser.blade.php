@@ -15,8 +15,8 @@
             <div class="container alert alert-success"> <p style="text-align: center">{{Session::get('message')}}</p></div>
         @endif
 
-	
-		
+
+
 <div class="container">
 
 	@if(Auth::user()->perfil==1)
@@ -58,6 +58,8 @@
 										Operaciones
 									@elseif($User->perfil ==5)
 										Ruteros
+									@elseif($User->perfil == 6)
+										Gestion Datos
 									@else
 									{{$User->perfil}}
 									@endif

@@ -39,7 +39,7 @@
             @if(Auth::user()->perfil==1)
                 <option value="1">Administrador</option>
                 <option value="3">Supervisor</option>
-                <option value="6">Administracion</option>
+                <option value="6">Gestion Datos</option>
             @endif
                 <option value="2">Teleoperador</option>
                 <option value="4">Operaciones</option>

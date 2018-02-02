@@ -24,7 +24,6 @@ Route::Get('home', 'HomeController@index');
 
 Route::group(['middleware' => ['auth', 'administrador'], 'prefix' => 'admin'], function () {
 
-
     Route::Resource('user', 'AdminController');
     Route::Resource('sup', 'supController');
     Route::Resource('call', 'TeoController');
@@ -40,7 +39,7 @@ Route::group(['middleware' => ['auth', 'administrador'], 'prefix' => 'admin'], f
     Route::Get('detalle{id}', 'supController@detalleUser');
     Route::Get('updatePivot{user_id}/{pivot_id}', 'supController@updatePivot');
     Route::Post('updatepivot2', 'supController@updatepivot2');
-    Route::Post('updatePass/{id}', 'adminController@updatePass');
+    Route::Post('updatePass/{id}', 'AdminController@updatePass');
     Route::Post('siguiente/{id}', 'teoController@siguiente');
     Route::Get('adminconfig', 'AdminController@adminConfig');
     Route::Post('createstatus', 'AdminController@create_status');
@@ -84,12 +83,12 @@ Route::group(['middleware' => ['auth', 'administrador'], 'prefix' => 'admin'], f
     Route::Get('load/cobertura/view','CargaController@loadCoberturaView');
     Route::Post('loadCampaing','CargaController@loadCampaing');
 
-     Route::Get('ajax-rutero', function () {
 
+    Route::Get('ajax-rutero', function () {
         $rutero_id = Input::Get('ruteroid');
         $nombre_rutero = comunaRetiro::where('comuna', '=', $rutero_id)->Get();
-
         return Response::json($nombre_rutero);
+
     });
 
 });
@@ -127,6 +126,7 @@ Route::group(['middleware' => ['auth', 'teleoperador'], 'prefix' => 'teo'], func
     Route::Get('agendamiento/llamada/llamar/{id}','TeoController@agendamientoLlamadoLlamar');
     Route::Get('agendamiento/llamada/llamadoExitoso/{id}','TeoController@agendamientoLlamadaLlamadoExitoso');
     Route::Get('show/cobertura','RegionesController@showCobertura');
+    Route::Get('complete/comunas','RegionesController@completeComunas');
 
     Route::Get('agendar/grabacion/{id}','TeoController@agendarGrabacion');
     Route::Get('ajax-rutero', function () {
@@ -157,10 +157,7 @@ Route::group(['middleware' => ['auth', 'supervisor'], 'prefix' => 'sup'], functi
     Route::Post('updatepivot2', 'supController@updatepivot2');
     Route::Resource('user', 'AdminController');
 
-    /*Route::Get('/', function(){
 
-        return view('sup/supervisor');
-    });*/
 });
 /*
 	El grupo de rutas de Operaciones tendra un acceso casi completo al sistema, salvo algunas funciones especificas de el administrador

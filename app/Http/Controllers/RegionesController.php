@@ -21,8 +21,9 @@ class RegionesController extends Controller {
 	public function store(Request $request)
 	{
 			 $data = $request->all();//seleccionamos todo el request y lo asignamos a data|
+
 			 $date = Carbon::now()->format('d/m/Y');//seleccionamos la fecha de hoy y la guardamos en la variable hoy
-			 $comuna=CoberturaRegiones::find($request->comuna);
+			 $comuna=CoberturaRegiones::where('comuna','=',$request->comunas)->get()->first();
 
 			 $region =$comuna->region;//asignamos el valor de la propiedad region del objeto comuna a la variable region
 			 $direccion = $request->direccion." #".$request->numero." / ".$request->lugarRetiro." #".$request->off_depto." / ".$request->comuna;
@@ -146,11 +147,27 @@ public function deliveryHistory(){
 	]);
 }
 
+public function completeComunas()
+{
+	$term = Input::get('term');
+	$results = array();
+
+	$queries = DB::table('cobertura_regiones')
+		->where('comuna', 'LIKE', '%'.$term.'%')->take(10)->get();
+		foreach ($queries as $query )
+		{
+			$results[] = [ 'id' => $query->id, 'value' =>$query->comuna];
+
+		}
+
+		return Response::json($results);
+}
+
 public function showCobertura()
 {
 	//funcion que se accesa mediante ajax y nos retorna la coberura de retiros en recsa de una comuna en concreto
 		$comuna = Input::Get('comuna');//obtenemos el id de la comuna desde el campo comuna enviado desde ajax
-		$cobertura = CoberturaRegiones::find($comuna);//seleccionamos la cobertura usando el metodo fid
+		$cobertura = CoberturaRegiones::where('comuna','=',$comuna)->get()->first();//seleccionamos la cobertura usando el metodo fid
 		return Response::json($cobertura);//retoenamos la cobertura obtenida en formato json
 }
 
@@ -309,7 +326,7 @@ if(Input::Get('checkbox20')){
 			Session::flash('message','Mandato Recepcionado con exito');
 		}else{
 
-			Session::flash('message','Erro Al Recepcionar el Mandato');
+			Session::flash('message','Error Al Recepcionar el Mandato');
 		}
 		return redirect('ope/dely/'.$id.'/edit');
 	}
@@ -332,6 +349,7 @@ public function filtroDeliveryHistory($id, $date){
 		'teos' => $teos,
 	]);
 }
+
 
 
 

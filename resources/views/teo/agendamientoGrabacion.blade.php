@@ -26,6 +26,17 @@
 <link href="{{ asset('/css/style.css') }}" rel="stylesheet">
 <script>
   $(document).ready(function(){
+
+    $(".v_llamar").hide();
+    $("#status").change(function(){
+      if($(this).val() == "Agendar Llamado"){
+        $(".v_llamar").fadeIn();
+      }else{
+        $(".v_llamar").fadeOut();
+      }
+
+    });
+
     $(".modal-form").hide();//ocultamos la ventana modal para cancelar el agendamiento
     $("#btn-cancel").click(function(){//al ejecutatar la funcion click en el boton cancel mostramos la ventana modal con el formaulario para cancelar el agendamiento
         $( ".modal-form" ).dialog({

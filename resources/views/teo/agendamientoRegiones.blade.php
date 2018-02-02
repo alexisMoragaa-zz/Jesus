@@ -46,55 +46,56 @@
 
     $("#cobertura").hide();//ocultamos las cuatro tablas que componen la cobertura
 
-    $("#comuna").change(function(){
-      var comuna = $(this).val();
-      $.get('/teo/show/cobertura',{ comuna }, function(data){
-        console.log(data);
-        $("#comunacobertura").text(data.comuna);
-        $("#showCobertura").text(data.cobertura);
+    $("#comunas").change(function(){
 
-          $("#semana1").empty();
-          var semana1 ="<tr><td>"+
-          data.semana_1_lunes+"</td><td>"+
-          data.semana_1_martes+"</td><td>"+
-          data.semana_1_miercoles+"</td><td>"+
-          data.semana_1_jueves+"</td><td>"+
-          data.semana_1_viernes+"</td><tr>"
-          $("#semana1").append(semana1);
-
-          $("#semana2").empty();
-          var semana2 ="<tr><td>"+
-          data.semana_2_lunes+"</td><td>"+
-          data.semana_2_martes+"</td><td>"+
-          data.semana_2_miercoles+"</td><td>"+
-          data.semana_2_jueves+"</td><td>"+
-          data.semana_2_viernes+"</td><tr>"
-          $("#semana2").append(semana2);
-
-          $("#semana3").empty();
-          var semana3 ="<tr><td>"+
-          data.semana_3_lunes+"</td><td>"+
-          data.semana_3_martes+"</td><td>"+
-          data.semana_3_miercoles+"</td><td>"+
-          data.semana_3_jueves+"</td><td>"+
-          data.semana_3_viernes+"</td><tr>"
-          $("#semana3").append(semana3);
-
-          $("#semana4").empty();
-          var semana4 ="<tr><td>"+
-          data.semana_4_lunes+"</td><td>"+
-          data.semana_4_martes+"</td><td>"+
-          data.semana_4_miercoles+"</td><td>"+
-          data.semana_4_jueves+"</td><td>"+
-          data.semana_4_viernes+"</td><tr>"
-          $("#semana4").append(semana4);
-
-
-      });
     });
 
     $("#btn-cobertura").click(function(){
       if($("#comuna").val()!=""){
+        var comuna = $("#comunas").val();
+        $.get('/teo/show/cobertura',{ comuna }, function(data){
+          console.log(data);
+          $("#comunacobertura").text(data.comuna);
+          $("#showCobertura").text(data.cobertura);
+
+            $("#semana1").empty();
+            var semana1 ="<tr><td>"+
+            data.semana_1_lunes+"</td><td>"+
+            data.semana_1_martes+"</td><td>"+
+            data.semana_1_miercoles+"</td><td>"+
+            data.semana_1_jueves+"</td><td>"+
+            data.semana_1_viernes+"</td><tr>"
+            $("#semana1").append(semana1);
+
+            $("#semana2").empty();
+            var semana2 ="<tr><td>"+
+            data.semana_2_lunes+"</td><td>"+
+            data.semana_2_martes+"</td><td>"+
+            data.semana_2_miercoles+"</td><td>"+
+            data.semana_2_jueves+"</td><td>"+
+            data.semana_2_viernes+"</td><tr>"
+            $("#semana2").append(semana2);
+
+            $("#semana3").empty();
+            var semana3 ="<tr><td>"+
+            data.semana_3_lunes+"</td><td>"+
+            data.semana_3_martes+"</td><td>"+
+            data.semana_3_miercoles+"</td><td>"+
+            data.semana_3_jueves+"</td><td>"+
+            data.semana_3_viernes+"</td><tr>"
+            $("#semana3").append(semana3);
+
+            $("#semana4").empty();
+            var semana4 ="<tr><td>"+
+            data.semana_4_lunes+"</td><td>"+
+            data.semana_4_martes+"</td><td>"+
+            data.semana_4_miercoles+"</td><td>"+
+            data.semana_4_jueves+"</td><td>"+
+            data.semana_4_viernes+"</td><tr>"
+            $("#semana4").append(semana4);
+
+
+        });
         $("#cobertura").dialog({width:"auto", height:"auto",
           buttons: [{
              text: "Cerrar","class":'btn btn-danger space',"id":'space',click: function () {
@@ -110,7 +111,22 @@
       }
 
      });
+    $("#comunas").autocomplete({
+      source: "/teo/complete/comunas",
+    	  minLength: 3,
+    	  select: function(event, ui) {
+    	  	$('#q').val(ui.item.value);
+    }
+    });
+    $(".v_llamar").hide();
+    $("#status").change(function(){
+      if($(this).val() == "Agendar Llamado"){
+        $(".v_llamar").fadeIn();
+      }else{
+        $(".v_llamar").fadeOut();
+      }
 
+    });
 
   });
 </script>
@@ -147,11 +163,10 @@
           <label for="observation" class="control-label">Observacion</label>
           <input type="text" class="form-control" name="observation1">
 
-          <label for="v_llamar" class="control-label v_llamar">Volver a llamar</label>
+          <label for="call_again" class="control-label v_llamar">Volver a llamar</label>
           <input type="date" name="call_again" class="v_llamar form-control">
         {!! Form::close() !!}
   </div>
-  {{-- /Cancelar Agendamioento --}}
 
 
   {{--Formulario de Agendamiento --}}
@@ -182,12 +197,7 @@
 
                   <div class="col-md-3">
                     <label class=" control-label">Comuna</label>
-                      <select name="comuna" id="comuna" class="form-control" required>
-                          <option value="">-- Seleccione --</option>
-                          @foreach($comunas as $comuna)
-                            <option value="{{$comuna->id}}">{{$comuna->comuna}}</option>
-                          @endforeach
-                      </select>
+                      <input type="text"  name="comunas" id="comunas"  class="form-control">
                   </div>
 
                   <div class="col-md-3 grabacion">
