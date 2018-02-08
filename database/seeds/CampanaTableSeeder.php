@@ -15,12 +15,20 @@ class CampanaTableSeeder extends Seeder
             'fundacion'=>'1'
         ));
         \DB::table('campanas')->insert(array(
-            'nombre_campana'=>'Magallanes RM',
+            'id'=>'3',
+            'nombre_campana'=>'Plasticos RM',
             'ubicacion'=>'region metropolitana',
             'fundacion'=>'2',
         ));
         \DB::table('campanas')->insert(array(
-            'nombre_campana'=>'Leones Marinos',
+            'id'=>'7',
+            'nombre_campana'=>'Antartica RM',
+            'ubicacion'=>'region metropolitana',
+            'fundacion'=>'2',
+        ));
+        \DB::table('campanas')->insert(array(
+            'id'=>'8',
+            'nombre_campana'=>'Plasticos Or',
             'ubicacion'=>'Regiones',
             'fundacion'=>'2',
         ));

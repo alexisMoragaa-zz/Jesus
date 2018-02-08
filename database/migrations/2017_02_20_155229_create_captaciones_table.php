@@ -33,16 +33,20 @@ class CreateCaptacionesTable extends Migration {
 			$table->string('volver_llamar')->nullable();
 			$table->string('observacion')->nullable();
 			$table->string('estado_llamada1')->nullable();
+			$table->string('estado1')->nullable();
 			$table->string('teo1')->nullable();
 			$table->string('primer_llamado')->nullable();
 			$table->string('estado_llamada2')->nullable();
+			$table->string('estado2')->nullable();
 			$table->string('teo2')->nullable();
 			$table->string('segundo_llamado')->nullable();
 			$table->string('estado_llamada3')->nullable();
+			$table->string('estado3')->nullable();
 			$table->string('teo3')->nullable();
 			$table->string('tercer_llamado')->nullable();
 			$table->string('n_llamados')->nullable();
 			$table->string('f_ultimo_llamado')->nullable();
+			$table->string('teoFinal')->nullable();
 
 
 			$table->timestamps();

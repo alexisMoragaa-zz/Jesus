@@ -268,42 +268,29 @@ public function informeUser($id){
 	$user = User::find($id);
 	$campana = Campana::find($user->campana);
 
-	$llamados1 = captaciones::where('campana_id','=',$user->campana)->where('teo1','=',$id)->count();
-	$llamados2 = captaciones::where('campana_id','=',$user->campana)->where('teo1','!=',$id)->where('teo2','=',$id)->count();
-	$llamados3 = captaciones::where('campana_id','=',$user->campana)->where('teo1','!=',$id)->where('teo2','!=',$id)->where('teo3','=',$id)->count();
-	$llamados=$llamados1+$llamados2+$llamados3;
+	$cumas = captaciones::where('campana_id',$user->campana)->where('estado','cu+')->where('teoFinal',$id)->count();
+	$cumenos = captaciones::where('campana_id',$user->campana)->where('estado','cu-')->where('teoFinal',$id)->count();
+	$ca = captaciones::where('campana_id',$user->campana)->where('estado','ca')->where('teoFinal',$id)->count();
+	$registrosContactados = $cumas+$cumenos+$ca;
 
-	$llamados1 = captaciones::where('campana_id','=',$user->campana)->where('teo1','=',$id)->where('estado','!=','cnu')->count();
-	$llamados2 = captaciones::where('campana_id','=',$user->campana)->where('teo1','!=',$id)->where('teo2','=',$id)->where('estado','!=','cnu')->count();
-	$llamados3 = captaciones::where('campana_id','=',$user->campana)->where('teo1','!=',$id)->where('teo2','!=',$id)->where('teo3','=',$id)->where('estado','!=','cnu')->count();
-	$registrosContactados=$llamados1+$llamados2+$llamados3;
 
-	$llamados1 = captaciones::where('campana_id','=',$user->campana)->where('teo1','=',$id)->where('estado','=','cu+')->count();
-	$llamados2 = captaciones::where('campana_id','=',$user->campana)->where('teo1','!=',$id)->where('teo2','=',$id)->where('estado','=','cu+')->count();
-	$llamados3 = captaciones::where('campana_id','=',$user->campana)->where('teo1','!=',$id)->where('teo2','!=',$id)->where('teo3','=',$id)->where('estado','=','cu+')->count();
-	$cumas=$llamados1+$llamados2+$llamados3;
-
-	$llamados1 = captaciones::where('campana_id','=',$user->campana)->where('teo1','=',$id)->where('estado','=','cu-')->count();
-	$llamados2 = captaciones::where('campana_id','=',$user->campana)->where('teo1','!=',$id)->where('teo2','=',$id)->where('estado','=','cu-')->count();
-	$llamados3 = captaciones::where('campana_id','=',$user->campana)->where('teo1','!=',$id)->where('teo2','!=',$id)->where('teo3','=',$id)->where('estado','=','cu-')->count();
-	$cumenos=$llamados1+$llamados2+$llamados3;
-
-	$llamados1 = captaciones::where('campana_id','=',$user->campana)->where('teo1','=',$id)->where('estado','=','cnu')->count();
-	$llamados2 = captaciones::where('campana_id','=',$user->campana)->where('teo1','!=',$id)->where('teo2','=',$id)->where('estado','=','cnu')->count();
-	$llamados3 = captaciones::where('campana_id','=',$user->campana)->where('teo1','!=',$id)->where('teo2','!=',$id)->where('teo3','=',$id)->where('estado','=','cnu')->count();
-	$cnu=$llamados1+$llamados2+$llamados3;
-
-	$llamados1 = captaciones::where('campana_id','=',$user->campana)->where('teo1','=',$id)->where('estado','=','ca')->count();
-	$llamados2 = captaciones::where('campana_id','=',$user->campana)->where('teo1','!=',$id)->where('teo2','=',$id)->where('estado','=','ca')->count();
-	$llamados3 = captaciones::where('campana_id','=',$user->campana)->where('teo1','!=',$id)->where('teo2','!=',$id)->where('teo3','=',$id)->where('estado','=','ca')->count();
-	$ca=$llamados1+$llamados2+$llamados3;
+	/*$llamados1 = captaciones::where('campana_id','=',$user->campana)->where('estado','=','cnu')->where('teo1','=',$id)->where('teo2','!=',$id)->where('teo3','!=',$id)->count();
+	$llamados2 = captaciones::where('campana_id','=',$user->campana)->where('estado','=','cnu')->where('teo1','!=',$id)->where('teo2','=',$id)->where('teo3','!=',$id)->count();
+	$llamados3 = captaciones::where('campana_id','=',$user->campana)->where('estado','=','cnu')->where('teo1','!=',$id)->where('teo2','!=',$id)->where('teo3','=',$id)->count();
+	$cnu=$llamados1+$llamados2+$llamados3;*/
+	$cnu1 = captaciones::where('campana_id',$user->campana)->where('estado1','cnu')->where('teo1',$id)->count();
+	$cnu2 = captaciones::where('campana_id',$user->campana)->where('estado2','cnu')->where('teo2',$id)->count();
+	$cnu3 = captaciones::where('campana_id',$user->campana)->where('estado3','cnu')->where('teo3',$id)->count();
+	$cnu = $cnu1+$cnu2+$cnu3;
+	$llamados =$cumas+$cumenos+$ca+$cnu;
 
 
 	$agendamiento = CaptacionesExitosa::where('nom_campana','=',$campana->nombre_campana)->where('teleoperador','=',$user->id)->where('tipo_retiro','=','Acepta Agendamiento')->count();
 	$grabacion = CaptacionesExitosa::where('nom_campana','=',$campana->nombre_campana)->where('teleoperador','=',$user->id)->where('tipo_retiro','=','Acepta Grabacion')->count();
 	$delivery = CaptacionesExitosa::where('nom_campana','=',$campana->nombre_campana)->where('teleoperador','=',$user->id)->where('tipo_retiro','=','Acepta Delivery')->count();
-
+	$iradues = CaptacionesExitosa::where('nom_campana','=',$campana->nombre_campana)->where('teleoperador','=',$user->id)->where('tipo_retiro','=','Acepta ir a Dues')->count();
 	$breadcrum = $user->name." ".$user->last_name." / ".$campana->nombre_campana;
+
 
 	if($registrosContactados != 0){
 		$penetracion =  number_format($cumas/$llamados*100,2,'.','');
@@ -312,6 +299,7 @@ public function informeUser($id){
 		$penetracion = "Sin Registros";
 		$contactabilidad = "Sin Registros";
 	}
+
 	return view('Informes.informeUser',
 	[
 		'user'=>$user,
@@ -326,6 +314,7 @@ public function informeUser($id){
 		'breadcrum'=>$breadcrum,
 		'penetracion'=>$penetracion,
 		'contactabilidad'=>$contactabilidad,
+		'iradues'=>$iradues,
 		'ca'=>$ca,
 	]);
 }
@@ -336,39 +325,22 @@ public function informeUserCampaing($user, $campaing){
 	$usuario = User::find($user);
 	$campana = Campana::find($campaing);
 
-	$llamados1 = captaciones::where('campana_id','=',$campaing)->where('teo1','=',$user)->count();
-	$llamados2 = captaciones::where('campana_id','=',$campaing)->where('teo1','!=',$user)->where('teo2','=',$user)->count();
-	$llamados3 = captaciones::where('campana_id','=',$campaing)->where('teo1','!=',$user)->where('teo2','!=',$user)->where('teo3','=',$user)->count();
-	$llamados=$llamados1+$llamados2+$llamados3;
+	$cumas = captaciones::where('campana_id',$campaing)->where('estado','cu+')->where('teoFinal',$user)->count();
+	$cumenos = captaciones::where('campana_id',$campaing)->where('estado','cu-')->where('teoFinal',$user)->count();
+	$ca =captaciones::where('campana_id',$campaing)->where('estado','ca')->where('teoFinal',$user)->count();
+	$registrosContactados=$cumas+$cumenos+$ca;
 
-	$llamados1 = captaciones::where('campana_id','=',$campaing)->where('teo1','=',$user)->where('estado','!=','cnu')->count();
-	$llamados2 = captaciones::where('campana_id','=',$campaing)->where('teo1','!=',$user)->where('teo2','=',$user)->where('estado','!=','cnu')->count();
-	$llamados3 = captaciones::where('campana_id','=',$campaing)->where('teo1','!=',$user)->where('teo2','!=',$user)->where('teo3','=',$user)->where('estado','!=','cnu')->count();
-	$registrosContactados=$llamados1+$llamados2+$llamados3;
+	$cnu1 = captaciones::where('campana_id','=',$campaing)->where('teo1',$user)->where('estado1','cnu')->count();
+	$cnu2 = captaciones::where('campana_id','=',$campaing)->where('teo2',$user)->where('estado2','cnu')->count();
+	$cnu3 = captaciones::where('campana_id','=',$campaing)->where('teo3',$user)->where('estado3','=','cnu')->count();
+	$cnu=$cnu1+$cnu2+$cnu3;
 
-	$llamados1 = captaciones::where('campana_id','=',$campaing)->where('teo1','=',$user)->where('estado','=','cu+')->count();
-	$llamados2 = captaciones::where('campana_id','=',$campaing)->where('teo1','!=',$user)->where('teo2','=',$user)->where('estado','=','cu+')->count();
-	$llamados3 = captaciones::where('campana_id','=',$campaing)->where('teo1','!=',$user)->where('teo2','!=',$user)->where('teo3','=',$user)->where('estado','=','cu+')->count();
-	$cumas=$llamados1+$llamados2+$llamados3;
-
-	$llamados1 = captaciones::where('campana_id','=',$campaing)->where('teo1','=',$user)->where('estado','=','cu-')->count();
-	$llamados2 = captaciones::where('campana_id','=',$campaing)->where('teo1','!=',$user)->where('teo2','=',$user)->where('estado','=','cu-')->count();
-	$llamados3 = captaciones::where('campana_id','=',$campaing)->where('teo1','!=',$user)->where('teo2','!=',$user)->where('teo3','=',$user)->where('estado','=','cu-')->count();
-	$cumenos=$llamados1+$llamados2+$llamados3;
-
-	$llamados1 = captaciones::where('campana_id','=',$campaing)->where('teo1','=',$user)->where('estado','=','cnu')->count();
-	$llamados2 = captaciones::where('campana_id','=',$campaing)->where('teo1','!=',$user)->where('teo2','=',$user)->where('estado','=','cnu')->count();
-	$llamados3 = captaciones::where('campana_id','=',$campaing)->where('teo1','!=',$user)->where('teo2','!=',$user)->where('teo3','=',$user)->where('estado','=','cnu')->count();
-	$cnu=$llamados1+$llamados2+$llamados3;
-
-	$llamados1 = captaciones::where('campana_id','=',$campaing)->where('teo1','=',$user)->where('estado','=','ca')->count();
-	$llamados2 = captaciones::where('campana_id','=',$campaing)->where('teo1','!=',$user)->where('teo2','=',$user)->where('estado','=','ca')->count();
-	$llamados3 = captaciones::where('campana_id','=',$campaing)->where('teo1','!=',$user)->where('teo2','!=',$user)->where('teo3','=',$user)->where('estado','=','ca')->count();
-	$ca=$llamados1+$llamados2+$llamados3;
+	$llamados =$cumas+$cumenos+$ca+$cnu;;
 
 	$agendamiento = CaptacionesExitosa::where('nom_campana','=',$campana->nombre_campana)->where('teleoperador','=',$user)->where('tipo_retiro','=','Acepta Agendamiento')->count();
 	$grabacion = CaptacionesExitosa::where('nom_campana','=',$campana->nombre_campana)->where('teleoperador','=',$user)->where('tipo_retiro','=','Acepta Grabacion')->count();
 	$delivery = CaptacionesExitosa::where('nom_campana','=',$campana->nombre_campana)->where('teleoperador','=',$user)->where('tipo_retiro','=','Acepta Delivery')->count();
+	$iradues = CaptacionesExitosa::where('nom_campana','=',$campana->nombre_campana)->where('teleoperador','=',$user)->where('tipo_retiro','=','Acepta ir a Dues')->count();
 
 	$breadcrum = $usuario->name." ".$usuario->last_name." / ".$campana->nombre_campana;
 
@@ -379,8 +351,7 @@ public function informeUserCampaing($user, $campaing){
 			$penetracion = "Sin Registros";
 			$contactabilidad = "Sin Registros";
 	}
-	return view('Informes.informeUser',
-	[
+	return view('Informes.informeUser',[
 		'user'=>$usuario,
 		'llamados' =>$llamados,
 		'registrosContactados' =>$registrosContactados,
@@ -394,6 +365,7 @@ public function informeUserCampaing($user, $campaing){
 		'penetracion'=>$penetracion,
 		'contactabilidad'=>$contactabilidad,
 		'ca'=>$ca,
+		'iradues'=>$iradues,
 	]);
 }
 
@@ -414,8 +386,6 @@ $no_contesta = informeRuta::where('rutero_id','=',$rutero_id)->where('estado','=
 $no_esta_domicilio = informeRuta::where('rutero_id','=',$rutero_id)->where('estado','=','noRetirado')->where('motivo','=','NoEstaEnDomicilio')->count();
 $no_encuentro_direccion = informeRuta::where('rutero_id','=',$rutero_id)->where('estado','=','noRetirado')->where('motivo','=','noEncuentroDirecion')->count();
 
-
-
 	return view('Informes.informeRutero',[
 		'rutero'=>$rutero,
 		'rutasRealizadas'=>$rutas_realizadas,
@@ -428,6 +398,7 @@ $no_encuentro_direccion = informeRuta::where('rutero_id','=',$rutero_id)->where(
 		'noContesta'=>$no_contesta,
 		'noEstaDomicilio'=>$no_esta_domicilio,
 		'noEncuentroDireccion'=>$no_encuentro_direccion,
+		'hoy'=>$hoy,
 	]);
 }
 

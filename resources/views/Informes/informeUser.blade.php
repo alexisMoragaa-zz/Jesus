@@ -36,6 +36,7 @@
               {{$cumas}},
               {{$cumenos}},
               {{$ca}},
+
             ],
             backgroundColor:[
               "#43A047",
@@ -64,11 +65,14 @@
               {{$agendamiento}},
               {{$grabacion}},
               {{$delivery}},
+              {{$iradues}},
+
             ],
             backgroundColor:[
               "#43A047",
               "#02CDED",
               "#BA68C8",
+              "#900C3F",
 
             ],
           }],
@@ -76,6 +80,7 @@
             "Agendamiento",
             "Grabacion",
             "Delivery",
+            "Ir a Dues",
           ]
         },
         options:{

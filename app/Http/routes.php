@@ -124,7 +124,7 @@ Route::group(['middleware' => ['auth', 'teleoperador'], 'prefix' => 'teo'], func
     Route::Post('validatePassCode','TeoController@ValidatePassCode');
     Route::Get('llamadas/agendadas','TeoController@llamadasAgendadas');
     Route::Get('agendamiento/llamada/llamar/{id}','TeoController@agendamientoLlamadoLlamar');
-    Route::Get('agendamiento/llamada/llamadoExitoso/{id}','TeoController@agendamientoLlamadaLlamadoExitoso');
+    Route::Get('agendamiento/llamada/llamadoExitoso/{id}/{tipe}','TeoController@agendamientoLlamadaLlamadoExitoso');
     Route::Get('show/cobertura','RegionesController@showCobertura');
     Route::Get('complete/comunas','RegionesController@completeComunas');
 

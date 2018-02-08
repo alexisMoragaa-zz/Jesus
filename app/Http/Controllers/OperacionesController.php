@@ -1002,7 +1002,7 @@ $fundacion = fundacion::find($request->selectFoundation)->nombre;//seleccionamos
 
 public function cambiarRutero(){//cambiarRutero es una funcion que nos retorna solo las rutas que estan por retirar desde el dia en curso en adelante para posterior cambiar el rutero
     $hoy = Carbon::now()->format('Y-m-d');//seleccionamos el dia de hoy y le asignamos el formato dia mes año
-    $ruteros = User::where('perfil','=',5)->get();//seleccionamos los ruteros para enviarlos a la vista
+    $ruteros = User::where('perfil','=',5)->orwhere('perfil','=',2)->get();//seleccionamos los ruteros para enviarlos a la vista
     $comunas = comunaRetiro::where('ciudad','=','santiago')->get();//seleccionamos todas las comunas de santiago
     $registros =informeRuta::where('fecha_agendamiento','>=',$hoy)->get();//seleccionamos los registros
     $breadCrum="Sin filtros/ se muestran todas las rutas a partir de hoy";//breadcrum que nos muestra el iltro realizado

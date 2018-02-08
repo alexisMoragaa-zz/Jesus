@@ -85,6 +85,51 @@ class UsersTableSeeder extends Seeder
 
       ));
 
+      \DB::table('users')->insert(array(
+          'id' =>'12',
+          'name' => 'karen',
+          'last_name'=>'Molero',
+          'email' => 'karen@gmail.com',
+          'perfil' => '2',
+          'estado' => 'Activo',
+          'password' => \Hash::make('karenmolero'),
+          'campana'  => '1',
+          'turno'  =>  'PM',
+          'fecha_ingreso'  =>  '10-02-2017',
+          'fecha_termino'  =>  '22-04-2017'
+
+      ));
+
+      \DB::table('users')->insert(array(
+          'id' =>'13',
+          'name' => 'mery',
+          'last_name'=>'fuenmayor',
+          'email' => 'mery@gmail.com',
+          'perfil' => '2',
+          'estado' => 'Activo',
+          'password' => \Hash::make('meryfuenmayor'),
+          'campana'  => '1',
+          'turno'  =>  'PM',
+          'fecha_ingreso'  =>  '10-02-2017',
+          'fecha_termino'  =>  '22-04-2017'
+
+      ));
+
+      \DB::table('users')->insert(array(
+          'id' => '14',
+          'name' => 'valentina',
+          'last_name'=>'martines',
+          'email' => 'valentina@gmail.com',
+          'perfil' => '2',
+          'estado' => 'Activo',
+          'password' => \Hash::make('valentinamartines'),
+          'campana'  => '1',
+          'turno'  =>  'PM',
+          'fecha_ingreso'  =>  '10-02-2017',
+          'fecha_termino'  =>  '22-04-2017'
+
+      ));
+
         //ruteros
         \DB::table('users')->insert(array(
             'name' => 'Danko',

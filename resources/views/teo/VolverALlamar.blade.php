@@ -41,6 +41,7 @@
           <div class="table-responsive">
             <table class="table table-striped">
               <thead>
+                <th>ID</th>
                 <th>Nombre</th>
                 <th>Telefono</th>
                 <th>Correo</th>
@@ -51,6 +52,7 @@
               <tbody>
                 @foreach ($realizados as $realizado)
                   <tr>
+                    <td>{{$realizado->id}}</td>
                     <td>{{$realizado->llamadosAgendados->nombre}}</td>
                     <td>{{$realizado->llamadosAgendados->fono_1}}</td>
                     <td>{{$realizado->llamadosAgendados->correo_1}}</td>
@@ -129,6 +131,7 @@
         <div class="table table-responsive">
           <table class="table ">
             <thead>
+              <th>ID</th>
               <th>Nombre</th>
               <th>Telefono</th>
               <th>Correo</th>
@@ -140,6 +143,7 @@
             <tbody>
               @foreach ($nollamados as $dontcall)
               <tr>
+                <td>{{$dontcall->id}}</td>
                 <td>{{$dontcall->llamadosAgendados->nombre}} {{$dontcall->llamadosAgendados->apellido}}</td>
                 <td>{{$dontcall->llamadosAgendados->fono_1}}</td>
                 <td>{{$dontcall->llamadosAgendados->correo_1}}</td>

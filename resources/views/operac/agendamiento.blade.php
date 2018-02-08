@@ -175,11 +175,7 @@
         </div>
   </div>
 {!! Form::close() !!}
-
         <div class="col-md-12" id="espacio"> </div>
-
-
-
         <div class="cl-md-12 table table-responsive " id="table-table">
 
             <table class="table table-hover table-condensed" id="table">

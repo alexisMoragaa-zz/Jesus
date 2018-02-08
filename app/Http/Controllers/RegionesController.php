@@ -2,6 +2,7 @@
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Http\Requests;
@@ -20,6 +21,7 @@ class RegionesController extends Controller {
 
 	public function store(Request $request)
 	{
+
 			 $data = $request->all();//seleccionamos todo el request y lo asignamos a data|
 
 			 $date = Carbon::now()->format('d/m/Y');//seleccionamos la fecha de hoy y la guardamos en la variable hoy
@@ -68,14 +70,20 @@ class RegionesController extends Controller {
 					 $name_status = 'estado_llamada1';//agregamos el estado en el campo promer llamado
 					 $f_llamado ='primer_llamado';
 					 $n_llamado ="1";
+					 $teocall="teo1";
+					 $callstatus="estado1";
 			 } elseif ($llamado2 == null) {//si llamado2 es nulo o vacio
 					 $name_status = 'estado_llamada2';//agregamos el estado en segundo llamado
 						 $f_llamado ='segundo_llamado';
 						 $n_llamado ="2";
+						 $teocall="teo2";
+						 $callstatus="estado2";
 			 } else {//si ninguna de las anteriores se cumple
 					 $name_status = 'estado_llamada3';//agregamos el estado en el tercer llamado
 					 $f_llamado ='tercer_llamado';
 					 $n_llamado ="3";
+					 $teocall="teo3";
+					 $callstatus="estado3";
 			 }
 
 			 $t_retiro=$request->tipo_retiro;//guardamos en la variable t_retiro el tipo de retiro obtenido del request
@@ -88,7 +96,10 @@ class RegionesController extends Controller {
 							 'estado' => 'cu+',//y el estado en cu+
 							 'n_llamados'=> $n_llamado,
 							 $f_llamado=>$date,
-							 $name_status=>$t_retiro// asignamos el nombre de estado como el tipo de retiro
+							 $name_status=>$t_retiro,// asignamos el nombre de estado como el tipo de retiro
+							 'teoFinal'=>Auth::user()->id,
+ 							 $teocall=>Auth::user()->id,
+ 							 $callstatus=>"cu+",
 						 ]);
 
 						 $id =DB::table('estado_rutas')->insertGetId([

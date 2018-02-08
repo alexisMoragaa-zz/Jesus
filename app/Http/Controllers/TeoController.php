@@ -1,9 +1,10 @@
 <?php namespace App\Http\Controllers;
-use App\Http\Requests;
-use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Http\Requests;
 use DB;
 use App\CaptacionesExitosa;
 use App\CoberturaRegiones;
@@ -41,22 +42,22 @@ class TeoController extends Controller
             ->where('estado', '!=', 'cu+')->where('estado_registro', '=', 0)->where('estado', '!=', 'ca')
             ->where('tercer_llamado','=',null)
             ->first();
+
 /*el registro que se le entregara al usuario tiene que pertenecer a la campaña a la cual el esta asignado
 la fecha de ultimo llamado no puede ser mayor al dia anterior respecto del dia en  curso su estado tiene que ser diferente de cnu
 su estado tiene que ser diferente de cu+ y defirente de ca (call_again) */
         if (empty($cap)) {//evaluamos el resultado de la busqueda y si es nullo retornamos una vista con el error
-          return view('teo/teoError');
-        }
+          $cap = captaciones::where('campana_id', '=', $dato)//seleccionamo el registro que se le entragara mediante una seria de filtros
+              // ->where('f_ultimo_llamado', '!=', $date)
+              ->where('estado', '!=', 'cu-')
+              ->where('estado', '!=', 'cu+')->where('estado_registro', '=', 0)->where('estado', '!=', 'ca')
+              ->where('tercer_llamado','=',null)
+              ->first();
 
-        //verificamos si fueron realizados los llamados 1 2 o 3 en base a las llamadas de los teleoperadores
-        if($cap->teo1 == null){
-          $teo ="teo1";//si el campo teo1, que almacena el id del teleoperador que realiza la primera llamada es null asigna teo1 a la variable para luego insertar el id del teleoperador en ese campo
-        }elseif ($cap->teo2 == null) {
-          $teo ="teo2";//repetimos el mismo proceso para los casos 2 y 3
-        }elseif($cap->teo3 == null){
-          $teo="teo3";
-        }else{
-        $teo="teo3";
+          Session::flash('message','Atencion! No Quedan registros Disponibles. Los numeros a continuacion ya fueron llamados el dia de Hoy');
+          if(empty($cap)){
+               return view('teo/teoError');
+          }
         }
 /*si el resultado de la busqueda nos retorna un registro ese registro lo actualizamos con el estadp de registro 1
 lo cual implica que el registro esta reservado y ningun otro teleoperador podra acceder a el.
@@ -66,13 +67,10 @@ pero se atualizara la fecha de ultimo llamado con lo cual es registro no estara 
             ->where('id', '=', $cap->id)//seleccionamos el registro
             ->update([//actualizamos el registro y lo dejamos tomado
                 'estado_registro' => 1,
-                $teo => Auth::user()->id,
-
-            ]);
+              ]);
             //finalmente retornamos la vista de llamados con el registro ya tomado
         return view('teo/teoin', compact('cap', 'status'));
     }
-
 
     public function show($id)
     {//funcion que nos pemite ver una captacion exitosa o un agendamiento en detalle
@@ -148,19 +146,21 @@ no vuelven a llamar a los mismos registros que otros lalmaron el mismo dia*/
             $llamado = 'primer_llamado';//llamado lo asignamos como primer llamado
             $name_status = 'estado_llamada1';//name status lo asignamos conmo estado_llamada1
             $n_llamado = '1';//y numero de llamado como 1, hacemos los mismo con el llamado 2
-
+            $teocall = 'teo1';
+            $callstatus= 'estado1';
             //y usamos un else para referenciar el llamado 3
         } elseif ($llamado2 == null) {
             $llamado = 'segundo_llamado';
             $name_status = 'estado_llamada2';
             $n_llamado = '2';
-
-
+            $teocall = 'teo2';
+            $callstatus= 'estado2';
         } else {
             $llamado = 'tercer_llamado';
             $name_status = 'estado_llamada3';
             $n_llamado = '3';
-
+            $teocall = 'teo3';
+            $callstatus= 'estado3';
         }
 //actualizamos la tabla captaciones con los datos que asignamos mediante los if,
         DB::table('captaciones')
@@ -174,7 +174,10 @@ no vuelven a llamar a los mismos registros que otros lalmaron el mismo dia*/
                 'estado' => $type,
                 $llamado => $date,
                 'n_llamados' => $n_llamado,
-                'volver_llamar' => $call_again
+                'volver_llamar' => $call_again,
+                'teoFinal' => $user,
+                $teocall => $user,
+                $callstatus => $type,
             ]);
 //si el call status es igual a agendar llamado creamos una nueva instancia de agendarLlamado
       if($call_status == "Agendar Llamado"){
@@ -248,6 +251,7 @@ no vuelven a llamar a los mismos registros que otros lalmaron el mismo dia*/
     {   /**Primera parte*/
       /*la funcion store se divide en tres partes prinsipales, esta que es la primera se encarga de generar una captacion exitosas
       pero como la tabla de captaciones exitosas tiene otras relaciones ademas de otras instancias como esa¿tado de ruta que dependen de ella*/
+
       //en la funcion store creamos una captacion exitosa
         $data = $request->all();//seleccionamos todo el request y lo asignamos a data|
         $ruteroo = User::where('perfil','=',5)->where('name','=',$data['rutero'])->get()->first();
@@ -276,11 +280,11 @@ no vuelven a llamar a los mismos registros que otros lalmaron el mismo dia*/
                 'apellido' => $data['apellido'],
                 'direccion' => $direccion,
                 'comuna' => $data['comuna'],
-                'region' =>$data['region'],
+                'region' => $data['region'],
                 'correo_1' => $data['correo_1'],
                 'monto' => $data['monto'],
                 'teleoperador' => $data['teleoperador'],
-                'originalTeo'=>$data['teleoperador'],
+                'originalTeo'=> $data['teleoperador'],
                 'nom_campana' => $data['nom_campana'],
                 'fundacion' => $data ['fundacion'],
                 'observaciones' => $data['observaciones'],
@@ -330,18 +334,24 @@ no vuelven a llamar a los mismos registros que otros lalmaron el mismo dia*/
         $llamado1 = captaciones::where('id', '=', $id)->pluck('primer_llamado');//tomamos el valor del primer llamado
         $llamado2 = captaciones::where('id', '=', $id)->pluck('segundo_llamado');//tomamos el valor del segundo llamado
 
-        if ($llamado1 == null) {//si llamado1 es nulo o vacio
+        if ($llamado1 == null){//si llamado1 es nulo o vacio
             $name_status = 'estado_llamada1';//agregamos el estado en el campo promer llamado
             $f_llamado ='primer_llamado';
             $n_llamado ="1";
+            $teocall ="teo1";
+            $callstatus="estado1";
         } elseif ($llamado2 == null) {//si llamado2 es nulo o vacio
             $name_status = 'estado_llamada2';//agregamos el estado en segundo llamado
               $f_llamado ='segundo_llamado';
               $n_llamado ="2";
+              $teocall ="teo2";
+              $callstatus="estado2";
         } else {//si ninguna de las anteriores se cumple
             $name_status = 'estado_llamada3';//agregamos el estado en el tercer llamado
             $f_llamado ='tercer_llamado';
             $n_llamado ="3";
+            $teocall ="teo3";
+            $callstatus="estado3";
         }
 
         $t_retiro=$request->tipo_retiro;//guardamos en la variable t_retiro el tipo de retiro obtenido del request
@@ -354,7 +364,10 @@ no vuelven a llamar a los mismos registros que otros lalmaron el mismo dia*/
                 'estado' => 'cu+',//y el estado en cu+
                 'n_llamados'=> $n_llamado,
                 $f_llamado=>$date,
-                $name_status=>$t_retiro// asignamos el nombre de estado como el tipo de retiro
+                $name_status=>$t_retiro,// asignamos el nombre de estado como el tipo de retiro
+                'teoFinal'=>Auth::user()->id,
+                $teocall=>Auth::user()->id,
+                $callstatus=>"cu+"
               ]);
 
       /*Finalmente en el metodo update usamos las variables que fueron asignadas en la primera parte de este metodo*/
@@ -466,7 +479,7 @@ no vuelven a llamar a los mismos registros que otros lalmaron el mismo dia*/
           $ruteroo = User::where('perfil','=',5)->where('name','=',$request->rutero)->get()->first();//obtenemos el rutero
           $id_rutero =$ruteroo->id;//seleccionamos su id
         }
-        
+
         $id =$request->id_captacion;//seleccionamos el id de la captacion o agendamiento
         $editCap =CaptacionesExitosa::find($id);//selecionamos la captacion o agendamiento y la guardamos como objeto en la variable $editCap
 
@@ -775,16 +788,22 @@ public function agendamientoLlamadoLlamar($id){
 
 }
 
-public function agendamientoLlamadaLlamadoExitoso($id){
+public function agendamientoLlamadaLlamadoExitoso($id,$tipe){
   //funcion para gestionar los registros llamados exitosos  dentro de los agendamientos de llamados creados por el teleoperador
-    $ll =AgendarLlamados::find($id);//seleccionamos el agendamiento en cuestion
+    $ll = AgendarLlamados::find($id);//seleccionamos el agendamiento en cuestion
+
     $ll->estado_llamado="llamado";//le asignamos el valor de llamado
     $ll->save();//guardamos os cambios
     $cap = captaciones::find($ll->llamadosAgendados->id);//Seleccionamos la captacion a la cual pertenece el agendamiento
     $cap->estado= "cu+";//asignamos el valor de cu+
-    $cap->save();//guardamos los cambios y finalmente redireccionamos  al modulo para tomar los datos correspondientes al agendamiento
-
-    return redirect('teo/mandatoExitoso&'.$ll->llamadosAgendados->id."&".$ll->llamadosAgendados->n_dues);
+    $cap->save();//guardamos los cambios y finalmente redireccionamos  al modulo para tomar los datos correspondientes al
+    if($tipe==1){
+      return redirect('/teo/regiones/'.$cap->id);
+    }elseif($tipe == 2){
+      return redirect('/teo/agendar/grabacion/'.$cap->id);
+    }else{
+      return redirect('teo/mandatoExitoso&'.$ll->llamadosAgendados->id."&".$ll->llamadosAgendados->n_dues);
+    }
   }
 
   public function agendarGrabacion($id){

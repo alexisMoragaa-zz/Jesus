@@ -31,6 +31,11 @@ class LetterTableSeeder extends Seeder
           'estado'=>'Carta Transitoria',
           'id_fundacion'=>"4",
         ));
+        \DB::table('letters')->insert(array(
+          'number'=>'1',
+          'estado'=>'En Dues',
+          'id_fundacion'=>"2",
+        ));
         //
         // \DB::table('letters')->insert(array(
         //   'number'=>'0',

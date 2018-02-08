@@ -126,7 +126,7 @@ $(document).ready(function(){
     {{--row for the panels whit information--}}
     <div class="col-md-4">
       <div class="panel panel-primary">
-        <div class="panel-heading">Registro de rutas hasta el cierre del dia <span>aca la fecha</span></div>
+        <div class="panel-heading">Registro de rutas hasta el cierre del dia <span>{{$hoy}}</span></div>
         <ul class="list-group">
           <li class="list-group-item">Total Rutas <span class="badge">{{$rutero->misRutas->count()}}</span></li>
           <li class="list-group-item">Rutas Realizadas<span class="badge">{{$rutasRealizadas}}</span></li>
@@ -137,7 +137,7 @@ $(document).ready(function(){
 
     <div class="col-md-4">
       <div class="panel panel-success">
-        <div class="panel-heading">Rutas Realizadas hasta el <span>2017-12-14</span>
+        <div class="panel-heading">Rutas Realizadas hasta el <span>{{$hoy}}</span>
           <span class="badge">{{$rutasRealizadas}}
           </span></div>
         <ul class="list-group">
