@@ -1,23 +1,30 @@
-## Laravel PHP Framework
+## Sistema de Callcenter 
 
-[![Build Status](https://travis-ci.org/laravel/framework.svg)](https://travis-ci.org/laravel/framework)
-[![Total Downloads](https://poser.pugx.org/laravel/framework/downloads.svg)](https://packagist.org/packages/laravel/framework)
-[![Latest Stable Version](https://poser.pugx.org/laravel/framework/v/stable.svg)](https://packagist.org/packages/laravel/framework)
-[![Latest Unstable Version](https://poser.pugx.org/laravel/framework/v/unstable.svg)](https://packagist.org/packages/laravel/framework)
-[![License](https://poser.pugx.org/laravel/framework/license.svg)](https://packagist.org/packages/laravel/framework)
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable, creative experience to be truly fulfilling. Laravel attempts to take the pain out of development by easing common tasks used in the majority of web projects, such as authentication, routing, sessions, queueing, and caching.
+Este software está desarrollado en su totalidad usando las tecnologías PHP, Como principal lenguaje de programación, usando Laravel como framework. Ademas de otras tecnologías como CSS y bootstrap3 para el diseño de la interfaz gráfica. Javascript para la interactividad, usando la Liberia de JQuery, y algunos derivados de Javascript como Ajax Y Json.
 
-Laravel is accessible, yet powerful, providing powerful tools needed for large, robust applications. A superb inversion of control container, expressive migration system, and tightly integrated unit testing support give you the tools you need to build any application with which you are tasked.
 
-## Official Documentation
+La función de este sistema es gestionar la información interna derivada de las respuestas obtenidas mediante el proceso de llamado diario al interior del callcenter, y con esta generar rutas de retiro similar a un delivery, las cuales son procesadas y finalmente reingresadas al sistema según el resultado de las mismas.
 
-Documentation for the framework can be found on the [Laravel website](http://laravel.com/docs).
 
-## Contributing
+Una vez el flujo de información se realiza el sistema es capaz de realizar informes con dicha data, pudiendo identificar entre otras cosas la efectividad de los operadores telefónicos, y la efectividad de los ruteros o motoboys que realizan la visita presencial con los socios captados mediante los operadores telefónicos
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](http://laravel.com/docs/contributions).
 
-### License
+## Características principales
 
-The Laravel framework is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT)
+
+1. Incorporar información fácilmente mediante la carga de archivos excel mediante un modulo especialmente diseñado para esta función usando maatwebsite
+
+
+ 2. Centralización de la información y estandarizaron de los procesos internos para entregar la data necesaria.
+
+
+ 3. Gestión interna de la información derivada de los procesos en las distintas áreas del Callcenter.
+ 
+ 4. Informes en tiempo real grafícados mediante la Liberia Chart.js lo cual permite evaluar el estado del callcenter en cualquier momento y lugar
+
+
+ 5. Exportar informes a excel con un simple clic.
+
+
+ 6. Exportar la data a excel con un simple clic.
