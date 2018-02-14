@@ -1,8 +1,6 @@
 @extends('app')
 @section('content')
-  {{--esta es una mousque herramienta misteriosa que nos alludara mas adelante--}}
-
-  <style>
+<style>
   .txt{
     color: black;
   }
@@ -15,7 +13,7 @@
 #mt-2{
   margin-top: 2em;
 }
-  </style>
+</style>
 
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js">
 
@@ -23,6 +21,7 @@
   <script>
     $(document).ready(function(){
       var datos_llamados ={
+        //Grafico de pie para los llamados realizados
         type:"doughnut",
         data:{
           datasets:[{
@@ -44,8 +43,11 @@
           responsive: true,
         }
       }
+      var grafico_llamados =$("#llamados");
+      window.pie = new Chart(grafico_llamados,datos_llamados);
 
       var datos_contactados ={
+        //Grafico de pie para graficar el resultado de los llamados realizados
         type:"doughnut",
         data:{
           datasets:[{
@@ -74,15 +76,64 @@
         }
       }
 
-
-      var grafico_llamados =$("#llamados");
-      window.pie = new Chart(grafico_llamados,datos_llamados);
-
       var grafico_contactados = document.getElementById('contactados').getContext('2d');
       window.pie = new Chart(grafico_contactados,datos_contactados);
 
+    //Grafico recorrido general de la base por dias
+      var datos_mensuales = {
+        type:"bar",
+        data:{
+          labels:[<?php foreach ($labels as $label) {
+            echo("'$label'".',');
+          }?>],
+          datasets:[{
+            label:"CU+",
+            data:[<?php foreach ($dCumasGeneral as $dato) {
+              echo("'$dato'".',');
+            }?>],
+            backgroundColor:"#05c814",
+            borderColor:"#28b463",
+            borderWidth:2,
+          },{
+            label:"CU-",
+            data:[<?php foreach ($dCumenosGeneral as $dcum) {
+              echo("'$dcum'".',');
+            }?>],
+            backgroundColor:"#ec7063",
+            borderColor:"#0c5f12",
+            borderWidth:2,
+          },{
+            label:"CNU",
+            data:[<?php foreach ($dCnuGeneral as $dato) {
+              echo("'$dato'".',');
+            }?>],
+            backgroundColor:"#f7dc6f",
+            borderColor:"#f39c12",
+            borderWidth:2,
+          }
+          ,{
+            label:"CallAgain",
+            data:[<?php foreach ($dCallAgainGeneral as $dato) {
+              echo("'$dato'".',');
+            }?>],
+            backgroundColor:"#33ffb2",
+            borderColor:"#1476fa",
+            borderWidth:2,
+          }
+        ],
 
-    });
+
+        },
+        options:{
+          responsive: true,
+        }
+      }
+      var grafico_datos_mensuales = document.getElementById('history').getContext('2d');
+      window.pie = new Chart(grafico_datos_mensuales,datos_mensuales);
+
+
+
+  });
   </script>
   <div class="row">
     <div class="container">
@@ -216,23 +267,22 @@
           </div>
         </div>
 
-
-
+      </div>
 
     </div>
 
+
+
+
+
+  <div class="col-md-10 col-md-offset-1">
+    <div id="canvas-container" class="col-md-12 bordes">
+      <h3 class="graphic-tittle">{!!$breadcrum2!!} </h3>
+      <canvas id="history"  height="100px"></canvas>
+    </div>
   </div>
 
+</div>
 
-
-
-
-
-
-
-
-    </div>
-
-    {{--esta es una mousque herramienta misteriosa que nos alludara mas adelante--}}
 
 @endsection

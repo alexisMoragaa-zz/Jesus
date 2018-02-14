@@ -30,9 +30,9 @@ class InformesController extends Controller {
 
 
 public function informeCampana($campana){
-		$campana = Campana::find($campana);
-
-		$total =$campana->registrosCampana->count();
+	//infome completo sobre la campaña que recivimos como parametro desde la url
+		$campana = Campana::find($campana);//seleccionamos la campana que enviamos
+		$total =$campana->registrosCampana->count();//tomamos el total de registros asiciados a la campaña
 
 			$llamados = captaciones::where('estado','!=',0)->where('campana_id','=',$campana->id)->count();
 			$pendientes = captaciones::where('estado','=',0)->where('campana_id','=',$campana->id)->count();
@@ -41,13 +41,48 @@ public function informeCampana($campana){
 			$cnu = captaciones::where('estado','=','cnu')->where('campana_id','=',$campana->id)->count();
 			$call_again = captaciones::where('estado','=','ca')->where('campana_id','=',$campana->id)->count();
 
-			$contactados = $cumas+$cumenos+$call_again;
-			$recorrido ="Recorrido Genaral de la Base";
+			$contactados = $cumas+$cumenos+$call_again;//seleccionamos os contactados
+			$recorrido ="Recorrido Genaral de la Base";//enviamos un breadcrum que nos indica donde nos encontramos
+
+			$lab = captaciones::select('f_ultimo_llamado')//seleccionamos las fechas de ultimo llamado sin repetirse para graficas el resultado general
+			->where('campana_id',$campana->id)->distinct()->get()->sortByDesc('f_ultimo_llamado');
+
+		$contador =0;//inicializamos un contador en 0
+				foreach ($lab as $l ) {//recorremos las fechas de llamados obtenidos desde la query
+					/*Usamos el foreach para recorrer la coleccion y por cada iteracion tomamos la fecha de ultimo llamado y seleccionamos la data usando esa fecha en cada iteracion*/
+					$dcumas =captaciones::where('estado','cu+')//seleccionamos los cu+
+					->where('f_ultimo_llamado',$l->f_ultimo_llamado)->where('campana_id',$campana->id)->count();
+					$dCumasGeneral[$contador]=$dcumas;//guardamos el resultado en la posicion asignada por el contador que se incremente en 1 por cada iteracion
+
+					$dcumenos =captaciones::where('estado','cu-')//seleccionamos los cu-
+					->where('f_ultimo_llamado',$l->f_ultimo_llamado)->where('campana_id',$campana->id)->count();
+						$dCumenosGeneral[$contador]=$dcumenos;//guardamos el resultado en la posicion asignada por el contador que se incremente en 1 por cada iteracion
+
+					$dcnu = captaciones::where('estado','cnu')//seleccionamos los cnu
+					->where('f_ultimo_llamado',$l->f_ultimo_llamado)->where('campana_id',$campana->id)->count();
+					$dCnuGeneral[$contador]=$dcnu;//guardamos el resultado en la posicion asignada por el contador que se incremente en 1 por cada iteracion
+
+					$dca = captaciones::where('estado','ca')//seleccionamos los ca
+					->where('f_ultimo_llamado',$l->f_ultimo_llamado)->where('campana_id',$campana->id)->count();
+					$dCallAgainGeneral[$contador]=$dca;//guardamos el resultado en la posicion asignada por el contador que se incremente en 1 por cada iteracion
+
+						$labels[$contador]=$l->f_ultimo_llamado;//guardamos en un array los labels para poder graficarlso de forma dinamica
+						$contador = $contador+1;//aumentamos el contador en 1 por cada iteracion del ciclo
+				}
+
+			// $labFirst = captaciones::select('primer_llamado')//seleccionamos las fechas de ultimo llamado sin repetirse para graficas el resultado general
+			// ->where('campana_id',$campana->id)->distinct()->get()->sortByDesc('primer_llamado')->toArray();
+			// dd($labFirst);
+		$breadcrum2="Resumen General base por dias llamados <small>Informacion Obtenida en base a la fecha de ultimo llamado</small>";
 		if($contactados != 0){
 			$penetracion =  number_format($cumas/$llamados*100,2,'.','');
 			$penetracionTotal = number_format($cumas/$total*100,2,'.','');
 			$contactabilidad = number_format((float)$contactados/$llamados*100, 2, '.', '');
-
+		}else{
+			$penetracion = "Sin Informacion";
+			$penetracionTotal = "Sin Informacion";
+			$contactabilidad = "Sin Informacion";
+		}
 			return view('Informes.informeCampana',[
 				'total'=>$total,
 				'llamados'=>$llamados,
@@ -61,21 +96,14 @@ public function informeCampana($campana){
 				'penetracionTotal'=>$penetracionTotal,
 				'call_again'=>$call_again,
 				'recorrido'=>$recorrido,
-			]);
-		}else{
-			return view('Informes.informeCampana',[
-				'total'=>$total,
-				'llamados'=>$llamados,
-				'pendientes'=>$pendientes,
-				'base'=>$campana,
-				'cumas'=>$cumas,
-				'cumenos'=>$cumenos,
-				'cnu'=>$cnu,
-				'call_again'=>$call_again,
-				'recorrido'=>$recorrido,
+				'labels'=>$labels,
+				'dCumasGeneral'=>$dCumasGeneral,
+				'dCumenosGeneral'=>$dCumenosGeneral,
+				'dCnuGeneral'=>$dCnuGeneral,
+				'dCallAgainGeneral'=>$dCallAgainGeneral,
+				'breadcrum2'=>$breadcrum2,
 			]);
 
-		}
 
 }
 
@@ -88,140 +116,83 @@ public function informeCampanaRecorridos($id,$vuelta){
 			$recorrer ="primer_llamado";
 			$estado_llamado="estado_llamada1";
 			$recorrido ="Recorrido Primera Vuelta  de la Base";
-			$total=$campana->registrosCampana->count();
+			$total = $campana->registrosCampana->count();
+			$estado = "estado1";
+			$breadcrum2="Resumen Primer Recorrido base por dias llamados <small>Informacion Obtenida en base a la fecha del Primer llamado</small>";
 
-		}elseif($vuelta==2){
+		}elseif($vuelta == 2){
 
-						$recorrer ="segundo_llamado";
-						$estado_llamado="estado_llamada2";
-						$recorrido ="Recorrido Segunda Vuelta  de la Base";
+				$recorrer ="segundo_llamado";
+				$estado_llamado="estado_llamada2";
+				$recorrido ="Recorrido Segunda Vuelta  de la Base";
+				$estado = "estado2";
+				$breadcrum2="Resumen Segundo Recorrido base por dias llamados <small>Informacion Obtenida en base a la fecha del Segundo llamado</small>";
+				$cumas = captaciones::where('campana_id',$campana->id)->where('estado1','cu+')->count();
 
-						$cumas1 = captaciones::where('estado_llamada1','=','Acepta Agendamiento')->where('campana_id','=',$id)->count();
-						$cumas2 = captaciones::where('estado_llamada1','=','Acepta Grabacion')->where('campana_id','=',$id)->count();
-						$cumas3 = captaciones::where('estado_llamada1','=','Acepta Delivery')->where('campana_id','=',$id)->count();
-						$cumas4 = captaciones::where('estado_llamada1','=','Acepta ir a Dues')->where('campana_id','=',$id)->count();
-						$cumas = $cumas1+$cumas2+$cumas3+$cumas4;
+			$cumenos = captaciones::where('campana_id',$campana->id)->where('estado1','cu-')->count();
+			$total=$campana->registrosCampana->count()-$cumas-$cumenos;
 
-						$cumenos1  = captaciones::where('campana_id','=',$campana->id)->where('estado_llamada1', '=', 'Civer Activista')->count();
-						$cumenos2  = captaciones::where('campana_id','=',$campana->id)->where('estado_llamada1', '=', 'Aporta a otra Fundacion')->count();
-						$cumenos3  = captaciones::where('campana_id','=',$campana->id)->where('estado_llamada1', '=', 'Es Socio')->count();
-						$cumenos4  = captaciones::where('campana_id','=',$campana->id)->where('estado_llamada1', '=', 'Fue Contactado')->count();
-						$cumenos5  = captaciones::where('campana_id','=',$campana->id)->where('estado_llamada1', '=', 'Jubilado')->count();
-						$cumenos6  = captaciones::where('campana_id','=',$campana->id)->where('estado_llamada1', '=', 'Menor de Edad')->count();
-						$cumenos7  = captaciones::where('campana_id','=',$campana->id)->where('estado_llamada1', '=', 'No tiene Cuenta')->count();
-						$cumenos8  = captaciones::where('campana_id','=',$campana->id)->where('estado_llamada1', '=', 'Sin Dinero')->count();
-						$cumenos9  = captaciones::where('campana_id','=',$campana->id)->where('estado_llamada1', '=', 'Auto Upgrade')->count();
-						$cumenos10 = captaciones::where('campana_id','=',$campana->id)->where('estado_llamada1', '=', 'Sin Trabajo')->count();
-						$cumenos11 = captaciones::where('campana_id','=',$campana->id)->where('estado_llamada1', '=', 'No Interesado')->count();
-						$cumenos12 = captaciones::where('campana_id','=',$campana->id)->where('estado_llamada1', '=', 'Molesto por Llamado')->count();
-						$cumenos13 = captaciones::where('campana_id','=',$campana->id)->where('estado_llamada1', '=', 'Persona Cuelga')->count();
-						$cumenos14 = captaciones::where('campana_id','=',$campana->id)->where('estado_llamada1', '=', 'Quiere Renunciar')->count();
-					$cumenos = $cumenos1+$cumenos2+$cumenos3+$cumenos4+$cumenos5+$cumenos6+$cumenos7+$cumenos8+$cumenos9+$cumenos10+$cumenos11+$cumenos12+$cumenos13+$cumenos14;
-				$total=$campana->registrosCampana->count()-$cumas-$cumenos;
+		}elseif($vuelta == 3){
 
-		}elseif($vuelta==3){
-
-						$recorrer ="tercer_llamado";
-						$estado_llamado="estado_llamada3";
-						$recorrido ="Recorrido Tercera Vuelta  de la Base";
-						$recorrer ="tercer_llamado";
-						$estado_llamado="estado_llamada3";
-						$recorrido ="Recorrido Tercera Vuelta  de la Base";
-
-						$cumas1 = captaciones::where('estado_llamada1','=','Acepta Agendamiento')->where('campana_id','=',$id)->count();
-						$cumas2 = captaciones::where('estado_llamada1','=','Acepta Grabacion')->where('campana_id','=',$id)->count();
-						$cumas3 = captaciones::where('estado_llamada1','=','Acepta Delivery')->where('campana_id','=',$id)->count();
-						$cumas4 = captaciones::where('estado_llamada1','=','Acepta ir a Dues')->where('campana_id','=',$id)->count();
-
-						$cumas5 = captaciones::where('estado_llamada2','=','Acepta Agendamiento')->where('campana_id','=',$id)->count();
-						$cumas6 = captaciones::where('estado_llamada2','=','Acepta Grabacion')->where('campana_id','=',$id)->count();
-						$cumas7 = captaciones::where('estado_llamada2','=','Acepta Delivery')->where('campana_id','=',$id)->count();
-						$cumas8 = captaciones::where('estado_llamada2','=','Acepta ir a Dues')->where('campana_id','=',$id)->count();
-
-						$cumasvuelta1 = $cumas1+$cumas2+$cumas3+$cumas4;
-						$cumasvuelta2 = $cumas5+$cumas6+$cumas7+$cumas8;
-
-						$cumenos1  = captaciones::where('campana_id','=',$campana->id)->where('estado_llamada1', '=', 'Civer Activista')->count();
-						$cumenos2  = captaciones::where('campana_id','=',$campana->id)->where('estado_llamada1', '=', 'Aporta a otra Fundacion')->count();
-						$cumenos3  = captaciones::where('campana_id','=',$campana->id)->where('estado_llamada1', '=', 'Es Socio')->count();
-						$cumenos4  = captaciones::where('campana_id','=',$campana->id)->where('estado_llamada1', '=', 'Fue Contactado')->count();
-						$cumenos5  = captaciones::where('campana_id','=',$campana->id)->where('estado_llamada1', '=', 'Jubilado')->count();
-						$cumenos6  = captaciones::where('campana_id','=',$campana->id)->where('estado_llamada1', '=', 'Menor de Edad')->count();
-						$cumenos7  = captaciones::where('campana_id','=',$campana->id)->where('estado_llamada1', '=', 'No tiene Cuenta')->count();
-						$cumenos8  = captaciones::where('campana_id','=',$campana->id)->where('estado_llamada1', '=', 'Sin Dinero')->count();
-						$cumenos9  = captaciones::where('campana_id','=',$campana->id)->where('estado_llamada1', '=', 'Auto Upgrade')->count();
-						$cumenos10 = captaciones::where('campana_id','=',$campana->id)->where('estado_llamada1', '=', 'Sin Trabajo')->count();
-						$cumenos11 = captaciones::where('campana_id','=',$campana->id)->where('estado_llamada1', '=', 'No Interesado')->count();
-						$cumenos12 = captaciones::where('campana_id','=',$campana->id)->where('estado_llamada1', '=', 'Molesto por Llamado')->count();
-						$cumenos13 = captaciones::where('campana_id','=',$campana->id)->where('estado_llamada1', '=', 'Persona Cuelga')->count();
-						$cumenos14 = captaciones::where('campana_id','=',$campana->id)->where('estado_llamada1', '=', 'Quiere Renunciar')->count();
-
-						$cumenos15  = captaciones::where('campana_id','=',$campana->id)->where('estado_llamada2', '=', 'Civer Activista')->count();
-						$cumenos16  = captaciones::where('campana_id','=',$campana->id)->where('estado_llamada2', '=', 'Aporta a otra Fundacion')->count();
-						$cumenos17  = captaciones::where('campana_id','=',$campana->id)->where('estado_llamada2', '=', 'Es Socio')->count();
-						$cumenos18  = captaciones::where('campana_id','=',$campana->id)->where('estado_llamada2', '=', 'Fue Contactado')->count();
-						$cumenos19  = captaciones::where('campana_id','=',$campana->id)->where('estado_llamada2', '=', 'Jubilado')->count();
-						$cumenos20  = captaciones::where('campana_id','=',$campana->id)->where('estado_llamada2', '=', 'Menor de Edad')->count();
-						$cumenos21  = captaciones::where('campana_id','=',$campana->id)->where('estado_llamada2', '=', 'No tiene Cuenta')->count();
-						$cumenos22  = captaciones::where('campana_id','=',$campana->id)->where('estado_llamada2', '=', 'Sin Dinero')->count();
-						$cumenos23  = captaciones::where('campana_id','=',$campana->id)->where('estado_llamada2', '=', 'Auto Upgrade')->count();
-						$cumenos24 = captaciones::where('campana_id','=',$campana->id)->where('estado_llamada2', '=', 'Sin Trabajo')->count();
-						$cumenos25 = captaciones::where('campana_id','=',$campana->id)->where('estado_llamada2', '=', 'No Interesado')->count();
-						$cumenos26 = captaciones::where('campana_id','=',$campana->id)->where('estado_llamada2', '=', 'Molesto por Llamado')->count();
-						$cumenos27 = captaciones::where('campana_id','=',$campana->id)->where('estado_llamada2', '=', 'Persona Cuelga')->count();
-						$cumenos28 = captaciones::where('campana_id','=',$campana->id)->where('estado_llamada2', '=', 'Quiere Renunciar')->count();
-
-					$cumenosvuelta1 = $cumenos1+$cumenos2+$cumenos3+$cumenos4+$cumenos5+$cumenos6+$cumenos7+$cumenos8+$cumenos9+$cumenos10+$cumenos11+$cumenos12+$cumenos13+$cumenos14;
-					$cumenosvuelta2 = $cumenos15+$cumenos16+$cumenos17+$cumenos18+$cumenos19+$cumenos20+$cumenos21+$cumenos22+$cumenos23+$cumenos24+$cumenos25+$cumenos26+$cumenos17+$cumenos28;
-
-				$total=$campana->registrosCampana->count()-$cumasvuelta1-$cumenosvuelta1-$cumasvuelta2-$cumenosvuelta2;
+			$recorrer ="tercer_llamado";
+			$estado_llamado="estado_llamada3";
+			$recorrido ="Recorrido Tercera Vuelta  de la Base";
+			$recorrer ="tercer_llamado";
+			$estado ="estado3";
+			$breadcrum2="Resumen Tercer Recorrido base por dias llamados <small>Informacion Obtenida en base a la fecha del Tercer llamado</small>";
+			$cumasvuelta1 = captaciones::where('campana_id',$campana->id)->where('estado1','cu+')->count();
+			$cumasvuelta2 = captaciones::where('campana_id',$campana->id)->where('estado2','cu+')->count();
+			$cumenosvuelta1 = captaciones::where('campana_id',$campana->id)->where('estado1','cu-')->count();
+			$cumenosvuelta2 = captaciones::where('campana_id',$campana->id)->where('estado2','cu-')->count();
+			$total=$campana->registrosCampana->count()-$cumasvuelta1-$cumenosvuelta1-$cumasvuelta2-$cumenosvuelta2;
 
 		}
 
 		$llamados = captaciones::where('campana_id','=',$id)->where($recorrer,'!=',0)->count();
 		$pendientes =$total-$llamados;
 
-			$cumas1 = captaciones::where($estado_llamado,'=','Acepta Agendamiento')->where('campana_id','=',$id)->count();
-			$cumas2 = captaciones::where($estado_llamado,'=','Acepta Grabacion')->where('campana_id','=',$id)->count();
-			$cumas3 = captaciones::where($estado_llamado,'=','Acepta Delivery')->where('campana_id','=',$id)->count();
-			$cumas4 = captaciones::where($estado_llamado,'=','Acepta ir a Dues')->where('campana_id','=',$id)->count();
-			$cumas = $cumas1+$cumas2+$cumas3+$cumas4;
+			$cumas = captaciones::where('campana_id',$id)->where($estado,'cu+')->count();
+			$cumenos = captaciones::where('campana_id',$id)->where($estado,'cu-')->count();
+			$cnu = captaciones::where('campana_id',$id)->where($estado,'cnu')->count();
+			$call_again = captaciones::where($estado_llamado,'=','Agendar Llamado')->where('campana_id','=',$campana->id)->count();
+			$contactados = $cumas+$cumenos+$call_again;
 
-			$cumenos1  = captaciones::where('campana_id','=',$campana->id)->where($estado_llamado, '=', 'Civer Activista')->count();
-			$cumenos2  = captaciones::where('campana_id','=',$campana->id)->where($estado_llamado, '=', 'Aporta a otra Fundacion')->count();
-			$cumenos3  = captaciones::where('campana_id','=',$campana->id)->where($estado_llamado, '=', 'Es Socio')->count();
-			$cumenos4  = captaciones::where('campana_id','=',$campana->id)->where($estado_llamado, '=', 'Fue Contactado')->count();
-			$cumenos5  = captaciones::where('campana_id','=',$campana->id)->where($estado_llamado, '=', 'Jubilado')->count();
-			$cumenos6  = captaciones::where('campana_id','=',$campana->id)->where($estado_llamado, '=', 'Menor de Edad')->count();
-			$cumenos7  = captaciones::where('campana_id','=',$campana->id)->where($estado_llamado, '=', 'No tiene Cuenta')->count();
-			$cumenos8  = captaciones::where('campana_id','=',$campana->id)->where($estado_llamado, '=', 'Sin Dinero')->count();
-			$cumenos9  = captaciones::where('campana_id','=',$campana->id)->where($estado_llamado, '=', 'Auto Upgrade')->count();
-			$cumenos10 = captaciones::where('campana_id','=',$campana->id)->where($estado_llamado, '=', 'Sin Trabajo')->count();
-			$cumenos11 = captaciones::where('campana_id','=',$campana->id)->where($estado_llamado, '=', 'No Interesado')->count();
-			$cumenos12 = captaciones::where('campana_id','=',$campana->id)->where($estado_llamado, '=', 'Molesto por Llamado')->count();
-			$cumenos13 = captaciones::where('campana_id','=',$campana->id)->where($estado_llamado, '=', 'Persona Cuelga')->count();
-			$cumenos14 = captaciones::where('campana_id','=',$campana->id)->where($estado_llamado, '=', 'Quiere Renunciar')->count();
-		$cumenos = $cumenos1+$cumenos2+$cumenos3+$cumenos4+$cumenos5+$cumenos6+$cumenos7+$cumenos8+$cumenos9+$cumenos10+$cumenos11+$cumenos12+$cumenos13+$cumenos14;
+		$lab = captaciones::select($recorrer)//seleccionamos las fechas de ultimo llamado sin repetirse para graficas el resultado general
+		->where('campana_id',$campana->id)->distinct()->whereNotNull($recorrer)->get()->sortByDesc($recorrer);
 
-			$cnu1  = captaciones::where('campana_id','=',$campana->id)->where($estado_llamado, '=', 'Fono Ocupado')->count();
-			$cnu2  = captaciones::where('campana_id','=',$campana->id)->where($estado_llamado, '=', 'Grabadora')->count();
-			$cnu3  = captaciones::where('campana_id','=',$campana->id)->where($estado_llamado, '=', 'Fax')->count();
-			$cnu4  = captaciones::where('campana_id','=',$campana->id)->where($estado_llamado, '=', 'No Contesta')->count();
-			$cnu5  = captaciones::where('campana_id','=',$campana->id)->where($estado_llamado, '=', 'Fuera de Servicio')->count();
-			$cnu6  = captaciones::where('campana_id','=',$campana->id)->where($estado_llamado, '=', 'Mala Conexion')->count();
-			$cnu7  = captaciones::where('campana_id','=',$campana->id)->where($estado_llamado, '=', 'Otra Persona')->count();
-			$cnu8  = captaciones::where('campana_id','=',$campana->id)->where($estado_llamado, '=', 'Fallecido')->count();
-		$cnu = $cnu1+$cnu2+$cnu3+$cnu4+$cnu5+$cnu6+$cnu7+$cnu8;
+		$contador = 0;//inicializamos un contador en 0
+				foreach ($lab as $l ) {//recorremos las fechas de llamados obtenidos desde la query
+					/*Usamos el foreach para recorrer la coleccion y por cada iteracion tomamos la fecha de ultimo llamado y seleccionamos la data usando esa fecha en cada iteracion*/
+					$dcumas =captaciones::where($estado,'cu+')//seleccionamos los cu+
+					->where($recorrer,$l->$recorrer)->where('campana_id',$campana->id)->count();
+					$dCumasGeneral[$contador]=$dcumas;//guardamos el resultado en la posicion asignada por el contador que se incremente en 1 por cada iteracion
 
-		$call_again = captaciones::where($estado_llamado,'=','Agendar Llamado')->where('campana_id','=',$campana->id)->count();
+					$dcumenos =captaciones::where($estado,'cu-')//seleccionamos los cu-
+					->where($recorrer,$l->$recorrer)->where('campana_id',$campana->id)->count();
+						$dCumenosGeneral[$contador]=$dcumenos;//guardamos el resultado en la posicion asignada por el contador que se incremente en 1 por cada iteracion
 
-		$contactados = $cumas+$cumenos+$call_again;
+					$dcnu = captaciones::where($estado,'cnu')//seleccionamos los cnu
+					->where($recorrer,$l->$recorrer)->where('campana_id',$campana->id)->count();
+					$dCnuGeneral[$contador]=$dcnu;//guardamos el resultado en la posicion asignada por el contador que se incremente en 1 por cada iteracion
+
+					$dca = captaciones::where($estado,'ca')//seleccionamos los ca
+					->where($recorrer,$l->$recorrer)->where('campana_id',$campana->id)->count();
+					$dCallAgainGeneral[$contador]=$dca;//guardamos el resultado en la posicion asignada por el contador que se incremente en 1 por cada iteracion
+
+						$labels[$contador]=$l->$recorrer;//guardamos en un array los labels para poder graficarlso de forma dinamica
+						$contador = $contador+1;//aumentamos el contador en 1 por cada iteracion del ciclo
+				}
+
 
 	if($contactados != 0){
 		$penetracion =  number_format($cumas/$llamados*100,2,'.','');
 		$penetracionTotal = number_format($cumas/$total*100,2,'.','');
 		$contactabilidad = number_format((float)$contactados/$llamados*100, 2, '.', '');
-
+	}else{
+		$penetracion =  "Sin Informacion";
+		$penetracionTotal = "Sin Informacion";
+		$contactabilidad = "Sin Informacion";
+	}
 		return view('Informes.informeCampana',[
 			'total'=>$total,
 			'llamados'=>$llamados,
@@ -235,21 +206,14 @@ public function informeCampanaRecorridos($id,$vuelta){
 			'penetracionTotal'=>$penetracionTotal,
 			'call_again'=>$call_again,
 			'recorrido'=>$recorrido,
-		]);
-	}else{
-		return view('Informes.informeCampana',[
-			'total'=>$total,
-			'llamados'=>$llamados,
-			'pendientes'=>$pendientes,
-			'base'=>$campana,
-			'cumas'=>$cumas,
-			'cumenos'=>$cumenos,
-			'cnu'=>$cnu,
-			'call_again'=>$call_again,
-			'recorrido'=>$recorrido,
+			'labels'=>$labels,
+			'dCumasGeneral'=>$dCumasGeneral,
+			'dCumenosGeneral'=>$dCumenosGeneral,
+			'dCnuGeneral'=>$dCnuGeneral,
+			'dCallAgainGeneral'=>$dCallAgainGeneral,
+			'breadcrum2'=>$breadcrum2,
 		]);
 
-	}
 }
 
 

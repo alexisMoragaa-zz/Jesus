@@ -355,7 +355,7 @@ no vuelven a llamar a los mismos registros que otros lalmaron el mismo dia*/
         }
 
         $t_retiro=$request->tipo_retiro;//guardamos en la variable t_retiro el tipo de retiro obtenido del request
-
+        $dateCall =Carbon::now()->format('d-m-Y');
         DB::table('captaciones')//usamos el metodo update de query builder
             ->where('id', '=', $id)//usamos where para buscar el registro que dseseamos actualizar por id
             ->update(//usamos el metodo update y le pasamos los datos que deseamos actualizar
@@ -363,7 +363,7 @@ no vuelven a llamar a los mismos registros que otros lalmaron el mismo dia*/
                 'estado_registro' => 0,//ponemos es estado de registro en 0
                 'estado' => 'cu+',//y el estado en cu+
                 'n_llamados'=> $n_llamado,
-                $f_llamado=>$date,
+                $f_llamado=>$dateCall,
                 $name_status=>$t_retiro,// asignamos el nombre de estado como el tipo de retiro
                 'teoFinal'=>Auth::user()->id,
                 $teocall=>Auth::user()->id,
