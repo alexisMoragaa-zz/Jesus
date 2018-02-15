@@ -367,7 +367,8 @@ no vuelven a llamar a los mismos registros que otros lalmaron el mismo dia*/
                 $name_status=>$t_retiro,// asignamos el nombre de estado como el tipo de retiro
                 'teoFinal'=>Auth::user()->id,
                 $teocall=>Auth::user()->id,
-                $callstatus=>"cu+"
+                $callstatus=>"cu+",
+                'f_ultimo_llamado' => $dateCall,//asignamos los valores obtenidos del request
               ]);
 
       /*Finalmente en el metodo update usamos las variables que fueron asignadas en la primera parte de este metodo*/

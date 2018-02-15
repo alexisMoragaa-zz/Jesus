@@ -151,7 +151,7 @@
       </div>
     </div>
 
-    <div class="col xs-12 col-md-6">
+    <div class="col-xs-12 col-md-6">
       <div id="canvas-container" class="col-md-12 bordes">
         <h3 class="graphic-tittle">Contactados</h3>
         <canvas id="contactados" width="250px" height="160px"></canvas>
@@ -232,7 +232,9 @@
 
             </ul>
           </div>
+          <div class=" alert alert-warning">Monto Total Acumulado (CU+)  <span class="badge right">${{$montoCumas}}</span></div>
         </div>
+
 
         <div class="col-md-10" id="mt-2">
           <div class="panel panel-info">
@@ -271,16 +273,13 @@
 
     </div>
 
-
-
-
-
-  <div class="col-md-10 col-md-offset-1">
-    <div id="canvas-container" class="col-md-12 bordes">
-      <h3 class="graphic-tittle">{!!$breadcrum2!!} </h3>
-      <canvas id="history"  height="100px"></canvas>
+    <div class="col-md-10 col-md-offset-1">
+      <div id="canvas-container" >
+        <h3 class="graphic-tittle">{!!$breadcrum2!!} </h3>
+        <canvas id="history"  height="100px"></canvas>
+      </div>
     </div>
-  </div>
+
 
 </div>
 

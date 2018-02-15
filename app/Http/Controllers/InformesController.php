@@ -70,9 +70,7 @@ public function informeCampana($campana){
 						$contador = $contador+1;//aumentamos el contador en 1 por cada iteracion del ciclo
 				}
 
-			// $labFirst = captaciones::select('primer_llamado')//seleccionamos las fechas de ultimo llamado sin repetirse para graficas el resultado general
-			// ->where('campana_id',$campana->id)->distinct()->get()->sortByDesc('primer_llamado')->toArray();
-			// dd($labFirst);
+
 		$breadcrum2="Resumen General base por dias llamados <small>Informacion Obtenida en base a la fecha de ultimo llamado</small>";
 		if($contactados != 0){
 			$penetracion =  number_format($cumas/$llamados*100,2,'.','');
@@ -83,6 +81,9 @@ public function informeCampana($campana){
 			$penetracionTotal = "Sin Informacion";
 			$contactabilidad = "Sin Informacion";
 		}
+
+		$montoCumas = \DB::table('captaciones_exitosas')->where('nom_campana',$campana->nombre_campana)->sum('monto');
+
 			return view('Informes.informeCampana',[
 				'total'=>$total,
 				'llamados'=>$llamados,
@@ -102,6 +103,7 @@ public function informeCampana($campana){
 				'dCnuGeneral'=>$dCnuGeneral,
 				'dCallAgainGeneral'=>$dCallAgainGeneral,
 				'breadcrum2'=>$breadcrum2,
+				'montoCumas'=>$montoCumas,
 			]);
 
 
@@ -225,7 +227,7 @@ public function informeFundacion($fundacion){
 			'fundacion'=>$fundacion,
 			'campanas'=>$campanas,
 		]);
-	// return "hola";
+
 }
 
 public function informeUser($id){
@@ -237,17 +239,11 @@ public function informeUser($id){
 	$ca = captaciones::where('campana_id',$user->campana)->where('estado','ca')->where('teoFinal',$id)->count();
 	$registrosContactados = $cumas+$cumenos+$ca;
 
-
-	/*$llamados1 = captaciones::where('campana_id','=',$user->campana)->where('estado','=','cnu')->where('teo1','=',$id)->where('teo2','!=',$id)->where('teo3','!=',$id)->count();
-	$llamados2 = captaciones::where('campana_id','=',$user->campana)->where('estado','=','cnu')->where('teo1','!=',$id)->where('teo2','=',$id)->where('teo3','!=',$id)->count();
-	$llamados3 = captaciones::where('campana_id','=',$user->campana)->where('estado','=','cnu')->where('teo1','!=',$id)->where('teo2','!=',$id)->where('teo3','=',$id)->count();
-	$cnu=$llamados1+$llamados2+$llamados3;*/
 	$cnu1 = captaciones::where('campana_id',$user->campana)->where('estado1','cnu')->where('teo1',$id)->count();
 	$cnu2 = captaciones::where('campana_id',$user->campana)->where('estado2','cnu')->where('teo2',$id)->count();
 	$cnu3 = captaciones::where('campana_id',$user->campana)->where('estado3','cnu')->where('teo3',$id)->count();
 	$cnu = $cnu1+$cnu2+$cnu3;
 	$llamados =$cumas+$cumenos+$ca+$cnu;
-
 
 	$agendamiento = CaptacionesExitosa::where('nom_campana','=',$campana->nombre_campana)->where('teleoperador','=',$user->id)->where('tipo_retiro','=','Acepta Agendamiento')->count();
 	$grabacion = CaptacionesExitosa::where('nom_campana','=',$campana->nombre_campana)->where('teleoperador','=',$user->id)->where('tipo_retiro','=','Acepta Grabacion')->count();
@@ -255,6 +251,84 @@ public function informeUser($id){
 	$iradues = CaptacionesExitosa::where('nom_campana','=',$campana->nombre_campana)->where('teleoperador','=',$user->id)->where('tipo_retiro','=','Acepta ir a Dues')->count();
 	$breadcrum = $user->name." ".$user->last_name." / ".$campana->nombre_campana;
 
+	$firstlabs = captaciones::select('primer_llamado')->where('teo1',$user->id)//seleccionamos las fechas de ultimo llamado sin repetirse para graficas el resultado general
+	->where('campana_id',$campana->id)->distinct()->whereNotNull('primer_llamado')->get()->sortByDesc('primer_llamado');
+
+	$contador = 0;//inicializamos un contador en 0
+			foreach ($firstlabs as $l ){//recorremos las fechas de llamados obtenidos desde la query
+				/*Usamos el foreach para recorrer la coleccion y por cada iteracion tomamos la fecha de ultimo llamado y seleccionamos la data usando esa fecha en cada iteracion*/
+				$dcumas =captaciones::where('estado1','cu+')->where('teo1',$user->id)//seleccionamos los cu+
+				->where('primer_llamado',$l->primer_llamado)->where('campana_id',$user->campana)->count();
+				$dCumasPrimer[$contador]=$dcumas;//guardamos el resultado en la posicion asignada por el contador que se incremente en 1 por cada iteracion
+
+				$dcumenos =captaciones::where('estado1','cu-')->where('teo1',$user->id)//seleccionamos los cu-
+				->where('primer_llamado',$l->primer_llamado)->where('campana_id',$user->campana)->count();
+					$dCumenosPrimer[$contador]=$dcumenos;//guardamos el resultado en la posicion asignada por el contador que se incremente en 1 por cada iteracion
+
+				$dcnu = captaciones::where('estado1','cnu')->where('teo1',$user->id)//seleccionamos los cnu
+				->where('primer_llamado',$l->primer_llamado)->where('campana_id',$campana->id)->count();
+				$dCnuPrimer[$contador]=$dcnu;//guardamos el resultado en la posicion asignada por el contador que se incremente en 1 por cada iteracion
+
+				$dca = captaciones::where('estado1','ca')->where('teo1',$user->id)//seleccionamos los ca
+				->where('primer_llamado',$l->primer_llamado)->where('campana_id',$campana->id)->count();
+				$dCallAgainPrimer[$contador]=$dca;//guardamos el resultado en la posicion asignada por el contador que se incremente en 1 por cada iteracion
+
+					$labelsPrimer[$contador]=$l->primer_llamado;//guardamos en un array los labels para poder graficarlso de forma dinamica
+					$contador = $contador+1;//aumentamos el contador en 1 por cada iteracion del ciclo
+			}
+
+			$secondlabs = captaciones::select('segundo_llamado')->where('teo2',$user->id)//seleccionamos las fechas de ultimo llamado sin repetirse para graficas el resultado general
+			->where('campana_id',$campana->id)->distinct()->whereNotNull('segundo_llamado')->get()->sortByDesc('segundo_llamado');
+
+			$contador2 = 0;//inicializamos un contador en 0
+					foreach ($secondlabs as $l ){//recorremos las fechas de llamados obtenidos desde la query
+						/*Usamos el foreach para recorrer la coleccion y por cada iteracion tomamos la fecha de ultimo llamado y seleccionamos la data usando esa fecha en cada iteracion*/
+						$dcumas =captaciones::where('estado2','cu+')->where('teo2',$user->id)//seleccionamos los cu+
+						->where('segundo_llamado',$l->segundo_llamado)->where('campana_id',$user->campana)->count();
+						$dCumasSegundo[$contador2]=$dcumas;//guardamos el resultado en la posicion asignada por el contador que se incremente en 1 por cada iteracion
+
+						$dcumenos =captaciones::where('estado2','cu-')->where('teo2',$user->id)//seleccionamos los cu-
+						->where('segundo_llamado',$l->segundo_llamado)->where('campana_id',$user->campana)->count();
+							$dCumenosSegundo[$contador2]=$dcumenos;//guardamos el resultado en la posicion asignada por el contador que se incremente en 1 por cada iteracion
+
+						$dcnu = captaciones::where('estado2','cnu')->where('teo2',$user->id)//seleccionamos los cnu
+						->where('segundo_llamado',$l->segundo_llamado)->where('campana_id',$campana->id)->count();
+						$dCnuSegundo[$contador2]=$dcnu;//guardamos el resultado en la posicion asignada por el contador que se incremente en 1 por cada iteracion
+
+						$dca = captaciones::where('estado2','ca')->where('teo2',$user->id)                                  //seleccionamos los ca
+						->where('segundo_llamado',$l->segundo_llamado)->where('campana_id',$campana->id)->count();
+						$dCallAgainSegundo[$contador2]=$dca;//guardamos el resultado en la posicion asignada por el contador que se incremente en 1 por cada iteracion
+
+							$labelsSegundo[$contador2]=$l->segundo_llamado;//guardamos en un array los labels para poder graficarlso de forma dinamica
+							$contador2 = $contador2+1;//aumentamos el contador en 1 por cada iteracion del ciclo
+					}
+
+
+					$threelabs = captaciones::select('tercer_llamado')->where('teo3',$user->id)//seleccionamos las fechas de ultimo llamado sin repetirse para graficas el resultado general
+					->where('campana_id',$campana->id)->distinct()->whereNotNull('tercer_llamado')->get()->sortByDesc('tercer_llamado');
+
+					$contador3 = 0;//inicializamos un contador en 0
+							foreach ($threelabs as $l ){//recorremos las fechas de llamados obtenidos desde la query
+								/*Usamos el foreach para recorrer la coleccion y por cada iteracion tomamos la fecha de ultimo llamado y seleccionamos la data usando esa fecha en cada iteracion*/
+								$dcumas =captaciones::where('estado3','cu+')->where('teo3',$user->id)//seleccionamos los cu+
+								->where('tercer_llamado',$l->tercer_llamado)->where('campana_id',$user->campana)->count();
+								$dCumasTercer[$contador3]=$dcumas;//guardamos el resultado en la posicion asignada por el contador que se incremente en 1 por cada iteracion
+
+								$dcumenos =captaciones::where('estado3','cu-')->where('teo3',$user->id)//seleccionamos los cu-
+								->where('tercer_llamado',$l->tercer_llamado)->where('campana_id',$user->campana)->count();
+									$dCumenosTercer[$contador3]=$dcumenos;//guardamos el resultado en la posicion asignada por el contador que se incremente en 1 por cada iteracion
+
+								$dcnu = captaciones::where('estado3','cnu')->where('teo3',$user->id)//seleccionamos los cnu
+								->where('tercer_llamado',$l->tercer_llamado)->where('campana_id',$campana->id)->count();
+								$dCnuTercer[$contador3]=$dcnu;//guardamos el resultado en la posicion asignada por el contador que se incremente en 1 por cada iteracion
+
+								$dca = captaciones::where('estado3','ca')->where('teo3',$user->id)//seleccionamos los ca
+								->where('tercer_llamado',$l->tercer_llamado)->where('campana_id',$campana->id)->count();
+								$dCallAgainTercer[$contador3]=$dca;//guardamos el resultado en la posicion asignada por el contador que se incremente en 1 por cada iteracion
+
+									$labelsTercer[$contador3]=$l->tercer_llamado;//guardamos en un array los labels para poder graficarlso de forma dinamica
+									$contador3 = $contador3+1;//aumentamos el contador en 1 por cada iteracion del ciclo
+							}
 
 	if($registrosContactados != 0){
 		$penetracion =  number_format($cumas/$llamados*100,2,'.','');
@@ -280,6 +354,22 @@ public function informeUser($id){
 		'contactabilidad'=>$contactabilidad,
 		'iradues'=>$iradues,
 		'ca'=>$ca,
+		'labelsPrimer'=>$labelsPrimer,
+		'dCallAgainPrimer'=>$dCallAgainPrimer,
+		'dCnuPrimer'=>$dCnuPrimer,
+		'dCumenosPrimer'=>$dCumenosPrimer,
+		'dCumasPrimer'=>$dCumasPrimer,
+		'dCumasSegundo'=>$dCumasSegundo,
+		'dCumenosSegundo'=>$dCumenosSegundo,
+		'dCnuSegundo'=>$dCnuSegundo,
+		'dCallAgainSegundo'=>$dCallAgainSegundo,
+		'labelsSecond'=>$labelsSegundo,
+		'dCumasTercero'=>$dCumasTercer,
+		'dCumenosTercero'=>$dCumenosTercer,
+		'dCnuTercero'=>$dCnuTercer,
+		'dCallAgainTercero'=>$dCallAgainTercer,
+		'labelsTercero'=>$labelsTercer,
+
 	]);
 }
 

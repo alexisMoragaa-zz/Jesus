@@ -100,6 +100,7 @@ class RegionesController extends Controller {
 							 'teoFinal'=>Auth::user()->id,
  							 $teocall=>Auth::user()->id,
  							 $callstatus=>"cu+",
+						   'f_ultimo_llamado' => $dateCall,//asignamos los valores obtenidos del request
 						 ]);
 
 						 $id =DB::table('estado_rutas')->insertGetId([

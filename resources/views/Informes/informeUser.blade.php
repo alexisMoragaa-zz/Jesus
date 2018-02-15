@@ -90,7 +90,165 @@
       var grafico_cumas =$("#cumas");
       window.pie = new Chart(grafico_cumas,cumas);
 
-    });
+      //Grafico recorrido general de la base por dias
+        var datos_mensuales = {
+          type:"bar",
+          data:{
+            labels:[<?php foreach ($labelsPrimer as $label) {
+              echo("'$label'".',');
+            }?>],
+            datasets:[{
+              label:"CU+",
+              data:[<?php foreach ($dCumasPrimer as $dato) {
+                echo("'$dato'".',');
+              }?>],
+              backgroundColor:"#05c814",
+              borderColor:"#28b463",
+              borderWidth:2,
+            },{
+              label:"CU-",
+              data:[<?php foreach ($dCumenosPrimer as $dcum) {
+                echo("'$dcum'".',');
+              }?>],
+              backgroundColor:"#ec7063",
+              borderColor:"#0c5f12",
+              borderWidth:2,
+            },{
+              label:"CNU",
+              data:[<?php foreach ($dCnuPrimer as $dato) {
+                echo("'$dato'".',');
+              }?>],
+              backgroundColor:"#f7dc6f",
+              borderColor:"#f39c12",
+              borderWidth:2,
+            }
+            ,{
+              label:"CallAgain",
+              data:[<?php foreach ($dCallAgainPrimer as $dato) {
+                echo("'$dato'".',');
+              }?>],
+              backgroundColor:"#33ffb2",
+              borderColor:"#1476fa",
+              borderWidth:2,
+            }
+          ],
+
+
+          },
+          options:{
+            responsive: true,
+          }
+        }
+        var grafico_datos_mensuales = document.getElementById('history').getContext('2d');
+        window.pie = new Chart(grafico_datos_mensuales,datos_mensuales);
+
+        //Grafico recorrido general de la base por dias
+          var second_call = {
+            type:"bar",
+            data:{
+              labels:[<?php foreach ($labelsSecond as $label) {
+                echo("'$label'".',');
+              }?>],
+              datasets:[{
+                label:"CU+",
+                data:[<?php foreach ($dCumasSegundo as $dato) {
+                  echo("'$dato'".',');
+                }?>],
+                backgroundColor:"#05c814",
+                borderColor:"#28b463",
+                borderWidth:2,
+              },{
+                label:"CU-",
+                data:[<?php foreach ($dCumenosSegundo as $dcum) {
+                  echo("'$dcum'".',');
+                }?>],
+                backgroundColor:"#ec7063",
+                borderColor:"#0c5f12",
+                borderWidth:2,
+              },{
+                label:"CNU",
+                data:[<?php foreach ($dCnuSegundo as $dato) {
+                  echo("'$dato'".',');
+                }?>],
+                backgroundColor:"#f7dc6f",
+                borderColor:"#f39c12",
+                borderWidth:2,
+              }
+              ,{
+                label:"CallAgain",
+                data:[<?php foreach ($dCallAgainSegundo as $dato) {
+                  echo("'$dato'".',');
+                }?>],
+                backgroundColor:"#33ffb2",
+                borderColor:"#1476fa",
+                borderWidth:2,
+              }
+            ],
+
+
+            },
+            options:{
+              responsive: true,
+            }
+          }
+          var grafico_second_call = document.getElementById('secondCall').getContext('2d');
+          window.pie = new Chart(grafico_second_call,second_call);
+
+
+    //Grafico recorrido general de la base por dias
+      var three_call = {
+        type:"bar",
+        data:{
+          labels:[<?php foreach ($labelsTercero as $label) {
+            echo("'$label'".',');
+          }?>],
+          datasets:[{
+            label:"CU+",
+            data:[<?php foreach ($dCumasTercero as $dato) {
+              echo("'$dato'".',');
+            }?>],
+            backgroundColor:"#05c814",
+            borderColor:"#28b463",
+            borderWidth:2,
+          },{
+            label:"CU-",
+            data:[<?php foreach ($dCumenosTercero as $dcum) {
+              echo("'$dcum'".',');
+            }?>],
+            backgroundColor:"#ec7063",
+            borderColor:"#0c5f12",
+            borderWidth:2,
+          },{
+            label:"CNU",
+            data:[<?php foreach ($dCnuTercero as $dato) {
+              echo("'$dato'".',');
+            }?>],
+            backgroundColor:"#f7dc6f",
+            borderColor:"#f39c12",
+            borderWidth:2,
+          }
+          ,{
+            label:"CallAgain",
+            data:[<?php foreach ($dCallAgainTercero as $dato) {
+              echo("'$dato'".',');
+            }?>],
+            backgroundColor:"#33ffb2",
+            borderColor:"#1476fa",
+            borderWidth:2,
+          }
+        ],
+
+
+        },
+        options:{
+          responsive: true,
+        }
+      }
+      var grafico_three_call = document.getElementById('threeCall').getContext('2d');
+      window.pie = new Chart(grafico_three_call,three_call);
+});
+
+
   </script>
 <div class="container">
 
@@ -155,6 +313,27 @@
     </div>
   </div>
 
+  <div class="col-md-12 ">
+    <div id="canvas-container" class="col-md-12 bordes">
+      <h3 class="graphic-tittle">Registro diario primer recorrido <small>Registros obtenidos mediante el resultado de la primera llamada</small></h3>
+      <canvas id="history"  height="80px"></canvas>
+    </div>
+  </div>
+
+  <div class="col-md-12 ">
+    <div id="canvas-container" class="col-md-12 bordes">
+      <h3 class="graphic-tittle">Registro diario Segundo recorrido <small>Registros obtenidos mediante el resultado de la Segunda llamada</small></h3>
+      <canvas id="secondCall"  height="80px"></canvas>
+    </div>
+  </div>
+
+  <div class="col-md-12 ">
+    <div id="canvas-container" class="col-md-12 bordes">
+      <h3 class="graphic-tittle">Registro diario Tercer recorrido <small>Registros obtenidos mediante el resultado de la Terera llamada</small></h3>
+      <canvas id="threeCall"  height="80px"></canvas>
+    </div>
+  </div>
 </div>
+
 
 @endsection
