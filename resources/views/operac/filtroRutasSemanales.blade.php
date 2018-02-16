@@ -38,6 +38,39 @@
       <input type="button" class="btn btn-success btn1" value="Buscar" id="buscar">
     </div>
   </div>
+
+  <div class="col-md-12">
+    <div class="table-responsive">
+      <h3 class="text-muted text-center">Rutas a realizarse  los proximos 7 dias a partir de hoy // -> <span class=""> {{$rutas->count()}}</span></h3>
+      <table class="table table-hover">
+        <thead>
+          <th>Nombre</th>
+          <th>Rut</th>
+          <th>Telefono</th>
+          <th>Direccion</th>
+          <th>Fecha Visita</th>
+          <th>Rutero</th>
+          <th>Ver Mas</th>
+        </thead>
+        <tbody>
+
+          @foreach ($rutas as $r)
+            <tr>
+              <td>{{$r->nombre}} {{$r->apellido}}</td>
+              <td>{{$r->rut}}</td>
+              <td>{{$r->fono_1}}</td>
+              <td>{{$r->direccion}}</td>
+              <td>{{$r->fecha_agendamiento}}</td>
+              <td>{{$r->rutero}}</td>
+
+              <td><a href="{{url('/ope/detalleRuta',$r->id)}}">Ver Mas</a></td>
+            </tr>
+          @endforeach
+        </tbody>
+      </table>
+    </div>
+  </div>
+
 </div>
 
 @endsection()

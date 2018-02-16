@@ -1,6 +1,7 @@
 <?php namespace App\Http\Controllers;
 
 use Monolog\Handler\ElasticSearchHandler;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Auth;
@@ -269,12 +270,12 @@ class OperacionesController extends Controller
     public function verRutas(){
 
         $hoy = Carbon::now()->format('Y-m-d');
-        $rutas =DB::table('captaciones_exitosas')->where('fecha_agendamiento','=',$hoy)->get();
+        $rutas = DB::table('captaciones_exitosas')->where('tipo_retiro','Acepta Agendamiento')->where('fecha_agendamiento','=',$hoy)->get();
         $ruteros = DB::table('users')->where('perfil','=',5)->get();
         $estado=DB::table('estado_rutas')->where('primer_agendamiento','!=','no aplica')->get();
        //$datos = DB::table('captaciones_exitosas')->where('id','=','1')->get();
 
-
+	    Session::flash('message', 'Se muestran las rutas a realizarse el dia '.$hoy);
         return view("rutas/rutas", compact('rutas','ruteros','estado','url'));
     }
 
@@ -293,16 +294,18 @@ class OperacionesController extends Controller
         $ayer =Carbon::now()->subDay(1)->format('Y-m-d');
         $startWeek =Carbon::now()->startOfWeek()->format('Y-m-d');
         $startMonth =Carbon::now()->startOfMonth()->format('Y-m-d');
-        $origenDeLosTiempos =Carbon::now()->startOfCentury()->format('Y-m-d');;
+        $origenDeLosTiempos =Carbon::now()->startOfCentury()->format('Y-m-d');
 
 
         if($request->buscarPor == 'hoy'){
 
             if($request->voluntario =='todos'){
-                $rutas = DB::table('captaciones_exitosas')->where('fecha_agendamiento','=',$hoy)->get();
+                $rutas = DB::table('captaciones_exitosas')->where('tipo_retiro','Acepta Agendamiento')->where('fecha_agendamiento','=',$hoy)->get();
+                Session::flash('message', 'Se muestran las rutas a realizarse el dia '.$hoy);
                 return view("rutas/rutas", compact('rutas','ruteros'));
             }else{
-                $rutas = DB::table('captaciones_exitosas')->where('fecha_agendamiento','=',$hoy)->where('rutero','=',$rutero)->get();
+                $rutas = DB::table('captaciones_exitosas')->where('tipo_retiro','Acepta Agendamiento')->where('fecha_agendamiento','=',$hoy)->where('rutero','=',$rutero)->get();
+                 Session::flash('message', 'Se muestran las rutas a realizarse el dia '.$hoy." con el rutero ".$rutero);
                 return view("rutas/rutas", compact('rutas','ruteros','estado'));
             }
 
@@ -312,21 +315,24 @@ class OperacionesController extends Controller
 
                 if($request->voluntario =='todos'){
 
-                    $rutas = DB::table('captaciones_exitosas')->whereBetween('fecha_agendamiento',[$hoy,$mañana])->get();
+                    $rutas = DB::table('captaciones_exitosas')->where('tipo_retiro','Acepta Agendamiento')->whereBetween('fecha_agendamiento',[$hoy,$mañana])->get();
+                     Session::flash('message', 'Se muestran las rutas a realizarse entre los dias /  '.$hoy." | y | ".$mañana);
                     return view("rutas/rutas", compact('rutas','ruteros','estado'));
                 }else{
-                    $rutas = DB::table('captaciones_exitosas')->whereBetween('fecha_agendamiento',[$hoy,$mañana])->where('rutero','=',$rutero)->get();
+                    $rutas = DB::table('captaciones_exitosas')->where('tipo_retiro','Acepta Agendamiento')->whereBetween('fecha_agendamiento',[$hoy,$mañana])->where('rutero','=',$rutero)->get();
+                    Session::flash('message', 'Se muestran las rutas a realizarse entre los dias /  '.$hoy." | y | ".$mañana."/ Para el Rutero --> ".$rutero);
                     return view("rutas/rutas", compact('rutas','ruteros','estado'));
                 }
 
             }else if($request->rutas_para =='la semana'){
 
                 if($request->voluntario =='todos'){
-
-                    $rutas = DB::table('captaciones_exitosas')->whereBetween('fecha_agendamiento',[$hoy,$final_semana])->get();
+                    $rutas = DB::table('captaciones_exitosas')->where('tipo_retiro','Acepta Agendamiento')->whereBetween('fecha_agendamiento',[$hoy,$final_semana])->get();
+                    Session::flash('message', 'Se muestran las rutas a realizarse entre los dias /  '.$hoy." | y | ".$final_semana);
                     return view("rutas/rutas", compact('rutas','ruteros','estado'));
                 }else{
-                    $rutas = DB::table('captaciones_exitosas')->whereBetween('fecha_agendamiento',[$hoy,$final_semana])->where('rutero','=',$rutero)->get();
+                    $rutas = DB::table('captaciones_exitosas')->where('tipo_retiro','Acepta Agendamiento')->whereBetween('fecha_agendamiento',[$hoy,$final_semana])->where('rutero','=',$rutero)->get();
+                    Session::flash('message', 'Se muestran las rutas a realizarse entre los dias /  '.$hoy." | y | ".$final_semana." / Para el rutero --> ".$rutero);
                     return view("rutas/rutas", compact('rutas','ruteros','estado'));
                 }
 
@@ -334,10 +340,12 @@ class OperacionesController extends Controller
 
                 if($request->voluntario =='todos'){
 
-                    $rutas = DB::table('captaciones_exitosas')->whereBetween('fecha_agendamiento',[$hoy,$final_mes])->get();
+                    $rutas = DB::table('captaciones_exitosas')->where('tipo_retiro','Acepta Agendamiento')->whereBetween('fecha_agendamiento',[$hoy,$final_mes])->get();
+                    Session::flash('message', 'Se muestran las rutas a realizarse entre los dias /  '.$hoy." | y | ".$final_mes);
                     return view("rutas/rutas", compact('rutas','ruteros','estado'));
                 }else{
-                    $rutas = DB::table('captaciones_exitosas')->whereBetween('fecha_agendamiento',[$hoy,$final_mes])->where('rutero','=',$rutero)->get();
+                    $rutas = DB::table('captaciones_exitosas')->where('tipo_retiro','Acepta Agendamiento')->whereBetween('fecha_agendamiento',[$hoy,$final_mes])->where('rutero','=',$rutero)->get();
+                    Session::flash('message', 'Se muestran las rutas a realizarse entre los dias /  '.$hoy." | y | ".$final_mes." / Para el rutero --> ".$rutero);
                     return view("rutas/rutas", compact('rutas','ruteros','estado'));
                 }
 
@@ -345,10 +353,12 @@ class OperacionesController extends Controller
 
                 if($request->voluntario =='todos'){
 
-                    $rutas = DB::table('captaciones_exitosas')->whereBetween('fecha_agendamiento',[$hoy,$finDeLosTiempos])->get();
+                    $rutas = DB::table('captaciones_exitosas')->where('tipo_retiro','Acepta Agendamiento')->whereBetween('fecha_agendamiento',[$hoy,$finDeLosTiempos])->get();
+                    Session::flash('message', 'Se muestran Todas las rutas a realizarse Desde hoy / '.$hoy." / hasta el infinito ");
                     return view("rutas/rutas", compact('rutas','ruteros','estado'));
                 }else{
-                    $rutas = DB::table('captaciones_exitosas')->whereBetween('fecha_agendamiento',[$hoy,$finDeLosTiempos])->where('rutero','=',$rutero)->get();
+                    $rutas = DB::table('captaciones_exitosas')->where('tipo_retiro','Acepta Agendamiento')->whereBetween('fecha_agendamiento',[$hoy,$finDeLosTiempos])->where('rutero','=',$rutero)->get();
+                    Session::flash('message', 'Se muestran Todas las rutas a realizarse Desde hoy / '.$hoy." / hasta el infinito Para el rutero --> ".$rutero);
                     return view("rutas/rutas", compact('rutas','ruteros','estado'));
                 }
             }
@@ -359,10 +369,12 @@ class OperacionesController extends Controller
             if ($request->rutasDe == 'ayer') {
 
                 if ($request->voluntario == 'todos') {
-                    $rutas = DB::table('captaciones_exitosas')->where('fecha_agendamiento', '=', $ayer)->get();
+                    $rutas = DB::table('captaciones_exitosas')->where('tipo_retiro','Acepta Agendamiento')->where('fecha_agendamiento', '=', $ayer)->get();
+                    Session::flash('message', 'Se muestran las rutas a realizadas el dia /'.$ayer);
                     return view("rutas/rutas", compact('rutas','ruteros','estado'));
                 } else {
-                    $rutas = DB::table('captaciones_exitosas') -> where('fecha_agendamiento', '=', $ayer)->where('rutero', '=', $rutero)->get();
+                    $rutas = DB::table('captaciones_exitosas')->where('tipo_retiro','Acepta Agendamiento')->where('fecha_agendamiento', '=', $ayer)->where('rutero', '=', $rutero)->get();
+                    Session::flash('message', 'Se muestran las rutas a realizadas el dia /'.$ayer.' / Por el rutero --> '.$rutero);
                     return view("rutas/rutas", compact('rutas','ruteros','estado'));
                 }
 
@@ -370,30 +382,36 @@ class OperacionesController extends Controller
 
                 if ($request->voluntario == 'todos') {
 
-                    $rutas = DB::table('captaciones_exitosas')->whereBetween('fecha_agendamiento',[$startWeek,$hoy])->get();
+                    $rutas = DB::table('captaciones_exitosas')->where('tipo_retiro','Acepta Agendamiento')->whereBetween('fecha_agendamiento',[$startWeek,$hoy])->get();
+                    Session::flash('message', 'Se muestran las rutas a realizadas entro los  dias /'.$startWeek." | y | ".$hoy);
                     return view("rutas/rutas", compact('rutas','ruteros','estado'));
                 } else {
-                    $rutas = DB::table('captaciones_exitosas') -> whereBetween('fecha_agendamiento',[$startWeek,$hoy])->where('rutero', '=', $rutero)->get();
+                    $rutas = DB::table('captaciones_exitosas')->where('tipo_retiro','Acepta Agendamiento')->whereBetween('fecha_agendamiento',[$startWeek,$hoy])->where('rutero', '=', $rutero)->get();
+                    Session::flash('message', 'Se muestran las rutas a realizadas entro los  dias /'.$startWeek." | y | ".$hoy.' / Por el rutero --> '.$rutero);
                     return view("rutas/rutas", compact('rutas','ruteros','estado'));
                 }
 
             } elseif($request->rutasDe =='el mes'){
 
                 if($request->voluntario =='todos'){
-                    $rutas = DB::table('captaciones_exitosas')->whereBetween('fecha_agendamiento',[$startMonth,$hoy])->get();
+                    $rutas = DB::table('captaciones_exitosas')->where('tipo_retiro','Acepta Agendamiento')->whereBetween('fecha_agendamiento',[$startMonth,$hoy])->get();
+                    Session::flash('message', 'Se muestran las rutas a realizadas entro los  dias /'.$startMonth." | y | ".$hoy);
                     return view("rutas/rutas", compact('rutas','ruteros','estado'));
                 }else{
-                    $rutas = DB::table('captaciones_exitosas') ->whereBetween('fecha_agendamiento',[$startMonth,$hoy])->where('rutero', '=', $rutero)->get();
+                    $rutas = DB::table('captaciones_exitosas')->where('tipo_retiro','Acepta Agendamiento')->whereBetween('fecha_agendamiento',[$startMonth,$hoy])->where('rutero', '=', $rutero)->get();
+                    Session::flash('message', 'Se muestran las rutas a realizadas entro los  dias /'.$startMonth." | y | ".$hoy.' / Por el rutero --> '.$rutero);
                     return view("rutas/rutas", compact('rutas','ruteros','estado'));
                 }
 
             }elseif ($request->rutasDe =='elOrigenDeLosTiempos'){
 
                 if($request->voluntario =='todos'){
-                    $rutas =DB::table('captaciones_exitosas')->whereBetween('fecha_agendamiento',[$origenDeLosTiempos,$hoy])->get();
+                    $rutas =DB::table('captaciones_exitosas')->where('tipo_retiro','Acepta Agendamiento')->whereBetween('fecha_agendamiento',[$origenDeLosTiempos,$hoy])->get();
+                    Session::flash('message', 'Se muestran las rutas a realizadas entro los  dias /'.$origenDeLosTiempos." | y | ".$hoy);
                     return view("rutas/rutas", compact('rutas','ruteros','estado'));
                 }else{
-                    $rutas =DB::table('captaciones_exitosas')->whereBetween('fecha_agendamiento',[$origenDeLosTiempos,$hoy])->where('rutero','=',$rutero)->get();
+                    $rutas =DB::table('captaciones_exitosas')->where('tipo_retiro','Acepta Agendamiento')->whereBetween('fecha_agendamiento',[$origenDeLosTiempos,$hoy])->where('rutero','=',$rutero)->get();
+                    Session::flash('message', 'Se muestran las rutas a realizadas entro los  dias /'.$origenDeLosTiempos." | y | ".$hoy.' / Por el rutero --> '.$rutero);
                     return view("rutas/rutas", compact('rutas','ruteros','estado'));
                 }
             }
@@ -402,10 +420,12 @@ class OperacionesController extends Controller
         }elseif($request->buscarPorDia != ""){//FIN RUTAS PASADAS comienzo rutas por dia
 
             if($request->voluntario =='todos'){
-                $rutas =DB::table('captaciones_exitosas')->where('fecha_agendamiento','=',$request->buscarPorDia)->get();
+                $rutas =DB::table('captaciones_exitosas')->where('tipo_retiro','Acepta Agendamiento')->where('fecha_agendamiento','=',$request->buscarPorDia)->get();
+                Session::flash('message', 'Se muestran las rutas Correspondientes  al dia /'.$request->buscarPorDia);
                 return view("rutas/rutas", compact('rutas','ruteros','estado'));
             }else{
-                $rutas =DB::table('captaciones_exitosas')->where('fecha_agendamiento','=',$request->buscarPorDia)->where('rutero','=',$rutero)->get();
+                $rutas =DB::table('captaciones_exitosas')->where('tipo_retiro','Acepta Agendamiento')->where('fecha_agendamiento','=',$request->buscarPorDia)->where('rutero','=',$rutero)->get();
+                Session::flash('message', 'Se muestran las rutas Correspondientes  al dia /'.$request->buscarPorDia.'/ con el Rutero --> '.$rutero);
                 return view("rutas/rutas", compact('rutas','ruteros','estado'));
             }
         }
@@ -491,6 +511,9 @@ class OperacionesController extends Controller
 
     public function rutas(){
     //funcion que nos redirecciona a una vista donde seleccionamos las rutas de deseamos ver
+    $hoy = Carbon::now()->format('Y-m-d');
+    $nextWeek= Carbon::now()->addDay(7)->format('Y-m-d');
+
       if(Auth::User()->perfil==5){
         //si el perfil es rutero lo redireccionamos a una vista donde podra seleccionar la semana que desea ver
         return view('rutas.filtroSemana');
@@ -498,7 +521,9 @@ class OperacionesController extends Controller
         $ruteros =User::where('perfil','=',5)->get();//seleccionamos los usuarios de tipo rutero
         //si el perfil es diferente a rutero redirecconamos a una vista donde puede seleccionar
         //la semana y el rutero sobre el cual se desea ver las rutas
-        return view('operac.filtroRutasSemanales',['ruteros'=>$ruteros]);
+
+        $rutas = CaptacionesExitosa::where('tipo_retiro','Acepta Agendamiento')->whereBetween('fecha_agendamiento',[$hoy,$nextWeek])->get();
+        return view('operac.filtroRutasSemanales',['ruteros'=>$ruteros,'rutas'=>$rutas]);
       }
     }
 

@@ -2,12 +2,8 @@
 
 @section('content')
     <style>
-        .moto{
 
-            width:50%;
-            margin-top: -40%;
-            margin-left: 250%;
-        }
+
 
     </style>
     <script src="http://code.jquery.com/jquery-migrate-1.0.0.js"></script>
@@ -66,16 +62,15 @@
     <div class="contenedor1">
 
 
-    <div class="col-md-4">
-        <img class="moto" src="/imagenes/iconoRu.png">
-    </div>
-
+    @if(Session::has('message'))
+      <div class="col-md-12   alert alert-info" id="breadCrum">
+        {{Session::get('message')}}
+      </div>
 
         <div class="col-md-12 linea">
 
         </div>
-
-
+@endif
 @if(Auth::user()->perfil ==1)
         {!! Form::open(array('url'=>'/admin/filtroRutas')) !!}
 @elseif(Auth::user()->perfil ==4)
