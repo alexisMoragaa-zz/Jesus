@@ -37,28 +37,56 @@ class TeoController extends Controller
         $status = estado::where('modulo', '=', 'llamado')->get();//seleccionamos los estado de la base de datos
         $date = Carbon::now()->format('d-m-Y');//seleccionamos la fecha de hoy y la almacenamos en $date
         $dato = Campana::findOrFail(Auth::user()->campana)->id;//seleccionamos la campaña a la cual este usuario esta asignado
-        $cap = captaciones::where('campana_id', '=', $dato)//seleccionamo el registro que se le entragara mediante una seria de filtros
-            ->where('f_ultimo_llamado', '!=', $date)->where('estado', '!=', 'cu-')
-            ->where('estado', '!=', 'cu+')->where('estado_registro', '=', 0)->where('estado', '!=', 'ca')
-            ->where('tercer_llamado','=',null)
-            ->first();
+
+        // $cap = captaciones::where('campana_id', '=', $dato)//seleccionamo el registro que se le entragara mediante una seria de filtros
+        //     ->where('f_ultimo_llamado', '!=', $date)->where('estado', '!=', 'cu-')
+        //     ->where('estado', '!=', 'cu+')->where('estado_registro', '=', 0)->where('estado', '!=', 'ca')
+        //     ->where('tercer_llamado','=',null)
+        //     ->first();
+        $cap = captaciones::where('campana_id',$dato)
+              ->where('f_ultimo_llamado','!=',$date)
+              ->where('estado_registro','0')
+              ->where('estado','!=','cu+')
+              ->where('estado','!=','cu-')
+              ->where('estado','!=','ca')
+              ->where('estado1',null)->get()->first();
+
+              if(empty($cap)){
+                $cap = captaciones::where('campana_id',$dato)
+                      ->where('f_ultimo_llamado','!=',$date)
+                      ->where('estado_registro','0')
+                      ->where('estado','!=','cu+')
+                      ->where('estado','!=','cu-')
+                      ->where('estado','!=','ca')
+                      ->where('estado2',null)->get()->first();
+
+                if(empty($cap)){
+                  $cap = captaciones::where('campana_id',$dato)
+                        ->where('f_ultimo_llamado','!=',$date)
+                        ->where('estado_registro','0')
+                        ->where('estado','!=','cu+')
+                        ->where('estado','!=','cu-')
+                        ->where('estado','!=','ca')
+                        ->where('estado3',null)->get()->first();
+                  if(empty($cap)){
+                    return view('teo/teoError');
+                    }
+                }
+              }
 
 /*el registro que se le entregara al usuario tiene que pertenecer a la campaña a la cual el esta asignado
 la fecha de ultimo llamado no puede ser mayor al dia anterior respecto del dia en  curso su estado tiene que ser diferente de cnu
 su estado tiene que ser diferente de cu+ y defirente de ca (call_again) */
-        if (empty($cap)) {//evaluamos el resultado de la busqueda y si es nullo retornamos una vista con el error
-          $cap = captaciones::where('campana_id', '=', $dato)//seleccionamo el registro que se le entragara mediante una seria de filtros
-              // ->where('f_ultimo_llamado', '!=', $date)
-              ->where('estado', '!=', 'cu-')
-              ->where('estado', '!=', 'cu+')->where('estado_registro', '=', 0)->where('estado', '!=', 'ca')
-              ->where('tercer_llamado','=',null)
-              ->first();
-
-          Session::flash('message','Atencion! No Quedan registros Disponibles. Los numeros a continuacion ya fueron llamados el dia de Hoy');
-          if(empty($cap)){
-               return view('teo/teoError');
-          }
-        }
+        // if (empty($cap)) {//evaluamos el resultado de la busqueda y si es nullo retornamos una vista con el error
+        //   // $cap = captaciones::where('campana_id', '=', $dato)//seleccionamo el registro que se le entragara mediante una seria de filtros
+        //
+        //       // ->where('estado', '!=', 'cu-')
+        //       // ->where('estado', '!=', 'cu+')->where('estado_registro', '=', 0)->where('estado', '!=', 'ca')
+        //       // ->where('tercer_llamado','=',null)
+        //       // ->first();
+        //
+        //   Session::flash('message','Atencion! No Quedan registros Disponibles. Los numeros a continuacion ya fueron llamados el dia de Hoy');
+        // }
 /*si el resultado de la busqueda nos retorna un registro ese registro lo actualizamos con el estadp de registro 1
 lo cual implica que el registro esta reservado y ningun otro teleoperador podra acceder a el.
 cuando el teleoperador determine el estado de la llamada el registro sera liberado,
